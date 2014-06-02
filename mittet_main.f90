@@ -1,25 +1,24 @@
-!********************************************************
-!  mittet 仮想領域法 2014.06.01 
-! 
-! GitHub開始
+!***************************************************
+!  mittet 仮想領域法 2014.06.01
+!
 !  
-!	
-!omega0=2πf0
-!f0=1,0Hz
-!sigmawa=3.2S/m
-!x=(i-1)*dx
-!∂n=Σαの書き方
-!代入必要?↓↓↓
-!E'(x,omega')=E(x,omega)
-!H'(x,omega')=sqrt(-iomega/2omega0)H(x,omega)
-!J'(x,omega')=sqrt(-iomega/2omega0)J(x,omega)
-!K'(x,omega')=K(x,omega)
-!********************************************************
-
-	
+!
+!   omega0=2πf0
+!   f0=1,0Hz
+!   sigmawa=3.2S/m
+!   x=(i-1)*dx
+!   ∂n=Σαの書き方
+!   代入必要?↓↓↓
+!   E'(x,omega')=E(x,omega)
+!   H'(x,omega')=sqrt(-iomega/2omega0)H(x,omega)
+!   J'(x,omega')=sqrt(-iomega/2omega0)J(x,omega)
+!   K'(x,omega')=K(x,omega)
+!***************************************************
 
 
-!!!初期値/モデル設定,変数定義*********************************************
+
+
+!!!初期値/モデル設定,変数定義******************************************************
 module const_para
     implicit none
 
@@ -68,8 +67,8 @@ module const_para
 
 
 
-!!!メインプログラム*************************************
-!*******************************************************
+!!!メインプログラム*************************************************************
+!********************************************************************************
 program main
     use const_para
     implicit none 
@@ -170,7 +169,7 @@ program main
 
 
 
-!!!dt,dx,dy,dzの設定cmax,cminの計算***********************
+!!!dt,dx,dy,dzの設定cmax,cminの計算************************************************
 subroutine set_d_txyz
     use const_para
     implicit none
@@ -217,7 +216,7 @@ subroutine set_d_txyz
 
 
 
-!!!入力波源の設定  ガウスパルス*********************************
+!!!入力波源の設定  ガウスパルス************************************************
 !subroutine gaussianpulse(istep,t,Ie,Mh)
 !    use const_para
 !    implicit none
@@ -286,7 +285,7 @@ subroutine gaussian(istep,t,Je,Jh,sigma,myu)
 
 
 
-!!!モデル設定*****************************
+!!!モデル設定********************************************************************
 subroutine model(sigma,myu)
     use const_para
     implicit none
@@ -330,7 +329,7 @@ subroutine model(sigma,myu)
 
 
 
-!!!アウトプットE-field,H-field*******************************
+!!!アウトプットE-field,H-field******************************************************
 subroutine output_EH(istep,t,Ex,Ey,Ez,Hx,Hy,Hz)
     use const_para
     implicit none
@@ -398,9 +397,9 @@ subroutine output_EH(istep,t,Ex,Ey,Ez,Hx,Hy,Hz)
 
 
 
-!!!仮想領域での電磁場の計算*****************************
+!!!仮想領域での電磁場の計算***********************************************************
 
-!電場計算**************************************************
+!電場計算*****************************************************************************
 !Ex-field
 subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
     use const_para
@@ -605,7 +604,7 @@ subroutine  HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)!myu追加
 
 
 
-!Hy-field--------------------------------------------
+!Hy-field-------------------------------------------------------------
 subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
     use const_para
     implicit none
@@ -651,7 +650,7 @@ subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
 
 
 
-!Hz-field------------------------------------------
+!Hz-field--------------------------------------------------------------------------
 subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
     use const_para
     implicit none
@@ -726,10 +725,10 @@ subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
 
 
 
-!!!境界条件 E_PML*****************************************
+!!!境界条件 E_PML***************************************************************************
 !係数の導出がまだ
 !cとは？
-!*****************************************************
+!*******************************************************************************************
 subroutine E_PML(Ex,Ey,Ez,Hx,Hy,Hz,c)
     use const_para
     implicit none
@@ -864,7 +863,7 @@ subroutine E_PML(Ex,Ey,Ez,Hx,Hy,Hz,c)
 
 
 
-!!!境界条件H PML*****************************************
+!!!境界条件H PML*********************************************************************************
 !subroutine H_BoundaryCondition(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu)
 !    use const_para
 !    implicit none
@@ -970,7 +969,16 @@ subroutine E_PML(Ex,Ey,Ez,Hx,Hy,Hz,c)
 
 
 
-!Convolutional PML_E ********************************************
+
+
+
+
+
+
+
+
+
+!Convolutional PML_E ******************************************************************************
 subroutine cpml
     use const_para
     implicit none
@@ -1104,6 +1112,14 @@ subroutine cpml
         enddo
     enddo
         endsubroutine cpml
+
+
+
+
+
+
+
+
 
 
 !Convolutional PML_H ********************************************
@@ -1246,12 +1262,41 @@ subroutine cpml_H
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ! 境界条件 cerjan************************************************
   !  subroutine cerjan()
   !      use const_para
   !      implicit none
 
    !         end subroutine cerjan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1339,6 +1384,15 @@ subroutine dft
 
 
 
+
+
+
+
+
+
+
+
+
 !fftw3_idft***********************************************************************
 subroutine idft
     implicit none
@@ -1395,6 +1449,13 @@ subroutine idft
     write(61,'(e12.4)') acc
     close(61)
     endsubroutine idft
+
+
+
+
+
+
+
 
 
 
