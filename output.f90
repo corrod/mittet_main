@@ -52,4 +52,3 @@ subroutine output_EH(istep,t,Ex,Ey,Ez,Hx,Hy,Hz)
     close(7)
     endif
             endsubroutine output_EH
-

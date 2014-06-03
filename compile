@@ -1,0 +1,9 @@
+ifort -c parameter.f90
+ifort -c main.f90
+ifort -c set.f90
+ifort -c source.f90
+ifort -c model.f90
+ifort -c output.f90
+ifort -c e_field.f90
+ifort -c h_field.f90
+ifort -o ficticious parameter.o main.o set.o source.o model.o output.o e_field.o h_field.o

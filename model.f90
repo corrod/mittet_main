@@ -18,4 +18,3 @@ subroutine model(sigma,myu)
     !sigma()=sigmafe
     !myu()=myufe
             endsubroutine model
-

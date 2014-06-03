@@ -31,4 +31,3 @@ subroutine set_d_txyz
     write(*,'(a,e12.4)') 'omega0',omega0
     write(*,*) 'sigmawa,myuwa',sigmawa,myuwa
             endsubroutine set_d_txyz
-

@@ -153,4 +153,3 @@ subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
 !    close(9)
 !   endif
             endsubroutine HZFIELD
-
