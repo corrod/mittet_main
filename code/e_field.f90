@@ -1,5 +1,5 @@
 !!!仮想領域での電磁場の計算*****************************************************
-
+!!!!!!!!!!!!!
 !電場計算***********************************************************************
 !Ex-field
 subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
@@ -17,7 +17,7 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
     real(8) :: etaxx(nx,ny,nz)
     real(8) :: CEXLY(nx,ny,nz)
     real(8) :: CEXLZ(nx,ny,nz)
-
+!
     !係数の設定
     do k=1,nz
          do j=1,ny

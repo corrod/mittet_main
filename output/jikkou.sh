@@ -1,0 +1,2 @@
+./compile
+time ./ficticious

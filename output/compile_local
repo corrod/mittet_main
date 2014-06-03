@@ -1,0 +1,9 @@
+gfortran -c ../code/parameter.f90
+gfortran -c ../code/main.f90
+gfortran -c ../code/set.f90
+gfortran -c ../code/source.f90
+gfortran -c ../code/model.f90
+gfortran -c ../code/output.f90
+gfortran -c ../code/e_field.f90
+gfortran -c ../code/h_field.f90
+gfortran -o ficticious parameter.o main.o set.o source.o model.o output.o e_field.o h_field.o
