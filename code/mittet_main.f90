@@ -6,7 +6,7 @@
 !   omega0=2πf0
 !   f0=1,0Hz
 !   sigmawa=3.2S/m
-!   x=(i-1)*dx
+!   x=(i-1)*dx 
 !   ∂n=Σαの書き方
 !   代入必要?↓↓↓
 !   E'(x,omega')=E(x,omega)
@@ -1412,7 +1412,7 @@ subroutine dft
 !fftw3_idft***********************************************************************
 subroutine idft
     implicit none
-    integer :: n,n1,i,ios  !n1いらね
+    integer :: n,n1,i,ios  !n1いらね iいらね
     real(8), allocatable :: acc(:),f(:),p(:)
     complex(kind(0d0)),allocatable :: c(:),cacc(:)
     character(7),parameter :: inp1='fas.out',inp2='fps.out',out='acc.out'

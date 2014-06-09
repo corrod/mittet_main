@@ -1,31 +1,21 @@
-!***************************************************
-!  mittet 仮想領域法 2014.06.01
-!
-!
-!
 !   omega0=2πf0
 !   f0=1,0Hz
 !   sigmawa=3.2S/m
 !   x=(i-1)*dx
 !   ∂n=Σαの書き方
-!   代入必要?↓↓↓
-!   E'(x,omega')=E(x,omega)
+!   代入必要？→E'(x,omega')=E(x,omega)
 !   H'(x,omega')=sqrt(-iomega/2omega0)H(x,omega)
 !   J'(x,omega')=sqrt(-iomega/2omega0)J(x,omega)
 !   K'(x,omega')=K(x,omega)
-!***************************************************
-
-
-
-
-!!!初期値/モデル設定,変数定義******************************************************
+!!!初期値/モデル設定,変数定義*****************************************************
 module const_para
     implicit none
 
     integer :: i,j,k
-    integer, parameter :: nstep = 100 !総タイムステップ数
+    integer, parameter :: nstep = 400 !総タイムステップ数
     integer, parameter :: nx = 100, ny = 100, nz = 100 !グリッド数
     integer, parameter :: x0 = 50, y0 = 50, z0 = 50  !送信源位置
+    integer, parameter :: ln = 1 !operator half rength
     real(8), parameter :: pai = 3.14159265358979d0 !πの値
     real(8), parameter :: fmax= 25d0 !最大周波数
     real(8), parameter :: tau0 =0.02!1.6d-4 !送信源出力時間

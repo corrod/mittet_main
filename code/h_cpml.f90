@@ -1,5 +1,8 @@
-!Convolutional PML_H ********************************************************************************************
-subroutine cpml_H
+!Convolutional PML_H *********************************************************************************
+! メイン部分の計算は通常の電磁波伝播と同じでプサイのぶぶんだけCPML？
+! subrouitne 分ける必要ないのかも
+!******************************************************************************************************
+subroutine CPML_H(ex,ey,ez,hx,hy,hz)
     use const_para
     implicit none
 
@@ -22,8 +25,9 @@ subroutine cpml_H
     complex(kind(0d0)) :: psi_hzx1(nx,ny,nz),psi_hyx1(nx,ny,nz)
     complex(kind(0d0)) :: psi_hxy1(nx,ny,nz),psi_hzy1(nx,ny,nz)
     complex(kind(0d0)) :: psi_hyz1(nx,ny,nz),psi_hxz1(nx,ny,nz)
-    complex(kind(0d0)) :: hx(nx,ny,nz),hy(nx,ny,nz),hz(nx,ny,nz)
-    complex(kind(0d0)) :: ex(nx,ny,nz),ey(nx,ny,nz),ez(nx,ny,nz)
+    complex(kind(0d0)), intent(in) :: ex(nx,ny,nz),ey(nx,ny,nz),ez(nx,ny,nz)
+    complex(kind(0d0)), intent(inout) :: hx(nx,ny,nz),hy(nx,ny,nz),hz(nx,ny,nz)
+
 
 !係数の設定
     da_x(i,j,k) = (1-(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) !sigma=σ*
@@ -54,9 +58,9 @@ subroutine cpml_H
     khdy(i) = kappa_y((j-1/2)*dy)*dy
     khdz(i) = kappa_z((k-1/2)*dy)*dz
 
-    bh_x(i) = exp((sigma_x(i)/kappa_x(i)+a_x(i)) *dt/epsi0)  !!カッコ位置確認
-    bh_y(j) = exp((sigma_y(j)/kappa_y(j)+a_y(j)) *dt/epsi0)
-    bh_z(k) = exp((sigma_z(k)/kappa_z(k)+a_z(k)) *dt/epsi0)
+    bh_x(i) = exp(-((sigma_x(i)/kappa_x(i)+a_x(i)) *dt/epsi0)) !!カッコ位置確認
+    bh_y(j) = exp(-((sigma_y(j)/kappa_y(j)+a_y(j)) *dt/epsi0))
+    bh_z(k) = exp(-((sigma_z(k)/kappa_z(k)+a_z(k)) *dt/epsi0))
 
     ch_x(i) = sigma_x(j)*(bh_x(i)-1) / (sigma_x(i) + kappa_x(i)*a_x(i)) / kappa_x(i)
     ch_y(j) = sigma_y(j)*(bh_y(j)-1) / (sigma_y(j) + kappa_y(j)*a_y(j)) / kappa_y(j)
@@ -132,4 +136,4 @@ subroutine cpml_H
                    enddo
                         enddo
                             enddo
-            endsubroutine cpml_H
+            endsubroutine CPML_H

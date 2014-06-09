@@ -7,7 +7,7 @@
 !   f0=1,0Hz
 !   sigmawa=3.2S/m
 !   x=(i-1)*dx
-!   ∂n=Σαの書き方
+!   operator half length ∂n=Σαの書き方
 !   代入必要?↓↓↓
 !   E'(x,omega')=E(x,omega)
 !   H'(x,omega')=sqrt(-iomega/2omega0)H(x,omega)
@@ -15,9 +15,8 @@
 !   K'(x,omega')=K(x,omega)
 !***************************************************
 
-
-!!!メインプログラム*************************************************************
-!********************************************************************************
+!!!メインプログラム************************************
+!****************************************************
 program main
     use const_para
     implicit none
@@ -34,9 +33,10 @@ program main
     complex(kind(0d0)) :: Hx(nx,ny,nz)
     complex(kind(0d0)) :: Hy(nx,ny,nz)
     complex(kind(0d0)) :: Hz(nx,ny,nz)
-    open(13,file='hz(x0,y0,z0+10).d') !iran
-    open(14,file='hz(x0,y0,z0+20).d') !iran
-    open(15,file='Jh(istep).d')!iran
+    open(16,file='hz0.d') !iran
+    open(13,file='hz10.d') !iran
+    open(14,file='hz20.d') !iran
+    open(17,file='jh.d')!iran
 
     t=0d0!開始時間---------------------------------------
 
@@ -62,7 +62,7 @@ program main
 
     t = 0d0  !時間の初期化
 
-    do istep = 1, nstep !*反復計算開始------------------------
+    do istep = 1, nstep !*反復計算開始----------------------
 
     !入力波源の設定
 !   call gaussianpulse(istep,t,Ie,Mh)
@@ -74,6 +74,7 @@ program main
 
      !境界条件 E
 !   call E_PML(Ex,Ey,Ez,HX,Hy,Hz,sigma)
+!    call CPML_E(ex,ey,ez,hx,hy,hz)
 
     t = t + dt*0.5d0  !時間の更新--------------------------
 
@@ -84,11 +85,12 @@ program main
 
     !境界条件 H
 !   call H_BoundaryCondition(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu)
+ !   call CPML_H(ex,ey,ez,hx,hy,hz)
 
     t = t + dt*0.5d0 !時間の更新---------------------------
 
     !アウトプットE-field、H-field
-    call output_EH(istep,t,Ex,Ey,Ez,Hx,Hy,Hz)
+    call output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
     enddo !*反復計算終了
 
@@ -97,9 +99,9 @@ program main
     !call green()
 
     !高速フーリエ変換
-    !call fft()
-
+   ! call ficticiou_to_diffusive_f(t)
+    close(16)
     close(13)
     close(14)
-    close(15)
-            endprogram main
+    close(17)
+            end program main

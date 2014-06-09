@@ -1,5 +1,8 @@
-!!!Convolutional PML_E **********************************************************************************
-subroutine cpml
+!!!Convolutional PML_E ********************************************************************************
+! メイン部分の計算は通常の電磁波伝播と同じでプサイのぶぶんだけCPML？
+! subrouitne 分ける必要ないのかも
+!******************************************************************************************************
+subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     use const_para
     implicit none
 
@@ -21,8 +24,8 @@ subroutine cpml
     complex(kind(0d0)) :: psi_ezx1(nx,ny,nz),psi_eyx1(nx,ny,nz)
     complex(kind(0d0)) :: psi_exy1(nx,ny,nz),psi_ezy1(nx,ny,nz)
     complex(kind(0d0)) :: psi_eyz1(nx,ny,nz),psi_exz1(nx,ny,nz)
-    complex(kind(0d0)) :: ex(nx,ny,nz),ey(nx,ny,nz),ez(nx,ny,nz)
-    complex(kind(0d0)) :: hx(nx,ny,nz),hy(nx,ny,nz),hz(nx,ny,nz)
+    complex(kind(0d0)), intent(inout) :: ex(nx,ny,nz),ey(nx,ny,nz),ez(nx,ny,nz)
+    complex(kind(0d0)), intent(in) :: hx(nx,ny,nz),hy(nx,ny,nz),hz(nx,ny,nz)
 
 !係数の設定
     ca_x(i,j,k) = (1-sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
@@ -49,9 +52,9 @@ subroutine cpml
     a_y(j) = a_max*((j-1)/(nypml1-1))**ma
     a_z(j) = a_max*((k-1)/(nzpml1-1))**ma
 
-    be_x(i) = exp((sigma_x(i)/kappa_x(i)+a_x(i))*dt/epsi0)
-    be_y(j) = exp((sigma_y(j)/kappa_y(j)+a_y(j))*dt/epsi0)
-    be_z(k) = exp((sigma_z(k)/kappa_z(k)+a_z(k))*dt/epsi0)
+    be_x(i) = exp(-((sigma_x(i)/kappa_x(i)+a_x(i))*dt/epsi0))
+    be_y(j) = exp(-((sigma_y(j)/kappa_y(j)+a_y(j))*dt/epsi0))
+    be_z(k) = exp(-((sigma_z(k)/kappa_z(k)+a_z(k))*dt/epsi0))
 
     ce_x(i) = sigma_x(i)*(be_x(i)-1) / (sigma_x(i)+kappa_x(i)*a_x(i)) / kappa_x(i)
     ce_y(j) = sigma_y(j)*(be_y(j)-1) / (sigma_y(j)+kappa_y(j)*a_y(j)) / kappa_y(j)
@@ -131,4 +134,4 @@ subroutine cpml
             enddo
         enddo
     enddo
-        endsubroutine cpml
+        endsubroutine CPML_E

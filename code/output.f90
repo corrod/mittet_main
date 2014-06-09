@@ -1,11 +1,12 @@
-!!!アウトプットE-field,H-field******************************************************
-subroutine output_EH(istep,t,Ex,Ey,Ez,Hx,Hy,Hz)
+!!!アウトプットE-field,H-field**************************************************
+subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     use const_para
     implicit none
 
     integer :: l
-    integer,intent(in) :: istep
+    integer, intent(in) :: istep
     real(8), intent(in) :: t
+    real(8), intent(in) :: Jh(nstep)
     complex(kind(0d0)), intent(in) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     character(5) :: name
@@ -35,9 +36,10 @@ subroutine output_EH(istep,t,Ex,Ey,Ez,Hx,Hy,Hz)
 !    close(4)
 !    close(5)
 !    close(6)
-
+    write(16,*) t, real(hz(x0,y0,z0))
     write(13,*) t, real(hz(x0,y0,z0+10)) !iran
     write(14,*) t, real(hz(x0,y0,z0+20)) !iran
+    write(17,*) Jh(istep)
 
 !--------シェル用出力------
     if (mod(istep,20)==0) then
