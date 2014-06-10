@@ -1,4 +1,6 @@
-!!!モデル設定********************************************************************
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!モデル設定
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 subroutine model(sigma,myu)
     use const_para
     implicit none
@@ -17,4 +19,4 @@ subroutine model(sigma,myu)
     !鉄板
     !sigma()=sigmafe
     !myu()=myufe
-            endsubroutine model
+            end subroutine model

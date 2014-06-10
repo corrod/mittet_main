@@ -6,24 +6,22 @@ program f_to_d
     		real(8) :: omega 
     	!	complex(kind(0d0)), allocatable :: Gxn(:,:,:),Gyn(:,:,:),Gzn(:,:,:)
     		real(8), allocatable :: jh(:)
-        real(8), allocatable :: f(:), p(:), hz(:), t(:)
+        real(8), allocatable :: f(:), p(:), inp(:), t(:)
   	   	complex(kind(0d0)), allocatable :: c(:)
-        character(5), parameter :: inp2='jh.d'
-        character(12),parameter :: out4='jh_as.out',out5='jh_ps.out',out6='jh_fft.out'
-        character(6) :: inp1
-        character(11) :: out1,out2
-        character(11) :: out3
-        character(1) :: name
+       ! character(8) :: inp1
+       ! character(8) :: out1,out2,out3
+       ! character(5), parameter :: inp2='jh.d'
+       ! character(12),parameter :: out4='jh_as.out',out5='jh_ps.out',out6='jh_fft.out'
         integer :: plan(8)
 
 
 	! FFTW3を呼び出すのに必要なヘッダーファイルを include する
     include 'fftw3.f'
  
-    !!! Hz------------------------------------------------------------
+    !!! 開始------------------------------------------------------------
     !ファイル（データ）の長さNDを調べる
     open(51,file='inp1.dat')!inp1,action='read')
-    nd=0
+      nd=0
     do
         read(51,'(f12.0)',iostat=ios)
         if (ios<0) exit !ファイルの末尾にきたらループを抜ける
@@ -32,27 +30,27 @@ program f_to_d
     close(51)
 
 
- 	!データの長さをnの２乗になるように決めて
+  	!データの長さをnの２乗になるように決めて
     !電場exデータ、複素フーリエ係数、フーリエ振幅、フーリエ位相の配列を確保
     n=2**int(log(dble(nd))/ log(2.0d0)+0.5d0)
 
-    allocate(t(1:n),hz(1:n),c(1:n/2),f(1:n/2),p(1:n/2))
+    allocate(t(1:n),inp(1:n),c(1:n/2),f(1:n/2),p(1:n/2))
 
 	
     !fftするデータの読み込み
     open(51,file='inp1.dat')!,action='read')
     do i=1,nd
-    read(51,*) t(i), hz(i)
+    read(51,*) t(i), inp(i)
     enddo
     close(51)
 
 
    	!不足分は0パッディング
-    hz(nd+1:n)=0.0d0
+    inp(nd+1:n)=0.0d0
 
 
     !fftwの実行
-    call dfftw_plan_dft_r2c_1d(plan,n,hz,c,fftw_estimate)
+    call dfftw_plan_dft_r2c_1d(plan,n,inp,c,fftw_estimate)
     call dfftw_execute(plan)
     call dfftw_destroy_plan(plan)
 
@@ -65,22 +63,22 @@ program f_to_d
 	! フーリエ振幅スペクトル，フーリエ位相スペクトルの書き出し
     open(61,file='out1.dat')!,status='replace',action='write')
     do i=1,n/2
-    write(61,*) (i-1)/(n*5.0d-4),f(i)
+    write(61,*) (i-1)/(n*dt),f(i)
     enddo
     close(61)
 
 
     open(61,file='out2.dat')!,status='replace',action='write')
     do i=1,n/2
-    write(61,*) (i-1)/(n*5.0d-4),p(i)
+    write(61,*) (i-1)/(n*dt),p(i)
     enddo
     close(61)
 
 
-     !フーリエ変換後のdiffusive freqency domainのhz
+     !フーリエ変換後のdiffusive freqency domainのinp
     open(61,file='out3.dat')!,status='replace',action='write')
     do i=1,n/2
-    write(61,*) (i-1)/(n*5.0d-4),real(c(i)),aimag(c(i))!,aimag(c)!i, hz(i)
+    write(61,*) (i-1)/(n*dt),real(c(i)),aimag(c(i))!,aimag(c)!i, inp(i)
     enddo
     close(61)
 

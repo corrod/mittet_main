@@ -1,4 +1,6 @@
-!!!送信源the first derivative of Gaussian********************************
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!送信源the first derivative of Gaussian!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 subroutine gaussian(istep,t,Je,Jh,sigma,myu)
     use const_para
     implicit none
@@ -24,4 +26,4 @@ subroutine gaussian(istep,t,Je,Jh,sigma,myu)
     !磁場ソースの設定
     Jh(istep) = Jn(istep)*dt/myu(x0,y0,z0)/dx/dy/dz
 
-        endsubroutine gaussian
+        end subroutine gaussian
