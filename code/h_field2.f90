@@ -23,9 +23,9 @@ subroutine  HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)!myu追加
 
     !Holberg optimization scheme
     alpha(1,1) = 1.00235d0
-    alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
-    alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
-    alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
+  !  alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
+  !  alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
+  !  alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
 
 
     !係数の設定
@@ -38,13 +38,10 @@ subroutine  HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)!myu追加
       enddo
     enddo
 
-    !磁場ソースの設定
-   ! Jh(istep) = Jn(istep) * dt /myu(x0,y0,z0) /dx/dy/dz
-
 
     !波動伝播計
     do k=1,nz-1
-        do j=2,ny-1
+        do j=1,ny-1
             do i=2,nx-1
                 do l=1,ln
                     temp1(l) = temp1(l-1) + alpha(ln,l) * (Ez(i,j+l,k) - Ez(i,j-(l-1),k))
@@ -58,7 +55,7 @@ subroutine  HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)!myu追加
 
     !ソース項
 !   Hx(x0,y0,z0) = Hx(x0,y0,z0) - Jh(istep)
-            endsubroutine HXFIELD
+            end subroutine HXFIELD
 
 
 
@@ -85,9 +82,9 @@ subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
 
    !Holberg optimization scheme
     alpha(1,1) = 1.00235d0
-    alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
-    alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
-    alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
+ !   alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
+ !   alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
+ !   alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
 
 
     !係数の設定
@@ -100,13 +97,11 @@ subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
       enddo
     enddo
 
-    !磁場ソースの設定
-  !  Jh(istep) = Jn(istep) * dt /myu(x0,y0,z0) /dx/dy/dz
 
     !波動伝播計算
     do k=1,nz-1
         do j=2,ny-1
-            do i=2,nx-1
+            do i=1,nx-1
                 do l=1,ln
                     temp1(l) = temp1(l-1) + alpha(ln,l) * (Ex(i,j,k+l) - Ex(i,j,k-(l-1)))
                     temp2(l) = temp2(l-1) + alpha(ln,l) * (Ez(i+l,j,k) - Ez(i-(l-1),j,k))
@@ -119,7 +114,7 @@ subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
 
     !ソース項
 !   Hy(x0,y0,z0) = Hy(x0,y0,z0) - Jh(istep)
-            endsubroutine HYFIELD
+            end subroutine HYFIELD
 
 
 
@@ -141,15 +136,14 @@ subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
     real(8) :: CHZLY(nx,ny,nz)
     real(8) :: alpha(ln,ln)
     real(8) :: temp1(0:ln),temp2(0:ln)
-    character(8) :: name
     temp1(0) = 0.0d0
     temp2(0) = 0.0d0
 
    !Holberg optimization scheme
     alpha(1,1) = 1.00235d0
-    alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
-    alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
-    alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
+   ! alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
+   ! alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
+   ! alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
 
 
     !係数の設定
@@ -162,13 +156,12 @@ subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
       enddo
     enddo
 
-    !磁場ソースの設定
-   ! Jh(istep) = Jn(istep) * dt /myu(x0,y0,z0) /dx/dy/dz
+
 
     !波動伝播計算
-    do k=1,nz-1
-        do j=2,ny-1
-            do i=2,nx-1
+    do k=2,nz-1
+        do j=1,ny-1
+            do i=1,nx-1
                 do l=1,ln
                     temp1(l) = temp1(l-1) + alpha(ln,l) * (Ey(i+l,j,k) - Ey(i-(l-1),j,k))
                     temp2(l) = temp2(l-1) + alpha(ln,l) * (Ex(i,j+l,k) - Ex(i,j-(l-1),k))
@@ -181,20 +174,4 @@ subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
     !ソース項
     Hz(x0,y0,z0) = Hz(x0,y0,z0) - Jh(istep)
 
-
-    !ソース位置、ソースから離れた位置でのhzの磁場の時間分布
-   write(8,*) 't,jh,hz(x0,y0,z0+10)',t,Jh(istep),real(hz(x0,y0,z0+10))
-
-!--------シェル用出力------
-!   if (mod(istep,5)==0) then
-!    l=10000+istep/5
-!    write(name,"(I5)") l
-!    open(9,file=name//".d")
-!    do j=1,ny
-!        do i=1,nx
-!            write(2,*) i,j,real(hz(i,j,z0))
-!        enddo
-!    enddo
-!    close(9)
-!   endif
-            endsubroutine HZFIELD
+            end subroutine HZFIELD

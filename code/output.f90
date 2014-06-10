@@ -1,4 +1,3 @@
-!!!アウトプットE-field,H-field**************************************************
 subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     use const_para
     implicit none
@@ -10,6 +9,30 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     complex(kind(0d0)), intent(in) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     character(5) :: name
+
+!--------シェル用出力------
+    if (mod(istep,20)==0) then
+   l=10000+istep/20
+    write(name,"(I5)") l
+    open(7,file=name//".d")
+        do j=1,ny
+            do i=1,nx
+                 write(7,*) t,i,j,real(Ex(i,j,z0))
+            enddo
+        enddo
+    close(7)
+    endif
+
+    
+    write(13,*) t, real(hz(x0,y0,z0))
+    write(14,*) t, real(hz(x0,y0,z0+10)) 
+    write(15,*) t, real(hz(x0,y0,z0+20)) 
+    write(16,*) t, real(hz(x0,y0,z0+30)) 
+    write(17,*) Jh(istep)
+
+            end subroutine output_EH
+
+            
  !   open(1,file='Exfield.d', position='append')
  !   open(2,file='Eyfield.d', position='append')
  !   open(3,file='Ezfield.d', position='append')
@@ -36,21 +59,4 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 !    close(4)
 !    close(5)
 !    close(6)
-    write(16,*) t, real(hz(x0,y0,z0))
-    write(13,*) t, real(hz(x0,y0,z0+10)) !iran
-    write(14,*) t, real(hz(x0,y0,z0+20)) !iran
-    write(17,*) Jh(istep)
 
-!--------シェル用出力------
-    if (mod(istep,20)==0) then
-   l=10000+istep/20
-    write(name,"(I5)") l
-    open(7,file=name//".d")
-        do j=1,ny
-            do i=1,nx
-                 write(7,*) t,i,j,real(Ex(i,j,z0))
-            enddo
-        enddo
-    close(7)
-    endif
-            endsubroutine output_EH

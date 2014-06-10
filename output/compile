@@ -1,5 +1,5 @@
 ifort -c ../code/parameter.f90
-ifort -c ../code/main.f90
+	#ifort -c ../code/main.f90 
 ifort -c ../code/set.f90
 ifort -c ../code/source.f90
 ifort -c ../code/model.f90
@@ -8,6 +8,6 @@ ifort -c ../code/e_field2.f90
 ifort -c ../code/e_cpml2.f90
 ifort -c ../code/h_field2.f90
 ifort -c ../code/h_cpml2.f90
-   #ifort -c ../code/f_to_d.f90
-	#ifort -o ficticious parameter.o main.o set.o source.o model.o output.o e_field2.o e_cpml2.o h_field2.o h_cpml2.o # f_to_d.f90
-ifort -o ficticious parameter.o main.o set.o source.o model.o output.o e_field2.o e_cpml2.o h_field2.o h_cpml2.o #f_to_d.o
+ifort -c ../code/f_to_d.f90 #-I/usr/local/include -lfftw3
+ifort -c ../code/main.f90 
+ifort -o ficticious parameter.o set.o source.o model.o output.o e_field2.o e_cpml2.o h_field2.o h_cpml2.o f_to_d.o main.o -I/usr/local/include -lfftw3

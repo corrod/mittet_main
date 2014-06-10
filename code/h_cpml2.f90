@@ -112,11 +112,6 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
 
 
 
-
-
-
-
-
 !psi update---------------------------------------------------------------
 !x-PML loop
     do k=1,nz-1
@@ -158,4 +153,4 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
                    enddo
                         enddo
                             enddo
-            endsubroutine CPML_H
+            end subroutine CPML_H

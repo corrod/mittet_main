@@ -31,7 +31,6 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     complex(kind(0d0)), intent(in) :: hx(nx,ny,nz),hy(nx,ny,nz),hz(nx,ny,nz)
 
     sigma_opt = (m+1)/(150d0*pai*sqrt(epsir)*dx)
-
     sigma_max = 0.7d0*sigma_opt
 
 
@@ -115,8 +114,6 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
 
 
 
-
-
   
 
 !psi-update---------------------------------------------------------------
@@ -161,4 +158,4 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
             enddo
         enddo
     enddo
-        endsubroutine CPML_E
+        end subroutine CPML_E

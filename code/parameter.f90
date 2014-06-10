@@ -42,4 +42,5 @@ module const_para
     real(8), parameter :: epsiair  = epsirair * epsi0 !空気の比誘電率
     real(8), parameter :: epsife   = epsirfe * epsi0   !鉄の比誘電率
     real(8), parameter :: epsiwa   = epsirwa * epsi0   !海水の比誘電率
+
             end module const_para

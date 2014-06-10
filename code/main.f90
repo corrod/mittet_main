@@ -33,9 +33,12 @@ program main
     complex(kind(0d0)) :: Hx(nx,ny,nz)
     complex(kind(0d0)) :: Hy(nx,ny,nz)
     complex(kind(0d0)) :: Hz(nx,ny,nz)
-    open(16,file='hz0.d') !iran
-    open(13,file='hz10.d') !iran
-    open(14,file='hz20.d') !iran
+ !   integer :: ll
+
+    open(13,file='hz1000.d') !iran
+    open(14,file='hz1010.d') !iran
+    open(15,file='hz1020.d') !iran
+    open(16,file='hz1030.d') !iran
     open(17,file='jh.d')!iran
 
     t=0d0!開始時間---------------------------------------
@@ -73,7 +76,7 @@ program main
     call EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
 
      !境界条件 E
-!   call E_PML(Ex,Ey,Ez,HX,Hy,Hz,sigma)
+!    call E_PML(Ex,Ey,Ez,HX,Hy,Hz,sigma)
 !    call CPML_E(ex,ey,ez,hx,hy,hz)
 
     t = t + dt*0.5d0  !時間の更新--------------------------
@@ -84,7 +87,7 @@ program main
     call HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu)
 
     !境界条件 H
-!   call H_BoundaryCondition(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu)
+!    call H_BoundaryCondition(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu)
  !   call CPML_H(ex,ey,ez,hx,hy,hz)
 
     t = t + dt*0.5d0 !時間の更新---------------------------
@@ -94,14 +97,13 @@ program main
 
     enddo !*反復計算終了
 
-
     !グリーン関数の導出
     !call green()
 
-    !高速フーリエ変換
-   ! call ficticiou_to_diffusive_f(t)
-    close(16)
+
     close(13)
     close(14)
+    close(15)
+    close(16)
     close(17)
             end program main

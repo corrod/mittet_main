@@ -26,9 +26,9 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
 
     !Holberg optimization scheme
     alpha(1,1) = 1.00235d0
-    alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
-    alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
-    alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
+    !alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
+    !alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
+    !alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
 
 
     !係数の設定
@@ -42,13 +42,11 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
          enddo
     enddo
 
-    !電場ソースの設定
-    !Je(istep) = dt * etaxx(x0,y0,z0) * Jn(istep) /dx/dy/dz
 
     !波動伝播計算
-    do k=1,nz-1
+    do k=2,nz-1
         do j=2,ny-1
-            do i=2,nx-1
+            do i=1,nx-1
                     do l=1,ln
                         temp1(l) = temp1(l-1) + alpha(ln,l) * (Hz(i,j+(l-1),k) - Hz(i,j-l,k))
                         temp2(l) = temp2(l-1) + alpha(ln,l) * (Hy(i,j,k+(l-1)) - Hy(i,j,k-l))
@@ -60,10 +58,7 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
 
     !ソース項
     !Ex(x0,y0,z0) = Ex(x0,y0,z0) - Je(istep)
-
-   !ソース位置、ソースから離れた位置でのExの磁場の時間分布
-   write(9,*) 't,ex(x0+10,y0,z0)',t,real(ex(x0+10,y0,z0))
-            endsubroutine EXFIELD
+            end subroutine EXFIELD
 
 
 !Ey-field-------------------------------------------------------------
@@ -90,9 +85,9 @@ subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
 
    !Holberg optimization scheme
     alpha(1,1) = 1.00235d0
-    alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
-    alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
-    alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
+    !alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
+    !alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
+    !alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
 
 
     !係数の設定
@@ -106,12 +101,10 @@ subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
         enddo
     enddo
 
-    !電場ソースの設定
-    !  Je(istep) = dt * etayy(x0,y0,z0) * Jn(istep) /dx/dy/dz
 
     !波動伝播計算
-    do k=1,nz-1
-        do j=2,ny-1
+    do k=2,nz-1
+        do j=1,ny-1
             do i=2,nx-1
                 do l=1,ln
                 temp1(l) = temp1(l-1) + alpha(ln,l) * (Hx(i,j,k+(l-1)) - Hx(i,j,k-l))
@@ -124,7 +117,7 @@ subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
 
     !ソース項
     !Ey(x0,y0,z0) = Ey(x0,y0,z0) - Je(istep)
-            endsubroutine EYFIELD
+            end subroutine EYFIELD
 
 
 
@@ -152,9 +145,9 @@ subroutine EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
 
    !Holberg optimization scheme
     alpha(1,1) = 1.00235d0
-    alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
-    alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
-    alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
+   ! alpha(2,1:2) = (/1.14443d0,-0.04886d0/)
+   ! alpha(3,1:3) = (/1.20282d0,-0.08276d0,0.00950d0/)
+   ! alpha(4,1:4) = (/1.23041d0,-0.10313d0,0.02005d0,-0.00331d0/)
 
     
     !係数の設定
@@ -168,8 +161,6 @@ subroutine EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
         enddo
     enddo
 
-    !電場ソースの設定
- !   Je(istep) = dt * etazz(x0,y0,z0) * Jn(istep) /dx/dy/dz
 
     !波動伝播計算
     do k=1,nz-1
@@ -186,4 +177,4 @@ subroutine EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
 
     !ソース項
 !   Ez(x0,y0,z0) = Ez(x0,y0,z0) - Je(istep)
-            endsubroutine EZFIELD
+            end subroutine EZFIELD
