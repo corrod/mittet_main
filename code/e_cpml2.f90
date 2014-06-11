@@ -2,7 +2,7 @@
 ! sigmamax amax kappamax の求め方
 ! メイン部分の計算は通常の電磁波伝播と同じでプサイのぶぶんだけCPML？l
 ! subrouitne 分ける必要ないのかも
-!psi部分だけPMLバージョン
+!psi部分だけPMLバージョン。
 !***********************************************************************************
 subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     use const_para
