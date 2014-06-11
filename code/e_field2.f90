@@ -34,9 +34,9 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
 
 
     !係数の設定
-    do k=1,nz
-         do j=1,ny
-              do i=1,nx
+    do k = 1,nz
+         do j = 1,ny
+              do i = 1,nx
                     etaxx(i,j,k) = 2.0d0 * omega0 * sigma(i,j,k)!sigmaxx(i,j,k)
                     CEXLY(i,j,k) = dt * etaxx(i,j,k) / dy 
                     CEXLZ(i,j,k) = - dt * etaxx(i,j,k) / dz
@@ -46,9 +46,9 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
 
 
     !波動伝播計算
-    do k=2,nz-1
-        do j=2,ny-1
-            do i=1,nx-1
+    do k = 2,nz-1
+        do j = 2,ny-1
+            do i = 1,nx-1
                     do l=1,ln
                         temp1(l) = temp1(l-1) + alpha(ln,l) * (Hz(i,j+(l-1),k) - Hz(i,j-l,k))
                         temp2(l) = temp2(l-1) + alpha(ln,l) * (Hy(i,j,k+(l-1)) - Hy(i,j,k-l))
@@ -94,9 +94,9 @@ subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
 
 
     !係数の設定
-    do k=1,nz
-        do j=1,ny
-           do i=1,nx
+    do k = 1,nz
+        do j = 1,ny
+           do i = 1,nx
               etayy(i,j,k) = 2.0d0 * omega0 * sigma(i,j,k)!sigmayy(i,j,k)
               CEYLZ(i,j,k) = dt * etayy(i,j,k) / dz
               CEYLX(i,j,k) = - dt * etayy(i,j,k) / dx
@@ -106,9 +106,9 @@ subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
 
 
     !波動伝播計算
-    do k=2,nz-1
-        do j=1,ny-1
-            do i=2,nx-1
+    do k = 2,nz-1
+        do j = 1,ny-1
+            do i = 2,nx-1
                 do l=1,ln
                 temp1(l) = temp1(l-1) + alpha(ln,l) * (Hx(i,j,k+(l-1)) - Hx(i,j,k-l))
                 temp2(l) = temp2(l-1) + alpha(ln,l) * (Hz(i+(l-1),j,k) - Hz(i-l,j,k)) 
@@ -155,9 +155,9 @@ subroutine EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
 
     
     !係数の設定
-    do k=1,nz
-        do j=1,ny
-            do i=1,nx
+    do k = 1,nz
+        do j = 1,ny
+            do i = 1,nx
                 etazz(i,j,k) = 2.0d0 * omega0 * sigma(i,j,k)!sigmazz(i,j,k)
                 CEZLX(i,j,k) = dt * etazz(i,j,k) / dx
                 CEZLY(i,j,k) = - dt * etazz(i,j,k) / dy
@@ -167,9 +167,9 @@ subroutine EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
 
 
     !波動伝播計算
-    do k=1,nz-1
-        do j=2,ny-1
-            do i=2,nx-1
+    do k = 1,nz-1
+        do j = 2,ny-1
+            do i = 2,nx-1
                      do l=1,ln
                      temp1(l) = temp1(l-1) + alpha(ln,l) * (Hy(i+(l-1),j,k) - Hy(i-l,j,k))
                      temp2(l) = temp2(l-1) + alpha(ln,l) * (Hx(i,j+(l-1),k) - Hx(i,j-l,k))

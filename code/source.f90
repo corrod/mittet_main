@@ -16,6 +16,7 @@ subroutine gaussian(istep,t,Je,Jh,sigma,myu)
     real(8), parameter   :: t0 = pai/fmax
     real(8), parameter   :: beta = pai*(fmax**2)
 
+    !1st_derivative gaussian
     Jn(istep) = -(2.0d0*beta*(t-t0)*sqrt(beta/pai))*exp(-beta*(t-t0)**2)
 
     !電場ソースの設定

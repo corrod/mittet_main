@@ -8,13 +8,13 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
     use const_para
     implicit none
 
-    integer,parameter :: m=4, ma=4
-    integer :: nxpml1=5, nypml1=5, nzpml1=5 !pmlの厚さ
-    real(8),parameter :: lnR0= -100d0  !ln|R(0)|
+    integer,parameter :: m = 4, ma = 4
+    integer           :: nxpml1 = 5, nypml1 = 5, nzpml1 = 5 !pmlの厚さ
+    real(8),parameter :: lnR0 = -100d0  !ln|R(0)|
     real(8)           :: sigma_opt
     real(8)           :: sigma_max!!!
-    real(8),parameter :: kappa_max=1.0d0 !!!
-    real(8),parameter :: a_max=0.1d0     !!!
+    real(8),parameter :: kappa_max = 1.0d0 !!!
+    real(8),parameter :: a_max = 0.1d0     !!!
     real(8) :: epsir = 1.0d0
     real(8) :: myu(nx,ny,nz),epsi(nx,ny,nz)
     real(8) :: da_x(nx,ny,nz),da_y(nx,ny,nz),da_z(nx,ny,nz)
@@ -33,12 +33,12 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
     complex(kind(0d0)), intent(inout) :: hx(nx,ny,nz),hy(nx,ny,nz),hz(nx,ny,nz)
 
 !!!    sigma_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
-    sigma_opt = (m+1)/(150d0*pai*sqrt(epsir)*dx)
+    sigma_opt = (m+1)/(150.0d0*pai*sqrt(epsir)*dx)
     sigma_max = 0.7d0*sigma_opt
     
-    do k=1,nz
-    do j=1,nz
-    do i=1,nz
+    do k = 1,nz
+    do j = 1,nz
+    do i = 1,nz
 
     sigma_x(i) = sigma_max* ((nxpml1-i)/(nxpml1-1)) **m  !!!-i-1/2の取り扱い
     sigma_y(j) = sigma_max* ((nypml1-j)/(nypml1-1)) **m
@@ -118,9 +118,9 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!psi update!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !x-PML loop
-    do k=1,nz-1
-        do j=1,ny-1
-            do i=1,nxpml1-1
+    do k = 1,nz-1
+        do j = 1,ny-1
+            do i = 1,nxpml1-1
                 psi_hzx1(i,j,k) = bh_x(i)*psi_hzx1(i,j,k)&
                                  +ch_x(i)*(ey(i+1,j,k)-ey(i,j,k)) / dx
                 psi_hyx1(i,j,k) = bh_x(i)*psi_hyx1(i,j,k)&
@@ -132,9 +132,9 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
                             enddo
 
 !y-PML loop
-    do k=1,nz-1
-        do j=1,nypml1-1
-            do i=1,nx-1
+    do k = 1,nz-1
+        do j = 1,nypml1-1
+            do i = 1,nx-1
                 psi_hxy1(i,j,k) = bh_y(j)*psi_hxy1(i,j,k)&
                                  +ch_y(j)*(ez(i,j+1,k)-ez(i,j,k)) / dy
                 psi_hzy1(i,j,k) = bh_y(j)*psi_hzy1(i,j,k)&
@@ -145,9 +145,9 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
                        enddo
                            enddo
 !z-PML loop
-    do k=1,nzpml1-1
-        do j=1,ny-1
-            do i=1,nx-1
+    do k = 1,nzpml1-1
+        do j = 1,ny-1
+            do i = 1,nx-1
                 psi_hyz1(i,j,k) = bh_z(k)*psi_hyz1(i,j,k)&
                                  +ch_z(k)*(ex(i,j,k+1)-ex(i,j,k)) / dz
                 psi_hxz1(i,j,k) = bh_y(k)*psi_hxz1(i,j,k)&

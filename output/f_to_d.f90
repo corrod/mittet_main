@@ -32,8 +32,9 @@ program f_to_d
 
   	!データの長さをnの２乗になるように決めて
     !電場exデータ、複素フーリエ係数、フーリエ振幅、フーリエ位相の配列を確保
-    n=2**int(log(dble(nd))/ log(2.0d0)+0.5d0)
+    n = 2**int(log(dble(nd))/ log(2.0d0)+0.5d0)
 
+    !配列確保
     allocate(t(1:n),inp(1:n),c(1:n/2),f(1:n/2),p(1:n/2))
 
 	
@@ -46,7 +47,7 @@ program f_to_d
 
 
    	!不足分は0パッディング
-    inp(nd+1:n)=0.0d0
+    inp(nd+1:n) = 0.0d0
 
 
     !fftwの実行

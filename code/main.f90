@@ -44,9 +44,9 @@ program main
     t=0d0!開始時間---------------------------------------
 
 !   Ex,Ey,Ez,Hx,Hy,Hzの初期化
-    do k=1,nz
-        do j=1,ny
-            do i=1,nx
+    do k = 1,nz
+        do j = 1,ny
+            do i = 1,nx
                 Ex(i,j,k)=0d0
                 Ey(i,j,k)=0d0
                 Ez(i,j,k)=0d0

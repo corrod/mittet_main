@@ -8,10 +8,10 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     use const_para
     implicit none
 
-    integer,parameter :: m=4,ma=4
-    integer,parameter :: nxpml1=5,nypml1=5,nzpml1=5 !PML層数
-    real(8),parameter :: kappa_max=1.0d0!!! 整数？
-    real(8),parameter :: a_max=0.1d0     !!!
+    integer,parameter :: m = 4,ma = 4
+    integer,parameter :: nxpml1 = 5,nypml1 = 5,nzpml1 = 5 !PML層数
+    real(8),parameter :: kappa_max = 1.0d0!!! 整数？
+    real(8),parameter :: a_max = 0.1d0     !!!
     real(8) :: sigma_opt !!!
     real(8) :: sigma_max !!! 導出法確認
     real(8) :: sigma(nx,ny,nz)
@@ -35,9 +35,9 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     sigma_max = 0.7d0*sigma_opt
 
 
-   do k=1,nz
-   do j=1,ny
-   do i=1,nx
+   do k = 1,nz
+   do j = 1,ny
+   do i = 1,nx
     sigma_x(i) = sigma_max*((nxpml1-i)/(nxpml1-1))**m
     sigma_y(j) = sigma_max*((nypml1-j)/(nypml1-1))**m
     sigma_z(k) = sigma_max*((nzpml1-k)/(nzpml1-1))**m
@@ -113,9 +113,9 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!psi-update!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !x-PML loop
-    do k =1,nz-1
-        do j=1,ny-1
-            do i=2,nxpml1
+    do k = 1,nz-1
+        do j = 1,ny-1
+            do i = 2,nxpml1
                 psi_ezx1(i,j,k) = be_x(i)*psi_ezx1(i,j,k)&
                                  +ce_x(i)*(hy(i,j,k)-hy(i-1,j,k)) / dx
                 psi_eyx1(i,j,k) = be_x(i)*psi_eyx1(i,j,k)&
@@ -127,9 +127,9 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     enddo
 
     !y-PML loop
-    do k =1,nz-1
-        do j=2,nypml1
-            do i=1,nx-1
+    do k = 1,nz-1
+        do j = 2,nypml1
+            do i = 1,nx-1
                 psi_exy1(i,j,k) = be_y(j)*psi_exy1(i,j,k)&
                                  +ce_y(j)*(hz(i,j,k)-hz(i,j-1,k)) / dy
                 psi_ezy1(i,j,k) = be_y(j)*psi_ezy1(i,j,k)&
@@ -141,9 +141,9 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     enddo
 
     !z-PML loop
-    do k =2,nzpml1
-        do j=1,ny-1
-            do i=1,nx-1
+    do k = 2,nzpml1
+        do j = 1,ny-1
+            do i = 1,nx-1
                 psi_eyz1(i,j,k) = be_z(k)*psi_eyz1(i,j,k)&
                                  +ce_z(k)*(hx(i,j,k)-hx(i,j,k-1)) / dz
                 psi_exz1(i,j,k) = be_z(k)*psi_exz1(i,j,k)&

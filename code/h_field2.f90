@@ -31,9 +31,9 @@ subroutine  HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)!myu追加
 
 
     !係数の設定
-    do k=1,nz
-       do j=1,ny
-           do i=1,nx
+    do k = 1,nz
+       do j = 1,ny
+           do i = 1,nx
               CHXLY(i,j,k) = - dt / myu(i,j,k) / dy
               CHXLZ(i,j,k) = dt / myu(i,j,k) / dz
           enddo
@@ -42,10 +42,10 @@ subroutine  HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)!myu追加
 
 
     !波動伝播計
-    do k=1,nz-1
-        do j=1,ny-1
-            do i=2,nx-1
-                do l=1,ln
+    do k = 1,nz-1
+        do j = 1,ny-1
+            do i = 2,nx-1
+                do l = 1,ln
                     temp1(l) = temp1(l-1) + alpha(ln,l) * (Ez(i,j+l,k) - Ez(i,j-(l-1),k))
                     temp2(l) = temp2(l-1) + alpha(ln,l) * (Ey(i,j,k+l) - Ey(i,j,k-(l-1)))
                 enddo
@@ -91,9 +91,9 @@ subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
 
 
     !係数の設定
-    do k=1,nz
-        do j=1,ny
-            do i=1,nx
+    do k = 1,nz
+        do j = 1,ny
+            do i = 1,nx
              CHYLZ(i,j,k) = - dt / myu(i,j,k) / dz
              CHYLX(i,j,k) = dt / myu(i,j,k) / dx
           enddo
@@ -102,10 +102,10 @@ subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
 
 
     !波動伝播計算
-    do k=1,nz-1
-        do j=2,ny-1
-            do i=1,nx-1
-                do l=1,ln
+    do k = 1,nz-1
+        do j = 2,ny-1
+            do i = 1,nx-1
+                do l = 1,ln
                     temp1(l) = temp1(l-1) + alpha(ln,l) * (Ex(i,j,k+l) - Ex(i,j,k-(l-1)))
                     temp2(l) = temp2(l-1) + alpha(ln,l) * (Ez(i+l,j,k) - Ez(i-(l-1),j,k))
                 enddo
@@ -151,9 +151,9 @@ subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
 
 
     !係数の設定
-    do k=1,nz
-       do j=1,ny
-         do i=1,nx
+    do k = 1,nz
+       do j = 1,ny
+         do i = 1,nx
             CHZLX(i,j,k) = - dt / myu(i,j,k) / dz
             CHZLY(i,j,k) = dt / myu(i,j,k) / dx
         enddo
@@ -163,10 +163,10 @@ subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
 
 
     !波動伝播計算
-    do k=2,nz-1
-        do j=1,ny-1
-            do i=1,nx-1
-                do l=1,ln
+    do k = 2,nz-1
+        do j = 1,ny-1
+            do i = 1,nx-1
+                do l = 1,ln
                     temp1(l) = temp1(l-1) + alpha(ln,l) * (Ey(i+l,j,k) - Ey(i-(l-1),j,k))
                     temp2(l) = temp2(l-1) + alpha(ln,l) * (Ex(i,j+l,k) - Ex(i,j-(l-1),k))
                 enddo

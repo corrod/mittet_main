@@ -31,3 +31,10 @@ subroutine set_d_txyz
     write(*,'(a,e12.4)')    'omega0',omega0
     write(*,*)              'sigmawa,myuwa',sigmawa,myuwa
             end subroutine set_d_txyz
+
+
+!!!グリッド間隔dxの設定;グリッド分散
+
+!!!タイムステップdtの設定;クーラン条件
+
+!!!総タイムステップnstepの設定
