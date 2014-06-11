@@ -13,7 +13,7 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     character(5) :: name
 
-
+    !震源から少し離れたHZの出力
     write(13,*) t, real(hz(x0,y0,z0))
     write(14,*) t, real(hz(x0,y0,z0+10)) 
     write(15,*) t, real(hz(x0,y0,z0+20)) 
@@ -26,13 +26,17 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     if (mod(istep,20)==0) then
    l=10000+istep/20
     write(name,"(I5)") l
-    open(7,file=name//".d")
+    open(7,file="hz"//name//".d")
+    open(8,file="ex"//name//".d")
+
         do j=1,ny
             do i=1,nx
-                 write(7,*) t,i,j,real(Ex(i,j,z0))
+                 write(7,*) t,i,j,real(hz(i,j,z0))
+                 write(8,*) t,i,j,real(ex(i,j,z0))
             enddo
         enddo
     close(7)
+    close(8)
     endif
 
     

@@ -2,12 +2,11 @@
 !  mittet 仮想領域法 2014.06.01
 !
 !
-!
 !   omega0=2πf0
 !   f0=1,0Hz
 !   sigmawa=3.2S/m
+!
 !   x=(i-1)*dx
-!   operator half length ∂n=Σαの書き方
 !   代入必要?↓↓↓
 !   E'(x,omega')=E(x,omega)
 !   H'(x,omega')=sqrt(-iomega/2omega0)H(x,omega)
@@ -15,8 +14,9 @@
 !   K'(x,omega')=K(x,omega)
 !***************************************************
 
-!!!!!!!!!!!!!!!!!!!メインプログラム!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!      メインプログラム     !!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 program main
     use const_para
     implicit none
@@ -33,13 +33,13 @@ program main
     complex(kind(0d0)) :: Hx(nx,ny,nz)
     complex(kind(0d0)) :: Hy(nx,ny,nz)
     complex(kind(0d0)) :: Hz(nx,ny,nz)
- !   integer :: ll
 
-    open(13,file='hz1000.d') !iran
-    open(14,file='hz1010.d') !iran
-    open(15,file='hz1020.d') !iran
-    open(16,file='hz1030.d') !iran
-    open(17,file='jh.d')!iran
+
+    open(13,file='hz1000.d') 
+    open(14,file='hz1010.d') 
+    open(15,file='hz1020.d') 
+    open(16,file='hz1030.d') 
+    open(17,file='jh.d')
 
     t=0d0!開始時間---------------------------------------
 
@@ -79,7 +79,7 @@ program main
 !    call E_PML(Ex,Ey,Ez,HX,Hy,Hz,sigma)
 !    call CPML_E(ex,ey,ez,hx,hy,hz)
 
-    t = t + dt*0.5d0  !時間の更新--------------------------
+    t = t + dt*0.5d0  !時間の更新--------------
 
     !磁場計算
     call HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)
