@@ -44,7 +44,7 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
          enddo
     enddo
 
-    !波動伝播計算
+    !ex波動伝播計算
     do k = 2,nz-1
         do j = 2,ny-1
             do i = 1,nx-1
@@ -107,7 +107,7 @@ subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
         enddo
     enddo
 
-    !波動伝播計算
+    !ey波動伝播計算
     do k = 2,nz-1
         do j = 1,ny-1
             do i = 2,nx-1
@@ -169,7 +169,7 @@ subroutine EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
         enddo
     enddo
 
-    !波動伝播計算
+    !ez波動伝播計算
     do k = 1,nz-1
         do j = 2,ny-1
             do i = 2,nx-1

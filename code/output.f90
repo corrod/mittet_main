@@ -1,6 +1,7 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 !ファイル出力用サブルーチン
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     use const_para
     implicit none
@@ -13,11 +14,11 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     character(5) :: name
 
-    !震源から少し離れたHZの出力
-    write(13,*) t, real(hz(x0,y0,z0))
-    write(14,*) t, real(hz(x0,y0,z0+10)) 
-    write(15,*) t, real(hz(x0,y0,z0+20)) 
-    write(16,*) t, real(hz(x0,y0,z0+30)) 
+
+    write(13,*) t, real(hz(x0,y0,z0)),    aimag(hz(x0,y0,z0))    !hz1000.d
+    write(14,*) t, real(hz(x0,y0,z0+10)), aimag(hz(x0,y0,z0+10)) !hz1010.d
+    write(15,*) t, real(hz(x0,y0,z0+20)), aimag(hz(x0,y0,z0+20))   !hz1030.d
+    write(16,*) t, real(hz(x0,y0,z0+30)), aimag(hz(x0,y0,z0+30)) !jh_fic.d
     write(17,*) t, Jh(istep)
 
 

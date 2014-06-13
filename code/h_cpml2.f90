@@ -1,16 +1,17 @@
-!Convolutional PML_H ******************************************************************
+!Convolutional PML_H !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! sigmamax amax kappamax の求め方 sigma*の求め方
 ! 導入の仕方
 ! メイン部分の計算は通常の電磁波伝播と同じでプサイのぶぶんだけCPML？
 ! subrouitne 分ける必要ないのかも
-!**************************************************************************************
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 subroutine CPML_H(ex,ey,ez,hx,hy,hz)
     use const_para
     implicit none
 
     integer,parameter :: m = 4, ma = 4
     integer           :: nxpml1 = 5, nypml1 = 5, nzpml1 = 5 !pmlの厚さ
-    real(8),parameter :: lnR0 = -100d0  !ln|R(0)|
+    real(8),parameter :: lnR0 = -100.0d0  !ln|R(0)|
     real(8)           :: sigma_opt
     real(8)           :: sigma_max!!!
     real(8),parameter :: kappa_max = 1.0d0 !!!

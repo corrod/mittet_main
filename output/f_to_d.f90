@@ -1,11 +1,13 @@
-!!ficticiou wave domain からdiffusive frequency 
+!!ficticiou wave domain からdiffusive frequency !!!!!!!
 !
-!deallocateするとプログラム止まる問題あり
+!入出力の列数に注意
+!deallocateするとプログラム止まる問題ありls
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 program f_to_d
 	use const_para
 		implicit none
+
     		integer :: n,nd,ios
     		real(8) :: omega 
     	!	complex(kind(0d0)), allocatable :: Gxn(:,:,:),Gyn(:,:,:),Gzn(:,:,:)
@@ -24,7 +26,7 @@ program f_to_d
  
     !!! 開始------------------------------------------------------------
     !ファイル（データ）の長さNDを調べる
-    open(51,file='inp1.dat')!inp1,action='read')
+    open(51,file='inp1.dat',action='read')
       nd=0
     do
         read(51,'(f12.0)',iostat=ios)
@@ -43,10 +45,10 @@ program f_to_d
 
 	
     !fftするデータの読み込み
-    open(51,file='inp1.dat')!,action='read')
-    do i=1,nd
-    read(51,*) t(i), inp(i)
-    enddo
+    open(51,file='inp1.dat',action='read')
+      do i=1,nd
+      read(51,*) t(i), inp(i)
+      enddo
     close(51)
 
 
@@ -67,24 +69,24 @@ program f_to_d
 
 	! フーリエ振幅スペクトル，フーリエ位相スペクトルの書き出し
     open(61,file='out1.dat')!,status='replace',action='write')
-    do i=1,n/2
-    write(61,*) (i-1)/(n*dt),f(i)
-    enddo
+      do i=1,n/2
+      write(61,*) (i-1)/(n*dt),f(i)
+      enddo
     close(61)
 
 
     open(61,file='out2.dat')!,status='replace',action='write')
-    do i=1,n/2
-    write(61,*) (i-1)/(n*dt),p(i)
-    enddo
+      do i=1,n/2
+      write(61,*) (i-1)/(n*dt),p(i)
+      enddo
     close(61)
 
 
      !フーリエ変換後のdiffusive freqency domainのinp
     open(61,file='out3.dat')!,status='replace',action='write')
-    do i=1,n/2
-    write(61,*) (i-1)/(n*dt),real(c(i)),aimag(c(i))!,aimag(c)!i, inp(i)
-    enddo
+      do i=1,n/2
+      write(61,*) (i-1)/(n*dt),real(c(i)),aimag(c(i))
+      enddo
     close(61)
 
     end program f_to_d

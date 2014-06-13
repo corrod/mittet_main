@@ -1,9 +1,10 @@
-!!!Convolutional PML_E *************************************************************
+!!!Convolutional PML_E !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! sigmamax amax kappamax の求め方
-! メイン部分の計算は通常の電磁波伝播と同じでプサイのぶぶんだけCPML？l
+! メイン部分の計算は通常の電磁波伝播と同じでプサイのぶぶんだけCPML？
 ! subrouitne 分ける必要ないのかも
 !psi部分だけPMLバージョン。
-!***********************************************************************************
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     use const_para
     implicit none
@@ -30,6 +31,8 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     complex(kind(0d0)) :: psi_eyz1(nx,ny,nz),psi_exz1(nx,ny,nz)
     complex(kind(0d0)), intent(inout) :: ex(nx,ny,nz),ey(nx,ny,nz),ez(nx,ny,nz)
     complex(kind(0d0)), intent(in) :: hx(nx,ny,nz),hy(nx,ny,nz),hz(nx,ny,nz)
+
+
 
 !!!    sigma_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
     sigma_opt = (m+1)/(150d0*pai*sqrt(epsir)*dx)

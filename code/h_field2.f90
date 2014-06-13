@@ -40,7 +40,7 @@ subroutine  HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)!myu追加
       enddo
     enddo
 
-    !波動伝播計
+    !hx波動伝播計
     do k = 1,nz-1
         do j = 1,ny-1
             do i = 2,nx-1
@@ -102,7 +102,7 @@ subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
       enddo
     enddo
 
-    !波動伝播計算
+    !hy波動伝播計算
     do k = 1,nz-1
         do j = 2,ny-1
             do i = 1,nx-1
@@ -165,7 +165,7 @@ subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
       enddo
     enddo
 
-    !波動伝播計算
+    !hz波動伝播計算
     do k = 2,nz-1
         do j = 1,ny-1
             do i = 1,nx-1

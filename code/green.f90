@@ -13,8 +13,8 @@ program green
 		complex(kind(0d0)), allocatable :: out1(:)
 
 		
-		!E inp1=E(omega)!!!!!!!!!!!!!!!!!!!!!!!!!
-		open(1,file='inp1.dat')!inp1,action='read')
+		!E inp1=E(omega)の読み込み!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		open(1,file='inp1.dat',action='read')
 	    nd=0
 	    do
 	        read(1,'(f12.0)',iostat=ios)
@@ -32,8 +32,8 @@ program green
 		
 
 
-		!Jn inp2=J(omega)!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		open(2,file='inp2.dat')!inp1,action='read')
+		!Jn inp2=J(omega)の読み込み!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		open(2,file='inp2.dat',action='read')
 	    nd=0
 	    do
 	        read(2,'(f12.0)',iostat=ios)
@@ -51,7 +51,7 @@ program green
 
 
 
-		!グリーン関数導出 out1=Gej_in(x,omega|xs)!!!!!!!!!!
+		!グリーン関数導出 out1=Gej_in(x,omega|xs)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		open(3,file='out1.dat')
 		out1(1:nd) = inp1(1:nd) / inp2(1:nd)  !!G=E/J
 		
