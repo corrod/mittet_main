@@ -44,7 +44,6 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
          enddo
     enddo
 
-
     !波動伝播計算
     do k = 2,nz-1
         do j = 2,ny-1
@@ -53,7 +52,7 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
                         temp1(l) = temp1(l-1) + alpha(ln,l) * (Hz(i,j+(l-1),k) - Hz(i,j-l,k))
                         temp2(l) = temp2(l-1) + alpha(ln,l) * (Hy(i,j,k+(l-1)) - Hy(i,j,k-l))
                     enddo
-                        Ex(i,j,k) = Ex(i,j,k) + CEXLY(i,j,k)*temp1(ln) + CEXLZ(i,j,k)*temp2(ln)
+                    Ex(i,j,k) = Ex(i,j,k) + CEXLY(i,j,k)*temp1(ln) + CEXLZ(i,j,k)*temp2(ln)
             enddo
         enddo
     enddo
@@ -61,6 +60,10 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
     !ソース項
     !Ex(x0,y0,z0) = Ex(x0,y0,z0) - Je(istep)
             end subroutine EXFIELD
+
+
+
+
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Ey-field!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -104,14 +107,13 @@ subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
         enddo
     enddo
 
-
     !波動伝播計算
     do k = 2,nz-1
         do j = 1,ny-1
             do i = 2,nx-1
                 do l=1,ln
-                temp1(l) = temp1(l-1) + alpha(ln,l) * (Hx(i,j,k+(l-1)) - Hx(i,j,k-l))
-                temp2(l) = temp2(l-1) + alpha(ln,l) * (Hz(i+(l-1),j,k) - Hz(i-l,j,k)) 
+                    temp1(l) = temp1(l-1) + alpha(ln,l) * (Hx(i,j,k+(l-1)) - Hx(i,j,k-l))
+                    temp2(l) = temp2(l-1) + alpha(ln,l) * (Hz(i+(l-1),j,k) - Hz(i-l,j,k)) 
                 enddo
                 Ey(i,j,k) = Ey(i,j,k) + CEYLZ(i,j,k)*temp1(ln) + CEYLX(i,j,k)*temp2(ln)
             enddo
@@ -121,6 +123,8 @@ subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
     !ソース項
     !Ey(x0,y0,z0) = Ey(x0,y0,z0) - Je(istep)
             end subroutine EYFIELD
+
+
 
 
 
@@ -165,14 +169,13 @@ subroutine EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
         enddo
     enddo
 
-
     !波動伝播計算
     do k = 1,nz-1
         do j = 2,ny-1
             do i = 2,nx-1
                      do l=1,ln
-                     temp1(l) = temp1(l-1) + alpha(ln,l) * (Hy(i+(l-1),j,k) - Hy(i-l,j,k))
-                     temp2(l) = temp2(l-1) + alpha(ln,l) * (Hx(i,j+(l-1),k) - Hx(i,j-l,k))
+                         temp1(l) = temp1(l-1) + alpha(ln,l) * (Hy(i+(l-1),j,k) - Hy(i-l,j,k))
+                         temp2(l) = temp2(l-1) + alpha(ln,l) * (Hx(i,j+(l-1),k) - Hx(i,j-l,k))
                      enddo
                      Ez(i,j,k) = Ez(i,j,k) + CEZLX(i,j,k)*temp1(ln) + CEZLY(i,j,k)*temp2(ln)
             enddo

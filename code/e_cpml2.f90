@@ -31,6 +31,7 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     complex(kind(0d0)), intent(inout) :: ex(nx,ny,nz),ey(nx,ny,nz),ez(nx,ny,nz)
     complex(kind(0d0)), intent(in) :: hx(nx,ny,nz),hy(nx,ny,nz),hz(nx,ny,nz)
 
+!!!    sigma_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
     sigma_opt = (m+1)/(150d0*pai*sqrt(epsir)*dx)
     sigma_max = 0.7d0*sigma_opt
 
@@ -38,6 +39,7 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
    do k = 1,nz
    do j = 1,ny
    do i = 1,nx
+
     sigma_x(i) = sigma_max*((nxpml1-i)/(nxpml1-1))**m
     sigma_y(j) = sigma_max*((nypml1-j)/(nypml1-1))**m
     sigma_z(k) = sigma_max*((nzpml1-k)/(nzpml1-1))**m
@@ -70,41 +72,46 @@ subroutine CPML_E(ex,ey,ez,hx,hy,hz)
     ce_x(i) = sigma_x(i)*(be_x(i)-1) / (sigma_x(i)+kappa_x(i)*a_x(i)) / kappa_x(i)
     ce_y(j) = sigma_y(j)*(be_y(j)-1) / (sigma_y(j)+kappa_y(j)*a_y(j)) / kappa_y(j)
     ce_z(k) = sigma_z(k)*(be_z(k)-1) / (sigma_z(k)+kappa_z(k)*a_z(k)) / kappa_z(k)
+    
    enddo
-    enddo
-    enddo
+   enddo
+   enddo
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!field-update loop!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !x-update
-!    do  k=2,nz-1
- !       do  j=2,ny-1
-  !             ex(i,j,k) = ca_x(i,j,k)*ex(i,j,k)&
-   !                        +cb_x(i,j,k)*((hz(i,j,k)-hz(i,j-1,k))/kedy(j) &
-    !                                   - (hy(i,j,k)-hy(i,j,k-1))/kedz(k))
-     !       enddo
-      !  enddo
- !   enddo
+   do  k=2,nz-1
+       do  j=2,ny-1
+          do i=1,nx-1
+              ex(i,j,k) = ca_x(i,j,k)*ex(i,j,k)&
+                          +cb_x(i,j,k)*((hz(i,j,k)-hz(i,j-1,k))/kedy(j) &
+                                      - (hy(i,j,k)-hy(i,j,k-1))/kedz(k))
+           enddo
+       enddo
+   enddo
+
     !y-update
- !   do  k=2,nz-1
- !       do  j=1,ny-1
- !           do i=2,nx-1
- !               ey(i,j,k) = ca_y(i,j,k)*ey(i,j,k)&
-  !                         +cb_y(i,j,k)*((hx(i,j,k)-hx(i,j,k-1))/kedz(k) &  
-  !                                     - (hz(i,j,k)-hz(i-1,j,k))/kedx(i))
-  !          enddo
-   !     enddo
-   ! enddo
+   do  k=2,nz-1
+       do  j=1,ny-1
+           do i=2,nx-1
+               ey(i,j,k) = ca_y(i,j,k)*ey(i,j,k)&
+                          +cb_y(i,j,k)*((hx(i,j,k)-hx(i,j,k-1))/kedz(k) &  
+                                      - (hz(i,j,k)-hz(i-1,j,k))/kedx(i))
+           enddo
+       enddo
+   enddo
+   
     !z-update
-  !     do  j=2,ny-1
-   !         do  i=2,nx-1
-    !            ez(i,j,k) = ca_z(i,j,k)*ez(i,j,k)&
-     !                      +cb_z(i,j,k)*((hy(i,j,k)-hy(i-1,j,k))/kedx(i) &  
-      !                                 - (hx(i,j,k)-hx(i,j-1,k))/kedy(j)) 
- !           enddo
-!        enddo
-  !   enddo
+    do k=1,nz-1
+      do  j=2,ny-1
+           do  i=2,nx-1
+               ez(i,j,k) = ca_z(i,j,k)*ez(i,j,k)&
+                          +cb_z(i,j,k)*((hy(i,j,k)-hy(i-1,j,k))/kedx(i) &  
+                                      - (hx(i,j,k)-hx(i,j-1,k))/kedy(j)) 
+           enddo
+       enddo
+    enddo
 
 
 

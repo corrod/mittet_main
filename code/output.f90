@@ -18,7 +18,7 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     write(14,*) t, real(hz(x0,y0,z0+10)) 
     write(15,*) t, real(hz(x0,y0,z0+20)) 
     write(16,*) t, real(hz(x0,y0,z0+30)) 
-    write(17,*) Jh(istep)
+    write(17,*) t, Jh(istep)
 
 
 
@@ -39,7 +39,8 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     close(8)
     endif
 
-    
+
+
             end subroutine output_EH
 
             

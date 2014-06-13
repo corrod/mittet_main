@@ -40,7 +40,6 @@ subroutine  HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)!myu追加
       enddo
     enddo
 
-
     !波動伝播計
     do k = 1,nz-1
         do j = 1,ny-1
@@ -49,7 +48,7 @@ subroutine  HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)!myu追加
                     temp1(l) = temp1(l-1) + alpha(ln,l) * (Ez(i,j+l,k) - Ez(i,j-(l-1),k))
                     temp2(l) = temp2(l-1) + alpha(ln,l) * (Ey(i,j,k+l) - Ey(i,j,k-(l-1)))
                 enddo
-                    Hx(i,j,k) = Hx(i,j,k) + CHXLY(i,j,k)*temp1(ln) + CHXLZ(i,j,k)*temp2(ln)
+                Hx(i,j,k) = Hx(i,j,k) + CHXLY(i,j,k)*temp1(ln) + CHXLZ(i,j,k)*temp2(ln)
 
             enddo
         enddo
@@ -58,6 +57,9 @@ subroutine  HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)!myu追加
     !ソース項
 !   Hx(x0,y0,z0) = Hx(x0,y0,z0) - Jh(istep)
             end subroutine HXFIELD
+
+
+
 
 
 
@@ -100,7 +102,6 @@ subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
       enddo
     enddo
 
-
     !波動伝播計算
     do k = 1,nz-1
         do j = 2,ny-1
@@ -109,7 +110,7 @@ subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
                     temp1(l) = temp1(l-1) + alpha(ln,l) * (Ex(i,j,k+l) - Ex(i,j,k-(l-1)))
                     temp2(l) = temp2(l-1) + alpha(ln,l) * (Ez(i+l,j,k) - Ez(i-(l-1),j,k))
                 enddo
-                    Hy(i,j,k) = Hy(i,j,k) + CHYLZ(i,j,k)*temp1(ln) + CHYLX(i,j,k)*temp2(ln)
+                Hy(i,j,k) = Hy(i,j,k) + CHYLZ(i,j,k)*temp1(ln) + CHYLX(i,j,k)*temp2(ln)
                         
             enddo
         enddo
@@ -122,8 +123,12 @@ subroutine HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu) !myu追加
 
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Hz-field-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Hz-field-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
     use const_para
     implicit none
@@ -160,8 +165,6 @@ subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
       enddo
     enddo
 
-
-
     !波動伝播計算
     do k = 2,nz-1
         do j = 1,ny-1
@@ -170,12 +173,11 @@ subroutine HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu) !myu追加
                     temp1(l) = temp1(l-1) + alpha(ln,l) * (Ey(i+l,j,k) - Ey(i-(l-1),j,k))
                     temp2(l) = temp2(l-1) + alpha(ln,l) * (Ex(i,j+l,k) - Ex(i,j-(l-1),k))
                 enddo
-                 Hz(i,j,k) = Hz(i,j,k) + CHZLX(i,j,k)*temp1(ln) + CHZLY(i,j,k)*temp2(ln) 
+                Hz(i,j,k) = Hz(i,j,k) + CHZLX(i,j,k)*temp1(ln) + CHZLY(i,j,k)*temp2(ln) 
              enddo           
         enddo
     enddo
 
     !ソース項
     Hz(x0,y0,z0) = Hz(x0,y0,z0) - Jh(istep)
-
             end subroutine HZFIELD

@@ -39,7 +39,7 @@ program main
     open(14,file='hz1010.d') 
     open(15,file='hz1020.d') 
     open(16,file='hz1030.d') 
-    open(17,file='jh.d')
+    open(17,file='jh_fic.d')
 
     t=0d0!開始時間---------------------------------------
 
@@ -68,9 +68,9 @@ program main
     do istep = 1, nstep !反復計算開始----------------------
 
     !入力波源の設定
-!   call gaussianpulse(istep,t,Ie,Mh)
     call gaussian(istep,t,Je,Jh,sigma,myu)
-    !電場計算
+
+    !電場計算 E
     call EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
     call EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
     call EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
@@ -81,7 +81,7 @@ program main
 
     t = t + dt*0.5d0  !時間の更新--------------
 
-    !磁場計算
+    !磁場計算 H
     call HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)
     call HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu)
     call HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu)

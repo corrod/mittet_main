@@ -1,12 +1,16 @@
-!!ficticiou wave domain からdiffusive frequency domain
+!!ficticiou wave domain からdiffusive frequency 
+!
+!deallocateするとプログラム止まる問題あり
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 program f_to_d
 	use const_para
 		implicit none
     		integer :: n,nd,ios
     		real(8) :: omega 
     	!	complex(kind(0d0)), allocatable :: Gxn(:,:,:),Gyn(:,:,:),Gzn(:,:,:)
-    		real(8), allocatable :: jh(:)
-        real(8), allocatable :: f(:), p(:), inp(:), t(:)
+    	!	real(8), allocatable :: jh(:)
+        real(8), allocatable :: inp(:), t(:), f(:), p(:)
   	   	complex(kind(0d0)), allocatable :: c(:)
        ! character(8) :: inp1
        ! character(8) :: out1,out2,out3
@@ -83,7 +87,7 @@ program f_to_d
     enddo
     close(61)
 
-end program f_to_d
+    end program f_to_d
 
 	!!!jh-------------------------------------------------------------------
 	!ファイル（データ）の長さNDを調べる

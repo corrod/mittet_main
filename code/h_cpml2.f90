@@ -36,6 +36,7 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
     sigma_opt = (m+1)/(150.0d0*pai*sqrt(epsir)*dx)
     sigma_max = 0.7d0*sigma_opt
     
+
     do k = 1,nz
     do j = 1,nz
     do i = 1,nz
@@ -44,9 +45,9 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
     sigma_y(j) = sigma_max* ((nypml1-j)/(nypml1-1)) **m
     sigma_z(k) = sigma_max* ((nzpml1-k)/(nzpml1-1)) **m    
 !!!    kappa_max =    !!!導出要確認
-    kappa_x(i) = 1 + (kappa_max-1)*((nxpml1-i)/(nxpml1-1)) **m  !!!-i-1/2の取扱い
-    kappa_y(j) = 1 + (kappa_max-1)*((nypml1-j)/(nypml1-1)) **m
-    kappa_z(k) = 1 + (kappa_max-1)*((nzpml1-k)/(nzpml1-1)) **m
+    kappa_x(i) = 1.0d0 + (kappa_max-1)*((nxpml1-i)/(nxpml1-1)) **m  !!!-i-1/2の取扱い
+    kappa_y(j) = 1.0d0 + (kappa_max-1)*((nypml1-j)/(nypml1-1)) **m
+    kappa_z(k) = 1.0d0 + (kappa_max-1)*((nzpml1-k)/(nzpml1-1)) **m
 
 !!!    a_max =         !!導出要確認
     a_x(i) = a_max* (i/(nxpml1-1))**ma !!!-i-1/2の取り扱い
@@ -73,6 +74,7 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
     ch_x(i) = sigma_x(j)*(bh_x(i)-1) / (sigma_x(i) + kappa_x(i)*a_x(i)) / kappa_x(i)
     ch_y(j) = sigma_y(j)*(bh_y(j)-1) / (sigma_y(j) + kappa_y(j)*a_y(j)) / kappa_y(j)
     ch_z(j) = sigma_z(k)*(bh_z(k)-1) / (sigma_z(k) + kappa_z(k)*a_z(k)) / kappa_z(k)
+
     enddo
     enddo
     enddo
@@ -83,35 +85,35 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!field update loop!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  !Hx
-! do k=1,nz-1
- !       do j=1,ny-1
-  !          do i=2,nx-1
-   !             hx(i,j,k) = da_x(i,j,k)*hx(i,j,k)&
-    !                       -db_x(i,j,k)*((ez(i,j+1,k)-ez(i,j,k))/khdy(j)&
-     !                                   -(ey(i,j,k+1)-ey(i,j,k))/khdz(k))
-      !                     enddo
-       !                         enddo
-        !                            enddo
+ do k=1,nz-1
+       do j=1,ny-1
+           do i=2,nx-1
+               hx(i,j,k) = da_x(i,j,k)*hx(i,j,k)&
+                          -db_x(i,j,k)*((ez(i,j+1,k)-ez(i,j,k))/khdy(j)&
+                                       -(ey(i,j,k+1)-ey(i,j,k))/khdz(k))
+                          enddo
+                               enddo
+                                   enddo
  !Hy
- !do k=1,nz-1
-  !      do j=2,ny-1
-   !         do i=1,nx-1
-    !            hy(i,j,k) = da_y(i,j,k)*hy(i,j,k)&
-     !                      -db_y(i,j,k)*((ex(i,j,k+1)-ex(i,j,k))/khdz(k)&
-      !                                  -(ez(i+1,j,k)-ez(i,j,k))/khdx(i))
-       !                     enddo
-        !                        enddo
-         !                           enddo
+ do k=1,nz-1
+       do j=2,ny-1
+           do i=1,nx-1
+               hy(i,j,k) = da_y(i,j,k)*hy(i,j,k)&
+                          -db_y(i,j,k)*((ex(i,j,k+1)-ex(i,j,k))/khdz(k)&
+                                       -(ez(i+1,j,k)-ez(i,j,k))/khdx(i))
+                           enddo
+                               enddo
+                                   enddo
  !Hz
-! do k=2,nz-1
- !       do j=1,ny-1
-  !          do i=1,nx-1
-   !             hz(i,j,k) = da_z(i,j,k)*hz(i,j,k)&
-    !                       -db_z(i,j,k)*((ey(i+1,j,k)-ey(i,j,k))/khdx(i)&
-     !                                   -(ex(i,j+1,k)-ex(i,j,k))/khdy(j))
-      !                      enddo
-       !                         enddo
-        !                            enddo
+do k=2,nz-1
+       do j=1,ny-1
+           do i=1,nx-1
+               hz(i,j,k) = da_z(i,j,k)*hz(i,j,k)&
+                          -db_z(i,j,k)*((ey(i+1,j,k)-ey(i,j,k))/khdx(i)&
+                                       -(ex(i,j+1,k)-ex(i,j,k))/khdy(j))
+                           enddo
+                               enddo
+                                   enddo
 
 
 
