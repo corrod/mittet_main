@@ -10,7 +10,7 @@ subroutine model(sigma,myu)
 
     !海水一様モデル
     sigma(1:nx,1:ny,1:nz) = sigmawa
-    myu(1:nx,1:ny,1:nz) = myuwa
+    myu(1:nx,1:ny,1:nz)   = myuwa
 
     !海水
     !sigma()=sigmawa

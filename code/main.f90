@@ -34,25 +34,24 @@ program main
     complex(kind(0d0)) :: Hy(nx,ny,nz)
     complex(kind(0d0)) :: Hz(nx,ny,nz)
 
-
     open(13,file='hz1000.d') 
     open(14,file='hz1010.d') 
     open(15,file='hz1020.d') 
     open(16,file='hz1030.d') 
     open(17,file='jh_fic.d')
 
-    t=0d0!開始時間---------------------------------------
+    t=0.0d0!開始時間---------------------------------------
 
 !   Ex,Ey,Ez,Hx,Hy,Hzの初期化
     do k = 1,nz
         do j = 1,ny
             do i = 1,nx
-                Ex(i,j,k)=0d0
-                Ey(i,j,k)=0d0
-                Ez(i,j,k)=0d0
-                Hx(i,j,k)=0d0
-                Hy(i,j,k)=0d0
-                Hz(i,j,k)=0d0
+                Ex(i,j,k)=0.0d0
+                Ey(i,j,k)=0.0d0
+                Ez(i,j,k)=0.0d0
+                Hx(i,j,k)=0.0d0
+                Hy(i,j,k)=0.0d0
+                Hz(i,j,k)=0.0d0
             enddo
         enddo
     enddo
@@ -63,7 +62,6 @@ program main
     !cmax,cminの計算 dt,dx,dy,dzの設定
     call set_d_txyz
 
-    t = 0d0  !時間の初期化
 
     do istep = 1, nstep !反復計算開始----------------------
 
@@ -71,25 +69,20 @@ program main
     call gaussian(istep,t,Je,Jh,sigma,myu)
 
     !電場計算 E
-!     call EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
-!     call EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
-!     call EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
     call Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sigma)
-     !境界条件 E
-!    call E_PML(Ex,Ey,Ez,HX,Hy,Hz,sigma)
-!    call CPML_E(ex,ey,ez,hx,hy,hz)
+    
+    !境界条件 CPML_E
+    call CPML_E(ex,ey,ez,hx,hy,hz,sigma)
 
-    t = t + dt*0.5d0  !時間の更新--------------
+
+    t = t + dt*0.5d0  !時間の更新--------------------------
 
     !磁場計算 H
-!     call HXFIELD(istep,t,Jh,Hx,Ey,Ez,myu)
-!     call HYFIELD(istep,t,Jh,Hy,Ex,Ez,myu)
-!     call HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu)
     call Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
-    
-    !境界条件 H
-!    call H_BoundaryCondition(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu)
- !   call CPML_H(ex,ey,ez,hx,hy,hz)
+
+    !境界条件 CPML_H
+    call CPML_H(ex,ey,ez,hx,hy,hz,sigma,myu)
+
 
     t = t + dt*0.5d0 !時間の更新---------------------------
 

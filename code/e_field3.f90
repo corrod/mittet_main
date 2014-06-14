@@ -13,7 +13,7 @@ subroutine Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sigma)
 !   complex(kind(0d0)), intent(in) :: sigmaxx(nx,ny,nz)
     real(8), intent(in) :: Je(nstep)
     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
-    complex(kind(0d0)), intent(inout) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
+    complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     real(8),intent(in)  :: sigma(nx,ny,nz)
     real(8) :: etaxx(nx,ny,nz),etayy(nx,ny,nz),etazz(nx,ny,nz)
     real(8) :: CEXLY(nx,ny,nz),CEYLZ(nx,ny,nz),CEZLX(nx,ny,nz)
@@ -112,4 +112,5 @@ subroutine Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sigma)
 
     !ソース項
 !   Ez(x0,y0,z0) = Ez(x0,y0,z0) - Je(istep)
+
             end subroutine Efield
