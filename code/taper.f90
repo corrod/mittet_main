@@ -33,7 +33,7 @@ program taper
 
 	    !Bartlett window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	    do i=1,m/2
-		    w(i) = (m/2-i)*2,0d0/m !n<=m/2
+		    w(i) = (dble(m)/2.0d0-dble(i))*2,0d0/dble(m) !n<=m/2
 	    enddo
 
 	    do i=m/2+1,nd
@@ -43,7 +43,7 @@ program taper
 
 	    !Hanning window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	    do i=1,m/2
-		    w(i) = cos(pai*i/m)      !n<=m/2
+		    w(i) = cos(pai*dble(i)/dble(m) )     !n<=m/2
 	    enddo
 
 	    do i=m/2+1,nd
@@ -53,7 +53,7 @@ program taper
 
 	    !Hamming window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	    do i=1,m/2
-		    w(i) = 0.54d0 + 0.46d0*cos(2.0d0*pai*i/m)      !n<=m/2
+		    w(i) = 0.54d0 + 0.46d0*cos(2.0d0*pai*dble(i)/dble(m))      !n<=m/2
 	    enddo
 
 	    do i=m/2+1,nd
@@ -63,7 +63,7 @@ program taper
 
 		!Blackman window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		do i=1,m/2
-		    w(i) = 0.42d0 + 0.5d0*cos(2.0d0*pai*i/m) - 0.08d0*cos(4.0d0*pai*i/m)      !n<=m/2
+		    w(i) = 0.42d0 + 0.5d0*cos(2.0d0*pai*dble(i)/dble(m)) - 0.08d0*cos(4.0d0*pai*dble(i)/dble(m))      !n<=m/2
 	    enddo
 
 	    do i=m/2+1,nd

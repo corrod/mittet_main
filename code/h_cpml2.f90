@@ -42,7 +42,7 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz,sigma,myu)
 epsi(1:nx,1:ny,1:nz)=sigma(1:nx,1:ny,1:nz)/(2.0d0*omega0)
 
 !!!    sigma_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
-    sigma_opt = (m+1.0d0) / (150.0d0*pai*sqrt(epsir)*dx)
+    sigma_opt = (dble(m)+1.0d0) / (150.0d0*pai*sqrt(epsir)*dx)
     sigma_max = 0.7d0*sigma_opt
     
 
@@ -51,24 +51,24 @@ do k = 1,nzpml1
   do j = 1,nypml1
     do i = 1,nxpml1
 
-    sigma_x(i) = sigma_max* ((nxpml1-i)/(nxpml1-1.0d0))**m  !!!-i-1/2の取り扱い
-    sigma_y(j) = sigma_max* ((nypml1-j)/(nypml1-1.0d0))**m
-    sigma_z(k) = sigma_max* ((nzpml1-k)/(nzpml1-1.0d0))**m    
+    sigma_x(i) = sigma_max* ((dble(nxpml1)-dble(i))/(dble(nxpml1)-1.0d0))**dble(m)  !!!-i-1/2の取り扱い
+    sigma_y(j) = sigma_max* ((dble(nypml1)-dble(j))/(dble(nypml1)-1.0d0))**dble(m)
+    sigma_z(k) = sigma_max* ((dble(nzpml1)-dble(k))/(dble(nzpml1)-1.0d0))**dble(m)    
 !!!    kappa_max =    !!!導出要確認
-    kappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*((nxpml1-i)/(nxpml1-1.0d0))**m  !!!-i-1/2の取扱い
-    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*((nypml1-j)/(nypml1-1.0d0))**m
-    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*((nzpml1-k)/(nzpml1-1.0d0))**m
+    kappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*((dble(nxpml1)-dble(i))/(dble(nxpml1)-1.0d0))**dble(m)  !!!-i-1/2の取扱い
+    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*((dble(nypml1)-dble(j))/(dble(nypml1)-1.0d0))**dble(m)
+    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*((dble(nzpml1)-dble(k))/(dble(nzpml1)-1.0d0))**dble(m)
 
 !!!    a_max =         !!導出要確認
-    a_x(i) = a_max* (i/(nxpml1-1.0d0))**ma !!!-i-1/2の取り扱い
-    a_y(j) = a_max* (j/(nypml1-1.0d0))**ma
-    a_z(k) = a_max* (k/(nzpml1-1.0d0))**ma
+    a_x(i) = a_max* (dble(i)/(dble(nxpml1)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
+    a_y(j) = a_max* (dble(j)/(dble(nypml1)-1.0d0))**dble(ma)
+    a_z(k) = a_max* (dble(k)/(dble(nzpml1)-1.0d0))**dble(ma)
 
     khdx(i) = kappa_x(i)*dx !!!(i-1/2)dxの取り扱い
     khdy(j) = kappa_y(j)*dy
     khdz(k) = kappa_z(k)*dz
 
-
+    !bh_xが必ず0になってしまう
     bh_x(i) = exp(-(sigma_x(i)/kappa_x(i)+a_x(i)) *dt/epsi0)
     bh_y(j) = exp(-(sigma_y(j)/kappa_y(j)+a_y(j)) *dt/epsi0)
     bh_z(k) = exp(-(sigma_z(k)/kappa_z(k)+a_z(k)) *dt/epsi0)

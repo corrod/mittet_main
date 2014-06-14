@@ -14,7 +14,7 @@ module const_para
     implicit none
 
     integer :: i,j,k
-    integer, parameter :: nstep = 400 !総タイムステップ数
+    integer, parameter :: nstep = 1000 !総タイムステップ数
     integer, parameter :: nx = 100, ny = 100, nz = 100 !グリッド数
     integer, parameter :: x0 = 50, y0 = 50, z0 = 50  !送信源位置
     integer, parameter :: ln = 1 !operator half rength

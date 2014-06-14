@@ -70,14 +70,14 @@ program f_to_d
 	! フーリエ振幅スペクトル，フーリエ位相スペクトルの書き出し
     open(61,file='out1.dat')!,status='replace',action='write')
       do i=1,n/2
-      write(61,*) (i-1)/(n*dt),f(i)
+      write(61,*) dble(i-1)/(dble(n)*dt), f(i)
       enddo
     close(61)
 
 
     open(61,file='out2.dat')!,status='replace',action='write')
       do i=1,n/2
-      write(61,*) (i-1)/(n*dt),p(i)
+      write(61,*) dble(i-1)/(dble(n)*dt), p(i)
       enddo
     close(61)
 
@@ -85,7 +85,7 @@ program f_to_d
      !フーリエ変換後のdiffusive freqency domainのinp
     open(61,file='out3.dat')!,status='replace',action='write')
       do i=1,n/2
-      write(61,*) (i-1)/(n*dt),real(c(i)),aimag(c(i))
+      write(61,*) dble(i-1)/(dble(n)*dt), real(c(i)), aimag(c(i))
       enddo
     close(61)
 

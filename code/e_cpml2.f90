@@ -8,7 +8,8 @@
 !ai=alphai>0 real
 !psi loop あと３枚必要？
 !演算中の倍精度の表現に注意.d0,
-!be_x(5)が0になってしまう問題
+!be_x(5)が0になってしまう問題.１になるはず,epsi0=8.854d-12
+!epsi0が小さすぎる!!:q
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine CPML_E(ex,ey,ez,hx,hy,hz,sigma)
@@ -42,7 +43,7 @@ epsi(1:nx,1:ny,1:nz)=sigma(1:nx,1:ny,1:nz)/(2.0d0*omega0)
 
 
 !!!    sigma_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
-    sigma_opt = (m+1.0d0) / (150.0d0*pai*sqrt(epsir)*dx)
+    sigma_opt = (dble(m)+1.0d0) / (150.0d0*pai*sqrt(epsir)*dx)
     sigma_max = 0.7d0*sigma_opt
 
 
@@ -51,24 +52,24 @@ do k = 1,nzpml1
   do j = 1,nypml1
     do i = 1,nxpml1
 
-    sigma_x(i) = sigma_max*((nxpml1-i)/(nxpml1-1.0d0))**m
-    sigma_y(j) = sigma_max*((nypml1-j)/(nypml1-1.0d0))**m
-    sigma_z(k) = sigma_max*((nzpml1-k)/(nzpml1-1.0d0))**m
+    sigma_x(i) = sigma_max*((dble(nxpml1)-dble(i))/(dble(nxpml1)-1.0d0))**dble(m)
+    sigma_y(j) = sigma_max*((dble(nypml1)-dble(j))/(dble(nypml1)-1.0d0))**dble(m)
+    sigma_z(k) = sigma_max*((dble(nzpml1)-dble(k))/(dble(nzpml1)-1.0d0))**dble(m)
 
-    kappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*((nxpml1-i)/(nxpml1-1.0d0))**m
-    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*((nypml1-j)/(nypml1-1.0d0))**m
-    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*((nzpml1-k)/(nzpml1-1.0d0))**m
+    kappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*((dble(nxpml1)-dble(i))/(dble(nxpml1)-1.0d0))**dble(m)
+    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*((dble(nypml1)-dble(j))/(dble(nypml1)-1.0d0))**dble(m)
+    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*((dble(nzpml1)-dble(k))/(dble(nzpml1)-1.0d0))**dble(m)
 
-    a_x(i) = a_max*((i-1.0d0)/(nxpml1-1.0d0))**ma
-    a_y(j) = a_max*((j-1.0d0)/(nypml1-1.0d0))**ma
-    a_z(k) = a_max*((k-1.0d0)/(nzpml1-1.0d0))**ma
+    a_x(i) = a_max*((dble(i)-1.0d0)/(dble(nxpml1)-1.0d0))**dble(ma)
+    a_y(j) = a_max*((dble(j)-1.0d0)/(dble(nypml1)-1.0d0))**dble(ma)
+    a_z(k) = a_max*((dble(k)-1.0d0)/(dble(nzpml1)-1.0d0))**dble(ma)
 
     kedx(i) = kappa_x(i)*dx  !kedy=kappa(jdy)dy
     kedy(j) = kappa_y(j)*dy  !!!
     kedz(k) = kappa_z(k)*dz  !!!
 
 
-
+    !be_xが必ず0になってしまう
     be_x(i) = exp(-(sigma_x(i)/kappa_x(i)+a_x(i))*dt/epsi0)
     be_y(j) = exp(-(sigma_y(j)/kappa_y(j)+a_y(j))*dt/epsi0)
     be_z(k) = exp(-(sigma_z(k)/kappa_z(k)+a_z(k))*dt/epsi0)
@@ -96,9 +97,12 @@ enddo
   enddo
     enddo
 
-! write(*,*) kedx(1), be_x(1), ce_x(1)
- write(*,*) epsi0, be_x(5)
-! write(*,*) kedx(10), be_x(10), ce_x(10)
+
+! write(*,*) sigma_x(5),kappa_x(5),a_x(5)
+!  write(*,*) kedx(1), be_x(1), ce_x(1)
+!   write(*,*) epsi0, be_x(5)
+!  write(*,*) kedx(10), be_x(10), ce_x(10)
+! write(*,*) ca_x(3,3,3), cb_x(3,3,3)
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!field-update loop!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -151,7 +155,8 @@ enddo
             enddo
         enddo
     enddo
-
+!write(*,*) psi_Eyx1(3,3,3)
+! write(*,*) ez(3,3,3)
     !y-PML loop
     do k = 1,nz-1
         do j = 2,nypml1
@@ -165,6 +170,7 @@ enddo
             enddo
         enddo
     enddo
+! write(*,*) psi_Exy1(3,3,3)
 
     !z-PML loop
     do k = 2,nzpml1
@@ -179,4 +185,6 @@ enddo
             enddo
         enddo
     enddo
+!     write(*,*) psi_Eyz1(3,3,3)
+
         end subroutine CPML_E
