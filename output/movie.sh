@@ -2,7 +2,7 @@
 #HZの波動伝播movie
 i=10001
 j=`expr $i - 10000`
-max=20
+max=32
 
 while [ $j -le $max ]; do
 gnuplot <<EOF

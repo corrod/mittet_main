@@ -27,6 +27,7 @@ program main
     real(8) :: Je(nstep) !電流源
     real(8) :: Jh(nstep) !磁流源
     real(8) :: sigma(nx,ny,nz),myu(nx,ny,nz)
+    real(8) :: cmax
     complex(kind(0d0)) :: Ex(nx,ny,nz)
     complex(kind(0d0)) :: Ey(nx,ny,nz)
     complex(kind(0d0)) :: Ez(nx,ny,nz)
@@ -39,6 +40,8 @@ program main
     open(15,file='hz1020.d') 
     open(16,file='hz1030.d') 
     open(17,file='jh_fic.d')
+    
+write(*,*) 'start calculation!!'
 
     t=0.0d0!開始時間---------------------------------------
 
@@ -60,7 +63,7 @@ program main
     call model(sigma,myu)
 
     !cmax,cminの計算 dt,dx,dy,dzの設定
-    call set_d_txyz
+    call set_d_txyz(cmax)
 
 
     do istep = 1, nstep !反復計算開始----------------------

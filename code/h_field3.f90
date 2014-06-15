@@ -107,4 +107,5 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 
     !ソース項
     Hz(x0,y0,z0) = Hz(x0,y0,z0) - Jh(istep)
+
             end subroutine Hfield

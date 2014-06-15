@@ -57,14 +57,13 @@ subroutine Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sigma)
     !ソース項
     !Ex(x0,y0,z0) = Ex(x0,y0,z0) - Je(istep)
 
-
     !Ey係数の設定!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     do k = 1,nz
         do j = 1,ny
            do i = 1,nx
-	              etayy(i,j,k) = 2.0d0 * omega0 * sigma(i,j,k)!sigmayy(i,j,k)
-	              CEYLZ(i,j,k) = dt * etayy(i,j,k) / dz
-	              CEYLX(i,j,k) = - dt * etayy(i,j,k) / dx
+                  etayy(i,j,k) = 2.0d0 * omega0 * sigma(i,j,k)!sigmayy(i,j,k)
+                  CEYLZ(i,j,k) = dt * etayy(i,j,k) / dz
+                  CEYLX(i,j,k) = - dt * etayy(i,j,k) / dx
            enddo
         enddo
     enddo
@@ -90,9 +89,9 @@ subroutine Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sigma)
     do k = 1,nz
         do j = 1,ny
             do i = 1,nx
-	               etazz(i,j,k) = 2.0d0 * omega0 * sigma(i,j,k)!sigmazz(i,j,k)
-	               CEZLX(i,j,k) = dt * etazz(i,j,k) / dx
-	               CEZLY(i,j,k) = - dt * etazz(i,j,k) / dy
+                   etazz(i,j,k) = 2.0d0 * omega0 * sigma(i,j,k)!sigmazz(i,j,k)
+                   CEZLX(i,j,k) = dt * etazz(i,j,k) / dx
+                   CEZLY(i,j,k) = - dt * etazz(i,j,k) / dy
             enddo
         enddo
     enddo
