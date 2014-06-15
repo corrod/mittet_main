@@ -41,7 +41,7 @@ program main
     open(16,file='hz1030.d') 
     open(17,file='jh_fic.d')
     
-write(*,*) 'start calculation!!'
+write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
 
     t=0.0d0!開始時間---------------------------------------
 
@@ -75,7 +75,7 @@ write(*,*) 'start calculation!!'
     call Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sigma)
     
     !境界条件 CPML_E
-    call CPML_E(ex,ey,ez,hx,hy,hz,sigma)
+    call CPML_E(ex,ey,ez,hx,hy,hz,sigma,cmax)
 
 
     t = t + dt*0.5d0  !時間の更新--------------------------
@@ -84,7 +84,7 @@ write(*,*) 'start calculation!!'
     call Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 
     !境界条件 CPML_H
-    call CPML_H(ex,ey,ez,hx,hy,hz,sigma,myu)
+    call CPML_H(ex,ey,ez,hx,hy,hz,sigma,myu,cmax)
 
 
     t = t + dt*0.5d0 !時間の更新---------------------------

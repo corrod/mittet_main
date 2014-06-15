@@ -1,0 +1,38 @@
+#!/bin/bash
+
+
+xstart=200
+xend=700
+ystart=0.1
+yend=10
+base=1.p
+base2=5.0e-13
+
+awk '{print $1, $2}' < data_hokan/seg/sigTrue_h > tmp1.dat
+awk '{print $1, $2}' < data_hokan/seg/sigX_hori > tmp2.dat
+awk '{print $1, $2}' < data_hokan/seg/sigY_hori > tmp3.dat
+awk '{print $1, $2}' < data_hokan/seg/sigZ_hori > tmp4.dat
+awk '{print $1, $2}' < data_hokan/seg/sigXYZ_hori > tmp5.dat
+
+psxy tmp1.dat -JX10.0/6.0l -R${xstart}/${xend}/${ystart}/${yend} \
+        -Ba100:"X[m]":/a${base}:"Conductivity [S/m]":WSne:."": \
+        -W10/141/72/74 -P -K > tmp.eps
+
+psxy tmp2.dat -JX10.0/6.0l -R${xstart}/${xend}/${ystart}/${yend} \
+       -Sc0.05 -Ba100:"":/a${base}:"":WSne:."": \
+        -W10/58/90/45 -P -K -O >> tmp.eps
+
+psxy tmp3.dat -JX10.0/6.0l -R${xstart}/${xend}/${ystart}/${yend} \
+       -Sc0.05 -Ba100:"":/a${base}:"":WSne:."": \
+        -W10/192/147/48 -P -K -O >> tmp.eps
+
+psxy tmp4.dat -JX10.0/6.0l -R${xstart}/${xend}/${ystart}/${yend} \
+       -Sc0.05 -Ba100:"":/a${base}:"":WSne:."": \
+        -W10/82/70/108 -P -K -O >> tmp.eps
+
+psxy tmp5.dat -JX10.0/6.0l -R${xstart}/${xend}/${ystart}/${yend} \
+       -Sc0.05 -Ba100:"":/a${base}:"":WSne:."": \
+        -W10/69/66/66 -P -O >> tmp.eps
+gv tmp.eps
+
+rm tmp1.dat tmp2.dat

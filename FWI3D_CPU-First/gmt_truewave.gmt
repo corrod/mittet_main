@@ -1,0 +1,18 @@
+#!/bin/bash
+
+
+xstart=0.00
+xend=9
+ystart=-1.0
+yend=1.0
+base=0.2
+
+awk '{print $1, $2}' < data/true_waveformX.dat > tmp1.dat
+
+psxy tmp1.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+        -Ba1:"Time [s]":/a${base}:"Electric field [V/m]":WSne:."": \
+        -W10/141/72/74 -P > tmp.eps
+
+gv tmp.eps
+
+rm tmp1.dat tmp2.dat

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+xstart=0.0
+xend=2500
+ystart=1.e-12
+yend=1.0e-6
+base=5.0e-6
+
+awk '{print $1, $2}' < data_hokan/accuracy_FWI3d > tmp2.dat
+awk '{print $1, $2}' < data_hokan/accuracy_em1d > tmp1.dat
+
+psxy tmp1.dat -JX10.0/6.0l -R${xstart}/${xend}/${ystart}/${yend} \
+       -Ba1000:"Offset [m]":/a${base}:"Electric field [V/m]":WSne:."Validation": \
+        -W10/141/72/74 -P -K > tmp.eps
+
+psxy tmp2.dat -JX10.0/6.0l -R${xstart}/${xend}/${ystart}/${yend} \
+      -Sc0.25 -Ba1000:"Offset [m]":/a${base}:"Electric field [V/m]":WSne:."Validation": \
+        -W10/58/90/45 -P -O >> tmp.eps
+
+gv tmp.eps
+
+rm tmp1.dat tmp2.dat

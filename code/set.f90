@@ -4,19 +4,24 @@ subroutine set_d_txyz(cmax)
     implicit none
 
     real(8) :: cwa, cfe, cair
+    !real(8) :: courant
     real(8) :: cmax
     real(8) :: t_max
     real(8) :: dt_max
 
+
     !媒質中の伝播速度計算
-    cwa = sqrt(2.0d0*omega0/myuwa/sigmawa)
-    cfe = sqrt(2.0d0*omega0/myufe/sigmafe)
+    cwa = sqrt(2.0d0*omega0/myuwa/sigmawa)   !!!!cmin=sqrt(2.0d0*omega0/myuwa/maxv)
+    cfe = sqrt(2.0d0*omega0/myufe/sigmafe)   !!!!cmax=sqrt(2.0d0*omega0/myufe/maxv)
     cair = 1.0d0 / sqrt(myuair*epsiair)
     write(*,'(a,2e12.4)') '伝播速度cwa,cfe', cwa,cfe !海水の伝播速度出力
     write(*,'(a,e12.4)')  '伝播距離c*t'    , cwa*dt*nstep
 
     cmax = cwa  !max(cwa,cfe,cair)!   最大伝播速度cmax計算
   !  write(*,*) 'cmax=',cmax
+  
+!     courant = 1.0d0/cmax/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2,0d0 + 1.0d0/dz**2.0d0)
+!     dt = courant*6.0d0/7.0d0*0.999d0
 
     t_max = dt*nstep !   計測時間t_max
     write(*,'(a,e12.4)')    '計測時間t_max',t_max

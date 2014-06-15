@@ -9,16 +9,24 @@
 !psi loop あと３枚必要？
 !割り算のとき倍精度d0に注意!!
 !db_x,db_y,db_zを仮想領域にあわせる
+!epsi0=1 from imamu
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine CPML_H(ex,ey,ez,hx,hy,hz,sigma,myu)
+subroutine CPML_H(ex,ey,ez,hx,hy,hz,sigma,myu,cmax)
     use const_para
     implicit none
 
-    integer, parameter :: m = 4, ma = 4
+    integer, parameter :: m = 4, ma = 1
     integer, parameter :: nxpml1 = 10, nypml1 = 10, nzpml1 = 10 !pmlの厚さ
-    real(8), parameter :: kappa_max = 7.0d0 !!!
+    real(8)            :: delta=nxpml1*dx
+    real(8), parameter :: kappa_max = 1.0d0 !!!
     real(8), parameter :: a_max = 0.2d0     !!!
+    real(8), parameter :: nn = 3.0d0 !nn should be [2,6]
+    real(8), parameter :: order = 0.0d0 !order should be (0,3]
+    real(8), parameter :: optToMax = 10.0d0
+    real(8), parameter :: Rcoef=0.01d0 !R should be [10^-2, 10^-12]
+    real(8), intent(in) :: cmax
+
     real(8), intent(in) :: myu(nx,ny,nz)
     real(8), intent(in) :: sigma(nx,ny,nz)
     real(8) :: sigma_opt
@@ -30,10 +38,10 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz,sigma,myu)
     real(8) :: am_x(nx),am_y(ny),am_z(nz)
     real(8) :: mkappa_x(nx),mkappa_y(ny),mkappa_z(nz)
     real(8) :: khdx(nx),khdy(ny),khdz(nz)
+    real(8) :: bh_x(nx),bh_y(ny),bh_z(nz)
+    real(8) :: ch_x(nx),ch_y(ny),ch_z(nz)
     real(8) :: da_x(nx,ny,nz),da_y(nx,ny,nz),da_z(nx,ny,nz)
     real(8) :: db_x(nx,ny,nz),db_y(nx,ny,nz),db_z(nx,ny,nz)
-    real(8) :: bh_x(nxpml1),bh_y(nypml1),bh_z(nzpml1)
-    real(8) :: ch_x(nxpml1),ch_y(nypml1),ch_z(nzpml1)
     complex(kind(0d0)) :: psi_Hzx1(nx,ny,nz),psi_Hyx1(nx,ny,nz)
     complex(kind(0d0)) :: psi_Hxy1(nx,ny,nz),psi_Hzy1(nx,ny,nz)
     complex(kind(0d0)) :: psi_Hyz1(nx,ny,nz),psi_Hxz1(nx,ny,nz)
@@ -43,13 +51,15 @@ subroutine CPML_H(ex,ey,ez,hx,hy,hz,sigma,myu)
     epsi(1:nx,1:ny,1:nz)=sigma(1:nx,1:ny,1:nz)/(2.0d0*omega0)
 
 !!!    sigma_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
-    sigma_opt = (dble(m)+1.0d0) / (150.0d0*pai*sqrt(epsir)*dx)
-    sigma_max = 0.7d0*sigma_opt
+    sigma_max = (nn+order+1.0d0)*cmax+log(1.0d0/Rcoef) / (2.0d0*delta) * optToMax  !!x方向だけ？
+
+   ! sigma_opt = (dble(m)+1.0d0) / (150.0d0*pai*sqrt(epsir)*dx)
+  !  sigma_max = 0.7d0*sigma_opt
     
 
-!係数の設定
+!係数の設定xh
 
-    do i = 1,nx
+do i = 1,nx
 if (i<=nxpml1) then
     msigma_x(i) = sigma_max* ((dble(nxpml1)-dble(i)-0.5d0)/(dble(nxpml1)-1.0d0))**dble(m)  !!!-i-1/2の取り扱い
     mkappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*((dble(nxpml1)-dble(i)-0.5d0)/(dble(nxpml1)-1.0d0))**dble(m)  !!!-i-1/2の取扱い
@@ -68,6 +78,7 @@ else if(i>=nx-nxpml1+1) then
     bh_x(i)     = exp(-(msigma_x(i)/mkappa_x(i)+am_x(i)) *dt) !/epsi0)
     ch_x(i)     = msigma_x(i)*(bh_x(i)-1.0d0) / (msigma_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i) 
     khdx(i)     = mkappa_x(i)*dx !!!(i-1/2)dxの取り扱い
+
 else
     msigma_x(i) = 0.0d0
     mkappa_x(i) = 1.0d0
@@ -79,7 +90,7 @@ else
         enddo
 
 
-
+!係数の設定yh
 
 do j = 1,ny
 if (j<=nypml1) then
@@ -88,7 +99,7 @@ if (j<=nypml1) then
     am_y(j)     = a_max* ((dble(j)-0.5d0)/(dble(nypml1)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
 
     bh_y(j)     = exp(-(msigma_y(j)/mkappa_y(j)+am_y(j)) *dt) !/epsi0)
-    ch_y(j)     = msigma_y(j)*(bh_y(j)-1.0d0) / (msigma_y(j) + mkappa_y(i)*am_y(j)) / mkappa_y(j)
+    ch_y(j)     = msigma_y(j)*(bh_y(j)-1.0d0) / (msigma_y(j) + mkappa_y(j)*am_y(j)) / mkappa_y(j)
     khdy(j)     = mkappa_y(j)*dx !!!(i-1/2)dxの取り扱い
 
 else if(j>=ny-nypml1+1) then
@@ -99,6 +110,7 @@ else if(j>=ny-nypml1+1) then
     bh_y(j)     = exp(-(msigma_y(j)/mkappa_y(j)+am_y(j)) *dt) !/epsi0)
     ch_y(j)     = msigma_y(j)*(bh_y(j)-1.0d0) / (msigma_y(j) + mkappa_y(j)*am_y(j)) / mkappa_y(j) 
     khdy(j)     = mkappa_y(j)*dy !!!(i-1/2)dxの取り扱い
+
 else
     msigma_y(j) = 0.0d0
     mkappa_y(j) = 1.0d0
@@ -110,6 +122,7 @@ else
         enddo
 
 
+!係数の設定zh
 
 do k = 1,nz
 if (k<=nzpml1) then
@@ -129,6 +142,7 @@ else if(k>=nz-nzpml1+1) then
     bh_z(k)     = exp(-(msigma_z(k)/mkappa_z(k)+am_z(k)) *dt) !/epsi0)
     ch_z(k)     = msigma_z(k)*(bh_z(k)-1.0d0) / (msigma_z(k) + mkappa_z(k)*am_z(k)) / mkappa_z(k) 
     khdz(k)     = mkappa_z(k)*dz !!!(i-1/2)dxの取り扱い
+
 else
     msigma_z(k) = 0.0d0
     mkappa_z(k) = 1.0d0
@@ -138,29 +152,6 @@ else
     khdz(k) = mkappa_z(k)*dz
     endif
         enddo
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 !     (+)の係数
 !     do i=1,nxpml1
@@ -189,11 +180,6 @@ else
 !         bh_z(nz-(k-1)) = bh_z(k)
 !         ch_z(nz-(k-1)) = ch_z(k)
 !     enddo
-
-
-
-
-
 
 
 

@@ -1,0 +1,51 @@
+#!/bin/bash
+
+gmtset PAPER_MEDIA=a4
+rm tmp*
+
+ystart=0.0
+yend=0.0000005
+xstart=0
+xend=5
+base=0.0000001
+base2=5.0e-13
+
+awk '{print $1, $4}' < old_seg/final_ex.dat > tmp1.dat
+awk '{print $1, $4}' < old_seg/1st_ex.dat   > tmp2.dat
+awk '{print $1, $4}' < old_seg/observe.dat  > tmp3.dat
+
+psxy tmp1.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+        -Ba1:"Frequency [Hz]":/a${base}:"Electric field [V/m]":WSne:."": \
+        -W10/141/72/74 -P -K > tmp1.eps
+
+psxy tmp2.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+       -Ba1:"":/a${base}:"":WSne:."": \
+        -W10/58/90/45 -P -K -O >> tmp1.eps
+
+psxy tmp3.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+       -Ba1:"":/a${base}:"":WSne:."": \
+        -W10/192/147/48 -P -O >> tmp1.eps
+
+gv tmp1.eps
+
+ystart=-3.14
+yend=3.14
+base=1.0
+
+awk '{print $1, atan2($3,$2)}' < old_seg/final_ex.dat > tmp1.dat
+awk '{print $1, atan2($3,$2)}' < old_seg/1st_ex.dat   > tmp2.dat
+awk '{print $1, atan2($3,$2)}' < old_seg/observe.dat  > tmp3.dat
+
+psxy tmp1.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+        -Sc0.16 -Ba1:"Frequency [Hz]":/a${base}:"Phase":WSne:."": \
+        -W10/141/72/74 -P -K > tmp2.eps
+
+psxy tmp2.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+       -Sc0.09 -Ba1:"":/a${base}:"":WSne:."": \
+        -W10/58/90/45 -P -K -O >> tmp2.eps
+
+psxy tmp3.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+       -Sc0.02 -Ba1:"":/a${base}:"":WSne:."": \
+        -W10/192/147/48 -P -O >> tmp2.eps
+
+gv tmp2.eps

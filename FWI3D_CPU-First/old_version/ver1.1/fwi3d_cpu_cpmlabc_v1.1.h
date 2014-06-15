@@ -1,0 +1,18 @@
+void init_pml(void);
+void init_cpml(void);
+void epml_abcs(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void hpml_abcs(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void epml_abcs4(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void hpml_abcs4(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void xe_pml(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void ye_pml(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void ze_pml(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void xh_pml(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void yh_pml(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void zh_pml(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void xe_pml4(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void ye_pml4(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void ze_pml4(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void xh_pml4(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void yh_pml4(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);
+void zh_pml4(double *EX, double *EY, double *EZ, double *HX, double *HY, double *HZ);

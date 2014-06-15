@@ -1,0 +1,16 @@
+#!/bin/bash
+
+
+xstart=1
+xend=16
+ystart=0.4
+yend=1.1
+base=0.2
+
+awk '{print $1, $2}' < iran >tmp.dat
+
+psxy tmp.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+       -Ba4f4:"Offset [m]":/a${base}:"Error":WSne:."": \
+        -W10/209/48/40 -P > tmp.eps
+
+gv tmp.eps

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+
+xstart=0.01
+xend=400
+ystart=0.0
+yend=2.0e-12
+base=5.0e-13
+base2=5.0e-13
+
+awk '{print $1, $2}' < data_hokan/inverse_g.dat > tmp1.dat
+awk '{print $1, $2}' < data_hokan/anal1.dat > tmp2.dat
+
+psxy tmp1.dat -JX10.0l/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+        -Ba0.01p:"Time [s]":/a${base}:"Electric field [V/m]":WSne:."Received Green function": \
+        -W10/141/72/74 -P -K > tmp.eps
+
+psxy tmp2.dat -JX10.0l/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+       -Sc0.03 -Ba0.01p:"Time [s]":/a${base}:"Electric field [V/m]":WSne:."Received Green function": \
+        -W10/58/90/45 -P -O >> tmp.eps
+
+gv tmp.eps
+
+rm tmp1.dat tmp2.dat

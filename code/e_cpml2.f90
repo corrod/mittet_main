@@ -12,15 +12,16 @@
 !epsi0が小さすぎる!!:q
 !cb_x,cb_y,cb_zを仮想領域にあわせる
 !係数が1-nxpml1, nx-(nx-nxpml)でことなるので調整
+!epsi0=1 from imamu
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine CPML_E(ex,ey,ez,hx,hy,hz,sigma,cmax)
     use const_para
     implicit none
 
-    integer, parameter :: m = 4, ma = 1.0d0
+    integer, parameter :: m = 4, ma = 1
     integer, parameter :: nxpml1 = 10, nypml1 = 10, nzpml1 = 10 !PML層数
-    real(8) :: delta=nxpml1*dx
+    real(8)            :: delta=nxpml1*dx
     real(8), parameter :: kappa_max = 1.0d0 !!!kappa should be [0,10]
     real(8), parameter :: a_max = 0.2d0     !!!if a_max=0, CPML changes to UPML
     real(8), parameter :: nn = 3.0d0 !nn should be [2,6]
@@ -89,6 +90,7 @@ enddo
 
 
 !係数の設定ye
+
 do j = 1,ny
   if(j<=nypml1) then
     sigma_y(j) = sigma_max * ((dble(nypml1)-dble(j))/(dble(nypml1)-1.0d0))**dble(nn+order)
@@ -119,9 +121,8 @@ do j = 1,ny
   enddo
 
 
-
-
 !係数の設定ze
+
 do k = 1,nz
   if(k<=nzpml1) then
     sigma_z(k) = sigma_max * ((dble(nzpml1)-dble(k))/(dble(nzpml1)-1.0d0))**dble(nn+order)
@@ -151,13 +152,6 @@ do k = 1,nz
   endif
 enddo
 
-
-
-
-
-
-    
-
   !(+)の係数
 !   do i=1,nxpml1
 !     sigma_x(nx-(i-1))=sigma_x(i)
@@ -185,8 +179,6 @@ enddo
 !     be_z(nz-(k-1))=be_z(k)
 !     ce_z(nz-(k-1))=ce_z(k)
 !   enddo
-
-
 
 
 

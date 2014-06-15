@@ -1,0 +1,30 @@
+#!/bin/bash
+gmtset PAPER_MEDIA=a4
+rm tmp*
+
+xstart=0
+xend=15
+ystart=0.2
+yend=1.1
+base=0.2
+base2=5.0e-13
+
+awk '{print $1, $2}' < data_hokan/seg/converge_X > tmp1.dat
+awk '{print $1, $2}' < data_hokan/seg/converge_Y > tmp2.dat
+awk '{print $1, $2}' < data_hokan/seg/converge_Z > tmp3.dat
+
+psxy tmp1.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+        -Sp0.18 -Ba2:"Iteration":/a${base}:"misfit":WSne:."": \
+        -W10/141/72/74 -P -K > tmp.eps
+
+psxy tmp2.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+       -Sp0.18 -Ba2:"":/a${base}:"":WSne:."": \
+        -W10/58/90/45 -P -K -O >> tmp.eps
+
+psxy tmp3.dat -JX10.0/6.0 -R${xstart}/${xend}/${ystart}/${yend} \
+       -Sp0.18 -Ba2:"":/a${base}:"":WSne:."": \
+        -W10/192/147/48 -P -O >> tmp.eps
+
+gv tmp.eps
+
+#rm tmp1.dat tmp2.dat
