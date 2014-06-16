@@ -24,8 +24,8 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
 
 !-----------------シェル用出力-------------------------------
-    if (mod(istep,20)==0) then
-   l=10000+istep/20
+    if (mod(istep,30)==0) then
+   l=10000+istep/30
     write(name,"(I5)") l
     open(7,file="hz"//name//".d")
     open(8,file="ex"//name//".d")
