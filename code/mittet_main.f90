@@ -38,13 +38,13 @@ module const_para
     real(8), parameter :: sigmaair = 0     !空気の導電率 S/m
     real(8), parameter :: sigmafe  = 1.03d7 !鉄の導電率 S/m
     real(8), parameter :: sigmawa  = 3.2d0  !海水の導電率 S/m
-    real(8), parameter :: myu0     = 1.2566370614d-6 !真空の透磁率 H/m
+    real(8), parameter :: MU0     = 1.2566370614d-6 !真空の透磁率 H/m
     real(8), parameter :: myurair  = 1.0d0        !空気の比透磁率
     real(8), parameter :: myurfe   = 4.0d3         !鉄の比透磁率
     real(8), parameter :: myurwa   = 0.999991d0     !海水の比透磁率
-    real(8), parameter :: myuair   = myurair * myu0 !空気の透磁率 H/m
-    real(8), parameter :: myufe    = myurfe * myu0   !鉄の透磁率 H/m
-    real(8), parameter :: myuwa    = myurwa * myu0   !鉄の透磁率 H/m
+    real(8), parameter :: myuair   = myurair * MU0 !空気の透磁率 H/m
+    real(8), parameter :: myufe    = myurfe * MU0   !鉄の透磁率 H/m
+    real(8), parameter :: myuwa    = myurwa * MU0   !鉄の透磁率 H/m
     real(8), parameter :: epsi0    = 8.854d-12   !真空の誘電率F/m
     real(8), parameter :: epsirair = 1.0006d0 !空気の比誘電率
     real(8), parameter :: epsirfe  = 1.0d0     !鉄の比誘電率

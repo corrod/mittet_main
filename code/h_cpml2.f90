@@ -67,7 +67,7 @@ subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu,cmax)
 
 !!!    sigma_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
     sigma_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) * optToMax  !!x方向だけ？
-    !msigma_max = sigma_max*myu0/epsi2
+    !msigma_max = sigma_max*MU0/epsi2
 
    ! sigma_opt = (dble(m)+1.0d0) / (150.0d0*pai*sqrt(epsir)*dx)
   !  sigma_max = 0.7d0*sigma_opt
@@ -178,10 +178,10 @@ do k=1,nz
         da_x(i,j,k) = (1.0d0 - ((msigma_x(i)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msigma_x(i)*dt)/(2.0d0*epsi(i,j,k))))
         da_y(i,j,k) = (1.0d0 - ((msigma_y(j)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msigma_y(j)*dt)/(2.0d0*epsi(i,j,k))))
         da_z(i,j,k) = (1.0d0 - ((msigma_z(k)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msigma_z(k)*dt)/(2.0d0*epsi(i,j,k))))
-        !!!****imamu systemではmyu→myu0 myu→eps2
-        db_x(i,j,k) = dt/myu0/(1.0d0+(msigma_x(i)*dt)/(2.0d0*epsi(i,j,k)))
-        db_y(i,j,k) = dt/myu0/(1.0d0+(msigma_y(j)*dt)/(2.0d0*epsi(i,j,k)))
-        db_z(i,j,k) = dt/myu0/(1.0d0+(msigma_z(k)*dt)/(2.0d0*epsi(i,j,k)))
+        !!!****imamu systemではmyu→MU0 myu→eps2
+        db_x(i,j,k) = dt/MU0/(1.0d0+(msigma_x(i)*dt)/(2.0d0*epsi(i,j,k)))
+        db_y(i,j,k) = dt/MU0/(1.0d0+(msigma_y(j)*dt)/(2.0d0*epsi(i,j,k)))
+        db_z(i,j,k) = dt/MU0/(1.0d0+(msigma_z(k)*dt)/(2.0d0*epsi(i,j,k)))
 
          !saito system   
     !   da_x(i,j,k) = (1.0d0-(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) !sigma=σ*

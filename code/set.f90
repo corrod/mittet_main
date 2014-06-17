@@ -45,7 +45,7 @@ subroutine set_d_txyz(cmax)
 
 !!!タイムステップdtの設定;クーラン条件
   !クーラン条件
-    courant = 1.0d0/cmax/sqrt(1.0d0/dx**2.0d0 +1.0d0/dy**2,0d0 +1.0d0/dz**2.0d0)
+    courant = 1.0d0/cmax/sqrt(1.0d0/dx**2.0d0 +1.0d0/dy**2.0d0 +1.0d0/dz**2.0d0)
     dt_ideal = courant*6.0d0/7.0d0*0.999d0
 
 !!!総タイムステップnstepの確
@@ -60,7 +60,7 @@ subroutine set_d_txyz(cmax)
 
 
 !最大の周波数の確認
-    cmin = sqrt(2.0d0*omega0/myu0/1.0d0)
+    cmin = sqrt(2.0d0*omega0/MU0/1.0d0)
     fmax_w = cmin /Glim /max(dx,dy,dz)
 
     write(*,*) "上限の周波数fmax_w",fmax_w    
