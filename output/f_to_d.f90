@@ -8,12 +8,12 @@ program f_to_d
 	use const_para
 		implicit none
 
-    		integer :: n,nd,ios
-    		real(8) :: omega 
+    		integer                         :: n,nd,ios
+    		!real(8)                         :: omega 
+        real(8), allocatable            :: inp(:), t(:), f(:), p(:)
+        complex(kind(0d0)), allocatable :: c(:)
     	!	complex(kind(0d0)), allocatable :: Gxn(:,:,:),Gyn(:,:,:),Gzn(:,:,:)
     	!	real(8), allocatable :: jh(:)
-        real(8), allocatable :: inp(:), t(:), f(:), p(:)
-  	   	complex(kind(0d0)), allocatable :: c(:)
        ! character(8) :: inp1
        ! character(8) :: out1,out2,out3
        ! character(5), parameter :: inp2='jh.d'

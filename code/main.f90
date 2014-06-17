@@ -21,13 +21,13 @@ program main
     use const_para
     implicit none
 
-    integer :: istep !タイムステップ
-    real(8) :: t !経過時間
-    real(8) :: Jn(nstep) !gaussian
-    real(8) :: Je(nstep) !電流源
-    real(8) :: Jh(nstep) !磁流源
-    real(8) :: sigma(nx,ny,nz),myu(nx,ny,nz)
-    real(8) :: cmax
+    integer            :: istep !タイムステップ
+    real(8)            :: t !経過時間
+    real(8)            :: Jn(nstep) !gaussian
+    real(8)            :: Je(nstep) !電流源
+    real(8)            :: Jh(nstep) !磁流源
+    real(8)            :: sigma(nx,ny,nz),myu(nx,ny,nz)
+    real(8)            :: cmax
     complex(kind(0d0)) :: Ex(nx,ny,nz)
     complex(kind(0d0)) :: Ey(nx,ny,nz)
     complex(kind(0d0)) :: Ez(nx,ny,nz)

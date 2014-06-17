@@ -21,30 +21,30 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sigma,cmax)
     use const_para
     implicit none
 
-    integer, parameter :: m = 4, ma = 1
-    integer, parameter :: nxpml1 = 10, nypml1 = 10, nzpml1 = 10 !PML層数
-    real(8), parameter :: c1=1.125d0, c2= -0.04167d0 !pml4の係数 from taylor Expansion
-    real(8)            :: delta=nxpml1*dx
-    real(8), parameter :: kappa_max = 1.0d0 !!!kappa should be [0,10]
-    real(8), parameter :: a_max = 0.2d0     !!!if a_max=0, CPML changes to UPML
-    real(8), parameter :: nn = 3.0d0 !nn should be [2,6]
-    real(8), parameter :: order = 0.0d0 !order should be (0,3]
-    real(8), parameter :: optToMax = 10.0d0
-    real(8), parameter :: Rcoef=0.01d0 !R should be [10^-2, 10^-12]
+   ! integer, parameter :: nxpml1 = 10, nypml1 = 10, nzpml1 = 10 !PML層数
+    integer, parameter  :: m         = 4, ma = 1
+    real(8), parameter  :: kappa_max = 1.0d0 !!!kappa should be [0,10]
+    real(8), parameter  :: a_max     = 0.2d0     !!!if a_max=0, CPML changes to UPML
+    real(8), parameter  :: nn        = 3.0d0 !nn should be [2,6]
+    real(8), parameter  :: order     = 0.0d0 !order should be (0,3]
+    real(8), parameter  :: optToMax  = 10.0d0
+    real(8), parameter  :: Rcoef     = 0.01d0 !R should be [10^-2, 10^-12]
+    real(8), parameter  :: c1        = 1.125d0, c2 = -0.04167d0 !pml4の係数 from taylor Expansion
+    real(8),parameter   :: epsir     = 1.0d0
+    real(8)             :: delta = nxpml1*dx
     real(8), intent(in) :: cmax
     real(8), intent(in) :: sigma(nx,ny,nz)
-    real(8) :: sigma_opt !!!
-    real(8) :: sigma_max !!! 導出法確認
-    real(8) :: sigma_x(nx),sigma_y(ny),sigma_z(nz)
-    real(8) :: a_x(nx),a_y(ny),a_z(nz)
-    real(8) :: kappa_x(nx),kappa_y(ny),kappa_z(nz)
-    real(8) :: kedx(nx),kedy(ny),kedz(nz) 
-    real(8) :: epsi(nx,ny,nz)!1.0d0
-    real(8) :: epsir = 1.0d0
-    real(8) :: ca_x(nx,ny,nz),ca_y(nx,ny,nz),ca_z(nx,ny,nz)
-    real(8) :: cb_x(nx,ny,nz),cb_y(nx,ny,nz),cb_z(nx,ny,nz)
-    real(8) :: be_x(nx),be_y(ny),be_z(nz)
-    real(8) :: ce_x(nx),ce_y(ny),ce_z(nz)
+    real(8)             :: sigma_opt !!!
+    real(8)             :: sigma_max !!! 導出法確認
+    real(8)             :: sigma_x(nx),sigma_y(ny),sigma_z(nz)
+    real(8)             :: a_x(nx),a_y(ny),a_z(nz)
+    real(8)             :: kappa_x(nx),kappa_y(ny),kappa_z(nz)
+    real(8)             :: kedx(nx),kedy(ny),kedz(nz) 
+    real(8)             :: epsi(nx,ny,nz)!1.0d0
+    real(8)             :: ca_x(nx,ny,nz),ca_y(nx,ny,nz),ca_z(nx,ny,nz)
+    real(8)             :: cb_x(nx,ny,nz),cb_y(nx,ny,nz),cb_z(nx,ny,nz)
+    real(8)             :: be_x(nx),be_y(ny),be_z(nz)
+    real(8)             :: ce_x(nx),ce_y(ny),ce_z(nz)
     complex(kind(0d0)) :: psi_Ezx1(nx,ny,nz),psi_Eyx1(nx,ny,nz)
     complex(kind(0d0)) :: psi_Exy1(nx,ny,nz),psi_Ezy1(nx,ny,nz)
     complex(kind(0d0)) :: psi_Eyz1(nx,ny,nz),psi_Exz1(nx,ny,nz)
@@ -69,7 +69,7 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sigma,cmax)
 
 
 !!!    sigma_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
-    sigma_max = (nn+order+1.0d0)*cmax+log(1.0d0/Rcoef) / (2.0d0*delta) * optToMax  !!x方向だけ？
+    sigma_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) * optToMax  !!x方向だけ？
 
 !    sigma_opt = (dble(m)+1.0d0) / (150.0d0*pai*sqrt(epsir)*dx)
 !    sigma_max = 0.7d0*sigma_opt
@@ -79,7 +79,7 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sigma,cmax)
  do i = 1,nx
     if(i<=nxpml1) then
       sigma_x(i) = sigma_max * ((dble(nxpml1)-dble(i))/(dble(nxpml1)-1.0d0))**dble(nn+order)
-      kappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*((dble(nxpml1)-dble(i))/(dble(nxpml1)-1.0d0))**dble(nn)
+      kappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*( (dble(nxpml1)-dble(i))/(dble(nxpml1)-1.0d0) )**dble(nn)
       a_x(i)     = a_max * ((dble(i)-1.0d0)/(dble(nxpml1)-1.0d0))**dble(ma)
 
       be_x(i)    = exp(-(sigma_x(i)/kappa_x(i)+a_x(i))*dt) !/epsi0)
@@ -88,7 +88,7 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sigma,cmax)
 
     else if(i>=nx-nxpml1+1) then
       sigma_x(i) = sigma_max * ((dble(i)-dble(nx)-1.0d0+dble(nxpml1))/(dble(nxpml1)-1.0d0))**dble(nn+order)
-      kappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*((dble(i)-dble(nx)-1.0d0+dble(nxpml1))/(dble(nxpml1)-1.0d0))**dble(nn)
+      kappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*( (dble(i)-dble(nx)-1.0d0+dble(nxpml1))/(dble(nxpml1)-1.0d0) )**dble(nn)
       a_x(i)     = a_max * ((dble(-i)+dble(nx)  )/(dble(nxpml1)-1.0d0))**dble(ma)
 
       be_x(i)    = exp(-(sigma_x(i)/kappa_x(i)+a_x(i))*dt) !/epsi0)
@@ -111,7 +111,7 @@ enddo
 do j = 1,ny
   if(j<=nypml1) then
     sigma_y(j) = sigma_max * ((dble(nypml1)-dble(j))/(dble(nypml1)-1.0d0))**dble(nn+order)
-    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*((dble(nypml1)-dble(j))/(dble(nypml1)-1.0d0))**dble(nn)
+    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*( (dble(nypml1)-dble(j))/(dble(nypml1)-1.0d0) )**dble(nn)
     a_y(j)     = a_max * ((dble(j)-1.0d0)/(dble(nypml1)-1.0d0))**dble(ma)
 
     be_y(j)    = exp(-(sigma_y(j)/kappa_y(j)+a_y(j))*dt) !/epsi0)
@@ -120,7 +120,7 @@ do j = 1,ny
 
   else if(j>=ny-nypml1+1) then
     sigma_y(j) = sigma_max * ((dble(j)-dble(ny)-1.0d0+dble(nypml1))/(dble(nypml1)-1.0d0))**dble(nn+order)
-    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*((dble(j)-dble(ny)-1.0d0+dble(nypml1))/(dble(nypml1)-1.0d0))**dble(nn)
+    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*( (dble(j)-dble(ny)-1.0d0+dble(nypml1))/(dble(nypml1)-1.0d0) )**dble(nn)
     a_y(j)     = a_max * ((dble(-j)+dble(ny)  )/(dble(nypml1)-1.0d0))**dble(ma)
 
     be_y(j)    = exp(-(sigma_y(j)/kappa_y(j)+a_y(j))*dt) !/epsi0)
@@ -143,7 +143,7 @@ do j = 1,ny
 do k = 1,nz
   if(k<=nzpml1) then
     sigma_z(k) = sigma_max * ((dble(nzpml1)-dble(k))/(dble(nzpml1)-1.0d0))**dble(nn+order)
-    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*((dble(nzpml1)-dble(k))/(dble(nzpml1)-1.0d0))**dble(nn)
+    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*( (dble(nzpml1)-dble(k))/(dble(nzpml1)-1.0d0) )**dble(nn)
     a_z(k)     = a_max*((dble(k)-1.0d0)/(dble(nzpml1)-1.0d0))**dble(ma)
 
     be_z(k)    = exp(-(sigma_z(k)/kappa_z(k)+a_z(k))*dt) !/epsi0)
@@ -152,7 +152,7 @@ do k = 1,nz
 
   else if(k>=nz-nzpml1+1) then
     sigma_z(k) = sigma_max * ((dble(k)-dble(nz)-1.0d0+dble(nzpml1))/(dble(nzpml1)-1.0d0))**dble(nn+order)
-    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*((dble(k)-dble(nz)-1.0d0+dble(nzpml1))/(dble(nzpml1)-1.0d0))**dble(nn)
+    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*( (dble(k)-dble(nz)-1.0d0+dble(nzpml1))/(dble(nzpml1)-1.0d0) )**dble(nn)
     a_z(k)     = a_max * ((dble(-k)+dble(nz)  )/(dble(nzpml1)-1.0d0))**dble(ma)
 
     be_z(k)    = exp(-(sigma_z(k)/kappa_z(k)+a_z(k))*dt) !/epsi0)
@@ -173,14 +173,21 @@ enddo
 do k=1,nz
   do j=1,ny
     do i=1,nx
-    ca_x(i,j,k) = (1.0d0-sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-    ca_y(i,j,k) = (1.0d0-sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-    ca_z(i,j,k) = (1.0d0-sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+    !imamu system
+    ca_x(i,j,k) = (1.0d0-sigma_x(i)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sigma_x(i)*dt/(2.0d0*epsi(i,j,k)))
+    ca_y(i,j,k) = (1.0d0-sigma_y(j)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sigma_y(j)*dt/(2.0d0*epsi(i,j,k)))
+    ca_z(i,j,k) = (1.0d0-sigma_z(k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sigma_z(k)*dt/(2.0d0*epsi(i,j,k)))
+    cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sigma_x(i)*dt/(2.0d0*epsi(i,j,k)))
+    cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sigma_y(j)*dt/(2.0d0*epsi(i,j,k)))
+    cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sigma_z(k)*dt/(2.0d0*epsi(i,j,k)))
 
-
-    cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-    cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-    cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+    !saito system
+   ! ca_x(i,j,k) = (1.0d0-sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   ! ca_y(i,j,k) = (1.0d0-sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   ! ca_z(i,j,k) = (1.0d0-sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   ! cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   ! cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   ! cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
     enddo
   enddo
 enddo
@@ -272,86 +279,86 @@ enddo
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!psi-update!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !xe-PML loop(-)
-    do k = 1,nz-1
-        do j = 1,ny-1
-            do i = 2,nxpml1
-                psi_Ezx1(i,j,k) = be_x(i)*psi_Ezx1(i,j,k)&
-                                 +ce_x(i)*(Hy(i,j,k)-Hy(i-1,j,k)) / dx
-                psi_Eyx1(i,j,k) = be_x(i)*psi_Eyx1(i,j,k)&
-                                 +ce_x(i)*(Hz(i,j,k)-Hz(i-1,j,k)) / dx
-                Ez(i,j,k) = Ez(i,j,k) + cb_z(i,j,k)*psi_Ezx1(i,j,k)
-                Ey(i,j,k) = Ey(i,j,k) - cb_y(i,j,k)*psi_Eyx1(i,j,k)
-            enddo
-        enddo
-    enddo
-    !xe-PML loop(+)
-    do k = 1,nz-1
-        do j = 1,ny-1
-            do i = nx-nxpml1+1,nx-1
-                psi_Ezx1(i,j,k) = be_x(i)*psi_Ezx1(i,j,k)&
-                                 +ce_x(i)*(Hy(i,j,k)-Hy(i-1,j,k)) / dx
-                psi_Eyx1(i,j,k) = be_x(i)*psi_Eyx1(i,j,k)&
-                                 +ce_x(i)*(Hz(i,j,k)-Hz(i-1,j,k)) / dx
-                Ez(i,j,k) = Ez(i,j,k) + cb_z(i,j,k)*psi_Ezx1(i,j,k)
-                Ey(i,j,k) = Ey(i,j,k) - cb_y(i,j,k)*psi_Eyx1(i,j,k)
-            enddo
-        enddo
-    enddo
+!   !xe-PML loop(-)
+!   do k = 1,nz-1
+!       do j = 1,ny-1
+!           do i = 2,nxpml1
+!               psi_Ezx1(i,j,k) = be_x(i)*psi_Ezx1(i,j,k)&
+!                                +ce_x(i)*(Hy(i,j,k)-Hy(i-1,j,k)) / dx
+!               psi_Eyx1(i,j,k) = be_x(i)*psi_Eyx1(i,j,k)&
+!                                +ce_x(i)*(Hz(i,j,k)-Hz(i-1,j,k)) / dx
+!               Ez(i,j,k) = Ez(i,j,k) + cb_z(i,j,k)*psi_Ezx1(i,j,k)
+!               Ey(i,j,k) = Ey(i,j,k) - cb_y(i,j,k)*psi_Eyx1(i,j,k)
+!           enddo
+!       enddo
+!   enddo
+!   !xe-PML loop(+)
+!   do k = 1,nz-1
+!       do j = 1,ny-1
+!           do i = nx-nxpml1+1,nx-1
+!               psi_Ezx1(i,j,k) = be_x(i)*psi_Ezx1(i,j,k)&
+!                                +ce_x(i)*(Hy(i,j,k)-Hy(i-1,j,k)) / dx
+!               psi_Eyx1(i,j,k) = be_x(i)*psi_Eyx1(i,j,k)&
+!                                +ce_x(i)*(Hz(i,j,k)-Hz(i-1,j,k)) / dx
+!               Ez(i,j,k) = Ez(i,j,k) + cb_z(i,j,k)*psi_Ezx1(i,j,k)
+!               Ey(i,j,k) = Ey(i,j,k) - cb_y(i,j,k)*psi_Eyx1(i,j,k)
+!           enddo
+!       enddo
+!   enddo
 
-    !ye-PML loop(-)
-    do k = 1,nz-1
-        do j = 2,nypml1
-            do i = 1,nx-1
-                psi_Exy1(i,j,k) = be_y(j)*psi_Exy1(i,j,k)&
-                                 +ce_y(j)*(Hz(i,j,k)-Hz(i,j-1,k)) / dy
-                psi_Ezy1(i,j,k) = be_y(j)*psi_Ezy1(i,j,k)&
-                                 +ce_y(j)*(Hx(i,j,k)-Hx(i,j-1,k)) / dy
-                Ex(i,j,k) = Ex(i,j,k) + cb_x(i,j,k)*psi_Exy1(i,j,k)
-                Ez(i,j,k) = Ez(i,j,k) - cb_z(i,j,k)*psi_Ezy1(i,j,k)
-            enddo
-        enddo
-    enddo
-   !ye-PML loop(+)
-    do k = 1,nz-1
-        do j = ny-nypml1+1,ny-1
-            do i = 1,nx-1
-                psi_Exy1(i,j,k) = be_y(j)*psi_Exy1(i,j,k)&
-                                 +ce_y(j)*(Hz(i,j,k)-Hz(i,j-1,k)) / dy
-                psi_Ezy1(i,j,k) = be_y(j)*psi_Ezy1(i,j,k)&
-                                 +ce_y(j)*(Hx(i,j,k)-Hx(i,j-1,k)) / dy
-                Ex(i,j,k) = Ex(i,j,k) + cb_x(i,j,k)*psi_Exy1(i,j,k)
-                Ez(i,j,k) = Ez(i,j,k) - cb_z(i,j,k)*psi_Ezy1(i,j,k)
-            enddo
-        enddo
-    enddo
+!   !ye-PML loop(-)
+!   do k = 1,nz-1
+!       do j = 2,nypml1
+!           do i = 1,nx-1
+!               psi_Exy1(i,j,k) = be_y(j)*psi_Exy1(i,j,k)&
+!                                +ce_y(j)*(Hz(i,j,k)-Hz(i,j-1,k)) / dy
+!               psi_Ezy1(i,j,k) = be_y(j)*psi_Ezy1(i,j,k)&
+!                                +ce_y(j)*(Hx(i,j,k)-Hx(i,j-1,k)) / dy
+!               Ex(i,j,k) = Ex(i,j,k) + cb_x(i,j,k)*psi_Exy1(i,j,k)
+!               Ez(i,j,k) = Ez(i,j,k) - cb_z(i,j,k)*psi_Ezy1(i,j,k)
+!           enddo
+!       enddo
+!   enddo
+!  !ye-PML loop(+)
+!   do k = 1,nz-1
+!       do j = ny-nypml1+1,ny-1
+!           do i = 1,nx-1
+!               psi_Exy1(i,j,k) = be_y(j)*psi_Exy1(i,j,k)&
+!                                +ce_y(j)*(Hz(i,j,k)-Hz(i,j-1,k)) / dy
+!               psi_Ezy1(i,j,k) = be_y(j)*psi_Ezy1(i,j,k)&
+!                                +ce_y(j)*(Hx(i,j,k)-Hx(i,j-1,k)) / dy
+!               Ex(i,j,k) = Ex(i,j,k) + cb_x(i,j,k)*psi_Exy1(i,j,k)
+!               Ez(i,j,k) = Ez(i,j,k) - cb_z(i,j,k)*psi_Ezy1(i,j,k)
+!           enddo
+!       enddo
+!   enddo
 
-    !ze-PML loop(-)
-    do k = 2,nzpml1
-        do j = 1,ny-1
-            do i = 1,nx-1
-                psi_Eyz1(i,j,k) = be_z(k)*psi_Eyz1(i,j,k)&
-                                 +ce_z(k)*(Hx(i,j,k)-Hx(i,j,k-1)) / dz
-                psi_Exz1(i,j,k) = be_z(k)*psi_Exz1(i,j,k)&
-                                 +ce_z(k)*(Hy(i,j,k)-Hy(i,j,k-1)) / dz
-                Ey(i,j,k) = Ey(i,j,k) + cb_y(i,j,k)*psi_Eyz1(i,j,k)
-                Ex(i,j,k) = Ex(i,j,k) - cb_x(i,j,k)*psi_Exz1(i,j,k)
-            enddo
-        enddo
-    enddo
-    !ze-PML loop(+)
-    do k = nz-nzpml1+1,nz-1
-        do j = 1,ny-1
-            do i = 1,nx-1
-                psi_Eyz1(i,j,k) = be_z(k)*psi_Eyz1(i,j,k)&
-                                 +ce_z(k)*(Hx(i,j,k)-Hx(i,j,k-1)) / dz
-                psi_Exz1(i,j,k) = be_z(k)*psi_Exz1(i,j,k)&
-                                 +ce_z(k)*(Hy(i,j,k)-Hy(i,j,k-1)) / dz
-                Ey(i,j,k) = Ey(i,j,k) + cb_y(i,j,k)*psi_Eyz1(i,j,k)
-                Ex(i,j,k) = Ex(i,j,k) - cb_x(i,j,k)*psi_Exz1(i,j,k)
-            enddo
-        enddo
-    enddo
+!   !ze-PML loop(-)
+!   do k = 2,nzpml1
+!       do j = 1,ny-1
+!           do i = 1,nx-1
+!               psi_Eyz1(i,j,k) = be_z(k)*psi_Eyz1(i,j,k)&
+!                                +ce_z(k)*(Hx(i,j,k)-Hx(i,j,k-1)) / dz
+!               psi_Exz1(i,j,k) = be_z(k)*psi_Exz1(i,j,k)&
+!                                +ce_z(k)*(Hy(i,j,k)-Hy(i,j,k-1)) / dz
+!               Ey(i,j,k) = Ey(i,j,k) + cb_y(i,j,k)*psi_Eyz1(i,j,k)
+!               Ex(i,j,k) = Ex(i,j,k) - cb_x(i,j,k)*psi_Exz1(i,j,k)
+!           enddo
+!       enddo
+!   enddo
+!   !ze-PML loop(+)
+!   do k = nz-nzpml1+1,nz-1
+!       do j = 1,ny-1
+!           do i = 1,nx-1
+!               psi_Eyz1(i,j,k) = be_z(k)*psi_Eyz1(i,j,k)&
+!                                +ce_z(k)*(Hx(i,j,k)-Hx(i,j,k-1)) / dz
+!               psi_Exz1(i,j,k) = be_z(k)*psi_Exz1(i,j,k)&
+!                                +ce_z(k)*(Hy(i,j,k)-Hy(i,j,k-1)) / dz
+!               Ey(i,j,k) = Ey(i,j,k) + cb_y(i,j,k)*psi_Eyz1(i,j,k)
+!               Ex(i,j,k) = Ex(i,j,k) - cb_x(i,j,k)*psi_Exz1(i,j,k)
+!           enddo
+!       enddo
+!   enddo
 
 
 
@@ -359,11 +366,11 @@ enddo
     !xe-PML4 loop(-)
     do k = 1,nz-1
         do j = 1,ny-1
-            do i = 2,nxpml1
+            do i = 3,nxpml1
                 psi_Ezx1(i,j,k) = be_x(i)*psi_Ezx1(i,j,k)&
-                                 +ce_x(i)*(c1*Hy(i,j,k)-c1*Hy(i-1,j,k) +c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
+                                 +ce_x(i)*(c1*Hy(i,j,k)-c1*Hy(i-1,j,k) + c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
                 psi_Eyx1(i,j,k) = be_x(i)*psi_Eyx1(i,j,k)&
-                                 +ce_x(i)*(c1*Hz(i,j,k)-c1*Hz(i-1,j,k) +c2*Hz(i+1,j,k)-c2*Hz(i-2,j,k)) / dx
+                                 +ce_x(i)*(c1*Hz(i,j,k)-c1*Hz(i-1,j,k) + c2*Hz(i+1,j,k)-c2*Hz(i-2,j,k)) / dx
                 Ez(i,j,k) = Ez(i,j,k) + cb_z(i,j,k)*psi_Ezx1(i,j,k)
                 Ey(i,j,k) = Ey(i,j,k) - cb_y(i,j,k)*psi_Eyx1(i,j,k)
             enddo
@@ -374,9 +381,9 @@ enddo
         do j = 1,ny-1
             do i = nx-nxpml1+1,nx-1
                 psi_Ezx1(i,j,k) = be_x(i)*psi_Ezx1(i,j,k)&
-                                 +ce_x(i)*(c1*Hy(i,j,k)-c1*Hy(i-1,j,k) +c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
+                                 +ce_x(i)*(c1*Hy(i,j,k)-c1*Hy(i-1,j,k) + c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
                 psi_Eyx1(i,j,k) = be_x(i)*psi_Eyx1(i,j,k)&
-                                 +ce_x(i)*(c1*Hz(i,j,k)-c1*Hz(i-1,j,k) +c2*Hz(i+1,j,k)-c2*Hz(i-2,j,k)) / dx
+                                 +ce_x(i)*(c1*Hz(i,j,k)-c1*Hz(i-1,j,k) + c2*Hz(i+1,j,k)-c2*Hz(i-2,j,k)) / dx
                 Ez(i,j,k) = Ez(i,j,k) + cb_z(i,j,k)*psi_Ezx1(i,j,k)
                 Ey(i,j,k) = Ey(i,j,k) - cb_y(i,j,k)*psi_Eyx1(i,j,k)
             enddo
@@ -385,12 +392,12 @@ enddo
 
     !ye-PML4 loop(-)
     do k = 1,nz-1
-        do j = 2,nypml1
+        do j = 3,nypml1
             do i = 1,nx-1
                 psi_Exy1(i,j,k) = be_y(j)*psi_Exy1(i,j,k)&
-                                 +ce_y(j)*(c1*Hz(i,j,k)-c1*Hz(i,j-1,k) +c2*Hz(i,j+1,k)-c2*Hz(i,j-2,k)) / dy
+                                 +ce_y(j)*(c1*Hz(i,j,k)-c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k)-c2*Hz(i,j-2,k)) / dy
                 psi_Ezy1(i,j,k) = be_y(j)*psi_Ezy1(i,j,k)&
-                                 +ce_y(j)*(c1*Hx(i,j,k)-c1*Hx(i,j-1,k) +c2*Hx(i,j+1,k)-c2*Hx(i,j-2,k)) / dy
+                                 +ce_y(j)*(c1*Hx(i,j,k)-c1*Hx(i,j-1,k) + c2*Hx(i,j+1,k)-c2*Hx(i,j-2,k)) / dy
                 Ex(i,j,k) = Ex(i,j,k) + cb_x(i,j,k)*psi_Exy1(i,j,k)
                 Ez(i,j,k) = Ez(i,j,k) - cb_z(i,j,k)*psi_Ezy1(i,j,k)
             enddo
@@ -401,9 +408,9 @@ enddo
         do j = ny-nypml1+1,ny-1
             do i = 1,nx-1
                 psi_Exy1(i,j,k) = be_y(j)*psi_Exy1(i,j,k)&
-                                 +ce_y(j)*(c1*Hz(i,j,k)-c1*Hz(i,j-1,k) +c2*Hz(i,j+1,k)-c2*Hz(i,j-2,k)) / dy
+                                 +ce_y(j)*(c1*Hz(i,j,k)-c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k)-c2*Hz(i,j-2,k)) / dy
                 psi_Ezy1(i,j,k) = be_y(j)*psi_Ezy1(i,j,k)&
-                                 +ce_y(j)*(c1*Hx(i,j,k)-c1*Hx(i,j-1,k) +c2*Hx(i,j+1,k)-c2*Hx(i,j-2,k)) / dy
+                                 +ce_y(j)*(c1*Hx(i,j,k)-c1*Hx(i,j-1,k) + c2*Hx(i,j+1,k)-c2*Hx(i,j-2,k)) / dy
                 Ex(i,j,k) = Ex(i,j,k) + cb_x(i,j,k)*psi_Exy1(i,j,k)
                 Ez(i,j,k) = Ez(i,j,k) - cb_z(i,j,k)*psi_Ezy1(i,j,k)
             enddo
@@ -411,13 +418,13 @@ enddo
     enddo
 
     !ze-PML4 loop(-)
-    do k = 2,nzpml1
+    do k = 3,nzpml1
         do j = 1,ny-1
             do i = 1,nx-1
                 psi_Eyz1(i,j,k) = be_z(k)*psi_Eyz1(i,j,k)&
-                                 +ce_z(k)*(c1*Hx(i,j,k)-c1*Hx(i,j,k-1) +c2*Hx(i,j,k+1)-c2*Hx(i,j,k-2)) / dz
+                                 +ce_z(k)*(c1*Hx(i,j,k)-c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1)-c2*Hx(i,j,k-2)) / dz
                 psi_Exz1(i,j,k) = be_z(k)*psi_Exz1(i,j,k)&
-                                 +ce_z(k)*(c1*Hy(i,j,k)-c1*Hy(i,j,k-1) +c2*Hy(i,j,k+1)-c2*Hy(i,j,k-2)) / dz
+                                 +ce_z(k)*(c1*Hy(i,j,k)-c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1)-c2*Hy(i,j,k-2)) / dz
                 Ey(i,j,k) = Ey(i,j,k) + cb_y(i,j,k)*psi_Eyz1(i,j,k)
                 Ex(i,j,k) = Ex(i,j,k) - cb_x(i,j,k)*psi_Exz1(i,j,k)
             enddo
@@ -428,9 +435,9 @@ enddo
         do j = 1,ny-1
             do i = 1,nx-1
                 psi_Eyz1(i,j,k) = be_z(k)*psi_Eyz1(i,j,k)&
-                                 +ce_z(k)*(c1*Hx(i,j,k)-c1*Hx(i,j,k-1) +c2*Hx(i,j,k+1)-c2*Hx(i,j,k-2)) / dz
+                                 +ce_z(k)*(c1*Hx(i,j,k)-c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1)-c2*Hx(i,j,k-2)) / dz
                 psi_Exz1(i,j,k) = be_z(k)*psi_Exz1(i,j,k)&
-                                 +ce_z(k)*(c1*Hy(i,j,k)-c1*Hy(i,j,k-1) +c2*Hy(i,j,k+1)-c2*Hy(i,j,k-2)) / dz
+                                 +ce_z(k)*(c1*Hy(i,j,k)-c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1)-c2*Hy(i,j,k-2)) / dz
                 Ey(i,j,k) = Ey(i,j,k) + cb_y(i,j,k)*psi_Eyz1(i,j,k)
                 Ex(i,j,k) = Ex(i,j,k) - cb_x(i,j,k)*psi_Exz1(i,j,k)
             enddo

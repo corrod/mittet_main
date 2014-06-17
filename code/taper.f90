@@ -5,8 +5,8 @@
 program taper
 	use const_para
 		implicit none
-		integer, parameter :: m=5 !taper幅
-		integer :: n,nd,ios
+		integer, parameter   :: m=5 !taper幅
+		integer              :: n,nd,ios
 		real(8), allocatable :: inp1(:)
 		real(8), allocatable :: temp1(:)
 		real(8), allocatable :: w(:) !window function重み

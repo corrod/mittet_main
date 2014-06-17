@@ -7,7 +7,7 @@ program green
 	use const_para
 		implicit none
 
-		integer :: nd,ios
+		integer              :: nd,ios
 		real(8), allocatable :: ii1(:), ii2(:)
 		real(8), allocatable :: inp1_r(:), inp1_i(:),inp2_r(:), inp2_i(:)
 		complex(kind(0d0)), allocatable :: inp1(:), inp2(:)
