@@ -55,7 +55,7 @@ void read_shotrec()
   fscanf(ifp1,"%d",&rec_num);
 
   rec_px=(int *)malloc(sizeof(int) * rec_num);
-  rec_py=(int *)malloc(sizeof(int) * rec_num);
+  rec_py=(int *)malloc(sizeof(int) * rec_num); 
   rec_pz=(int *)malloc(sizeof(int) * rec_num);
 
   for(i=0;i<rec_num;i++){

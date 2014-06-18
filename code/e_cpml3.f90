@@ -53,7 +53,7 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig,cmax)
 !     complex(kind(0d0)), intent(in)    :: Hx(-1:nx+2,-1:ny+2,-1:nz+2),Hy(-1:nx+2,-1:ny+2,-1:nz+2),Hz(-1:nx+2,-1:ny+2,-1:nz+2)
     complex(kind(0d0)), intent(inout) ::Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in) ::   Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
-    
+
     epsi(1:nx,1:ny,1:nz)=sig(1:nx,1:ny,1:nz)/(2.0d0*omega0)
     sig_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) * optToMax  !!x方向だけ？
 !!!    sig_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*ncpml*dx)  !ln(R(0));反射係数!!!
@@ -76,8 +76,8 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig,cmax)
 !係数の設定xe
  do i = 1,nx
     if(i<=ncpml) then
-      sig_x(i) = sig_max * ((dble(ncpml)-dble(i))/(dble(ncpml)-1.0d0))**dble(nn+order)
-      kappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*( (dble(ncpml)-dble(i))/(dble(ncpml)-1.0d0) )**dble(nn)
+      sig_x(i)   = sig_max * ((dble(ncpml)-dble(i))/(dble(ncpml)-1.0d0))**dble(nn+order)
+      kappa_x(i) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(ncpml)-dble(i))/(dble(ncpml)-1.0d0) )**dble(nn)
       a_x(i)     = a_max * ((dble(i)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
 
       be_x(i)    = exp(-(sig_x(i)/kappa_x(i)+a_x(i))*dt) !/epsi0)
@@ -85,8 +85,8 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig,cmax)
       kedx(i)    = kappa_x(i)*dx
 
     else if(i>=nx-ncpml+1) then
-      sig_x(i) = sig_max * ((dble(i)-dble(nx)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
-      kappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*( (dble(i)-dble(nx)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
+      sig_x(i)   = sig_max * ((dble(i)-dble(nx)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
+      kappa_x(i) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(i)-dble(nx)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
       a_x(i)     = a_max * ((dble(-i)+dble(nx)  )/(dble(ncpml)-1.0d0))**dble(ma)
 
       be_x(i)    = exp(-(sig_x(i)/kappa_x(i)+a_x(i))*dt) !/epsi0)
@@ -94,7 +94,7 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig,cmax)
       kedx(i)    = kappa_x(i)*dx
 
     else
-      sig_x(i) = 0.0d0
+      sig_x(i)   = 0.0d0
       kappa_x(i) = 1.0d0
       a_x(i)     = 0.0d0
       be_x(i)    = 0.0d0
@@ -108,8 +108,8 @@ enddo
 
 do j = 1,ny
   if(j<=ncpml) then
-    sig_y(j) = sig_max * ((dble(ncpml)-dble(j))/(dble(ncpml)-1.0d0))**dble(nn+order)
-    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*( (dble(ncpml)-dble(j))/(dble(ncpml)-1.0d0) )**dble(nn)
+    sig_y(j)   = sig_max * ((dble(ncpml)-dble(j))/(dble(ncpml)-1.0d0))**dble(nn+order)
+    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(ncpml)-dble(j))/(dble(ncpml)-1.0d0) )**dble(nn)
     a_y(j)     = a_max * ((dble(j)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
 
     be_y(j)    = exp(-(sig_y(j)/kappa_y(j)+a_y(j))*dt) !/epsi0)
@@ -117,8 +117,8 @@ do j = 1,ny
     kedy(j)    = kappa_y(j)*dy  !!!
 
   else if(j>=ny-ncpml+1) then
-    sig_y(j) = sig_max * ((dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
-    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*( (dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
+    sig_y(j)   = sig_max * ((dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
+    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
     a_y(j)     = a_max * ((dble(-j)+dble(ny)  )/(dble(ncpml)-1.0d0))**dble(ma)
 
     be_y(j)    = exp(-(sig_y(j)/kappa_y(j)+a_y(j))*dt) !/epsi0)
@@ -126,7 +126,7 @@ do j = 1,ny
     kedy(j)    = kappa_y(j)*dy  !!!
 
   else
-    sig_y(j) = 0.0d0
+    sig_y(j)   = 0.0d0
     kappa_y(j) = 1.0d0
     a_y(j)     = 0.0d0
     be_y(j)    = 0.0d0
@@ -140,8 +140,8 @@ do j = 1,ny
 
 do k = 1,nz
   if(k<=ncpml) then
-    sig_z(k) = sig_max * ((dble(ncpml)-dble(k))/(dble(ncpml)-1.0d0))**dble(nn+order)
-    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*( (dble(ncpml)-dble(k))/(dble(ncpml)-1.0d0) )**dble(nn)
+    sig_z(k)   = sig_max * ((dble(ncpml)-dble(k))/(dble(ncpml)-1.0d0))**dble(nn+order)
+    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(ncpml)-dble(k))/(dble(ncpml)-1.0d0) )**dble(nn)
     a_z(k)     = a_max*((dble(k)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
 
     be_z(k)    = exp(-(sig_z(k)/kappa_z(k)+a_z(k))*dt) !/epsi0)
@@ -149,8 +149,8 @@ do k = 1,nz
     kedz(k)    = kappa_z(k)*dz  !!!
 
   else if(k>=nz-ncpml+1) then
-    sig_z(k) = sig_max * ((dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
-    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*( (dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
+    sig_z(k)   = sig_max * ((dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
+    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
     a_z(k)     = a_max * ((dble(-k)+dble(nz)  )/(dble(ncpml)-1.0d0))**dble(ma)
 
     be_z(k)    = exp(-(sig_z(k)/kappa_z(k)+a_z(k))*dt) !/epsi0)
@@ -158,7 +158,7 @@ do k = 1,nz
     kedz(k)    = kappa_z(k)*dz  !!!
 
   else
-    sig_z(k) = 0.0d0
+    sig_z(k)   = 0.0d0
     kappa_z(k) = 1.0d0
     a_z(k)     = 0.0d0
     be_z(k)    = 0.0d0
@@ -355,6 +355,22 @@ enddo
             enddo
         enddo
     enddo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 !psi-update

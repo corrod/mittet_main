@@ -14,8 +14,8 @@ module const_para
     implicit none
 
     integer :: i,j,k
-    integer, parameter :: nstep = 3000 !総タイムステップ数
-    integer, parameter :: nx = 101,ny=101,nz=101 !101, ny = 101, nz = 101 !グリッド数
+    integer, parameter :: nstep = 2000 !総タイムステップ数
+    integer, parameter :: nx = 100,ny=100,nz=100 !101, ny = 101, nz = 101 !グリッド数
     real(8), parameter :: dx = 20.0d0, dy = 20.0d0, dz = 20.0d0!dx=1.0d-2,dy=1.0d-2,dz=1.0d-2
     integer, parameter :: x0 = 51,y0=51,z0=51!=51, y0 = 51, z0 = 51  !送信源位置
     real(8), parameter :: fmax     = 25.0d0 !12.5kusuda!送信源の最大周波数

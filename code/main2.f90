@@ -82,6 +82,8 @@ write(*,*) istep
     
     !境界条件 CPML_E
 !     call CPML_E(ex,ey,ez,hx,hy,hz,sig,cmax)
+!     call cerjan_e(ex,ey,ez) !!!だめ
+    call cerjan2_e(ex,ey,ez)  !!!ok
 
 t = t + dt*0.5d0  !時間の更新--------------------------
 
@@ -90,6 +92,8 @@ t = t + dt*0.5d0  !時間の更新--------------------------
 
     !境界条件 CPML_H
 !    call CPML_H(ex,ey,ez,hx,hy,hz,sig,myu,cmax)
+!    call cerjan_h(hx,hy,hz) !!!だめ
+    call cerjan2_h(hx,hy,hz) !!!ok
 
 t = t + dt*0.5d0 !時間の更新---------------------------
 

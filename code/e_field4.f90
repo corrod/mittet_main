@@ -114,6 +114,8 @@ subroutine Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)
 
 !    !ソース項
 !!   Ez(x0,y0,z0) = Ez(x0,y0,z0) - Je(istep)
+
+
 !ver2 imamu c style444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
 !     !Ex4
 !     do k = 1,nz
