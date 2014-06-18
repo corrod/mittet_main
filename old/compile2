@@ -2,7 +2,7 @@
 
 #メインスクリプト::::::::::::::::::::::::::::::
 #export OMP_NUM_THREADS=3
-ifort -o ficticious ../code/parameter.f90 ../code/set.f90 ../code/source.f90 ../code/model.f90 ../code/output.f90 ../code/e_field3.f90 ../code/e_cpml2.f90 ../code/h_field3.f90 ../code/h_cpml2.f90 ../code/main.f90 -check all -CB -traceback -g
+ifort -o ficticious ../code/parameter.f90 ../code/set.f90 ../code/source.f90 ../code/model.f90 ../code/output.f90 ../code/e_field3.f90 ../code/e_cpml2.f90 ../code/h_field3.f90 ../code/h_cpml2.f90 ../code/main.f90 #-check all -CB -traceback -g
 time ./ficticious 
 
 

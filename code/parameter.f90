@@ -14,19 +14,20 @@ module const_para
     implicit none
 
     integer :: i,j,k
-    integer, parameter :: nstep    = 1200 !総タイムステップ数
-    integer, parameter :: nx       = 101,ny=101,nz=101 !101, ny = 101, nz = 101 !グリッド数
-    integer, parameter :: x0       = 51,y0=51,z0=51!=51, y0 = 51, z0 = 51  !送信源位置
-    integer, parameter :: ncpml=10 !nxpml1   = 10,nypml1=10,nzpml1=10!CPMLのgrid数
+    integer, parameter :: nstep = 2000 !総タイムステップ数
+    integer, parameter :: nx = 101,ny=101,nz=101 !101, ny = 101, nz = 101 !グリッド数
+    real(8), parameter :: dx = 20.0d0, dy = 20.0d0, dz = 20.0d0!dx=1.0d-2,dy=1.0d-2,dz=1.0d-2
+    integer, parameter :: x0 = 51,y0=51,z0=51!=51, y0 = 51, z0 = 51  !送信源位置
+    real(8), parameter :: fmax     = 25.0d0 !12.5kusuda!送信源の最大周波数
+    integer, parameter :: ncpml    = 10   !nxpml1   = 10,nypml1=10,nzpml1=10!CPMLのgrid数
+    integer, parameter :: nxpml1=10,nypml1=10,nzpml1=10
     integer, parameter :: ln       = 1 !operator half rength
     real(8), parameter :: pai      = 3.14159265358979d0 !πの値
 !     real(8), parameter :: tau0     = 0.02d0!1.6d-4 !送信源出力時間
     real(8), parameter :: f0       = 1.0d0 !f0が小さいとdtがでかくなる
     real(8), parameter :: omega0   = 2.0d0*pai*f0 !2πf0, !ω0
-    real(8), parameter :: fmax     = 15.0d0 !送信源の最大周波数
     real(8), parameter :: Glim     = 10.4d0 ! Taylor expansion参
-    real(8), parameter :: dt       = 4.0d-4!5.0d-4 !タイムステップ長 s
-    real(8), parameter :: dx       = 20.0d0, dy = 20.0d0, dz = 20.0d0!dx=1.0d-2,dy=1.0d-2,dz=1.0d-2
+    real(8), parameter :: dt       = 3.0d-4 !4.0d-4 !タイムステップ長 s
     real(8), parameter :: CC       = 2.997924580d0 !光速
     real(8), parameter :: sigmaair = 0.0d0     !空気の導電率 S/m
     real(8), parameter :: sigmafe  = 1.03d7 !鉄の導電率 S/m

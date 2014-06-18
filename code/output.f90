@@ -14,7 +14,6 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     character(5) :: name
 
-
     write(13,*) t, real(hz(x0,y0,nz-1)),    aimag(hz(x0,y0,nz-1))    !hz1050.d
     write(14,*) t, real(hz(x0,y0,z0+10)), aimag(hz(x0,y0,z0+10)) !hz1010.d
     write(15,*) t, real(hz(x0,y0,z0+20)), aimag(hz(x0,y0,z0+20))   !hz1030.d

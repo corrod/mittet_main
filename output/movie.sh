@@ -2,7 +2,7 @@
 #HZの波動伝播movie
 i=10001
 j=`expr $i - 10000`
-max=30
+max=66
 
 while [ $j -le $max ]; do
 gnuplot <<EOF
@@ -13,8 +13,8 @@ gnuplot <<EOF
  set pm3d map
  set size square
  set palette rgbformulae 33,13,10
- set cbrange[-0.07:0.07]#[-0.0002:0.0002]
- set zr[-0.07:0.07]#[-0.0002:0.0002]
+ set cbrange[-0.05:0.05]#[-0.0002:0.0002]
+ set zr[-0.05:0.05]#[-0.0002:0.0002]
  splot "hz$i.d" u 2:3:4
 EOF
 
