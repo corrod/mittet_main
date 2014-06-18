@@ -1,20 +1,20 @@
 !Convolutional PML_H !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! sigmamax amax kappamax の求め方 sigma*の求め方
+! sigmax amax kappamax の求め方 sig*の求め方
 ! 導入の仕方
 ! メイン部分の計算は通常の電磁波伝播と同じでプサイのぶぶんだけCPML？
 ! subrouitne 分ける必要ないのかも
 !kappa >=1 real
-!sigmai>0 real
+!sigi>0 real
 !ai=alphai>0 real
 !psi loop あと３枚必要？
 !割り算のとき倍精度d0に注意!!
 !db_x,db_y,db_zを仮想領域にあわせる
 !epsi0=1 from imamu
-!sigma* の求め方
+!sig* の求め方
 !db_z[ijk] = dt/MU0 /(1.f+(msigz[k]*dt)/(2.f*eps2));
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu,cmax)
+subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sig,myu,cmax)
     use const_para
     implicit none
 
@@ -31,11 +31,11 @@ subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu,cmax)
     real(8)             :: delta     = nxpml1*dx
     real(8), intent(in) :: cmax
     real(8), intent(in) :: myu(nx,ny,nz)
-    real(8), intent(in) :: sigma(nx,ny,nz)
-    real(8)             :: sigma_opt
-    real(8)             :: sigma_max!!!
-    real(8)             :: msigma_max
-    real(8)             :: msigma_x(nx),msigma_y(ny),msigma_z(nz)
+    real(8), intent(in) :: sig(nx,ny,nz)
+    real(8)             :: sig_opt
+    real(8)             :: sig_max!!!
+    real(8)             :: msig_max
+    real(8)             :: msig_x(nx),msig_y(ny),msig_z(nz)
     !     real(8), parameter :: lnR0 = -100.0d0  !ln|R(0)|
     real(8)             :: epsi(nx,ny,nz)!1.0d0
     real(8)             :: am_x(nx),am_y(ny),am_z(nz)
@@ -63,40 +63,40 @@ subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu,cmax)
 !     alpha(3,1:3) = (/1.17188d0,-0.06510d0,0.00469d0/)
 !     alpha(4,1:4) = (/1.19629d0,-0.07975d0,-0.00070d0/)
 
-    epsi(1:nx,1:ny,1:nz)=sigma(1:nx,1:ny,1:nz)/2.0d0/omega0
+    epsi(1:nx,1:ny,1:nz)=sig(1:nx,1:ny,1:nz)/2.0d0/omega0
 
-!!!    sigma_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
-    sigma_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) * optToMax  !!x方向だけ？
-    !msigma_max = sigma_max*MU0/epsi2
+!!!    sig_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
+    sig_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) * optToMax  !!x方向だけ？
+    !msig_max = sig_max*MU0/epsi2
 
-   ! sigma_opt = (dble(m)+1.0d0) / (150.0d0*pai*sqrt(epsir)*dx)
-  !  sigma_max = 0.7d0*sigma_opt
+   ! sig_opt = (dble(m)+1.0d0) / (150.0d0*pai*sqrt(epsir)*dx)
+  !  sig_max = 0.7d0*sig_opt
     
 
 !係数の設定xh
 
 do i = 1,nx
 if (i<=nxpml1) then
-    msigma_x(i) = sigma_max* ((dble(nxpml1)-dble(i)-0.5d0)/(dble(nxpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
+    msig_x(i) = sig_max* ((dble(nxpml1)-dble(i)-0.5d0)/(dble(nxpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
     mkappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*((dble(nxpml1)-dble(i)-0.5d0)/(dble(nxpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
     am_x(i)     = a_max* ((dble(i)-0.5d0)/(dble(nxpml1)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
 
-    bh_x(i)     = exp(-(msigma_x(i)/mkappa_x(i)+am_x(i)) *dt) !/epsi0)
-    ch_x(i)     = msigma_x(i)*(bh_x(i)-1.0d0) / (msigma_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i)
+    bh_x(i)     = exp(-(msig_x(i)/mkappa_x(i)+am_x(i)) *dt) !/epsi0)
+    ch_x(i)     = msig_x(i)*(bh_x(i)-1.0d0) / (msig_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i)
     khdx(i)     = mkappa_x(i)*dx !!!(i-1/2)dxの取り扱い
 
 
 else if(i>=nx-nxpml1+1) then
-    msigma_x(i) = sigma_max* ((dble(i)-dble(nx)+0.5d0+dble(nxpml1))/(dble(nxpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
+    msig_x(i) = sig_max* ((dble(i)-dble(nx)+0.5d0+dble(nxpml1))/(dble(nxpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
     mkappa_x(i) = 1.0d0 + (kappa_max-1.0d0)*((dble(i)-dble(nx)+0.5d0+dble(nxpml1))/(dble(nxpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
     am_x(i)     = a_max* ((dble(-i)+nx+0.5d0)/(dble(nxpml1)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
 
-    bh_x(i)     = exp(-(msigma_x(i)/mkappa_x(i)+am_x(i)) *dt) !/epsi0)
-    ch_x(i)     = msigma_x(i)*(bh_x(i)-1.0d0) / (msigma_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i) 
+    bh_x(i)     = exp(-(msig_x(i)/mkappa_x(i)+am_x(i)) *dt) !/epsi0)
+    ch_x(i)     = msig_x(i)*(bh_x(i)-1.0d0) / (msig_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i) 
     khdx(i)     = mkappa_x(i)*dx !!!(i-1/2)dxの取り扱い
 
 else
-    msigma_x(i) = 0.0d0
+    msig_x(i) = 0.0d0
     mkappa_x(i) = 1.0d0
     am_x(i)     = 0.0d0   
     bh_x(i)     = 0.0d0   
@@ -110,25 +110,25 @@ else
 
 do j = 1,ny
 if (j<=nypml1) then
-    msigma_y(j) = sigma_max* ((dble(nypml1)-dble(j)-0.5d0)/(dble(nypml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
+    msig_y(j) = sig_max* ((dble(nypml1)-dble(j)-0.5d0)/(dble(nypml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
     mkappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*((dble(nypml1)-dble(j)-0.5d0)/(dble(nypml1)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
     am_y(j)     = a_max* ((dble(j)-0.5d0)/(dble(nypml1)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
 
-    bh_y(j)     = exp(-(msigma_y(j)/mkappa_y(j)+am_y(j)) *dt) !/epsi0)
-    ch_y(j)     = msigma_y(j)*(bh_y(j)-1.0d0) / (msigma_y(j) + mkappa_y(j)*am_y(j)) / mkappa_y(j)
+    bh_y(j)     = exp(-(msig_y(j)/mkappa_y(j)+am_y(j)) *dt) !/epsi0)
+    ch_y(j)     = msig_y(j)*(bh_y(j)-1.0d0) / (msig_y(j) + mkappa_y(j)*am_y(j)) / mkappa_y(j)
     khdy(j)     = mkappa_y(j)*dx !!!(i-1/2)dxの取り扱い
 
 else if(j>=ny-nypml1+1) then
-    msigma_y(j) = sigma_max* ((dble(j)-dble(ny)+0.5d0+dble(nypml1))/(dble(nypml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
+    msig_y(j) = sig_max* ((dble(j)-dble(ny)+0.5d0+dble(nypml1))/(dble(nypml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
     mkappa_y(j) = 1.0d0 + (kappa_max-1.0d0)*((dble(j)-dble(ny)+0.5d0+dble(nypml1))/(dble(nypml1)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
     am_y(j)     = a_max* ((dble(-j)+ny+0.5d0)/(dble(nypml1)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
 
-    bh_y(j)     = exp(-(msigma_y(j)/mkappa_y(j)+am_y(j)) *dt) !/epsi0)
-    ch_y(j)     = msigma_y(j)*(bh_y(j)-1.0d0) / (msigma_y(j) + mkappa_y(j)*am_y(j)) / mkappa_y(j) 
+    bh_y(j)     = exp(-(msig_y(j)/mkappa_y(j)+am_y(j)) *dt) !/epsi0)
+    ch_y(j)     = msig_y(j)*(bh_y(j)-1.0d0) / (msig_y(j) + mkappa_y(j)*am_y(j)) / mkappa_y(j) 
     khdy(j)     = mkappa_y(j)*dy !!!(i-1/2)dxの取り扱い
 
 else
-    msigma_y(j) = 0.0d0
+    msig_y(j) = 0.0d0
     mkappa_y(j) = 1.0d0
     am_y(j)     = 0.0d0   
     bh_y(j)     = 0.0d0   
@@ -142,25 +142,25 @@ else
 
 do k = 1,nz
 if (k<=nzpml1) then
-    msigma_z(k) = sigma_max* ((dble(nzpml1)-dble(k)-0.5d0)/(dble(nzpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
+    msig_z(k) = sig_max* ((dble(nzpml1)-dble(k)-0.5d0)/(dble(nzpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
     mkappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*((dble(nzpml1)-dble(k)-0.5d0)/(dble(nzpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
     am_z(k)     = a_max* ((dble(k)-0.5d0)/(dble(nzpml1)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
 
-    bh_z(k)     = exp(-(msigma_z(k)/mkappa_z(k)+am_z(k)) *dt) !/epsi0)
-    ch_z(k)     = msigma_z(k)*(bh_z(k)-1.0d0) / (msigma_z(k) + mkappa_z(k)*am_z(k)) / mkappa_z(k)
+    bh_z(k)     = exp(-(msig_z(k)/mkappa_z(k)+am_z(k)) *dt) !/epsi0)
+    ch_z(k)     = msig_z(k)*(bh_z(k)-1.0d0) / (msig_z(k) + mkappa_z(k)*am_z(k)) / mkappa_z(k)
     khdz(k)     = mkappa_z(k)*dz !!!(i-1/2)dxの取り扱い
 
 else if(k>=nz-nzpml1+1) then
-    msigma_z(k) = sigma_max* ((dble(k)-dble(nz)+0.5d0+dble(nzpml1))/(dble(nzpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
+    msig_z(k) = sig_max* ((dble(k)-dble(nz)+0.5d0+dble(nzpml1))/(dble(nzpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
     mkappa_z(k) = 1.0d0 + (kappa_max-1.0d0)*((dble(k)-dble(nz)+0.5d0+dble(nzpml1))/(dble(nzpml1)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
     am_z(k)     = a_max* ((dble(-k)+nz+0.5d0)/(dble(nzpml1)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
 
-    bh_z(k)     = exp(-(msigma_z(k)/mkappa_z(k)+am_z(k)) *dt) !/epsi0)
-    ch_z(k)     = msigma_z(k)*(bh_z(k)-1.0d0) / (msigma_z(k) + mkappa_z(k)*am_z(k)) / mkappa_z(k) 
+    bh_z(k)     = exp(-(msig_z(k)/mkappa_z(k)+am_z(k)) *dt) !/epsi0)
+    ch_z(k)     = msig_z(k)*(bh_z(k)-1.0d0) / (msig_z(k) + mkappa_z(k)*am_z(k)) / mkappa_z(k) 
     khdz(k)     = mkappa_z(k)*dz !!!(i-1/2)dxの取り扱い
 
 else
-    msigma_z(k) = 0.0d0
+    msig_z(k) = 0.0d0
     mkappa_z(k) = 1.0d0
     am_z(k)     = 0.0d0   
     bh_z(k)     = 0.0d0   
@@ -169,29 +169,29 @@ else
     endif
         enddo
 
-!!!sigma=simga*
+!!!sig=simga*
 
 do k=1,nz
     do j=1,ny
         do i=1,nx
         !imamu system
-        da_x(i,j,k) = (1.0d0 - ((msigma_x(i)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msigma_x(i)*dt)/(2.0d0*epsi(i,j,k))))
-        da_y(i,j,k) = (1.0d0 - ((msigma_y(j)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msigma_y(j)*dt)/(2.0d0*epsi(i,j,k))))
-        da_z(i,j,k) = (1.0d0 - ((msigma_z(k)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msigma_z(k)*dt)/(2.0d0*epsi(i,j,k))))
+        da_x(i,j,k) = (1.0d0 - ((msig_x(i)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msig_x(i)*dt)/(2.0d0*epsi(i,j,k))))
+        da_y(i,j,k) = (1.0d0 - ((msig_y(j)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msig_y(j)*dt)/(2.0d0*epsi(i,j,k))))
+        da_z(i,j,k) = (1.0d0 - ((msig_z(k)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msig_z(k)*dt)/(2.0d0*epsi(i,j,k))))
         !!!****imamu systemではmyu→MU0 myu→eps2
-        db_x(i,j,k) = dt/MU0/(1.0d0+(msigma_x(i)*dt)/(2.0d0*epsi(i,j,k)))
-        db_y(i,j,k) = dt/MU0/(1.0d0+(msigma_y(j)*dt)/(2.0d0*epsi(i,j,k)))
-        db_z(i,j,k) = dt/MU0/(1.0d0+(msigma_z(k)*dt)/(2.0d0*epsi(i,j,k)))
+        db_x(i,j,k) = dt/MU0/(1.0d0+(msig_x(i)*dt)/(2.0d0*epsi(i,j,k)))
+        db_y(i,j,k) = dt/MU0/(1.0d0+(msig_y(j)*dt)/(2.0d0*epsi(i,j,k)))
+        db_z(i,j,k) = dt/MU0/(1.0d0+(msig_z(k)*dt)/(2.0d0*epsi(i,j,k)))
 
          !saito system   
-    !   da_x(i,j,k) = (1.0d0-(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) !sigma=σ*
-    !   da_y(i,j,k) = (1.0d0-(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k)))!導磁率σ
-    !   da_z(i,j,k) = (1.0d0-(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+    !   da_x(i,j,k) = (1.0d0-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) !sig=σ*
+    !   da_y(i,j,k) = (1.0d0-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))!導磁率σ
+    !   da_z(i,j,k) = (1.0d0-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
     !   saito system
-    !   db_x(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
-    !   db_y(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
-    !   db_z(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
-!!!sigma_x(i)?sigma(i,j,k)?
+    !   db_x(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+    !   db_y(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+    !   db_z(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+!!!sig_x(i)?sig(i,j,k)?
         enddo
     enddo
 enddo
@@ -225,14 +225,14 @@ enddo
 
 !
 !msig_max=esig_max*MU0/epsi2
-!  scaler = 0.01f * sigmax2/gradmax;
-!  //scaler = 0.01f * sigmax2;
+!  scaler = 0.01f * sigx2/gradmax;
+!  //scaler = 0.01f * sigx2;
 !sig2[ijk] = sig[ijk] - scaler * grad[ijk];
 
 
 !     (+)の係数
 !     do i=1,nxpml1
-!         msigma_x(nx-(i-1))= msigma_x(i)
+!         msig_x(nx-(i-1))= msig_x(i)
 !         mkappa_x(nx-(i-1))=mkappa_x(i)
 !         am_x(nx-(i-1)) = am_x(i)
 !         khdx(nx-(i-1)) = khdx(i)
@@ -241,7 +241,7 @@ enddo
 !     enddo
 
 !     do j=1,nypml1
-!         msigma_y(ny-(j-1))= msigma_y(j)
+!         msig_y(ny-(j-1))= msig_y(j)
 !         mkappa_y(ny-(j-1))=mkappa_y(j)
 !         am_y(ny-(j-1)) = am_y(j)
 !         khdy(ny-(j-1)) = khdy(j)
@@ -250,7 +250,7 @@ enddo
 !     enddo
 
 !     do k=1,nzpml1
-!         msigma_z(nz-(k-1))= msigma_z(k)
+!         msig_z(nz-(k-1))= msig_z(k)
 !         mkappa_z(nz-(k-1))=mkappa_z(k)
 !         am_z(nz-(k-1)) = am_z(k)
 !         khdz(nz-(k-1)) = khdz(k)

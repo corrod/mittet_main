@@ -5,7 +5,7 @@
 !
 !   omega0=2πf0
 !   f0=1,0Hz
-!   sigmawa=3.2S/m
+!   sigwa=3.2S/m
 !   x=(i-1)*dx 
 !   ∂n=Σαの書き方
 !   代入必要?↓↓↓
@@ -32,12 +32,12 @@ module const_para
     real(8), parameter :: omega0 = 2.0d0*pai!2πf0,f0=1 !ω0
     real(8), parameter :: dt    = 5.0d-4 !タイムステップ長 s
     real(8), parameter :: dx    = 20d0,dy = 20d0,dz = 20d0!dx=1.0d-2,dy=1.0d-2,dz=1.0d-2 
-    real(8)            :: sigmaxx(nx,ny,nz) !diagonal sigma x
-    real(8)            :: sigmayy(nx,ny,nz) !diagonal sigma y
-    real(8)            :: sigmazz(nx,ny,nz) !diagonal sigma z
-    real(8), parameter :: sigmaair = 0     !空気の導電率 S/m
-    real(8), parameter :: sigmafe  = 1.03d7 !鉄の導電率 S/m
-    real(8), parameter :: sigmawa  = 3.2d0  !海水の導電率 S/m
+    real(8)            :: sigxx(nx,ny,nz) !diagonal sig x
+    real(8)            :: sigyy(nx,ny,nz) !diagonal sig y
+    real(8)            :: sigzz(nx,ny,nz) !diagonal sig z
+    real(8), parameter :: sigair = 0     !空気の導電率 S/m
+    real(8), parameter :: sigfe  = 1.03d7 !鉄の導電率 S/m
+    real(8), parameter :: sigwa  = 3.2d0  !海水の導電率 S/m
     real(8), parameter :: MU0     = 1.2566370614d-6 !真空の透磁率 H/m
     real(8), parameter :: myurair  = 1.0d0        !空気の比透磁率
     real(8), parameter :: myurfe   = 4.0d3         !鉄の比透磁率
@@ -78,7 +78,7 @@ program main
     real(8) :: Jn(nstep) !gaussian
     real(8) :: Je(nstep) !電流源
     real(8) :: Jh(nstep) !磁流源
-    real(8) :: sigma(nx,ny,nz),myu(nx,ny,nz)
+    real(8) :: sig(nx,ny,nz),myu(nx,ny,nz)
     complex(kind(0d0)) :: Ex(nx,ny,nz)
     complex(kind(0d0)) :: Ey(nx,ny,nz)
     complex(kind(0d0)) :: Ez(nx,ny,nz)
@@ -106,7 +106,7 @@ program main
     enddo
 
     !モデルの読み込み
-    call model(sigma,myu)
+    call model(sig,myu)
 
     !cmax,cminの計算 dt,dx,dy,dzの設定 
     call set_d_txyz
@@ -117,14 +117,14 @@ program main
 
     !入力波源の設定
 !   call gaussianpulse(istep,t,Ie,Mh)  
-    call gaussian(istep,t,Je,Jh,sigma,myu)
+    call gaussian(istep,t,Je,Jh,sig,myu)
     !電場計算
-    call EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
-    call EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
-    call EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
+    call EXFIELD(istep,t,Je,Ex,Hy,Hz,sig)
+    call EYFIELD(istep,t,Je,Ey,Hz,Hx,sig)
+    call EZFIELD(istep,t,Je,Ez,Hx,Hy,sig)
 
      !境界条件 E
-!   call E_PML(Ex,Ey,Ez,HX,Hy,Hz,sigma)
+!   call E_PML(Ex,Ey,Ez,HX,Hy,Hz,sig)
 
     t = t + dt*0.5d0  !時間の更新--------------------------
 
@@ -134,7 +134,7 @@ program main
     call HZFIELD(istep,t,Jh,Hz,Ex,Ey,myu)
 
     !境界条件 H
-!   call H_BoundaryCondition(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu)
+!   call H_BoundaryCondition(Ex,Ey,Ez,Hx,Hy,Hz,sig,myu)
 
     t = t + dt*0.5d0 !時間の更新---------------------------
 
@@ -186,8 +186,8 @@ subroutine set_d_txyz
 	real(8) :: dt_max
 
     !媒質中の伝播速度計算
-    cwa = sqrt(2.0d0*omega0/myuwa/sigmawa)
-    cfe = sqrt(2.0d0*omega0/myufe/sigmafe)
+    cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
+    cfe = sqrt(2.0d0*omega0/myufe/sigfe)
     cair = 1.0d0 / sqrt(myuair*epsiair)
     write(*,'(a,2e12.4)') 'cwa,cfe', cwa,cfe !海水の伝播速度出力
     write(*,'(a,e12.4)') '伝播距離c*t', cwa*dt*nstep
@@ -206,7 +206,7 @@ subroutine set_d_txyz
     write(*,'(a,3i5)') 'nx,ny,nz',nx,ny,nz !グリッド数
     write(*,'(a,i5)') 'nstep',nstep
     write(*,'(a,e12.4)') 'omega0',omega0
-    write(*,*) 'sigmawa,myuwa',sigmawa,myuwa
+    write(*,*) 'sigwa,myuwa',sigwa,myuwa
             endsubroutine set_d_txyz
 
 
@@ -231,7 +231,7 @@ subroutine set_d_txyz
 
 
 !!!送信源the first derivative of Gaussian********************************
-subroutine gaussian(istep,t,Je,Jh,sigma,myu)
+subroutine gaussian(istep,t,Je,Jh,sig,myu)
     use const_para
     implicit none
     
@@ -240,7 +240,7 @@ subroutine gaussian(istep,t,Je,Jh,sigma,myu)
     real(8)              :: Jn(nstep)!gaussian
     real(8), intent(out) :: Je(nstep)
     real(8), intent(out) :: Jh(nstep)
-    real(8), intent(in)  :: sigma(nx,ny,nz)
+    real(8), intent(in)  :: sig(nx,ny,nz)
     real(8), intent(in)  :: myu(nx,ny,nz)
     real(8)              :: etaxx(x0,y0,z0)
     real(8), parameter   :: t0 = pai/fmax
@@ -249,7 +249,7 @@ subroutine gaussian(istep,t,Je,Jh,sigma,myu)
     Jn(istep) = -(2.0d0*beta*(t-t0)*sqrt(beta/pai))*exp(-beta*(t-t0)**2)
 
     !電場ソースの設定
-    etaxx(x0,y0,z0) = (2.0d0*omega0)/sigma(x0,y0,z0)
+    etaxx(x0,y0,z0) = (2.0d0*omega0)/sig(x0,y0,z0)
     Je(istep) = dt*etaxx(x0,y0,z0)*Jn(istep)/dx/dy/dz
 
     !磁場ソースの設定
@@ -280,23 +280,23 @@ subroutine gaussian(istep,t,Je,Jh,sigma,myu)
 
 
 !!!モデル設定********************************************************************
-subroutine model(sigma,myu)
+subroutine model(sig,myu)
     use const_para
     implicit none
 
-	real(8),intent(out) :: sigma(nx,ny,nz)
+	real(8),intent(out) :: sig(nx,ny,nz)
 	real(8),intent(out) :: myu(nx,ny,nz)
 
     !海水一様モデル
-    sigma(1:nx,1:ny,1:nz) = sigmawa
+    sig(1:nx,1:ny,1:nz) = sigwa
     myu(1:nx,1:ny,1:nz) = myuwa
 
     !海水
-    !sigma()=sigmawa
+    !sig()=sigwa
     !myu()=myuwa
 
     !鉄板
-    !sigma()=sigmafe
+    !sig()=sigfe
     !myu()=myufe
             endsubroutine model
 
@@ -392,18 +392,18 @@ subroutine output_EH(istep,t,Ex,Ey,Ez,Hx,Hy,Hz)
 
 !電場計算*****************************************************************************
 !Ex-field
-subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
+subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sig)
     use const_para
     implicit none
 
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
-!   complex(kind(0d0)), intent(in) :: sigmaxx(nx,ny,nz)
+!   complex(kind(0d0)), intent(in) :: sigxx(nx,ny,nz)
     real(8), intent(in) :: Je(nstep)
     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz)
     complex(kind(0d0)), intent(inout) :: Hy(nx,ny,nz)
     complex(kind(0d0)), intent(inout) :: Hz(nx,ny,nz)
-    real(8),intent(in)  :: sigma(nx,ny,nz)
+    real(8),intent(in)  :: sig(nx,ny,nz)
     real(8) :: etaxx(nx,ny,nz)
     real(8) :: CEXLY(nx,ny,nz)
     real(8) :: CEXLZ(nx,ny,nz)
@@ -412,7 +412,7 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
     do k=1,nz
          do j=1,ny
               do i=1,nx
-                    etaxx(i,j,k) = 2.0d0 * omega0 * sigma(i,j,k)!sigmaxx(i,j,k)
+                    etaxx(i,j,k) = 2.0d0 * omega0 * sig(i,j,k)!sigxx(i,j,k)
                     CEXLY(i,j,k) = dt * etaxx(i,j,k) / dy
                     CEXLZ(i,j,k) = - dt * etaxx(i,j,k) / dz
               enddo
@@ -442,18 +442,18 @@ subroutine EXFIELD(istep,t,Je,Ex,Hy,Hz,sigma)
 
 
 !Ey-field-------------------------------------------------------------
-subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
+subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sig)
     use const_para
     implicit none
 
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
-!   complex(kind(0d0)), intent(in) :: sigmayy(nx,ny,nz)
+!   complex(kind(0d0)), intent(in) :: sigyy(nx,ny,nz)
     real(8), intent(in) :: Je(nstep)
     complex(kind(0d0)), intent(inout) :: Ey(nx,ny,nz)
     complex(kind(0d0)), intent(inout) :: Hz(nx,ny,nz)
     complex(kind(0d0)), intent(inout) :: Hx(nx,ny,nz)
-    real(8), intent(in) :: sigma(nx,ny,nz)
+    real(8), intent(in) :: sig(nx,ny,nz)
     real(8) :: etayy(nx,ny,nz)
     real(8) :: CEYLZ(nx,ny,nz)
     real(8) :: CEYLX(nx,ny,nz)
@@ -462,7 +462,7 @@ subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
     do k=1,nz
         do j=1,ny
            do i=1,nx
-              etayy(i,j,k) = 2.0d0 * omega0 * sigma(i,j,k)!sigmayy(i,j,k)
+              etayy(i,j,k) = 2.0d0 * omega0 * sig(i,j,k)!sigyy(i,j,k)
               CEYLZ(i,j,k) = dt * etayy(i,j,k) / dz
               CEYLX(i,j,k) = - dt * etayy(i,j,k) / dx
            enddo
@@ -490,18 +490,18 @@ subroutine EYFIELD(istep,t,Je,Ey,Hz,Hx,sigma)
 
 
 !Ez-field-------------------------------------------------------------------
-subroutine EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
+subroutine EZFIELD(istep,t,Je,Ez,Hx,Hy,sig)
     use const_para
     implicit none
 
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
-!   complex(kind(0d0)),intent(in) :: sigmazz(nx,ny,nz)
+!   complex(kind(0d0)),intent(in) :: sigzz(nx,ny,nz)
     real(8),intent(in) :: Je(nstep)
     complex(kind(0d0)), intent(inout) :: Ez(nx,ny,nz)
     complex(kind(0d0)), intent(inout) :: Hx(nx,ny,nz)
     complex(kind(0d0)), intent(inout) :: Hy(nx,ny,nz)
-    real(8),intent(in)  :: sigma(nx,ny,nz)
+    real(8),intent(in)  :: sig(nx,ny,nz)
     real(8) :: etazz(nx,ny,nz)
     real(8) :: CEZLX(nx,ny,nz)
     real(8) :: CEZLY(nx,ny,nz)
@@ -510,7 +510,7 @@ subroutine EZFIELD(istep,t,Je,Ez,Hx,Hy,sigma)
     do k=1,nz
         do j=1,ny
             do i=1,nx
-                etazz(i,j,k) = 2.0d0 * omega0 * sigma(i,j,k)!sigmazz(i,j,k)
+                etazz(i,j,k) = 2.0d0 * omega0 * sig(i,j,k)!sigzz(i,j,k)
                 CEZLX(i,j,k) = dt * etazz(i,j,k) / dx
                 CEZLY(i,j,k) = - dt * etazz(i,j,k) / dy
             enddo
@@ -736,11 +736,11 @@ subroutine cpml
  
     integer,parameter :: m=4,ma=4
     integer,parameter :: nxpml1=5,nypml1=5,nzpml1=5
-    real(8) :: sigma_max !!! 導出法確認
+    real(8) :: sig_max !!! 導出法確認
     real(8) :: kappa_max !!! 整数？
     real(8) :: a_max     !!!
-    real(8) :: sigma(nx,ny,nz)
-    real(8) :: sigma_x(nx),sigma_y(ny),sigma_z(nz)
+    real(8) :: sig(nx,ny,nz)
+    real(8) :: sig_x(nx),sig_y(ny),sig_z(nz)
     real(8) :: ca_x(nx,ny,nz),ca_y(nx,ny,nz),ca_z(nx,ny,nz)
     real(8) :: cb_x(nx,ny,nz),cb_y(nx,ny,nz),cb_z(nx,ny,nz)
     real(8) :: kappa_x(nx),kappa_y(ny),kappa_z(nz)
@@ -756,21 +756,21 @@ subroutine cpml
     complex(kind(0d0)) :: hx(nx,ny,nz),hy(nx,ny,nz),hz(nx,ny,nz)
 
 !係数の設定
-    ca_x(i,j,k) = (1-sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-    ca_y(i,j,k) = (1-sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-    ca_z(i,j,k) = (1-sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+    ca_x(i,j,k) = (1-sig(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+    ca_y(i,j,k) = (1-sig(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+    ca_z(i,j,k) = (1-sig(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
 
-    cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-    cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-    cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1+sigma(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+    cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+    cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+    cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
 
     kedx(i) = kappa_x(i)*dx  !kedy=kappa(jdy)dy
     kedy(j) = kappa_y(j)*dy  !!!
     kedz(k) = kappa_z(k)*dz  !!!
    
-    sigma_x(i) = sigma_max*((nxpml1-i)/(nxpml1-1))**m
-    sigma_y(j) = sigma_max*((nypml1-j)/(nypml1-1))**m
-    sigma_z(k) = sigma_max*((nzpml1-k)/(nzpml1-1))**m
+    sig_x(i) = sig_max*((nxpml1-i)/(nxpml1-1))**m
+    sig_y(j) = sig_max*((nypml1-j)/(nypml1-1))**m
+    sig_z(k) = sig_max*((nzpml1-k)/(nzpml1-1))**m
 
     kappa_x(i) = 1 + (kappa_max-1)*((nxpml1-j)/(nxpml1-1))**m
     kappa_y(j) = 1 + (kappa_max-1)*((nypml1-j)/(nypml1-1))**m
@@ -780,13 +780,13 @@ subroutine cpml
     a_y(j) = a_max*((j-1)/(nypml1-1))**ma
     a_z(j) = a_max*((k-1)/(nzpml1-1))**ma
 
-    be_x(i) = exp((sigma_x(i)/kappa_x(i)+a_x(i))*dt/epsi0)
-    be_y(j) = exp((sigma_y(j)/kappa_y(j)+a_y(j))*dt/epsi0)
-    be_z(k) = exp((sigma_z(k)/kappa_z(k)+a_z(k))*dt/epsi0)
+    be_x(i) = exp((sig_x(i)/kappa_x(i)+a_x(i))*dt/epsi0)
+    be_y(j) = exp((sig_y(j)/kappa_y(j)+a_y(j))*dt/epsi0)
+    be_z(k) = exp((sig_z(k)/kappa_z(k)+a_z(k))*dt/epsi0)
 
-    ce_x(i) = sigma_x(i)*(be_x(i)-1) / (sigma_x(i)+kappa_x(i)*a_x(i)) / kappa_x(i)
-    ce_y(j) = sigma_y(j)*(be_y(j)-1) / (sigma_y(j)+kappa_y(j)*a_y(j)) / kappa_y(j)
-    ce_z(k) = sigma_z(k)*(be_z(k)-1) / (sigma_z(k)+kappa_z(k)*a_z(k)) / kappa_z(k)
+    ce_x(i) = sig_x(i)*(be_x(i)-1) / (sig_x(i)+kappa_x(i)*a_x(i)) / kappa_x(i)
+    ce_y(j) = sig_y(j)*(be_y(j)-1) / (sig_y(j)+kappa_y(j)*a_y(j)) / kappa_y(j)
+    ce_z(k) = sig_z(k)*(be_z(k)-1) / (sig_z(k)+kappa_z(k)*a_z(k)) / kappa_z(k)
 
 !field-update loop
     !x-update
@@ -879,7 +879,7 @@ subroutine cpml_H
     integer,parameter :: m=4, ma=4
     integer :: nxpml1=5, nypml1=5, nzpml1=5 !pmlの厚さ
     real(8),parameter :: lnR0= -100d0  !ln|R(0)|
-    real(8) :: sigma_max !!!
+    real(8) :: sig_max !!!
     real(8) :: kappa_max !!!
     real(8) :: a_max     !!!
     real(8) :: myu(nx,ny,nz),epsi(nx,ny,nz)
@@ -888,8 +888,8 @@ subroutine cpml_H
     real(8) :: khdx(nx),khdy(ny),khdz(nz)
     real(8) :: bh_x(nx),bh_y(ny),bh_z(dz)
     real(8) :: ch_x(nx),ch_y(ny),ch_z(nz)
-    real(8) :: sigma(nx,ny,nz)
-    real(8) :: sigma_x(nx),sigma_y(ny),sigma_z(nz)
+    real(8) :: sig(nx,ny,nz)
+    real(8) :: sig_x(nx),sig_y(ny),sig_z(nz)
     real(8) :: kappa_x(nx),kappa_y(ny),kappa_z(nz)
     real(8) :: a_x(nx),a_y(ny),a_z(nz)
     complex(kind(0d0)) :: psi_hzx1(nx,ny,nz),psi_hyx1(nx,ny,nz)
@@ -899,19 +899,19 @@ subroutine cpml_H
     complex(kind(0d0)) :: ex(nx,ny,nz),ey(nx,ny,nz),ez(nx,ny,nz)
 
 !係数の設定
-    da_x(i,j,k) = (1-(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) !sigma=σ*
-    da_y(i,j,k) = (1-(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k)))!導磁率σ
-    da_z(i,j,k) = (1-(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+    da_x(i,j,k) = (1-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) !sig=σ*
+    da_y(i,j,k) = (1-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))!導磁率σ
+    da_z(i,j,k) = (1-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
 
-    db_x(i,j,k) = (dt/myu(i,j,k)) / (1+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
-    db_y(i,j,k) = (dt/myu(i,j,k)) / (1+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
-    db_z(i,j,k) = (dt/myu(i,j,k)) / (1+(sigma(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+    db_x(i,j,k) = (dt/myu(i,j,k)) / (1+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+    db_y(i,j,k) = (dt/myu(i,j,k)) / (1+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+    db_z(i,j,k) = (dt/myu(i,j,k)) / (1+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
       
-!!!    sigma_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
+!!!    sig_max = -(m+1)*lnR0 / (2.0d0*(sqrt(myu/epsi))*nxpml1*dx)  !ln(R(0));反射係数!!!
 
-    sigma_x(i) = sigma_max* ((nxpml1-i-1/2)/(nxpml1-1)) **m
-    sigma_y(j) = sigma_max* ((nypml1-j-1/2)/(nypml1-1)) **m
-    sigma_z(k) = sigma_max* ((nzpml1-j-1/2)/(nzpml1-1)) **m
+    sig_x(i) = sig_max* ((nxpml1-i-1/2)/(nxpml1-1)) **m
+    sig_y(j) = sig_max* ((nypml1-j-1/2)/(nypml1-1)) **m
+    sig_z(k) = sig_max* ((nzpml1-j-1/2)/(nzpml1-1)) **m
 
 !!!    kappa_max =    !!!導出要確認
     kappa_x(i) = 1 + (kappa_max-1)*((nxpml1-i-1/2)/(nxpml1-1)) **m
@@ -927,13 +927,13 @@ subroutine cpml_H
     khdy(i) = kappa_y((j-1/2)*dy)*dy
     khdz(i) = kappa_z((k-1/2)*dy)*dz
 
-    bh_x(i) = exp((sigma_x(i)/kappa_x(i)+a_x(i)) *dt/epsi0)  !!カッコ位置確認
-    bh_y(j) = exp((sigma_y(j)/kappa_y(j)+a_y(j)) *dt/epsi0)
-    bh_z(k) = exp((sigma_z(k)/kappa_z(k)+a_z(k)) *dt/epsi0)
+    bh_x(i) = exp((sig_x(i)/kappa_x(i)+a_x(i)) *dt/epsi0)  !!カッコ位置確認
+    bh_y(j) = exp((sig_y(j)/kappa_y(j)+a_y(j)) *dt/epsi0)
+    bh_z(k) = exp((sig_z(k)/kappa_z(k)+a_z(k)) *dt/epsi0)
 
-    ch_x(i) = sigma_x(j)*(bh_x(i)-1) / (sigma_x(i) + kappa_x(i)*a_x(i)) / kappa_x(i)
-    ch_y(j) = sigma_y(j)*(bh_y(j)-1) / (sigma_y(j) + kappa_y(j)*a_y(j)) / kappa_y(j)
-    ch_z(j) = sigma_z(k)*(bh_z(k)-1) / (sigma_z(k) + kappa_z(k)*a_z(k)) / kappa_z(k)
+    ch_x(i) = sig_x(j)*(bh_x(i)-1) / (sig_x(i) + kappa_x(i)*a_x(i)) / kappa_x(i)
+    ch_y(j) = sig_y(j)*(bh_y(j)-1) / (sig_y(j) + kappa_y(j)*a_y(j)) / kappa_y(j)
+    ch_z(j) = sig_z(k)*(bh_z(k)-1) / (sig_z(k) + kappa_z(k)*a_z(k)) / kappa_z(k)
 
 !field update loop 
  !Hx
@@ -1055,9 +1055,9 @@ subroutine E_PML(Ex,Ey,Ez,Hx,Hy,Hz,c)
     integer :: LPMLST(6)
     integer,parameter :: L_max=6 !層数
     integer :: M=4 !導電率の分布を与える次数
-    real(8) :: sigma_max
-    real(8) :: sigmax(L_max),sigmay(L_max),sigmaz(L_max)
-    real(8) :: epsi !sigma/2omega0で置き換えれるかも
+    real(8) :: sig_max
+    real(8) :: sigx(L_max),sigy(L_max),sigz(L_max)
+    real(8) :: epsi !sig/2omega0で置き換えれるかも
     real(8) :: c
     real(8) :: R !反射係数
     complex(kind(0d0)),intent(inout) :: Ex(nx,ny,nz), Ey(nx,ny,nz), Ez(nx,ny,nz)
@@ -1067,49 +1067,49 @@ subroutine E_PML(Ex,Ey,Ez,Hx,Hy,Hz,c)
     complex(kind(0d0)) :: CEYX(nx),CEYXL(nx),CEYZ(nz),CEYZL(nz)!**配列の大きさ適当
     complex(kind(0d0)) :: CEZX(nx),CEZXL(nx),CEZY(ny),CEZYL(ny)!**配列の大きさ適当
 
-    sigma_max = - (((M+1)*epsi*c) / (2.0d0*L_max*dx)) * R   
+    sig_max = - (((M+1)*epsi*c) / (2.0d0*L_max*dx)) * R   
      do i=1,L_max
-          sigmax(i) = sigma_max * ((i-0.5d0)/L_max)
+          sigx(i) = sig_max * ((i-0.5d0)/L_max)
      enddo
      do j=1,L_max
-          sigmay(j) = sigma_max * ((j-0.5d0)/L_max)
+          sigy(j) = sig_max * ((j-0.5d0)/L_max)
      enddo
      do k=1,L_max
-          sigmaz(k) = sigma_max * ((k-0.5d0)/L_max)
+          sigz(k) = sig_max * ((k-0.5d0)/L_max)
      enddo
 
 
-   !mittet sigma=2*omega0*epsi PML
+   !mittet sig=2*omega0*epsi PML
     CEXY(j)  = (1-omega0*dt) / (1+omega0*dt)
-    CEXYL(j) = 2.0d0*omega0*dt / (sigmay(j)*(1+dt*omega0))
+    CEXYL(j) = 2.0d0*omega0*dt / (sigy(j)*(1+dt*omega0))
     CEXZ(k)  = (1-omega0*dt) / (1+omega0*dt)
-    CEXZL(k) = 2.0d0*omega0*dt / (sigmaz(k)*(1+dt*omega0))
+    CEXZL(k) = 2.0d0*omega0*dt / (sigz(k)*(1+dt*omega0))
 
     CEYX(i)  = (1-omega0*dt) / (1+omega0*dt)
-    CEYXL(i) = 2.0d0*omega0*dt / (sigmax(i)*(1+dt*omega0))
+    CEYXL(i) = 2.0d0*omega0*dt / (sigx(i)*(1+dt*omega0))
     CEYZ(k)  = (1-omega0*dt) / (1+omega0*dt)
-    CEYZL(k) = 2.0d0*omega0*dt / (sigmaz(k)*(1+dt*omega0))
+    CEYZL(k) = 2.0d0*omega0*dt / (sigz(k)*(1+dt*omega0))
 
     CEZX(i)  = (1-omega0*dt) / (1+omega0*dt)
-    CEZXL(i) = 2.0d0*omega0*dt / (sigmax(i)*(1+dt*omega0))
+    CEZXL(i) = 2.0d0*omega0*dt / (sigx(i)*(1+dt*omega0))
     CEZY(j)  = (1-omega0*dt) / (1+omega0*dt)
-    CEZYL(j) = 2.0d0*omega0*dt / (sigmay(j)*(1+dt*omega0))
+    CEZYL(j) = 2.0d0*omega0*dt / (sigy(j)*(1+dt*omega0))
 
     !normal PML 
-    !CEXY(j) = (1-sigma(j)*dt/(2.0d0*epsi)) / (1+sigma(j)*dt/(2.0d0*epsi))
-    !CEXYL(j) = (dt/epsi) / (1+sigma(j)*dt/(2.0d0*epsi)) / dy
-    !CEXZ(k) =(1-sigma(j)*dt/(2.0d0*epsi)) / (1+sigma(j)*dt/(2.0d0*epsi))
-    !CEXZL(k)=(dt/epsi) / (1+sigma(k)*dt/(2.0d0*epsi)) / dz
+    !CEXY(j) = (1-sig(j)*dt/(2.0d0*epsi)) / (1+sig(j)*dt/(2.0d0*epsi))
+    !CEXYL(j) = (dt/epsi) / (1+sig(j)*dt/(2.0d0*epsi)) / dy
+    !CEXZ(k) =(1-sig(j)*dt/(2.0d0*epsi)) / (1+sig(j)*dt/(2.0d0*epsi))
+    !CEXZL(k)=(dt/epsi) / (1+sig(k)*dt/(2.0d0*epsi)) / dz
 
-    !CEYX(i) =(1-sigma(i)*dt/(2.0d0*epsi)) / (1+sigma(i)*dt/(2.0d0*epsi))
-    !CEYXL(i) =(dt/epsi) / (1+sigma(i)*dt/(2.0d0*epsi)) / dx
-    !CEYZ(k) =(1-sigma(k)*dt/(2.0d0*epsi)) / (1+sigma(k)*dt/(2.0d0*epsi))
-    !CEYZL(k) =(dt/epsi) / (1+sigma(k)*dt/(2.0d0*epsi)) / dz
+    !CEYX(i) =(1-sig(i)*dt/(2.0d0*epsi)) / (1+sig(i)*dt/(2.0d0*epsi))
+    !CEYXL(i) =(dt/epsi) / (1+sig(i)*dt/(2.0d0*epsi)) / dx
+    !CEYZ(k) =(1-sig(k)*dt/(2.0d0*epsi)) / (1+sig(k)*dt/(2.0d0*epsi))
+    !CEYZL(k) =(dt/epsi) / (1+sig(k)*dt/(2.0d0*epsi)) / dz
 
-    !CEZX(i) =(1-sigma(i)*dt/(2.0d0*epsi)) / (1+sigma(i)*dt/(2.0d0*epsi))
-    !CEZXL(i) =(dt/epsi) / (1+sigma(i)*dt/(2.0d0*epsi)) / dx
-    !CEZY(j) =(1-sigma(j)*dt/(2.0d0*epsi)) / (1+sigma(j)*dt/(2.0d0*epsi))
-    !CEZYL(j) =(dt/epsi) / (1+sigma(j)*dt/(2.0d0*epsi)) / dy
+    !CEZX(i) =(1-sig(i)*dt/(2.0d0*epsi)) / (1+sig(i)*dt/(2.0d0*epsi))
+    !CEZXL(i) =(dt/epsi) / (1+sig(i)*dt/(2.0d0*epsi)) / dx
+    !CEZY(j) =(1-sig(j)*dt/(2.0d0*epsi)) / (1+sig(j)*dt/(2.0d0*epsi))
+    !CEZYL(j) =(dt/epsi) / (1+sig(j)*dt/(2.0d0*epsi)) / dy
 
 
      do L=1,6
@@ -1178,7 +1178,7 @@ subroutine E_PML(Ex,Ey,Ez,Hx,Hy,Hz,c)
 
 
 !!!境界条件H PML*********************************************************************************
-!subroutine H_BoundaryCondition(Ex,Ey,Ez,Hx,Hy,Hz,sigma,myu)
+!subroutine H_BoundaryCondition(Ex,Ey,Ez,Hx,Hy,Hz,sig,myu)
 !    use const_para
 !    implicit none
 !    integer :: I0,I1,J0,J1,K0,K1
@@ -1187,7 +1187,7 @@ subroutine E_PML(Ex,Ey,Ez,Hx,Hy,Hz,c)
  !   integer :: LPMLJJ(6,2)
  !   integer :: LPMLKK(6,2)
  !   integer :: LPMLST(6)
- !   real(8), intent(in) :: sigma, myu
+ !   real(8), intent(in) :: sig, myu
   !  complex(kind(0d0)),intent(in)    :: Ex(nx,ny,nz), Ey(nx,ny,nz), Ez(nx,ny,nz)
   !  complex(kind(0d0)),intent(inout) :: Hx(nx,ny,nz), Hy(nx,ny,nz), Hz(nx,ny,nz)
  !   complex(kind(0d0)) :: Hxy(nz),Hxz(ny),Hyx(nz),Hyz(nx),Hzx(ny),Hzy(nx)
@@ -1195,7 +1195,7 @@ subroutine E_PML(Ex,Ey,Ez,Hx,Hy,Hz,c)
     !complex(kind(0d0)) :: CHYX(nx),CHYXL(nx),CHYZ(nz),CHYZL(nz)!**配列の大きさ適当
     !complex(kind(0d0)) :: CHZX(nx),CHZXL(nx),CHZY(ny),CHZYL(ny)!**配列の大きさ適当
    
-   !mittet sigma=2*omega0*epsi PML
+   !mittet sig=2*omega0*epsi PML
     !CHXY(j)  = 
     !CHXYL(j) = 
     !CHXZ(k)  = 
@@ -1212,20 +1212,20 @@ subroutine E_PML(Ex,Ey,Ez,Hx,Hy,Hz,c)
     !CHZYL(j) =
 
      !normal PML **インデックス要確認 
-   ! CHXY(j)  = (1-sigma(j)*dt/(2.0*epsi)) / (1+sigma(j)*dt/(2.0d0epsi))
-    !CHXYL(j) = -(dt/myu) / (1+sigma(j)*dt/(2.0d0*epsi))/dx 
-    !CHXZ(k)  = (1-sigma(k)*dt/(2.0*epsi)) / (1+sigma(k)*dt/(2.0d0epsi))
-    !CHXZL(k) = -(dt/myu) / (1+sigma(k)*dt/(2.0d0*epsi))/dx 
+   ! CHXY(j)  = (1-sig(j)*dt/(2.0*epsi)) / (1+sig(j)*dt/(2.0d0epsi))
+    !CHXYL(j) = -(dt/myu) / (1+sig(j)*dt/(2.0d0*epsi))/dx 
+    !CHXZ(k)  = (1-sig(k)*dt/(2.0*epsi)) / (1+sig(k)*dt/(2.0d0epsi))
+    !CHXZL(k) = -(dt/myu) / (1+sig(k)*dt/(2.0d0*epsi))/dx 
 
-    !CHYX(i)  = (1-sigma(i)*dt/(2.0*epsi)) / (1+sigma(i)*dt/(2.0d0epsi))
-    !CHYXL(i) = -(dt/myu) / (1+sigma(i)*dt/(2.0d0*epsi))/dx 
-    !CHYZ(k)  = (1-sigma(k)*dt/(2.0*epsi)) / (1+sigma(k)*dt/(2.0d0epsi))
-    !CHYZL(k) = -(dt/myu) / (1+sigma(k)*dt/(2.0d0*epsi))/dx 
+    !CHYX(i)  = (1-sig(i)*dt/(2.0*epsi)) / (1+sig(i)*dt/(2.0d0epsi))
+    !CHYXL(i) = -(dt/myu) / (1+sig(i)*dt/(2.0d0*epsi))/dx 
+    !CHYZ(k)  = (1-sig(k)*dt/(2.0*epsi)) / (1+sig(k)*dt/(2.0d0epsi))
+    !CHYZL(k) = -(dt/myu) / (1+sig(k)*dt/(2.0d0*epsi))/dx 
 
-    !CHZX(i)  = (1-sigma(i)*dt/(2.0*epsi)) / (1+sigma(i)*dt/(2.0d0epsi))
-    !CHZXL(i) = -(dt/myu) / (1+sigma(i)*dt/(2.0d0*epsi))/dx 
-    !CHZY(j)  = (1-sigma(j)*dt/(2.0*epsi)) / (1+sigma(j)*dt/(2.0d0epsi))
-    !CHZYL(j) = -(dt/myu) / (1+sigma(j)*dt/(2.0d0*epsi))/dx 
+    !CHZX(i)  = (1-sig(i)*dt/(2.0*epsi)) / (1+sig(i)*dt/(2.0d0epsi))
+    !CHZXL(i) = -(dt/myu) / (1+sig(i)*dt/(2.0d0*epsi))/dx 
+    !CHZY(j)  = (1-sig(j)*dt/(2.0*epsi)) / (1+sig(j)*dt/(2.0d0epsi))
+    !CHZYL(j) = -(dt/myu) / (1+sig(j)*dt/(2.0d0*epsi))/dx 
 
  !    do L=1,6
   !    I0 = LPMLII(L,1)

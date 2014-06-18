@@ -7,51 +7,51 @@ time ./ficticious
 
 
 #FFTスクリプト(H)::::::::::::::::::::::::::::::
-i=1010
-j=`expr $i - 1000`
-max=30
+# i=1010
+# j=`expr $i - 1000`
+# max=30
 
-while [ $j -le $max ]; do
-cp hz$i.d inp1.dat
-ifort -o fftw_hz ../code/parameter.f90 f_to_d.f90 -I/usr/local/include -lfftw3
-./fftw_hz
-cp out1.dat ashz$i.out 
-cp out2.dat pshz$i.out
-cp out3.dat ffthz$i.out
-i=`expr $i + 10`
-j=`expr $j + 10`
-done
-
-
-#FFTスクリプト(Jh)::::::::::::::::::::::::::::
-cp jh_fic.d inp1.dat
-ifort -o fftw_jh ../code/parameter.f90 f_to_d.f90 -I/usr/local/include -lfftw3 #-check all -CB -traceback -g
-./fftw_jh
-cp out1.dat asjh.out 
-cp out2.dat psjh.out
-cp out3.dat jh_dif.out
+# while [ $j -le $max ]; do
+# cp hz$i.d inp1.dat
+# ifort -o fftw_hz ../code/parameter.f90 f_to_d.f90 -I/usr/local/include -lfftw3
+# ./fftw_hz
+# cp out1.dat ashz$i.out 
+# cp out2.dat pshz$i.out
+# cp out3.dat ffthz$i.out
+# i=`expr $i + 10`
+# j=`expr $j + 10`
+# done
 
 
-#グリーン関数スクリプト(GEJ_in):::::::::::::::::::
-i=1010
-j=`expr $i - 1000`
-max=30
-
-cp jh_dif.out inp2.dat
-
-while [ $j -le $max ]; do
-cp ffthz$i.out inp1.dat
-ifort -o green ../code/parameter.f90 ../code/green.f90 -check all -CB -traceback -g
-./green
-cp out1.dat Gej_x$i.out
-i=`expr $i + 10`
-j=`expr $j + 10`
-done
+# #FFTスクリプト(Jh)::::::::::::::::::::::::::::
+# cp jh_fic.d inp1.dat
+# ifort -o fftw_jh ../code/parameter.f90 f_to_d.f90 -I/usr/local/include -lfftw3 #-check all -CB -traceback -g
+# ./fftw_jh
+# cp out1.dat asjh.out 
+# cp out2.dat psjh.out
+# cp out3.dat jh_dif.out
 
 
+# #グリーン関数スクリプト(GEJ_in):::::::::::::::::::
+# i=1010
+# j=`expr $i - 1000`
+# max=30
 
-#画像出力::::::::::::::::::::::::::::::::::::
-#ある点でのHZの時間分布
-./gnu.sh
-#HZの伝播movie
-./movie.sh
+# cp jh_dif.out inp2.dat
+
+# while [ $j -le $max ]; do
+# cp ffthz$i.out inp1.dat
+# ifort -o green ../code/parameter.f90 ../code/green.f90 -check all -CB -traceback -g
+# ./green
+# cp out1.dat Gej_x$i.out
+# i=`expr $i + 10`
+# j=`expr $j + 10`
+# done
+
+
+
+# #画像出力::::::::::::::::::::::::::::::::::::
+# #ある点でのHZの時間分布
+ ./gnu.sh
+# #HZの伝播movie
+# ./movie.sh

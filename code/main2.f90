@@ -4,7 +4,7 @@
 !
 !   omega0=2πf0
 !   f0=1,0Hz
-!   sigmawa=3.2S/m
+!   sigwa=3.2S/m
 !
 !   x=(i-1)*dx
 !   代入必要?↓↓↓
@@ -26,15 +26,20 @@ program main
     real(8)            :: Jn(nstep) !gaussian
     real(8)            :: Je(nstep) !電流源
     real(8)            :: Jh(nstep) !磁流源
-    real(8)            :: sigma(nx,ny,nz),myu(nx,ny,nz)
+    real(8)            :: sig(nx,ny,nz),myu(nx,ny,nz)
     real(8)            :: cmax
-    complex(kind(0d0)) :: Ex(-1:nx+2,-1:ny+2,-1:nz+2)
-    complex(kind(0d0)) :: Ey(-1:nx+2,-1:ny+2,-1:nz+2)
-    complex(kind(0d0)) :: Ez(-1:nx+2,-1:ny+2,-1:nz+2)
-    complex(kind(0d0)) :: Hx(-1:nx+2,-1:ny+2,-1:nz+2)
-    complex(kind(0d0)) :: Hy(-1:nx+2,-1:ny+2,-1:nz+2)
-    complex(kind(0d0)) :: Hz(-1:nx+2,-1:ny+2,-1:nz+2)
-
+!     complex(kind(0d0)) :: Ex(-1:nx+2,-1:ny+2,-1:nz+2)
+!     complex(kind(0d0)) :: Ey(-1:nx+2,-1:ny+2,-1:nz+2)
+!     complex(kind(0d0)) :: Ez(-1:nx+2,-1:ny+2,-1:nz+2)
+!     complex(kind(0d0)) :: Hx(-1:nx+2,-1:ny+2,-1:nz+2)
+!     complex(kind(0d0)) :: Hy(-1:nx+2,-1:ny+2,-1:nz+2)
+!     complex(kind(0d0)) :: Hz(-1:nx+2,-1:ny+2,-1:nz+2)
+    complex(kind(0d0)) :: Ex(nx,ny,nz)
+    complex(kind(0d0)) :: Ey(nx,ny,nz)
+    complex(kind(0d0)) :: Ez(nx,ny,nz)
+    complex(kind(0d0)) :: Hx(nx,ny,nz)
+    complex(kind(0d0)) :: Hy(nx,ny,nz)
+    complex(kind(0d0)) :: Hz(nx,ny,nz)
     open(13,file='hz1100.d') 
     open(14,file='hz1010.d') 
     open(15,file='hz1020.d') 
@@ -46,30 +51,37 @@ write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
     t=0.0d0!開始時間---------------------------------------
 
 !   Ex,Ey,Ez,Hx,Hy,Hzの初期化
-    Ex(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-    Ey(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-    Ez(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-    Hx(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-    Hy(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-    Hz(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-
+!     Ex(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
+!     Ey(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
+!     Ez(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
+!     Hx(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
+!     Hy(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
+!     Hz(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
+    Ex(1:nx,1:ny,1:nz)=0.0d0
+    Ey(1:nx,1:ny,1:nz)=0.0d0
+    Ez(1:nx,1:ny,1:nz)=0.0d0
+    Hx(1:nx,1:ny,1:nz)=0.0d0
+    Hy(1:nx,1:ny,1:nz)=0.0d0
+    Hz(1:nx,1:ny,1:nz)=0.0d0
+    
 
     !モデルの読み込み
-    call model(sigma,myu)
+    call model(sig,myu)
 
     !cmax,cminの計算 dt,dx,dy,dzの設定
     call set_d_txyz(cmax)
 
 do istep = 1, nstep !反復計算開始----------------------
+write(*,*) istep
 
     !入力波源の設定
-    call gaussian(istep,t,Je,Jh,sigma,myu)
+    call gaussian(istep,t,Je,Jh,sig,myu)
 
     !電場計算 E
-    call Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sigma)
+    call Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     
     !境界条件 CPML_E
-    call CPML_E(ex,ey,ez,hx,hy,hz,sigma,cmax)
+!     call CPML_E(ex,ey,ez,hx,hy,hz,sig,cmax)
 
 t = t + dt*0.5d0  !時間の更新--------------------------
 
@@ -77,7 +89,7 @@ t = t + dt*0.5d0  !時間の更新--------------------------
     call Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 
     !境界条件 CPML_H
-    call CPML_H(ex,ey,ez,hx,hy,hz,sigma,myu,cmax)
+!    call CPML_H(ex,ey,ez,hx,hy,hz,sig,myu,cmax)
 
 t = t + dt*0.5d0 !時間の更新---------------------------
 

@@ -13,8 +13,8 @@ gnuplot <<EOF
  set pm3d map
  set size square
  set palette rgbformulae 33,13,10
- set cbrange[-0.05:0.05]#[-0.0002:0.0002]
- set zr[-0.05:0.05]#[-0.0002:0.0002]
+ set cbrange[-0.0002:0.0002]
+ set zr[-0.0002:0.0002]
  splot "hz$i.d" u 2:3:4
 EOF
 
