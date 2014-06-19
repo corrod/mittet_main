@@ -37,7 +37,7 @@ subroutine mur_1st_for_e
         eyx1(4,j,k)=ey(nx,j,k)
      end do
   end do
-  
+
   ! --- Ezに対して ---
 
   do k=1,nz-1
