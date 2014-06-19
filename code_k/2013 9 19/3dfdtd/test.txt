@@ -1,0 +1,8 @@
+ **** INIT ****
+ FREQUENCY (GHZ)=   1.0000000000000000     
+ NUMBER OF CELLS [NX,NY,NZ]=         100         100         100
+ CELL INTERVAL [(FREE WAVELENGTH)/N]=          20
+ TIME STEP [START] (sec)=         200
+ TIME STEP [END]   (sec)=         300
+ TIME STEP [STEP]  (sec)=         400
+ dt=  3.23332649162066735E-002
