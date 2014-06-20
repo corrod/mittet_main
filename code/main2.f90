@@ -27,7 +27,7 @@ program main
     real(8)            :: Je(nstep) !電流源
     real(8)            :: Jh(nstep) !磁流源
     real(8)            :: sig(nx,ny,nz),myu(nx,ny,nz)
-    real(8)            :: cmax
+!     real(8)            :: cmax
 !     complex(kind(0d0)) :: Ex(-1:nx+2,-1:ny+2,-1:nz+2)
 !     complex(kind(0d0)) :: Ey(-1:nx+2,-1:ny+2,-1:nz+2)
 !     complex(kind(0d0)) :: Ez(-1:nx+2,-1:ny+2,-1:nz+2)
@@ -40,12 +40,12 @@ program main
     complex(kind(0d0)) :: Hx(nx,ny,nz)
     complex(kind(0d0)) :: Hy(nx,ny,nz)
     complex(kind(0d0)) :: Hz(nx,ny,nz)
-    open(13,file='hz1100.d') 
-    open(14,file='hz1010.d') 
-    open(15,file='hz1020.d') 
-    open(16,file='hz1030.d') 
+    open(13,file='hz1100.d')
+    open(14,file='hz1010.d')
+    open(15,file='hz1020.d')
+    open(16,file='hz1030.d')
     open(17,file='jh_fic.d')
-    
+
 write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
 
     t=0.0d0!開始時間---------------------------------------
@@ -63,13 +63,13 @@ write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
     Hx(1:nx,1:ny,1:nz)=0.0d0
     Hy(1:nx,1:ny,1:nz)=0.0d0
     Hz(1:nx,1:ny,1:nz)=0.0d0
-    
+
 
     !モデルの読み込み
     call model(sig,myu)
 
     !cmax,cminの計算 dt,dx,dy,dzの設定
-    call set_d_txyz(cmax)
+    call set_d_txyz !(cmax)
 
 do istep = 1, nstep !反復計算開始----------------------
 write(*,*) istep
@@ -79,14 +79,14 @@ write(*,*) istep
 
     !電場計算 E
     call Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)
-    
+
     !境界条件 CPML_E
-!     call CPML_E(ex,ey,ez,hx,hy,hz,sig,cmax)
+!     call CPML_E(ex,ey,ez,hx,hy,hz,sig,cmax)  !
 !     call cerjan_e(ex,ey,ez) !!!だめ
-    call cerjan2_e(ex,ey,ez)  !!!ok
-!     call mur_yz
-!     call mur_zx
-!     call mur_xy
+!     call cerjan2_e(ex,ey,ez)  !cerjanの吸収境界!!!ok
+    call mur_yz(ex,ey,ez) !Murの吸収境界
+    call mur_zx(ex,ey,ez)
+    call mur_xy(ex,ey,ez)
 
 t = t + dt*0.5d0  !時間の更新--------------------------
 
@@ -96,7 +96,7 @@ t = t + dt*0.5d0  !時間の更新--------------------------
     !境界条件 CPML_H
 !    call CPML_H(ex,ey,ez,hx,hy,hz,sig,myu,cmax)
 !    call cerjan_h(hx,hy,hz) !!!だめ
-    call cerjan2_h(hx,hy,hz) !!!ok
+!     call cerjan2_h(hx,hy,hz) !!!ok
 
 t = t + dt*0.5d0 !時間の更新---------------------------
 

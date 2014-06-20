@@ -9,7 +9,7 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 
     integer :: l
     integer, intent(in) :: istep
-    real(8), intent(in) :: t 
+    real(8), intent(in) :: t
     real(8), parameter  :: c1 = 1.125d0, c2 = -0.04167d0 !from taylor expansion
     real(8), intent(in) :: myu(1:nx,1:ny,1:nz)
     real(8), intent(in) :: Jh(nstep)
@@ -103,8 +103,8 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !            do i = 1,nx
 !                Hz(i,j,k) = Hz(i,j,k)&
 !                          + CHZLX(i,j,k)*(Ey(i+1,j,k)-Ey(i,j,k))&
-!                          + CHZLY(i,j,k)*(Ex(i,j+1,k)-Ex(i,j,k)) 
-!             enddo           
+!                          + CHZLY(i,j,k)*(Ex(i,j+1,k)-Ex(i,j,k))
+!             enddo
 !        enddo
 !    enddo
 
@@ -175,7 +175,7 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !                 Hz(i,j,k) = Hz(i,j,k)&
 !                          + CHZLX(i,j,k)* ( c1*Ey(i+1,j,k) - c1*Ey(i,j,k) + c2*Ey(i+2,j,k) - c2*Ey(i-1,j,k) )&
 !                          + CHZLY(i,j,k)* ( c1*Ex(i,j+1,k) - c1*Ex(i,j,k) + c2*Ex(i,j+2,k) - c2*Ex(i,j-1,k) )
-!              enddo           
+!              enddo
 !         enddo
 !     enddo
 
@@ -246,7 +246,7 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
                 Hz(i,j,k) = Hz(i,j,k)&
                          + CHZLX(i,j,k)* ( c1*Ey(i+1,j,k) - c1*Ey(i,j,k) + c2*Ey(i+2,j,k) - c2*Ey(i-1,j,k) )&
                          + CHZLY(i,j,k)* ( c1*Ex(i,j+1,k) - c1*Ex(i,j,k) + c2*Ex(i,j+2,k) - c2*Ex(i,j-1,k) )
-             enddo           
+             enddo
         enddo
     enddo
 
@@ -321,8 +321,8 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !            do i = 1,nx-1
 !                Hz(i,j,k) = Hz(i,j,k)&
 !                          + CHZLX(i,j,k)*(Ey(i+1,j,k)-Ey(i,j,k))&
-!                          + CHZLY(i,j,k)*(Ex(i,j+1,k)-Ex(i,j,k)) 
-!             enddo           
+!                          + CHZLY(i,j,k)*(Ex(i,j+1,k)-Ex(i,j,k))
+!             enddo
 !        enddo
 !    enddo
 !
@@ -405,8 +405,8 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !                    temp1(l) = temp1(l-1) + alpha(ln,l) * (Ey(i+l,j,k) - Ey(i-(l-1),j,k))
 !                    temp2(l) = temp2(l-1) + alpha(ln,l) * (Ex(i,j+l,k) - Ex(i,j-(l-1),k))
 !                enddo
-!                Hz(i,j,k) = Hz(i,j,k) + CHZLX(i,j,k)*temp1(ln) + CHZLY(i,j,k)*temp2(ln) 
-!             enddo           
+!                Hz(i,j,k) = Hz(i,j,k) + CHZLX(i,j,k)*temp1(ln) + CHZLY(i,j,k)*temp2(ln)
+!             enddo
 !        enddo
 !    enddo
 

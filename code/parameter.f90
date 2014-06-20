@@ -28,7 +28,8 @@ module const_para
     real(8), parameter :: omega0   = 2.0d0*pi*f0 !2πf0, !ω0
     real(8), parameter :: Glim     = 10.4d0 ! Taylor expansion参
     real(8), parameter :: dt       = 3.0d-4 !4.0d-4 !タイムステップ長 s
-    real(8), parameter :: CC       = 2.997924580d0 !光速
+
+!媒質パラメータ
     real(8), parameter :: sigair = 0.0d0     !空気の導電率 S/m
     real(8), parameter :: sigfe  = 1.03d7 !鉄の導電率 S/m
     real(8), parameter :: sigwa  = 3.2d0  !海水の導電率 S/m
@@ -46,6 +47,32 @@ module const_para
     real(8), parameter :: epsiair  = epsirair * epsi0 !空気の比誘電率
     real(8), parameter :: epsife   = epsirfe * epsi0   !鉄の比誘電率
     real(8), parameter :: epsiwa   = epsirwa * epsi0   !海水の比誘電率
+
+
+!伝播速度設定
+    real(8), parameter :: CC       = 2.997924580d0 !光速
+    real(8), parameter :: cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
+    real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe)
+    real(8), parameter :: cmax = cwa
+    real(8), parameter :: cmin = cwa
+
+!mur 変数
+    real(8) :: cxd,cxu,cxx
+    real(8) :: cxfyd,cxfzd
+    real(8) :: cyd,cyu,cyy
+    real(8) :: cyfxd,cyfzd
+    real(8) :: czd,czu,czz
+    real(8) :: czfxd,czfyd
+    complex(kind(0d0)) :: eyx1(nx,ny,nz),eyx2(nx,ny,nz),ezx1(nx,ny,nz),ezx2(nx,ny,nz)
+    complex(kind(0d0)) :: exy1(nx,ny,nz),exy2(nx,ny,nz),ezy1(nx,ny,nz),ezy2(nx,ny,nz)
+    complex(kind(0d0)) :: exz1(nx,ny,nz),exz2(nx,ny,nz),eyz1(nx,ny,nz),eyz2(nx,ny,nz)
+
+
+
+
+
+
+
 !     real(8)            :: sigxx(nx,ny,nz) !diagonal sig x
 !     real(8)            :: sigyy(nx,ny,nz) !diagonal sig y
 !     real(8)            :: sigzz(nx,ny,nz) !diagonal sig z

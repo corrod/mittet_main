@@ -1,19 +1,20 @@
 !!!dt,dx,dy,dzの設定cmax,cminの計算************************************************
-subroutine set_d_txyz(cmax)
+! subroutine set_d_txyz(cmax)
+subroutine set_d_txyz
     use const_para
     implicit none
 
     integer :: Nt1,Nt2
     real(8) :: S !タイムステップ数を求める際の係数
-    real(8) :: cwa, cfe, cair
-    real(8) :: courant 
-    real(8) :: cmax
-    real(8) :: cmin
+!     real(8) :: cwa, cfe, cair
+    real(8) :: courant
+!     real(8), intent(out) :: cmax
+!     real(8) :: cmin
     real(8) :: t_cal !計測時間
     real(8) :: dt_max
     real(8) :: fmax_w !最大周波数（上限）
     real(8) :: dt_ideal !クーラン条件を満たすdt
-    real(8) :: cfl_limit 
+    real(8) :: cfl_limit
     real(8) :: fourier_limit
     real(8) :: dt_mittet
 
@@ -21,11 +22,12 @@ subroutine set_d_txyz(cmax)
 
 !媒質中の伝播速度cmax,cmin計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    cwa  = sqrt(2.0d0*omega0/myuwa/sigwa)   !!!!cmin=sqrt(2.0d0*omega0/myuwa/maxv)
-    cfe  = sqrt(2.0d0*omega0/myufe/sigfe)   !!!!cmax=sqrt(2.0d0*omega0/myufe/maxv)
-    cair = 1.0d0 / sqrt(myuair*epsiair)
-    cmax = cwa  !max(cwa,cfe,cair)!   最大伝播速度cmax計算
-    cmin = cwa  !min(cwa,cfe,cair)
+!     cwa  = sqrt(2.0d0*omega0/myuwa/sigwa)   !!!!cmin=sqrt(2.0d0*omega0/myuwa/maxv)
+!     cfe  = sqrt(2.0d0*omega0/myufe/sigfe)   !!!!cmax=sqrt(2.0d0*omega0/myufe/maxv)
+!     cair = 1.0d0 / sqrt(myuair*epsiair)
+
+!     cmax = cwa  !max(cwa,cfe,cair)!   最大伝播速度cmax計算
+!     cmin = cwa  !min(cwa,cfe,cair)
 !     cmin = sqrt(2.0d0*omega0/MU0/1.0d0)  !!別の求め方もあるだり
 
 
@@ -33,16 +35,16 @@ subroutine set_d_txyz(cmax)
 !計算条件の出力!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     write(*,*)  'nstep',nstep
-    write(*,*)  'dt',dt 
+    write(*,*)  'dt',dt
     write(*,*)  'fmax', fmax
     write(*,*)  'omega0',omega0
-    write(*,'(a,3i5)')      'nx,ny,nz',nx,ny,nz 
-    write(*,'(a,3e12.4)')   'dx,dy,dz',dx,dy,dz 
+    write(*,'(a,3i5)')      'nx,ny,nz',nx,ny,nz
+    write(*,'(a,3e12.4)')   'dx,dy,dz',dx,dy,dz
     write(*,*)              '波長λ', cmax/fmax
     write(*,*) 'cwa',cwa
     write(*,*) 'cfe',cfe
     write(*,*) 'cmax',cmax
-    write(*,*) 'cmin',cmin
+!     write(*,*) 'cmin',cmin
     write(*,*) 'propagate distance c*t', cwa*dt*nstep
     write(*,*) '１/2辺の長さdx*nx/2',dx*nx*0.5d0
     write(*,*) 'dt*nstep',dt*nstep
@@ -66,7 +68,7 @@ endif
 
     dt_mittet = dx/(3*0.5d0)/cmax !standard 2nd order space schme
 
-    write(*,*) '#courant imamu dt_max', dt_max 
+    write(*,*) '#courant imamu dt_max', dt_max
     write(*,*) '#courant dt_ideal',dt_ideal  !デカすぎ
     write(*,*) '#dt mittet',dt_mittet
 
@@ -107,7 +109,7 @@ endif
 !     cmin = sqrt(2.0d0*omega0/MU0/1.0d0)
     fmax_w = cmin /Glim /max(dx,dy,dz)
 
-    write(*,*) "#fmax_w",fmax_w    
+    write(*,*) "#fmax_w",fmax_w
      if(fmax_w <fmax) then
     write(*,*), "******* fmax is violated *******\n"
     endif

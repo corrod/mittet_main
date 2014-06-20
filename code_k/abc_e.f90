@@ -1,125 +1,4 @@
 !-------------------------------------------------------------------------------
-! 電界に対する吸収境界条件
-!-------------------------------------------------------------------------------
-subroutine absorbing_boundary_condition_for_e
-  implicit none
-
-!  call mur_1st_for_e    ! Mur 1次の吸収境界条件
-  call mur_2nd_for_e      ! Mur 2次の吸収境界条件
-
-  return
-end subroutine
-
-!-------------------------------------------------------------------------------
-! Mur 1次の吸収境界条件
-!-------------------------------------------------------------------------------
-subroutine mur_1st_for_e
-  use consts
-  use fdtd
-  implicit none
-
-  integer :: i,j,k
-
-  ! *** 壁 i=1,nx に対して（x軸に沿って） ***
-  ! --- Eyに対して ---
-  do k=2,nz-1
-     do j=1,ny-1
-        ey(1,j,k) =eyx1(2,j,k)+cxd*(ey(2,j,k)-eyx1(1,j,k))
-        ey(nx,j,k)=eyx1(3,j,k)+cxu*(ey(nx-1,j,k)-eyx1(4,j,k))
-     end do
-  end do
-  ! 過去の時間の値の更新
-  do k=2,nz-1
-     do j=1,ny-1
-        eyx1(1,j,k)=ey(1,j,k)
-        eyx1(2,j,k)=ey(2,j,k)
-        eyx1(3,j,k)=ey(nx-1,j,k)
-        eyx1(4,j,k)=ey(nx,j,k)
-     end do
-  end do
-
-  ! --- Ezに対して ---
-
-  do k=1,nz-1
-     do j=2,ny-1
-        ez(1,j,k) =ezx1(2,j,k)+cxd*(ez(2,j,k)-ezx1(1,j,k))
-        ez(nx,j,k)=ezx1(3,j,k)+cxu*(ez(nx-1,j,k)-ezx1(4,j,k))
-     end do
-  end do
-  ! 過去の時間の値の更新
-  do k=1,nz-1
-     do j=2,ny-1
-        ezx1(1,j,k)=ez(1,j,k)
-        ezx1(2,j,k)=ez(2,j,k)
-        ezx1(3,j,k)=ez(nx-1,j,k)
-        ezx1(4,j,k)=ez(nx,j,k)
-     end do
-  end do
-
-  ! *** 壁 j=1,ny に対して（y軸に沿って） ***
-  ! --- Ex に対して ---
-  do k=2,nz-1
-     do i=1,nx-1
-        ex(i,1,k)=exy1(i,2,k)+cyd*(ex(i,2,k)-exy1(i,1,k))
-        ex(i,ny,k)=exy1(i,3,k)+cyu*(ex(i,ny-1,k)-exy1(i,4,k))
-     end do
-  end do
-
-  ! --- Ez に対して ---
-  do k=1,nz-1
-     do i=2,nx-1
-        ez(i,1,k)=ezy1(i,2,k)+cyd*(ez(i,2,k)-ezy1(i,1,k))
-        ez(1,ny,k)=ezy1(i,3,k)+cyu*(ez(i,ny-1,k)-ezy1(i,4,k))
-     end do
-  end do
-  ! 過去の時間の値の更新
-  do k=1,nz-1
-     do i=2,nx-1
-        ezy1(i,1,k)=ez(i,1,k)
-        ezy1(i,2,k)=ez(i,2,k)
-        ezy1(i,3,k)=ez(i,ny-1,k)
-        ezy1(i,4,k)=ez(i,ny,k)
-     end do
-  end do
-
-  ! *** 壁 k=1,nz に対して（z軸に沿って） ***
-  ! --- Ex に対して ---
-  do i=1,nx-1
-     do j=2,ny-1
-        ex(i,j,1)=exz1(i,j,2)+czd*(ex(i,j,2)-exz1(i,j,1))
-        ex(i,j,nz)=exz1(i,j,3)+czu*(ex(i,j,nz-1)-exz1(i,j,4))
-     end do
-  end do
-  ! 過去の時間の値の更新
-  do i=1,nx-1
-     do j=2,ny-1
-        exz1(i,j,1)=ex(i,j,1)
-        exz1(i,j,2)=ex(i,j,2)
-        exz1(i,j,3)=ex(i,j,nz-1)
-        exz1(i,j,4)=ex(i,j,nz)
-     end do
-  end do
-  ! --- Ey に対して ---
-  do i=2,nx-1
-     do j=1,ny-1
-        ey(i,j,1)=eyz1(i,j,2)+czd*(ey(i,j,2)-eyz1(i,j,1))
-        ey(i,j,nz)=eyz1(i,j,3)+czu*(ey(i,j,nz-1)-eyz1(i,j,4))
-     end do
-  end do
-  ! 過去の時間の値の更新
-  do i=2,nx-1
-     do j=1,ny-1
-        eyz1(i,j,1)=ey(i,j,1)
-        eyz1(i,j,2)=ey(i,j,2)
-        eyz1(i,j,3)=ey(i,j,nz-1)
-        eyz1(i,j,4)=ey(i,j,nz)
-     end do
-  end do
-
-return
-end subroutine
-
-!-------------------------------------------------------------------------------
 !  Mur 2次の吸収境界条件
 !-------------------------------------------------------------------------------
 subroutine mur_2nd_for_e
@@ -509,6 +388,127 @@ subroutine mur_2nd_xy_plane_for_e
    end do
 
    return
+end subroutine
+
+!-------------------------------------------------------------------------------
+! 電界に対する吸収境界条件
+!-------------------------------------------------------------------------------
+subroutine absorbing_boundary_condition_for_e
+  implicit none
+
+!  call mur_1st_for_e    ! Mur 1次の吸収境界条件
+  call mur_2nd_for_e      ! Mur 2次の吸収境界条件
+
+  return
+end subroutine
+
+!-------------------------------------------------------------------------------
+! Mur 1次の吸収境界条件
+!-------------------------------------------------------------------------------
+subroutine mur_1st_for_e
+  use consts
+  use fdtd
+  implicit none
+
+  integer :: i,j,k
+
+  ! *** 壁 i=1,nx に対して（x軸に沿って） ***
+  ! --- Eyに対して ---
+  do k=2,nz-1
+     do j=1,ny-1
+        ey(1,j,k) =eyx1(2,j,k)+cxd*(ey(2,j,k)-eyx1(1,j,k))
+        ey(nx,j,k)=eyx1(3,j,k)+cxu*(ey(nx-1,j,k)-eyx1(4,j,k))
+     end do
+  end do
+  ! 過去の時間の値の更新
+  do k=2,nz-1
+     do j=1,ny-1
+        eyx1(1,j,k)=ey(1,j,k)
+        eyx1(2,j,k)=ey(2,j,k)
+        eyx1(3,j,k)=ey(nx-1,j,k)
+        eyx1(4,j,k)=ey(nx,j,k)
+     end do
+  end do
+
+  ! --- Ezに対して ---
+
+  do k=1,nz-1
+     do j=2,ny-1
+        ez(1,j,k) =ezx1(2,j,k)+cxd*(ez(2,j,k)-ezx1(1,j,k))
+        ez(nx,j,k)=ezx1(3,j,k)+cxu*(ez(nx-1,j,k)-ezx1(4,j,k))
+     end do
+  end do
+  ! 過去の時間の値の更新
+  do k=1,nz-1
+     do j=2,ny-1
+        ezx1(1,j,k)=ez(1,j,k)
+        ezx1(2,j,k)=ez(2,j,k)
+        ezx1(3,j,k)=ez(nx-1,j,k)
+        ezx1(4,j,k)=ez(nx,j,k)
+     end do
+  end do
+
+  ! *** 壁 j=1,ny に対して（y軸に沿って） ***
+  ! --- Ex に対して ---
+  do k=2,nz-1
+     do i=1,nx-1
+        ex(i,1,k)=exy1(i,2,k)+cyd*(ex(i,2,k)-exy1(i,1,k))
+        ex(i,ny,k)=exy1(i,3,k)+cyu*(ex(i,ny-1,k)-exy1(i,4,k))
+     end do
+  end do
+
+  ! --- Ez に対して ---
+  do k=1,nz-1
+     do i=2,nx-1
+        ez(i,1,k)=ezy1(i,2,k)+cyd*(ez(i,2,k)-ezy1(i,1,k))
+        ez(1,ny,k)=ezy1(i,3,k)+cyu*(ez(i,ny-1,k)-ezy1(i,4,k))
+     end do
+  end do
+  ! 過去の時間の値の更新
+  do k=1,nz-1
+     do i=2,nx-1
+        ezy1(i,1,k)=ez(i,1,k)
+        ezy1(i,2,k)=ez(i,2,k)
+        ezy1(i,3,k)=ez(i,ny-1,k)
+        ezy1(i,4,k)=ez(i,ny,k)
+     end do
+  end do
+
+  ! *** 壁 k=1,nz に対して（z軸に沿って） ***
+  ! --- Ex に対して ---
+  do i=1,nx-1
+     do j=2,ny-1
+        ex(i,j,1)=exz1(i,j,2)+czd*(ex(i,j,2)-exz1(i,j,1))
+        ex(i,j,nz)=exz1(i,j,3)+czu*(ex(i,j,nz-1)-exz1(i,j,4))
+     end do
+  end do
+  ! 過去の時間の値の更新
+  do i=1,nx-1
+     do j=2,ny-1
+        exz1(i,j,1)=ex(i,j,1)
+        exz1(i,j,2)=ex(i,j,2)
+        exz1(i,j,3)=ex(i,j,nz-1)
+        exz1(i,j,4)=ex(i,j,nz)
+     end do
+  end do
+  ! --- Ey に対して ---
+  do i=2,nx-1
+     do j=1,ny-1
+        ey(i,j,1)=eyz1(i,j,2)+czd*(ey(i,j,2)-eyz1(i,j,1))
+        ey(i,j,nz)=eyz1(i,j,3)+czu*(ey(i,j,nz-1)-eyz1(i,j,4))
+     end do
+  end do
+  ! 過去の時間の値の更新
+  do i=2,nx-1
+     do j=1,ny-1
+        eyz1(i,j,1)=ey(i,j,1)
+        eyz1(i,j,2)=ey(i,j,2)
+        eyz1(i,j,3)=ey(i,j,nz-1)
+        eyz1(i,j,4)=ey(i,j,nz)
+     end do
+  end do
+
+return
 end subroutine
 
 

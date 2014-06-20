@@ -2,8 +2,18 @@
 
 #メインスクリプト::::::::::::::::::::::::::::::
 #export OMP_NUM_THREADS=3
-ifort -o ficticious ../code/parameter.f90 ../code/set.f90 ../code/source.f90 ../code/model.f90 ../code/output.f90 ../code/e_field4.f90 ../code/e_cpml3.f90 ../code/h_field4.f90 ../code/h_cpml3.f90 ../code/cerjan.f90 ../code/main2.f90 #  -check all -CB -traceback -g
-time ./ficticious 
+
+
+# CPML
+# ifort -o ficticious parameter.f90 set_condition.f90 makewave.f90 model.f90 output.f90 e_field4.f90 mur2.f90 e_cpml3.f90 h_field4.f90 h_cpml3.f90 cerjan.f90 main2.f90 #  -check all -CB -traceback -g
+
+#Mur
+ ifort -o ficticious parameter.f90 set_condition.f90 makewave.f90 model.f90 output.f90 e_field4.f90 mur2.f90 h_field4.f90 main2.f90 # -check all -CB -traceback -g
+
+#cerjan
+# ifort -o ficticious parameter.f90 set_condition.f90 makewave.f90 model.f90 output.f90 e_field4.f90 cerjan.f90 h_field4.f90 main2.f90 #-check all -CB -traceback -g
+
+time ./ficticious
 
 
 #FFTスクリプト(H)::::::::::::::::::::::::::::::
@@ -15,7 +25,7 @@ time ./ficticious
 # cp hz$i.d inp1.dat
 # ifort -o fftw_hz ../code/parameter.f90 f_to_d.f90 -I/usr/local/include -lfftw3
 # ./fftw_hz
-# cp out1.dat ashz$i.out 
+# cp out1.dat ashz$i.out
 # cp out2.dat pshz$i.out
 # cp out3.dat ffthz$i.out
 # i=`expr $i + 10`
@@ -27,7 +37,7 @@ time ./ficticious
 # cp jh_fic.d inp1.dat
 # ifort -o fftw_jh ../code/parameter.f90 f_to_d.f90 -I/usr/local/include -lfftw3 #-check all -CB -traceback -g
 # ./fftw_jh
-# cp out1.dat asjh.out 
+# cp out1.dat asjh.out
 # cp out2.dat psjh.out
 # cp out3.dat jh_dif.out
 
@@ -52,6 +62,6 @@ time ./ficticious
 
 # #画像出力::::::::::::::::::::::::::::::::::::
 # #ある点でのHZの時間分布
- ./gnu.sh
+ # ./gnu.sh
 # #HZの伝播movie
- ./movie.sh
+  # ./movie.sh
