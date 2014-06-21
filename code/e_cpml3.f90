@@ -279,7 +279,7 @@ enddo
     !xe-PML4 loop(-)
     do k = 1,nz-1
         do j = 1,ny-1
-            do i = 3,ncpml-1
+            do i = 3,ncpml+1
                 psi_Ezx1(i,j,k) = be_x(i) * psi_Ezx1(i,j,k) &
                                  +ce_x(i) * (c1*Hy(i,j,k)-c1*Hy(i-1,j,k) + c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
                 psi_Eyx1(i,j,k) = be_x(i) * psi_Eyx1(i,j,k) &

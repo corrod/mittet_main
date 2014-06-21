@@ -281,7 +281,7 @@ enddo
 !xh-PML4 loop(+)
     do k = 1,nz-1
         do j = 1,ny-1
-            do i = nx-ncpml+1,nx-1
+            do i = nx-ncpml+1,nx-2
                 psi_Hzx1(i,j,k) = bh_x(i) * psi_Hzx1(i,j,k)&
                                  +ch_x(i) * ( c1*Ey(i+1,j,k)-c1*Ey(i,j,k) + c2*Ey(i+2,j,k)-c2*Ey(i-1,j,k) ) / dx
                 psi_Hyx1(i,j,k) = bh_x(i) * psi_Hyx1(i,j,k)&
@@ -307,7 +307,7 @@ enddo
                            enddo
 !!yh-PML4 loop(+)
     do k = 1,nz-1
-        do j = ny-ncpml+1,ny-1
+        do j = ny-ncpml+1,ny-2
             do i = 1,nx-1
                 psi_Hxy1(i,j,k) = bh_y(j) * psi_Hxy1(i,j,k)&
                                  +ch_y(j) * ( c1*Ez(i,j+1,k)-c1*Ez(i,j,k) + c2*Ez(i,j+2,k)-c2*Ez(i,j-1,k) ) / dy
@@ -333,7 +333,7 @@ enddo
                         enddo
                             enddo
 !zh-PML4 loop(+)
-    do k = nz-ncpml+1,nz-1
+    do k = nz-ncpml+1,nz-2
         do j = 1,ny-1
             do i = 1,nx-1
                 psi_Hyz1(i,j,k) = bh_z(k) * psi_Hyz1(i,j,k)&
