@@ -75,7 +75,7 @@ do istep = 1, nstep !反復計算開始----------------------
 write(*,*) istep
 
     !入力波源の設定
-    call gaussian(istep,t,Je,Jh,sig,myu)
+    call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
 
     !電場計算 E
     call Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)

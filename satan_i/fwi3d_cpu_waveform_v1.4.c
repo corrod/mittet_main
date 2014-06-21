@@ -230,13 +230,13 @@ int butpas(double *h,int *m,double *gn,int *n,double fl,double fh,double fs,doub
   cc=exp(log(pa*sa)/(double)(*n))/(op*os);
   c=sqrt(cc);
   ww=ww*cc;
-  
+
   dp=HP/(double)(*n);
   k=(*n)/2;
   *m=k*2;
   l=0;
   g=fj=1.0;
-  
+
   for(j=0;j<k;j++)
     {
       oj.r=cos(dp*fj)*0.5;
@@ -253,7 +253,7 @@ int butpas(double *h,int *m,double *gn,int *n,double fl,double fh,double fs,doub
       r[1].r=oj.r-cq.r;
       r[1].c=oj.c-cq.c;
       g=g*cc;
-      
+
       for(i=0;i<2;i++)
 	{
 	  re=r[i].r*r[i].r;

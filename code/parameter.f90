@@ -28,6 +28,7 @@ module const_para
     real(8), parameter :: omega0   = 2.0d0*pi*f0 !2πf0, !ω0
     real(8), parameter :: Glim     = 10.4d0 ! Taylor expansion参
     real(8), parameter :: dt       = 3.0d-4 !4.0d-4 !タイムステップ長 s
+    complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
 
 !媒質パラメータ
     real(8), parameter :: sigair = 0.0d0     !空気の導電率 S/m
