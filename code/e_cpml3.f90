@@ -1,4 +1,4 @@
-!!!Convolutional PML_E !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 !!!Convolutional PML_E !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! sigmax amax kappamax の求め方
 ! メイン部分の計算は通常の電磁波伝播と同じでプサイのぶぶんだけCPML？
@@ -18,7 +18,7 @@
 !sig(i,j,k) or sig_x(i) ??
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig,cmax)
+subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig)!,cmax)
     use const_para
     implicit none
 
@@ -33,7 +33,7 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig,cmax)
     real(8), parameter  :: c1        = 1.125d0, c2 = -0.04167d0 !pml4の係数 from taylor Expansion
     real(8),parameter   :: epsir     = 1.0d0
     real(8)             :: delta = ncpml*dx
-    real(8), intent(in) :: cmax
+!     real(8), intent(in) :: cmax
     real(8), intent(in) :: sig(nx,ny,nz)
     real(8)             :: sig_opt !!!
     real(8)             :: sig_max !!! 導出法確認
@@ -458,7 +458,7 @@ enddo
 !     enddo
 
 
-
+!Normal
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!psi-update!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !   !xe-PML loop(-)
 !   do k = 1,nz-1

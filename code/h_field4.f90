@@ -36,6 +36,80 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !     alpha(3,1:3) = (/1.17188d0,-0.06510d0,0.00469d0/)
 !     alpha(4,1:4) = (/1.19629d0,-0.07975d0,-0.00070d0/)
 
+!ver1 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
+    !Hx4
+    do k = 1,nz
+       do j = 1,ny
+           do i = 1,nx
+              CHXLY(i,j,k) = - dt / myu(i,j,k) / dy
+              CHXLZ(i,j,k) = dt / myu(i,j,k) / dz
+          enddo
+      enddo
+    enddo
+    !Hx4波動伝播
+    do k = 2,nz-2
+        do j = 2,ny-2
+            do i = 2,nx-1
+                Hx(i,j,k) = Hx(i,j,k)&
+                         + CHXLY(i,j,k)*( c1*Ez(i,j+1,k) - c1*Ez(i,j,k) + c2*Ez(i,j+2,k) - c2*Ez(i,j-1,k) )&
+                         + CHXLZ(i,j,k)*( c1*Ey(i,j,k+1) - c1*Ey(i,j,k) + c2*Ey(i,j,k+2) - c2*Ey(i,j,k-1) )
+            enddo
+        enddo
+    enddo
+
+    !ソース項
+!   Hx(x0,y0,z0) = Hx(x0,y0,z0) - Jh(istep)
+
+  !Hy4
+    do k = 1,nz
+        do j = 1,ny
+            do i = 1,nx
+             CHYLZ(i,j,k) = - dt / myu(i,j,k) / dz
+             CHYLX(i,j,k) = dt / myu(i,j,k) / dx
+          enddo
+      enddo
+    enddo
+    !Hy4波動伝播計算
+    do k = 2,nz-2
+        do j = 2,ny-1
+            do i = 2,nx-2
+                Hy(i,j,k) = Hy(i,j,k)&
+                         + CHYLZ(i,j,k)*( c1*Ex(i,j,k+1) - c1*Ex(i,j,k) + c2*Ex(i,j,k+2) - c2*Ex(i,j,k-1) )&
+                         + CHYLX(i,j,k)*( c1*Ez(i+1,j,k) - c1*Ez(i,j,k) + c2*Ez(i+2,j,k) - c2*Ez(i-1,j,k) )
+            enddo
+        enddo
+    enddo
+
+    !ソース項
+  !   Hy(x0,y0,z0) = Hy(x0,y0,z0) - Jh(istep)
+
+  !Hz4
+    do k = 1,nz
+       do j = 1,ny
+         do i = 1,nx
+            CHZLX(i,j,k) = - dt / myu(i,j,k) / dx
+            CHZLY(i,j,k) = dt / myu(i,j,k) / dy
+        enddo
+      enddo
+    enddo
+    !Hz4波動伝播計算
+    do k = 2,nz-1
+        do j = 2,ny-2
+            do i = 2,nx-2
+                Hz(i,j,k) = Hz(i,j,k)&
+                         + CHZLX(i,j,k)* ( c1*Ey(i+1,j,k) - c1*Ey(i,j,k) + c2*Ey(i+2,j,k) - c2*Ey(i-1,j,k) )&
+                         + CHZLY(i,j,k)* ( c1*Ex(i,j+1,k) - c1*Ex(i,j,k) + c2*Ex(i,j+2,k) - c2*Ex(i,j-1,k) )
+             enddo
+        enddo
+    enddo
+
+    !ソース項
+    Hz(x0,y0,z0) = Hz(x0,y0,z0) - Jh(istep)
+
+
+
+
+
 ! NORMAL version2 ln=1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !    !Hx係数の設定!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !    do k = 1,nz
@@ -183,75 +257,6 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !     Hz(x0,y0,z0) = Hz(x0,y0,z0) - Jh(istep)
 
 
-!ver1 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
-    !Hx4
-    do k = 1,nz
-       do j = 1,ny
-           do i = 1,nx
-              CHXLY(i,j,k) = - dt / myu(i,j,k) / dy
-              CHXLZ(i,j,k) = dt / myu(i,j,k) / dz
-          enddo
-      enddo
-    enddo
-    !Hx4波動伝播
-    do k = 2,nz-2
-        do j = 2,ny-2
-            do i = 2,nx-1
-                Hx(i,j,k) = Hx(i,j,k)&
-                         + CHXLY(i,j,k)*( c1*Ez(i,j+1,k) - c1*Ez(i,j,k) + c2*Ez(i,j+2,k) - c2*Ez(i,j-1,k) )&
-                         + CHXLZ(i,j,k)*( c1*Ey(i,j,k+1) - c1*Ey(i,j,k) + c2*Ey(i,j,k+2) - c2*Ey(i,j,k-1) )
-            enddo
-        enddo
-    enddo
-
-    !ソース項
-!   Hx(x0,y0,z0) = Hx(x0,y0,z0) - Jh(istep)
-
-  !Hy4
-    do k = 1,nz
-        do j = 1,ny
-            do i = 1,nx
-             CHYLZ(i,j,k) = - dt / myu(i,j,k) / dz
-             CHYLX(i,j,k) = dt / myu(i,j,k) / dx
-          enddo
-      enddo
-    enddo
-    !Hy4波動伝播計算
-    do k = 2,nz-2
-        do j = 2,ny-1
-            do i = 2,nx-2
-                Hy(i,j,k) = Hy(i,j,k)&
-                         + CHYLZ(i,j,k)*( c1*Ex(i,j,k+1) - c1*Ex(i,j,k) + c2*Ex(i,j,k+2) - c2*Ex(i,j,k-1) )&
-                         + CHYLX(i,j,k)*( c1*Ez(i+1,j,k) - c1*Ez(i,j,k) + c2*Ez(i+2,j,k) - c2*Ez(i-1,j,k) )
-            enddo
-        enddo
-    enddo
-
-    !ソース項
-  !   Hy(x0,y0,z0) = Hy(x0,y0,z0) - Jh(istep)
-
-  !Hz4
-    do k = 1,nz
-       do j = 1,ny
-         do i = 1,nx
-            CHZLX(i,j,k) = - dt / myu(i,j,k) / dx
-            CHZLY(i,j,k) = dt / myu(i,j,k) / dy
-        enddo
-      enddo
-    enddo
-    !Hz4波動伝播計算
-    do k = 2,nz-1
-        do j = 2,ny-2
-            do i = 2,nx-2
-                Hz(i,j,k) = Hz(i,j,k)&
-                         + CHZLX(i,j,k)* ( c1*Ey(i+1,j,k) - c1*Ey(i,j,k) + c2*Ey(i+2,j,k) - c2*Ey(i-1,j,k) )&
-                         + CHZLY(i,j,k)* ( c1*Ex(i,j+1,k) - c1*Ex(i,j,k) + c2*Ex(i,j+2,k) - c2*Ex(i,j-1,k) )
-             enddo
-        enddo
-    enddo
-
-    !ソース項
-    Hz(x0,y0,z0) = Hz(x0,y0,z0) - Jh(istep)
 
 
 ! NORMAL ln=1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

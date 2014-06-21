@@ -416,7 +416,7 @@ void xe_pml4(double *EX, double *EY, double *EZ, double *HX, double *HY, double 
         for(i=2;i<ncpml-1;i++){
           ijk = k*ix*iy + j*ix + i;
           psi_Ezx1[ijk] = be_x[i] * psi_Ezx1[ijk] \
-                        + ce_x[i] * (c1*HY[ijk] - c1*HY[ijk - 1] +c2*HY[ijk +1]-c2*HY[ijk-2] ) /dx;
+                        + ce_x[i] * (c1*HY[ijk] - c1*HY[ijk - 1] +c2*HY[ijk +1]-c2*HY[ijk-2]) /dx;
           psi_Eyx1[ijk] = be_x[i] * psi_Eyx1[ijk] \
                         + ce_x[i] * (c1*HZ[ijk] - c1*HZ[ijk - 1] +c2*HZ[ijk+ 1]-c2*HZ[ijk-2]) /dx;
           EZ[ijk] += cb_z[ijk] * psi_Ezx1[ijk];

@@ -15,7 +15,7 @@
 !db_z[ijk] = dt/MU0 /(1.f+(msigz[k]*dt)/(2.f*eps2));
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sig,myu,cmax)
+subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sig,myu)!,cmax)
     use const_para
     implicit none
 
@@ -30,7 +30,7 @@ subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sig,myu,cmax)
     real(8), parameter  :: c1        = 1.125d0, c2 = -0.04167d0 !pml4の係数 from taylor expansion
     real(8),parameter   :: epsir     = 1.0d0
     real(8)             :: delta     = ncpml*dx
-    real(8), intent(in) :: cmax
+!     real(8), intent(in) :: cmax
     real(8), intent(in) :: myu(nx,ny,nz)
     real(8), intent(in) :: sig(nx,ny,nz)
     real(8)             :: sig_opt
@@ -451,7 +451,7 @@ enddo
 
 
 
-
+!Normal
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!psi update!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !xh-PML loop(-)
 !    do k = 1,nz-1
@@ -481,9 +481,6 @@ enddo
 !                            enddo
 !
 !
-!
-!
-!
 !!yh-PML loop(-)
 !    do k = 1,nz-1
 !        do j = 1,ncpml-1
@@ -510,8 +507,6 @@ enddo
 !                  enddo
 !                       enddo
 !                           enddo
-!
-!
 !
 !
 !!zh-PML loop(-)

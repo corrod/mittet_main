@@ -32,112 +32,112 @@ subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine sinw(istep,t)
-    use const_para
-    implicit none
-    real(8) :: signal(nstep)
-    real(8) freq=100.0d0
-    signal(istep) = sin(2.0d0*pi*freq*istep*dt)
-end subroutine sinw
+! subroutine sinw(istep,t)
+!     use const_para
+!     implicit none
+!     real(8) :: signal(nstep)
+!     real(8) freq=100.0d0
+!     signal(istep) = sin(2.0d0*pi*freq*istep*dt)
+! end subroutine sinw
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine sinc(istep,t)
-    use const_para
-    implicit none
-    real(8) :: signal(nstep)
-    real(8),parameter :: freq=1000.0d0
-    signal(istep) = sin(2.0d0*pi*freq*(istep-nstep/2.0d0)*dt)/(2.0d0*pi*freq*istep*dt)
-end subroutine sinw
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! subroutine sinc(istep,t)
+!     use const_para
+!     implicit none
+!     real(8) :: signal(nstep)
+!     real(8),parameter :: freq=1000.0d0
+!     signal(istep) = sin(2.0d0*pi*freq*(istep-nstep/2.0d0)*dt)/(2.0d0*pi*freq*istep*dt)
+! end subroutine sinw
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine kukei(istep,t)
-    use const_para
-    implicit none
-    real(8) :: signal(nstep)
-    integer, parameter :: fp=1500
-    integer :: fp_r
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! subroutine kukei(istep,t)
+!     use const_para
+!     implicit none
+!     real(8) :: signal(nstep)
+!     integer, parameter :: fp=1500
+!     integer :: fp_r
 
-    fp_r=mod(istep,fp*4)
-    if(fp_r<fp) then
-        signal(istep)=0.0d0
-        else if(fp*1<=fp_r .and. fp_r<fp*2) then
-            signal(istep) = -1.0d0
-            else if(fp*2<=fp_r .and. fp_r<fp*3) then
-            signal(istep) = 0.0d0
-             else if(fp*3<=fp_r .and. fp_r<fp*4) then
-                signal(istep) = 1.0d0
-            endif
-end subroutine kukei
+!     fp_r=mod(istep,fp*4)
+!     if(fp_r<fp) then
+!         signal(istep)=0.0d0
+!         else if(fp*1<=fp_r .and. fp_r<fp*2) then
+!             signal(istep) = -1.0d0
+!             else if(fp*2<=fp_r .and. fp_r<fp*3) then
+!             signal(istep) = 0.0d0
+!              else if(fp*3<=fp_r .and. fp_r<fp*4) then
+!                 signal(istep) = 1.0d0
+!             endif
+! end subroutine kukei
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine ricker(istep,t)
-    use const_para
-    implicit none
-        real(8) :: alpha
-        real(8) :: beta
-        real(8) :: fp =1.0d1
-        real(8) :: Md =1.0d0
-        real(8) :: phase = Md/fp
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! subroutine ricker(istep,t)
+!     use const_para
+!     implicit none
+!         real(8) :: alpha
+!         real(8) :: beta
+!         real(8) :: fp =1.0d1
+!         real(8) :: Md =1.0d0
+!         real(8) :: phase = Md/fp
 
-        alpha = (pi*fp)**2.0d0*(dble(istep-200)*dt-phase)**2.0d0
-        beta=2.0d0*alpha - 1.0d0
-        signal(istep) = beta *exp(-alpha)
-    end subroutine ricker
+!         alpha = (pi*fp)**2.0d0*(dble(istep-200)*dt-phase)**2.0d0
+!         beta=2.0d0*alpha - 1.0d0
+!         signal(istep) = beta *exp(-alpha)
+!     end subroutine ricker
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine sin2(istep,t)
-    use const_para
-    implicit none
-        real(8),parameter :: freq = 1.06d0
-        real(8),parameter :: om = 2.0d0*pi*freq
-        real(8),parameter :: Tw = 4.0d0*pi/om
-        integer           :: iTw
-        iTw = int(Tw/dt)
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! subroutine sin2(istep,t)
+!     use const_para
+!     implicit none
+!         real(8),parameter :: freq = 1.06d0
+!         real(8),parameter :: om = 2.0d0*pi*freq
+!         real(8),parameter :: Tw = 4.0d0*pi/om
+!         integer           :: iTw
+!         iTw = int(Tw/dt)
 
-        if(istep<iTw) then
-            signal(istep) = 0.5d0*(1.0d0-cos(pi*dble(istep)*dt/Tw))*sin(om*istep*dt)
-            elseif(iTw<=istep<nstep) then
-                signal(istep) = sin(om*istep*dt)
-            endif
-        end subroutine sin2
+!         if(istep<iTw) then
+!             signal(istep) = 0.5d0*(1.0d0-cos(pi*dble(istep)*dt/Tw))*sin(om*istep*dt)
+!             elseif(iTw<=istep<nstep) then
+!                 signal(istep) = sin(om*istep*dt)
+!             endif
+!         end subroutine sin2
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine gauss_sin(istep,t)
-    use const_para
-    implicit none
-    real(8),parameter :: om = 10.0d0
-    real(8),parameter :: t0 = pi/om
-    real(8),parameter :: alpha = (2.0d0/t0)**2.0d0
-    real(8),parameter :: wc = 1.0d0*pi/2.0d0/t0
-    integer,parameter :: it0 = int(2.0d0*t0/dt)
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! subroutine gauss_sin(istep,t)
+!     use const_para
+!     implicit none
+!     real(8),parameter :: om = 10.0d0
+!     real(8),parameter :: t0 = pi/om
+!     real(8),parameter :: alpha = (2.0d0/t0)**2.0d0
+!     real(8),parameter :: wc = 1.0d0*pi/2.0d0/t0
+!     integer,parameter :: it0 = int(2.0d0*t0/dt)
 
-    if(istep<it0) then
-        signal(istep) = exp(-alpha*(istep*dt-t0)**2)) * cos(wc*(istep*dt-t0))
-    elseif(2.0d0*dt<ntstep) then
-        signal(istep) =0.0d0
-    endif
-end subroutine gauss_sin
+!     if(istep<it0) then
+!         signal(istep) = exp(-alpha*(istep*dt-t0)**2)) * cos(wc*(istep*dt-t0))
+!     elseif(2.0d0*dt<ntstep) then
+!         signal(istep) =0.0d0
+!     endif
+! end subroutine gauss_sin
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine fourier1(istep,t)
-    use const_para
-    implicit none
-    real(8) :: ReF,ImF,om
-    integer :: n
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! subroutine fourier1(istep,t)
+!     use const_para
+!     implicit none
+!     real(8) :: ReF,ImF,om
+!     integer :: n
 
-    om = 1.0d0/nstep/dt
-    do n=1,nstep
-        do k=1,nstep
-    if(n<nstep) then
-        ReF=0.0d0
-        Imf=0.0d0
-        if(k<nstep) then
-            ReF = ReF + signal(k) * cos(2.0d0*pi*k*n/nstep)
-            ImF = ImF + signal(k) * sin(2.0d0*pi*k*n/nstep)
-        endif
-            enddo
-                enddo
-        end subroutine fourier1
+!     om = 1.0d0/nstep/dt
+!     do n=1,nstep
+!         do k=1,nstep
+!     if(n<nstep) then
+!         ReF=0.0d0
+!         Imf=0.0d0
+!         if(k<nstep) then
+!             ReF = ReF + signal(k) * cos(2.0d0*pi*k*n/nstep)
+!             ImF = ImF + signal(k) * sin(2.0d0*pi*k*n/nstep)
+!         endif
+!             enddo
+!                 enddo
+!         end subroutine fourier1
 
 
 
