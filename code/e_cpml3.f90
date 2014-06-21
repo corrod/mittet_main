@@ -40,7 +40,7 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig,cmax)
     real(8)             :: sig_x(nx),sig_y(ny),sig_z(nz)
     real(8)             :: a_x(nx),a_y(ny),a_z(nz)
     real(8)             :: kappa_x(nx),kappa_y(ny),kappa_z(nz)
-    real(8)             :: kedx(nx),kedy(ny),kedz(nz) 
+    real(8)             :: kedx(nx),kedy(ny),kedz(nz)
     real(8)             :: epsi(nx,ny,nz)!1.0d0
     real(8)             :: ca_x(nx,ny,nz),ca_y(nx,ny,nz),ca_z(nx,ny,nz)
     real(8)             :: cb_x(nx,ny,nz),cb_y(nx,ny,nz),cb_z(nx,ny,nz)
@@ -163,7 +163,7 @@ do k = 1,nz
     a_z(k)     = 0.0d0
     be_z(k)    = 0.0d0
     ce_z(k)    = 0.0d0
-    kedz(k)    = kappa_z(k)*dz  
+    kedz(k)    = kappa_z(k)*dz
   endif
 enddo
 
@@ -274,15 +274,16 @@ enddo
 
 
 !psi-update
-!isikura444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
+!operator half length ln = 2
+!444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
     !xe-PML4 loop(-)
     do k = 1,nz-1
         do j = 1,ny-1
             do i = 3,ncpml-1
-                psi_Ezx1(i,j,k) = be_x(i)*psi_Ezx1(i,j,k)&
-                                 +ce_x(i)*(c1*Hy(i,j,k)-c1*Hy(i-1,j,k) + c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
-                psi_Eyx1(i,j,k) = be_x(i)*psi_Eyx1(i,j,k)&
-                                 +ce_x(i)*(c1*Hz(i,j,k)-c1*Hz(i-1,j,k) + c2*Hz(i+1,j,k)-c2*Hz(i-2,j,k)) / dx
+                psi_Ezx1(i,j,k) = be_x(i) * psi_Ezx1(i,j,k) &
+                                 +ce_x(i) * (c1*Hy(i,j,k)-c1*Hy(i-1,j,k) + c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
+                psi_Eyx1(i,j,k) = be_x(i) * psi_Eyx1(i,j,k) &
+                                 +ce_x(i) * (c1*Hz(i,j,k)-c1*Hz(i-1,j,k) + c2*Hz(i+1,j,k)-c2*Hz(i-2,j,k)) / dx
                 Ez(i,j,k) = Ez(i,j,k) + cb_z(i,j,k)*psi_Ezx1(i,j,k)
                 Ey(i,j,k) = Ey(i,j,k) - cb_y(i,j,k)*psi_Eyx1(i,j,k)
             enddo
@@ -292,10 +293,10 @@ enddo
     do k = 1,nz-1
         do j = 1,ny-1
             do i = nx-ncpml+1,nx-1
-                psi_Ezx1(i,j,k) = be_x(i)*psi_Ezx1(i,j,k)&
-                                 +ce_x(i)*(c1*Hy(i,j,k)-c1*Hy(i-1,j,k) + c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
-                psi_Eyx1(i,j,k) = be_x(i)*psi_Eyx1(i,j,k)&
-                                 +ce_x(i)*(c1*Hz(i,j,k)-c1*Hz(i-1,j,k) + c2*Hz(i+1,j,k)-c2*Hz(i-2,j,k)) / dx
+                psi_Ezx1(i,j,k) = be_x(i) * psi_Ezx1(i,j,k) &
+                                 +ce_x(i) * (c1*Hy(i,j,k)-c1*Hy(i-1,j,k) + c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
+                psi_Eyx1(i,j,k) = be_x(i) * psi_Eyx1(i,j,k) &
+                                 +ce_x(i) * (c1*Hz(i,j,k)-c1*Hz(i-1,j,k) + c2*Hz(i+1,j,k)-c2*Hz(i-2,j,k)) / dx
                 Ez(i,j,k) = Ez(i,j,k) + cb_z(i,j,k)*psi_Ezx1(i,j,k)
                 Ey(i,j,k) = Ey(i,j,k) - cb_y(i,j,k)*psi_Eyx1(i,j,k)
             enddo
@@ -306,10 +307,10 @@ enddo
     do k = 1,nz-1
         do j = 3,ncpml-1
             do i = 1,nx-1
-                psi_Exy1(i,j,k) = be_y(j)*psi_Exy1(i,j,k)&
-                                 +ce_y(j)*(c1*Hz(i,j,k)-c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k)-c2*Hz(i,j-2,k)) / dy
-                psi_Ezy1(i,j,k) = be_y(j)*psi_Ezy1(i,j,k)&
-                                 +ce_y(j)*(c1*Hx(i,j,k)-c1*Hx(i,j-1,k) + c2*Hx(i,j+1,k)-c2*Hx(i,j-2,k)) / dy
+                psi_Exy1(i,j,k) = be_y(j) * psi_Exy1(i,j,k) &
+                                 +ce_y(j) * (c1*Hz(i,j,k)-c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k)-c2*Hz(i,j-2,k)) / dy
+                psi_Ezy1(i,j,k) = be_y(j) * psi_Ezy1(i,j,k) &
+                                 +ce_y(j) * (c1*Hx(i,j,k)-c1*Hx(i,j-1,k) + c2*Hx(i,j+1,k)-c2*Hx(i,j-2,k)) / dy
                 Ex(i,j,k) = Ex(i,j,k) + cb_x(i,j,k)*psi_Exy1(i,j,k)
                 Ez(i,j,k) = Ez(i,j,k) - cb_z(i,j,k)*psi_Ezy1(i,j,k)
             enddo
@@ -319,10 +320,10 @@ enddo
     do k = 1,nz-1
         do j = ny-ncpml+1,ny-1
             do i = 1,nx-1
-                psi_Exy1(i,j,k) = be_y(j)*psi_Exy1(i,j,k)&
-                                 +ce_y(j)*(c1*Hz(i,j,k)-c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k)-c2*Hz(i,j-2,k)) / dy
-                psi_Ezy1(i,j,k) = be_y(j)*psi_Ezy1(i,j,k)&
-                                 +ce_y(j)*(c1*Hx(i,j,k)-c1*Hx(i,j-1,k) + c2*Hx(i,j+1,k)-c2*Hx(i,j-2,k)) / dy
+                psi_Exy1(i,j,k) = be_y(j) * psi_Exy1(i,j,k) &
+                                 +ce_y(j) * (c1*Hz(i,j,k)-c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k)-c2*Hz(i,j-2,k)) / dy
+                psi_Ezy1(i,j,k) = be_y(j) * psi_Ezy1(i,j,k) &
+                                 +ce_y(j) * (c1*Hx(i,j,k)-c1*Hx(i,j-1,k) + c2*Hx(i,j+1,k)-c2*Hx(i,j-2,k)) / dy
                 Ex(i,j,k) = Ex(i,j,k) + cb_x(i,j,k)*psi_Exy1(i,j,k)
                 Ez(i,j,k) = Ez(i,j,k) - cb_z(i,j,k)*psi_Ezy1(i,j,k)
             enddo
@@ -333,10 +334,10 @@ enddo
     do k = 3,ncpml-1
         do j = 1,ny-1
             do i = 1,nx-1
-                psi_Eyz1(i,j,k) = be_z(k)*psi_Eyz1(i,j,k)&
-                                 +ce_z(k)*(c1*Hx(i,j,k)-c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1)-c2*Hx(i,j,k-2)) / dz
-                psi_Exz1(i,j,k) = be_z(k)*psi_Exz1(i,j,k)&
-                                 +ce_z(k)*(c1*Hy(i,j,k)-c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1)-c2*Hy(i,j,k-2)) / dz
+                psi_Eyz1(i,j,k) = be_z(k) * psi_Eyz1(i,j,k) &
+                                 +ce_z(k) * (c1*Hx(i,j,k)-c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1)-c2*Hx(i,j,k-2)) / dz
+                psi_Exz1(i,j,k) = be_z(k) * psi_Exz1(i,j,k) &
+                                 +ce_z(k) * (c1*Hy(i,j,k)-c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1)-c2*Hy(i,j,k-2)) / dz
                 Ey(i,j,k) = Ey(i,j,k) + cb_y(i,j,k)*psi_Eyz1(i,j,k)
                 Ex(i,j,k) = Ex(i,j,k) - cb_x(i,j,k)*psi_Exz1(i,j,k)
             enddo
@@ -346,10 +347,10 @@ enddo
     do k = nz-ncpml+1,nz-1
         do j = 1,ny-1
             do i = 1,nx-1
-                psi_Eyz1(i,j,k) = be_z(k)*psi_Eyz1(i,j,k)&
-                                 +ce_z(k)*(c1*Hx(i,j,k)-c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1)-c2*Hx(i,j,k-2)) / dz
-                psi_Exz1(i,j,k) = be_z(k)*psi_Exz1(i,j,k)&
-                                 +ce_z(k)*(c1*Hy(i,j,k)-c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1)-c2*Hy(i,j,k-2)) / dz
+                psi_Eyz1(i,j,k) = be_z(k) * psi_Eyz1(i,j,k) &
+                                 +ce_z(k) * (c1*Hx(i,j,k)-c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1)-c2*Hx(i,j,k-2)) / dz
+                psi_Exz1(i,j,k) = be_z(k) * psi_Exz1(i,j,k) &
+                                 +ce_z(k) * (c1*Hy(i,j,k)-c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1)-c2*Hy(i,j,k-2)) / dz
                 Ey(i,j,k) = Ey(i,j,k) + cb_y(i,j,k)*psi_Eyz1(i,j,k)
                 Ex(i,j,k) = Ex(i,j,k) - cb_x(i,j,k)*psi_Exz1(i,j,k)
             enddo
@@ -541,7 +542,7 @@ enddo
 !   enddo
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!field-update loop!!!!!!!!!!!!!!!!!!!!!!!!!
-!    
+!
      !x-update
 !    do  k=2,nz-1
 !        do  j=2,ny-1
@@ -558,19 +559,19 @@ enddo
 !        do  j=1,ny-1
 !            do i=2,nx-1
 !                Ey(i,j,k) = ca_y(i,j,k)*Ey(i,j,k)&
-!                           +cb_y(i,j,k)*((Hx(i,j,k)-Hx(i,j,k-1))/kedz(k) &  
+!                           +cb_y(i,j,k)*((Hx(i,j,k)-Hx(i,j,k-1))/kedz(k) &
 !                                       - (Hz(i,j,k)-Hz(i-1,j,k))/kedx(i))
 !            enddo
 !        enddo
 !    enddo
-   
+
 !     !z-update
 !     do k=1,nz-1
 !       do  j=2,ny-1
 !            do  i=2,nx-1
 !                Ez(i,j,k) = ca_z(i,j,k)*Ez(i,j,k)&
-!                           +cb_z(i,j,k)*((Hy(i,j,k)-Hy(i-1,j,k))/kedx(i) &  
-!                                       - (Hx(i,j,k)-Hx(i,j-1,k))/kedy(j)) 
+!                           +cb_z(i,j,k)*((Hy(i,j,k)-Hy(i-1,j,k))/kedx(i) &
+!                                       - (Hx(i,j,k)-Hx(i,j-1,k))/kedy(j))
 !            enddo
 !        enddo
 !     enddo
