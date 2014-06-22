@@ -5,7 +5,7 @@
 
 
 # CPML
-ifort -o ficticious parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field4.f90 e_cpml3.f90 h_field4.f90 h_cpml3.f90 main2.f90  -check all -CB -traceback -g
+ifort -o ficticious parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field4.f90 e_cpml4.f90 h_field4.f90 h_cpml4.f90 main2.f90 # -check all -CB -traceback -g
 
 #Mur
  # ifort -o ficticious parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field4.f90 mur2.f90 h_field4.f90 main2.f90 # -check all -CB -traceback -g

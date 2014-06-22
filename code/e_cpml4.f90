@@ -14,8 +14,8 @@
 !cb_x,cb_y,cb_zを仮想領域にあわせる
 !係数が1-ncpml, nx-(nx-nxpml)でことなるので調整
 !epsi0=1 from imamu
-!sig_xの値をどう取るか
-!sig(i,j,k) or sig_x(i) ??
+!esig_xの値をどう取るか
+!sig(i,j,k) or esig_x(i) ??
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig)!,cmax)
@@ -28,7 +28,7 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig)!,cmax)
     real(8), parameter  :: a_max     = 0.2d0     !!!if a_max=0, CPML changes to UPML
     real(8), parameter  :: nn        = 3.0d0 !nn should be [2,6]
     real(8), parameter  :: order     = 0.0d0 !order should be (0,3]
-    real(8), parameter  :: optToMax  = 10.0d0
+    real(8), parameter  :: optToMax  = 10.0d0 !10.0d0
     real(8), parameter  :: Rcoef     = 0.01d0 !R should be [10^-2, 10^-12]
     real(8), parameter  :: c1        = 1.125d0, c2 = -0.04167d0 !pml4の係数 from taylor Expansion
     real(8),parameter   :: epsir     = 1.0d0
@@ -37,15 +37,15 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig)!,cmax)
     real(8), intent(in) :: sig(nx,ny,nz)
     real(8)             :: sig_opt !!!
     real(8)             :: sig_max !!! 導出法確認
-    real(8)             :: sig_x(nx),sig_y(ny),sig_z(nz)
-    real(8)             :: a_x(nx),a_y(ny),a_z(nz)
-    real(8)             :: kappa_x(nx),kappa_y(ny),kappa_z(nz)
-    real(8)             :: kedx(nx),kedy(ny),kedz(nz)
+    real(8)             :: esig_x(nx),esig_y(ny),esig_z(nz),msig_x(nx),msig_y(ny),msig_z(nz)
+    real(8)             :: ae_x(nx),ae_y(ny),ae_z(nz),am_x(nx),am_y(ny),am_z(nz)
+    real(8)             :: ekappa_x(nx),ekappa_y(ny),ekappa_z(nz),mkappa_x(nx),mkappa_y(ny),mkappa_z(nz)
+    real(8)             :: kedx(nx),kedy(ny),kedz(nz),khdx(nx),khdy(ny),khdz(nz)
     real(8)             :: epsi(nx,ny,nz)!1.0d0
     real(8)             :: ca_x(nx,ny,nz),ca_y(nx,ny,nz),ca_z(nx,ny,nz)
     real(8)             :: cb_x(nx,ny,nz),cb_y(nx,ny,nz),cb_z(nx,ny,nz)
-    real(8)             :: be_x(nx),be_y(ny),be_z(nz)
-    real(8)             :: ce_x(nx),ce_y(ny),ce_z(nz)
+    real(8)             :: be_x(nx),be_y(ny),be_z(nz),bh_x(nx),bh_y(ny),bh_z(nz)
+    real(8)             :: ce_x(nx),ce_y(ny),ce_z(nz),ch_x(nx),ch_y(ny),ch_z(nz)
     complex(kind(0d0))  :: psi_Ezx1(nx,ny,nz),psi_Eyx1(nx,ny,nz)
     complex(kind(0d0))  :: psi_Exy1(nx,ny,nz),psi_Ezy1(nx,ny,nz)
     complex(kind(0d0))  :: psi_Eyz1(nx,ny,nz),psi_Exz1(nx,ny,nz)
@@ -73,111 +73,223 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig)!,cmax)
 !     alpha(3,1:3) = (/1.17188d0,-0.06510d0,0.00469d0/)
 !     alpha(4,1:4) = (/1.19629d0,-0.07975d0,-0.00070d0/)
 
-!係数の設定xe
+
+!係数の設定x
+open(99,file='fxcpml.d')
  do i = 1,nx
     if(i<=ncpml) then
-      sig_x(i)   = sig_max * ((dble(ncpml)-dble(i))/(dble(ncpml)-1.0d0))**dble(nn+order)
-      kappa_x(i) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(ncpml)-dble(i))/(dble(ncpml)-1.0d0) )**dble(nn)
-      a_x(i)     = a_max * ((dble(i)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
+      esig_x(i)  = sig_max * ((dble(ncpml)-dble(i)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
+      msig_x(i)  = sig_max * ((dble(ncpml)-dble(i)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
+      ekappa_x(i)= 1.0d0 + (kappa_max-1.0d0) * ((dble(ncpml)-dble(i)      )/(dble(ncpml)-1.0d0))**dble(nn)
+      mkappa_x(i)= 1.0d0 + (kappa_max-1.0d0) * ((dble(ncpml)-dble(i)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
+      ae_x(i)    = a_max * ((dble(i)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
+      am_x(i)    = a_max * ((dble(i)-0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
 
-      be_x(i)    = exp(-(sig_x(i)/kappa_x(i)+a_x(i))*dt) !/epsi0)
-      ce_x(i)    = sig_x(i)*(be_x(i)-1.0d0) / (sig_x(i)+kappa_x(i)*a_x(i)) / kappa_x(i)
-      kedx(i)    = kappa_x(i)*dx
+      be_x(i)    = exp(-(esig_x(i)/ekappa_x(i)+ae_x(i)) * dt) !/epsi0)
+      bh_x(i)    = exp(-(msig_x(i)/mkappa_x(i)+am_x(i)) * dt) !/epsi0)
+      ce_x(i)    = esig_x(i)*(be_x(i)-1.0d0) / (esig_x(i) + ekappa_x(i)*ae_x(i)) / ekappa_x(i)
+      ch_x(i)    = msig_x(i)*(bh_x(i)-1.0d0) / (msig_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i)
+      kedx(i)    = ekappa_x(i)*dx
+      khdx(i)    = mkappa_x(i)*dx !!!(i-1/2)dxの取り扱い
 
     else if(i>=nx-ncpml+1) then
-      sig_x(i)   = sig_max * ((dble(i)-dble(nx)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
-      kappa_x(i) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(i)-dble(nx)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
-      a_x(i)     = a_max * ((dble(-i)+dble(nx)  )/(dble(ncpml)-1.0d0))**dble(ma)
+      esig_x(i)  = sig_max * ((dble(i)-dble(nx)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
+      msig_x(i)  = sig_max * ((dble(i)-dble(nx)-1.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
+      ekappa_x(i)= 1.0d0 + (kappa_max-1.0d0) * ((dble(i)-dble(nx)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)
+      mkappa_x(i)= 1.0d0 + (kappa_max-1.0d0) * ((dble(i)-dble(nx)-1.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
+      ae_x(i)    = a_max * ((dble(-i)+dble(nx)      )/(dble(ncpml)-1.0d0))**dble(ma)
+      am_x(i)    = a_max * ((dble(-i)+dble(nx)+0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
 
-      be_x(i)    = exp(-(sig_x(i)/kappa_x(i)+a_x(i))*dt) !/epsi0)
-      ce_x(i)    = sig_x(i)*(be_x(i)-1.0d0) / (sig_x(i)+kappa_x(i)*a_x(i)) / kappa_x(i)
-      kedx(i)    = kappa_x(i)*dx
+      be_x(i)    = exp(-(esig_x(i)/ekappa_x(i)+ae_x(i)) * dt) !/epsi0)
+      bh_x(i)    = exp(-(msig_x(i)/mkappa_x(i)+am_x(i)) * dt) !/epsi0)
+      ce_x(i)    = esig_x(i)*(be_x(i)-1.0d0) / (esig_x(i) + ekappa_x(i)*ae_x(i)) / ekappa_x(i)
+      ch_x(i)    = msig_x(i)*(bh_x(i)-1.0d0) / (msig_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i)
+      kedx(i)    = ekappa_x(i)*dx
+      khdx(i)    = mkappa_x(i)*dx !!!(i-1/2)dxの取り扱い
 
     else
-      sig_x(i)   = 0.0d0
-      kappa_x(i) = 1.0d0
-      a_x(i)     = 0.0d0
+      esig_x(i)  = 0.0d0
+      msig_x(i)  = 0.0d0
+      ekappa_x(i)= 1.0d0
+      mkappa_x(i)= 1.0d0
+      ae_x(i)    = 0.0d0
+      am_x(i)    = 0.0d0
       be_x(i)    = 0.0d0
+      bh_x(i)    = 0.0d0
       ce_x(i)    = 0.0d0
-      kedx(i)    = kappa_x(i)*dx
+      ch_x(i)    = 0.0d0
+      kedx(i)    = ekappa_x(i)*dx
+      khdx(i)    = mkappa_x(i)*dx
     endif
+write(99,"(I3,12e12.4)")  i,esig_x(i),msig_x(i),ekappa_x(i),mkappa_x(i),ae_x(i),am_x(i),be_x(i),am_x(i), ce_x(i),ch_x(i), kedx(i),khdx(i)
 enddo
+close(99)
+
+!係数の設定y
+if(j<=ncpml) then
+      esig_y(j)  = sig_max * ((dble(ncpml)-dble(j)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
+      msig_y(j)  = sig_max * ((dble(ncpml)-dble(j)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
+      ekappa_y(j)= 1.0d0 + (kappa_max-1.0d0) * ((dble(ncpml)-dble(j)      )/(dble(ncpml)-1.0d0))**dble(nn)
+      mkappa_y(j)= 1.0d0 + (kappa_max-1.0d0) * ((dble(ncpml)-dble(j)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
+      ae_y(j)    = a_max * ((dble(j)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
+      am_y(j)    = a_max * ((dble(j)-0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
+
+      be_y(j)    = exp(-(esig_y(j)/ekappa_y(j)+ae_y(j)) * dt) !/epsi0)
+      bh_y(j)    = exp(-(msig_y(j)/mkappa_y(j)+am_y(j)) * dt) !/epsi0)
+      ce_y(j)    = esig_y(j)*(be_y(j)-1.0d0) / (esig_y(j) + ekappa_y(j)*ae_y(j)) / ekappa_y(j)
+      ch_y(j)    = msig_y(j)*(bh_y(j)-1.0d0) / (msig_y(j) + mkappa_y(j)*am_y(j)) / mkappa_y(j)
+      kedy(j)    = ekappa_y(j)*dy
+      khdy(j)    = mkappa_y(j)*dy !!!(i-1/2)dyの取り扱い
+
+    else if(j>=ny-ncpml+1) then
+      esig_y(j)  = sig_max * ((dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
+      msig_y(j)  = sig_max * ((dble(j)-dble(ny)-1.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
+      ekappa_y(j)= 1.0d0 + (kappa_max-1.0d0) * ((dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)
+      mkappa_y(j)= 1.0d0 + (kappa_max-1.0d0) * ((dble(j)-dble(ny)-1.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
+      ae_y(j)    = a_max * ((dble(-j)+dble(ny)      )/(dble(ncpml)-1.0d0))**dble(ma)
+      am_y(j)    = a_max * ((dble(-j)+dble(ny)+0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
+
+      be_y(j)    = exp(-(esig_y(j)/ekappa_y(j)+ae_y(j)) * dt) !/epsi0)
+      bh_y(j)    = exp(-(msig_y(j)/mkappa_y(j)+am_y(j)) * dt) !/epsi0)
+      ce_y(j)    = esig_y(j)*(be_y(j)-1.0d0) / (esig_y(j) + ekappa_y(j)*ae_y(j)) / ekappa_y(j)
+      ch_y(j)    = msig_y(j)*(bh_y(j)-1.0d0) / (msig_y(j) + mkappa_y(j)*am_y(j)) / mkappa_y(j)
+      kedy(j)    = ekappa_y(j)*dy
+      khdy(j)    = mkappa_y(j)*dy !!!(i-1/2)dyの取り扱い
+
+    else
+      esig_y(j)  = 0.0d0
+      msig_y(j)  = 0.0d0
+      ekappa_y(j)= 1.0d0
+      mkappa_y(j)= 1.0d0
+      ae_y(j)    = 0.0d0
+      am_y(j)    = 0.0d0
+      be_y(j)    = 0.0d0
+      bh_y(j)    = 0.0d0
+      ce_y(j)    = 0.0d0
+      ch_y(j)    = 0.0d0
+      kedy(j)    = ekappa_y(j)*dy
+      khdy(j)    = mkappa_y(j)*dy
+    endif
+!係数の設定
+if(k<=ncpml) then
+      esig_z(k)  = sig_max * ((dble(ncpml)-dble(k)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
+      msig_z(k)  = sig_max * ((dble(ncpml)-dble(k)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
+      ekappa_z(k)= 1.0d0 + (kappa_max-1.0d0) * ((dble(ncpml)-dble(k)      )/(dble(ncpml)-1.0d0))**dble(nn)
+      mkappa_z(k)= 1.0d0 + (kappa_max-1.0d0) * ((dble(ncpml)-dble(k)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
+      ae_z(k)    = a_max * ((dble(k)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
+      am_z(k)    = a_max * ((dble(k)-0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
+
+      be_z(k)    = exp(-(esig_z(k)/ekappa_z(k)+ae_z(k)) * dt) !/epsi0)
+      bh_z(k)    = exp(-(msig_z(k)/mkappa_z(k)+am_z(k)) * dt) !/epsi0)
+      ce_z(k)    = esig_z(k)*(be_z(k)-1.0d0) / (esig_z(k) + ekappa_z(k)*ae_z(k)) / ekappa_z(k)
+      ch_z(k)    = msig_z(k)*(bh_z(k)-1.0d0) / (msig_z(k) + mkappa_z(k)*am_z(k)) / mkappa_z(k)
+      kedz(k)    = ekappa_z(k)*dz
+      khdz(k)    = mkappa_z(k)*dz !!!(i-1/2)dzの取り扱い
+
+    else if(k>=nz-ncpml+1) then
+      esig_z(k)  = sig_max * ((dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
+      msig_z(k)  = sig_max * ((dble(k)-dble(nz)-1.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
+      ekappa_z(k)= 1.0d0 + (kappa_max-1.0d0) * ((dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)
+      mkappa_z(k)= 1.0d0 + (kappa_max-1.0d0) * ((dble(k)-dble(nz)-1.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
+      ae_z(k)    = a_max * ((dble(-k)+dble(nz)      )/(dble(ncpml)-1.0d0))**dble(ma)
+      am_z(k)    = a_max * ((dble(-k)+dble(nz)+0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
+
+      be_z(k)    = exp(-(esig_z(k)/ekappa_z(k)+ae_z(k)) * dt) !/epsi0)
+      bh_z(k)    = exp(-(msig_z(k)/mkappa_z(k)+am_z(k)) * dt) !/epsi0)
+      ce_z(k)    = esig_z(k)*(be_z(k)-1.0d0) / (esig_z(k) + ekappa_z(k)*ae_z(k)) / ekappa_z(k)
+      ch_z(k)    = msig_z(k)*(bh_z(k)-1.0d0) / (msig_z(k) + mkappa_z(k)*am_z(k)) / mkappa_z(k)
+      kedz(k)    = ekappa_z(k)*dz
+      khdz(k)    = mkappa_z(k)*dz !!!(i-1/2)dzの取り扱い
+
+    else
+      esig_z(k)  = 0.0d0
+      msig_z(k)  = 0.0d0
+      ekappa_z(k)= 1.0d0
+      mkappa_z(k)= 1.0d0
+      ae_z(k)    = 0.0d0
+      am_z(k)    = 0.0d0
+      be_z(k)    = 0.0d0
+      bh_z(k)    = 0.0d0
+      ce_z(k)    = 0.0d0
+      ch_z(k)    = 0.0d0
+      kedz(k)    = ekappa_z(k)*dz
+      khdz(k)    = mkappa_z(k)*dz
+    endif
 
 
-!係数の設定ye
 
-do j = 1,ny
-  if(j<=ncpml) then
-    sig_y(j)   = sig_max * ((dble(ncpml)-dble(j))/(dble(ncpml)-1.0d0))**dble(nn+order)
-    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(ncpml)-dble(j))/(dble(ncpml)-1.0d0) )**dble(nn)
-    a_y(j)     = a_max * ((dble(j)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
-
-    be_y(j)    = exp(-(sig_y(j)/kappa_y(j)+a_y(j))*dt) !/epsi0)
-    ce_y(j)    = sig_y(j)*(be_y(j)-1.0d0) / (sig_y(j)+kappa_y(j)*a_y(j)) / kappa_y(j)
-    kedy(j)    = kappa_y(j)*dy  !!!
-
-  else if(j>=ny-ncpml+1) then
-    sig_y(j)   = sig_max * ((dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
-    kappa_y(j) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
-    a_y(j)     = a_max * ((dble(-j)+dble(ny)  )/(dble(ncpml)-1.0d0))**dble(ma)
-
-    be_y(j)    = exp(-(sig_y(j)/kappa_y(j)+a_y(j))*dt) !/epsi0)
-    ce_y(j)    = sig_y(j)*(be_y(j)-1.0d0) / (sig_y(j)+kappa_y(j)*a_y(j)) / kappa_y(j)
-    kedy(j)    = kappa_y(j)*dy  !!!
-
-  else
-    sig_y(j)   = 0.0d0
-    kappa_y(j) = 1.0d0
-    a_y(j)     = 0.0d0
-    be_y(j)    = 0.0d0
-    ce_y(j)    = 0.0d0
-    kedy(j)    = kappa_y(j)*dy
-      endif
-  enddo
-
-
-!係数の設定ze
-
-do k = 1,nz
-  if(k<=ncpml) then
-    sig_z(k)   = sig_max * ((dble(ncpml)-dble(k))/(dble(ncpml)-1.0d0))**dble(nn+order)
-    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(ncpml)-dble(k))/(dble(ncpml)-1.0d0) )**dble(nn)
-    a_z(k)     = a_max*((dble(k)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
-
-    be_z(k)    = exp(-(sig_z(k)/kappa_z(k)+a_z(k))*dt) !/epsi0)
-    ce_z(k)    = sig_z(k)*(be_z(k)-1.0d0) / (sig_z(k)+kappa_z(k)*a_z(k)) / kappa_z(k)
-    kedz(k)    = kappa_z(k)*dz  !!!
-
-  else if(k>=nz-ncpml+1) then
-    sig_z(k)   = sig_max * ((dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
-    kappa_z(k) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
-    a_z(k)     = a_max * ((dble(-k)+dble(nz)  )/(dble(ncpml)-1.0d0))**dble(ma)
-
-    be_z(k)    = exp(-(sig_z(k)/kappa_z(k)+a_z(k))*dt) !/epsi0)
-    ce_z(k)    = sig_z(k)*(be_z(k)-1.0d0) / (sig_z(k)+kappa_z(k)*a_z(k)) / kappa_z(k)
-    kedz(k)    = kappa_z(k)*dz  !!!
-
-  else
-    sig_z(k)   = 0.0d0
-    kappa_z(k) = 1.0d0
-    a_z(k)     = 0.0d0
-    be_z(k)    = 0.0d0
-    ce_z(k)    = 0.0d0
-    kedz(k)    = kappa_z(k)*dz
-  endif
-enddo
+!do j = 1,ny
+!  if(j<=ncpml) then
+!    esig_y(j)   = sig_max * ((dble(ncpml)-dble(j))/(dble(ncpml)-1.0d0))**dble(nn+order)
+!    ekappa_y(j) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(ncpml)-dble(j))/(dble(ncpml)-1.0d0) )**dble(nn)
+!    ae_y(j)     = a_max * ((dble(j)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
+!
+!    be_y(j)    = exp(-(esig_y(j)/ekappa_y(j)+ae_y(j))*dt) !/epsi0)
+!    ce_y(j)    = esig_y(j)*(be_y(j)-1.0d0) / (esig_y(j)+ekappa_y(j)*ae_y(j)) / ekappa_y(j)
+!    kedy(j)    = ekappa_y(j)*dy  !!!
+!
+!  else if(j>=ny-ncpml+1) then
+!    esig_y(j)   = sig_max * ((dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
+!    ekappa_y(j) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
+!    ae_y(j)     = a_max * ((dble(-j)+dble(ny)  )/(dble(ncpml)-1.0d0))**dble(ma)
+!
+!    be_y(j)    = exp(-(esig_y(j)/ekappa_y(j)+ae_y(j))*dt) !/epsi0)
+!    ce_y(j)    = esig_y(j)*(be_y(j)-1.0d0) / (esig_y(j)+ekappa_y(j)*ae_y(j)) / ekappa_y(j)
+!    kedy(j)    = ekappa_y(j)*dy  !!!
+!
+!  else
+!    esig_y(j)   = 0.0d0
+!    ekappa_y(j) = 1.0d0
+!    ae_y(j)     = 0.0d0
+!    be_y(j)    = 0.0d0
+!    ce_y(j)    = 0.0d0
+!    kedy(j)    = ekappa_y(j)*dy
+!      endif
+!  enddo
+!
+!
+!!係数の設定ze
+!
+!do k = 1,nz
+!  if(k<=ncpml) then
+!    esig_z(k)   = sig_max * ((dble(ncpml)-dble(k))/(dble(ncpml)-1.0d0))**dble(nn+order)
+!    ekappa_z(k) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(ncpml)-dble(k))/(dble(ncpml)-1.0d0) )**dble(nn)
+!    ae_z(k)     = a_max*((dble(k)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
+!
+!    be_z(k)    = exp(-(esig_z(k)/ekappa_z(k)+ae_z(k))*dt) !/epsi0)
+!    ce_z(k)    = esig_z(k)*(be_z(k)-1.0d0) / (esig_z(k)+ekappa_z(k)*ae_z(k)) / ekappa_z(k)
+!    kedz(k)    = ekappa_z(k)*dz  !!!
+!
+!  else if(k>=nz-ncpml+1) then
+!    esig_z(k)   = sig_max * ((dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
+!    ekappa_z(k) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
+!    ae_z(k)     = a_max * ((dble(-k)+dble(nz)  )/(dble(ncpml)-1.0d0))**dble(ma)
+!
+!    be_z(k)    = exp(-(esig_z(k)/ekappa_z(k)+ae_z(k))*dt) !/epsi0)
+!    ce_z(k)    = esig_z(k)*(be_z(k)-1.0d0) / (esig_z(k)+ekappa_z(k)*ae_z(k)) / ekappa_z(k)
+!    kedz(k)    = ekappa_z(k)*dz  !!!
+!
+!  else
+!    esig_z(k)   = 0.0d0
+!    ekappa_z(k) = 1.0d0
+!    ae_z(k)     = 0.0d0
+!    be_z(k)    = 0.0d0
+!    ce_z(k)    = 0.0d0
+!    kedz(k)    = ekappa_z(k)*dz
+!  endif
+!enddo
 
 
 do k=1,nz
   do j=1,ny
     do i=1,nx
     !imamu system
-    ca_x(i,j,k) = (1.0d0-sig_x(i)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sig_x(i)*dt/(2.0d0*epsi(i,j,k)))
-    ca_y(i,j,k) = (1.0d0-sig_y(j)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sig_y(j)*dt/(2.0d0*epsi(i,j,k)))
-    ca_z(i,j,k) = (1.0d0-sig_z(k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sig_z(k)*dt/(2.0d0*epsi(i,j,k)))
-    cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig_x(i)*dt/(2.0d0*epsi(i,j,k)))
-    cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig_y(j)*dt/(2.0d0*epsi(i,j,k)))
-    cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig_z(k)*dt/(2.0d0*epsi(i,j,k)))
+    ca_x(i,j,k) = (1.0d0-esig_x(i)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+esig_x(i)*dt/(2.0d0*epsi(i,j,k)))
+    ca_y(i,j,k) = (1.0d0-esig_y(j)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+esig_y(j)*dt/(2.0d0*epsi(i,j,k)))
+    ca_z(i,j,k) = (1.0d0-esig_z(k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+esig_z(k)*dt/(2.0d0*epsi(i,j,k)))
+    cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+esig_x(i)*dt/(2.0d0*epsi(i,j,k)))
+    cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+esig_y(j)*dt/(2.0d0*epsi(i,j,k)))
+    cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+esig_z(k)*dt/(2.0d0*epsi(i,j,k)))
 
     !saito system
    ! ca_x(i,j,k) = (1.0d0-sig(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
@@ -242,27 +354,27 @@ enddo
 
   !(+)の係数
 !   do i=1,ncpml
-!     sig_x(nx-(i-1))=sig_x(i)
-!     kappa_x(nx-(i-1))=kappa_x(i)
-!     a_x(nx-(i-1))=a_x(i)
+!     esig_x(nx-(i-1))=esig_x(i)
+!     ekappa_x(nx-(i-1))=ekappa_x(i)
+!     ae_x(nx-(i-1))=ae_x(i)
 !     kedx(nx-(i-1))=kedx(i)
 !     be_x(nx-(i-1))=be_x(i)
 !     ce_x(nx-(i-1))=ce_x(i)
 !   enddo
 
 !     do j=1,ncpml
-!     sig_y(ny-(j-1))=sig_y(j)
-!     kappa_y(ny-(j-1))=kappa_y(j)
-!     a_y(ny-(j-1))=a_y(j)
+!     esig_y(ny-(j-1))=esig_y(j)
+!     ekappa_y(ny-(j-1))=ekappa_y(j)
+!     ae_y(ny-(j-1))=ae_y(j)
 !     kedy(ny-(j-1))=kedy(j)
 !     be_y(ny-(j-1))=be_y(j)
 !     ce_y(ny-(j-1))=ce_y(j)
 !   enddo
 
 !       do k=1,ncpml
-!     sig_z(nz-(k-1))=sig_z(k)
-!     kappa_z(nz-(k-1))=kappa_z(k)
-!     a_z(nz-(k-1))=a_z(k)
+!     esig_z(nz-(k-1))=esig_z(k)
+!     ekappa_z(nz-(k-1))=ekappa_z(k)
+!     ae_z(nz-(k-1))=ae_z(k)
 !     kedz(nz-(k-1))=kedz(k)
 !     be_z(nz-(k-1))=be_z(k)
 !     ce_z(nz-(k-1))=ce_z(k)
