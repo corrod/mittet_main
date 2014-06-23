@@ -36,8 +36,11 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !     alpha(3,1:3) = (/1.17188d0,-0.06510d0,0.00469d0/)
 !     alpha(4,1:4) = (/1.19629d0,-0.07975d0,-0.00070d0/)
 
-!ver1 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
-    !Hx4
+
+
+!ver1 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444
+!ln=2 c1 = 1.125d0, c2 = -0.04167d0 ! from Tayor expansion
+!Hx4
     do k = 1,nz
        do j = 1,ny
            do i = 1,nx
@@ -46,7 +49,7 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
           enddo
       enddo
     enddo
-    !Hx4波動伝播
+!Hx4波動伝播
     do k = 2,nz-2
         do j = 2,ny-2
             do i = 2,nx-1
@@ -60,7 +63,7 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
     !ソース項
 !   Hx(x0,y0,z0) = Hx(x0,y0,z0) - Jh(istep)
 
-  !Hy4
+!Hy4
     do k = 1,nz
         do j = 1,ny
             do i = 1,nx
@@ -69,7 +72,7 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
           enddo
       enddo
     enddo
-    !Hy4波動伝播計算
+!Hy4波動伝播計算
     do k = 2,nz-2
         do j = 2,ny-1
             do i = 2,nx-2
@@ -83,7 +86,7 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
     !ソース項
   !   Hy(x0,y0,z0) = Hy(x0,y0,z0) - Jh(istep)
 
-  !Hz4
+!Hz4
     do k = 1,nz
        do j = 1,ny
          do i = 1,nx
@@ -92,7 +95,7 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
         enddo
       enddo
     enddo
-    !Hz4波動伝播計算
+!Hz4波動伝播計算
     do k = 2,nz-1
         do j = 2,ny-2
             do i = 2,nx-2
@@ -337,7 +340,7 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !
 !
 
-!ボツ
+!ボツ ln=2 オリジナルver
   !    !Hx係数の設定!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !    do k = 1,nz
 !       do j = 1,ny

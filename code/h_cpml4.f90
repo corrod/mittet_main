@@ -169,7 +169,8 @@ if(j<=ncpml) then
       kedy(j)    = ekappa_y(j)*dy
       khdy(j)    = mkappa_y(j)*dy
     endif
-!係数の設定
+
+!係数の設定z
 if(k<=ncpml) then
       esig_z(k)  = sig_max * ((dble(ncpml)-dble(k)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
       msig_z(k)  = sig_max * ((dble(ncpml)-dble(k)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い

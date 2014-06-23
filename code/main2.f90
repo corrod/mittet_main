@@ -14,32 +14,27 @@
 !   K'(x,omega')=K(x,omega)
 !***************************************************
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!      メインプログラム     !!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!ficticious wave domain
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 program main
     use const_para
     implicit none
 
     integer            :: istep !タイムステップ
     real(8)            :: t !経過時間
-    real(8)            :: Jn(nstep) !gaussian
     real(8)            :: Je(nstep) !電流源
     real(8)            :: Jh(nstep) !磁流源
     real(8)            :: sig(nx,ny,nz),myu(nx,ny,nz)
-!     real(8)            :: cmax
+    complex(kind(0d0)) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
+    complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 !     complex(kind(0d0)) :: Ex(-1:nx+2,-1:ny+2,-1:nz+2)
 !     complex(kind(0d0)) :: Ey(-1:nx+2,-1:ny+2,-1:nz+2)
 !     complex(kind(0d0)) :: Ez(-1:nx+2,-1:ny+2,-1:nz+2)
 !     complex(kind(0d0)) :: Hx(-1:nx+2,-1:ny+2,-1:nz+2)
 !     complex(kind(0d0)) :: Hy(-1:nx+2,-1:ny+2,-1:nz+2)
 !     complex(kind(0d0)) :: Hz(-1:nx+2,-1:ny+2,-1:nz+2)
-    complex(kind(0d0)) :: Ex(nx,ny,nz)
-    complex(kind(0d0)) :: Ey(nx,ny,nz)
-    complex(kind(0d0)) :: Ez(nx,ny,nz)
-    complex(kind(0d0)) :: Hx(nx,ny,nz)
-    complex(kind(0d0)) :: Hy(nx,ny,nz)
-    complex(kind(0d0)) :: Hz(nx,ny,nz)
+
     open(13,file='hz1100.d')
     open(14,file='hz1010.d')
     open(15,file='hz1020.d')
@@ -85,8 +80,9 @@ write(*,*) istep
 !     call cerjan_e(ex,ey,ez) !!!だめ
 !     call cerjan2_e(ex,ey,ez)  !cerjanの吸収境界!!!ok
 !     call mur_yz(ex,ey,ez) !Murの吸収境界
-!     call mur_zx(ex,ey,ez)
-!     call mur_xy(ex,ey,ez)
+!     call mur_zx(ex,ey,ez)!Murの吸収境界
+!     call mur_xy(ex,ey,ez)!Murの吸収境界
+!     call e_pml(ex,ey,ez,hx,hy,hz) !Normal PML
 
 t = t + dt*0.5d0  !時間の更新--------------------------
 
@@ -94,9 +90,10 @@ t = t + dt*0.5d0  !時間の更新--------------------------
     call Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 
     !境界条件 CPML_H
-   call CPML_H(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)
-!    call cerjan_h(hx,hy,hz) !!!だめ
+    call CPML_H(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)
+!     call cerjan_h(hx,hy,hz) !!!だめ
 !     call cerjan2_h(hx,hy,hz) !!!ok
+!     call h_pml(ex,ey,ez,hx,hy,hz)!Normal PML
 
 t = t + dt*0.5d0 !時間の更新---------------------------
 

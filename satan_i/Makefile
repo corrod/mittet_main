@@ -56,7 +56,7 @@ freq:		$(frequency)
 quad:		$(quadrup)
 	$(CC2) $(quadrup) -o $(PROG8)
 
-rec:		$(function) $(lattice) $(cpmlabc) $(rec2rec) 
+rec:		$(function) $(lattice) $(cpmlabc) $(rec2rec)
 	$(CC) $(function) $(lattice) $(cpmlabc) $(rec2rec) -o $(PROG4)
 
 wave:		$(wavetra)
@@ -65,8 +65,8 @@ wave:		$(wavetra)
 posi:		$(posiinf)
 	$(CC) $(posiinf) -o $(PROG3)
 
-clean:	
+clean:
 	rm -f *.out *.o *.mod
 
-cleandata:	
+cleandata:
 	rm -f *.out *.o *.mod ./data/* ./data2/*

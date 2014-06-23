@@ -31,12 +31,13 @@ subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
         end subroutine firstderiv_gauss
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! subroutine sinw(istep,t)
 !     use const_para
 !     implicit none
 !     real(8) :: signal(nstep)
-!     real(8) freq=100.0d0
+!     real(8),parameter ::freq=100.0d0
 !     signal(istep) = sin(2.0d0*pi*freq*istep*dt)
 ! end subroutine sinw
 
@@ -47,7 +48,7 @@ subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
 !     real(8) :: signal(nstep)
 !     real(8),parameter :: freq=1000.0d0
 !     signal(istep) = sin(2.0d0*pi*freq*(istep-nstep/2.0d0)*dt)/(2.0d0*pi*freq*istep*dt)
-! end subroutine sinw
+! end subroutine sinc
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! subroutine kukei(istep,t)
@@ -75,9 +76,10 @@ subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
 !     implicit none
 !         real(8) :: alpha
 !         real(8) :: beta
-!         real(8) :: fp =1.0d1
-!         real(8) :: Md =1.0d0
-!         real(8) :: phase = Md/fp
+!         real(8) :: signal(nstep)
+!         real(8),parameter :: fp =1.0d1
+!         real(8),parameter :: Md =1.0d0
+!         real(8),parameter :: phase = Md/fp
 
 !         alpha = (pi*fp)**2.0d0*(dble(istep-200)*dt-phase)**2.0d0
 !         beta=2.0d0*alpha - 1.0d0
@@ -91,11 +93,12 @@ subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
 !         real(8),parameter :: freq = 1.06d0
 !         real(8),parameter :: om = 2.0d0*pi*freq
 !         real(8),parameter :: Tw = 4.0d0*pi/om
+!         real(8) :: signal(nstep)
 !         integer           :: iTw
 !         iTw = int(Tw/dt)
 
 !         if(istep<iTw) then
-!             signal(istep) = 0.5d0*(1.0d0-cos(pi*dble(istep)*dt/Tw))*sin(om*istep*dt)
+!             signal(istep) = 0.5d0*(1.0d0-cos(pi*istep*dt/Tw)*sin(om*istep*dt))
 !             elseif(iTw<=istep<nstep) then
 !                 signal(istep) = sin(om*istep*dt)
 !             endif
@@ -109,10 +112,11 @@ subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
 !     real(8),parameter :: t0 = pi/om
 !     real(8),parameter :: alpha = (2.0d0/t0)**2.0d0
 !     real(8),parameter :: wc = 1.0d0*pi/2.0d0/t0
+!     real(8) :: signal(nstep)
 !     integer,parameter :: it0 = int(2.0d0*t0/dt)
 
 !     if(istep<it0) then
-!         signal(istep) = exp(-alpha*(istep*dt-t0)**2)) * cos(wc*(istep*dt-t0))
+!         signal(istep) = exp(-alpha*(istep*dt-t0)**2) * cos(wc*(istep*dt-t0))
 !     elseif(2.0d0*dt<ntstep) then
 !         signal(istep) =0.0d0
 !     endif
@@ -123,6 +127,7 @@ subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
 !     use const_para
 !     implicit none
 !     real(8) :: ReF,ImF,om
+!     real(8) :: signal(nstep)
 !     integer :: n
 
 !     om = 1.0d0/nstep/dt
@@ -131,65 +136,11 @@ subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
 !     if(n<nstep) then
 !         ReF=0.0d0
 !         Imf=0.0d0
-!         if(k<nstep) then
+!         elseif(k<nstep) then
 !             ReF = ReF + signal(k) * cos(2.0d0*pi*k*n/nstep)
 !             ImF = ImF + signal(k) * sin(2.0d0*pi*k*n/nstep)
 !         endif
 !             enddo
 !                 enddo
 !         end subroutine fourier1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

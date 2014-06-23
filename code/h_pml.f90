@@ -1,11 +1,87 @@
-subroutine h_pml
-  use fdtd
+subroutine h_pml(ex,ey,ez,hx,hy,hz)
+  use const_para
   implicit none
-  integer :: l,i,j,k
-  
+
+  integer,parameter :: npml = 5 !PML層数 4~16
+  integer,parameter :: M = 3 !2~4
+  real(8),parameter :: Rcoef = 0.01d0!-120.0d0 !反射係数 |R(0)| !R should be [10^-2, 10^-12]
+  integer :: l
+  integer :: i0,i1,j0,j1,k0,k1,l1,l2,l3,lpmlst(6)
+  real(8) :: lpmlii(6,2),lpmljj(6,2),lpmlkk(6,2)
+  real(8) :: exy(nx,ny,nz),exz(nx,ny,nz),eyx(nx,ny,nz),eyz(nx,ny,nz),ezx(nx,ny,nz),ezy(nx,ny,nz)
+  real(8) :: hxy(nx,ny,nz),hxz(nx,ny,nz),hyx(nx,ny,nz),hyz(nx,ny,nz),hzx(nx,ny,nz),hzy(nx,ny,nz)
+  real(8) :: cxe(nx),cye(ny),cze(nz)
+  real(8) :: cxh(nx),cyh(ny),czh(nz)
+  real(8) :: cxel(nx),cyel(ny),czel(nz)
+  real(8) :: cxhl(nx),cyhl(ny),czhl(nz)
+  real(8) :: shx,shy,shz,sex,sey,sez
+  real(8) :: sigmax
+
+    sigmax = - (M+1)*epsi0*cmax/2.0d0/dble(npml)/dx *log(1.0d0/Rcoef)
+
+    do i=1,npml
+    sig(i) = sigmax * (dble(i)-1.0d0/2.0d0)/dble(npml)**M
+    enddo
+
+
+    do i=1,npml
+      do j=1,npml
+        do k=1,npml
+      cxh(i) = (1.0d0 - sig(i)*dt/2.0d0/epsi0) /(1.0d0 + sig(i)*dt/2.0d0/epsi0)
+      cyh(j) = (1.0d0 - sig(j)*dt/2.0d0/epsi0) /(1.0d0 + sig(j)*dt/2.0d0/epsi0)
+      czh(k) = (1.0d0 - sig(k)*dt/2.0d0/epsi0) /(1.0d0 + sig(k)*dt/2.0d0/epsi0)
+
+      cxhl(i) = - (dt/myu0) / (1.0d0 + sig(i)*dt/2.0d0/epsi0)/dx
+      cyhl(j) = - (dt/myu0) / (1.0d0 + sig(j)*dt/2.0d0/epsi0)/dy
+      czhl(k) = - (dt/myu0) / (1.0d0 + sig(k)*dt/2.0d0/epsi0)/dz
+        enddo
+      enddo
+    enddo
+
+    !i=1
+   lpmlii(1,1)=1
+   lpmljj(1,1)=1
+   lpmlkk(1,1)=1
+   lpmlii(1,2)=npml+1
+   lpmljj(1,2)=ny
+   lpmlkk(1,2)=nz
+   lpmlii(2,1)=nx-npml
+   lpmljj(2,1)=1
+   lpmlkk(2,1)=1
+   lpmlii(2,2)=nx
+   lpmljj(2,2)=ny
+   lpmlkk(2,2)=nz
+
+   lpmlii(3,1)=1
+   lpmljj(3,1)=1
+   lpmlkk(3,1)=1
+   lpmlii(3,2)=nx
+   lpmljj(3,2)=npml+1
+   lpmlkk(3,2)=nz
+   lpmlii(4,1)=1
+   lpmljj(4,1)=ny-npml
+   lpmlkk(4,1)=1
+   lpmlii(4,2)=nx
+   lpmljj(4,2)=ny
+   lpmlkk(4,2)=nz
+
+   lpmlii(5,1)=1
+   lpmljj(5,1)=1
+   lpmlkk(5,1)=1
+   lpmlii(5,2)=nx
+   lpmljj(5,2)=ny
+   lpmlkk(5,2)=npml+1
+   lpmlii(6,1)=1
+   lpmljj(6,1)=1
+   lpmlkk(6,1)=nz-npml
+   lpmlii(6,2)=nx
+   lpmljj(6,2)=ny
+   lpmlkk(6,2)=nz
+
+
   do l=1,6
 
-     i0=lpmlii(l,1)
+     i0=lpmlii(l,1) !l=1 : i-1, l=2 : i=nxに接する層
      i1=lpmlii(l,2)
      j0=lpmljj(l,1)
      j1=lpmljj(l,2)
@@ -20,9 +96,9 @@ subroutine h_pml
               hxz(i,j,k)=czh(k)*hxz(i,j,k)+czhl(k)*(ey(i,j,k-1)-ey(i,j,k))
               hx(i,j,k)=hxy(i,j,k)+hxz(i,j,k)
 !              l1=l1+1
-           end do
-        end do
-     end do
+           enddo
+        enddo
+     enddo
 
 !     l2=lpmlst(l)
      do i=i0+1,i1-1
@@ -32,9 +108,9 @@ subroutine h_pml
               hyz(i,j,k)=czh(k)*hyz(i,j,k)+cyhl(k)*(ex(i,j,k)-ex(i,j,k-1))
               hy(i,j,k)=hyx(i,j,k)+hyz(i,j,k)
 !              l2=l2+1
-           end do
-        end do
-     end do
+           enddo
+        enddo
+     enddo
 
 !      l3=lpmlst(l)
      do i=i0+1,i1-1
@@ -44,9 +120,12 @@ subroutine h_pml
               hzy(i,j,k)=cyh(j)*hzy(i,j,k)+cyhl(j)*(ex(i,j-1,k)-ex(i,j,k))
               hz(i,j,k)=hzx(i,j,k)+hzy(i,j,k)
 !              l3=l3+1
-           end do
-        end do
-     end do
-  end do
+           enddo
+        enddo
+     enddo
 
-end subroutine
+enddo  !!!***
+
+!return  !!!***
+
+end subroutine h_pml
