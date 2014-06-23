@@ -9,7 +9,7 @@ program f_to_d
 		implicit none
 
     		integer                         :: n,nd,ios
-    		!real(8)                         :: omega 
+    		!real(8)                        :: omega
         real(8), allocatable            :: inp(:), t(:), f(:), p(:)
         complex(kind(0d0)), allocatable :: c(:)
     	!	complex(kind(0d0)), allocatable :: Gxn(:,:,:),Gyn(:,:,:),Gzn(:,:,:)
@@ -23,7 +23,7 @@ program f_to_d
 
 	! FFTW3を呼び出すのに必要なヘッダーファイルを include する
     include 'fftw3.f'
- 
+
     !!! 開始------------------------------------------------------------
     !ファイル（データ）の長さNDを調べる
     open(51,file='inp1.dat',action='read')
@@ -43,7 +43,7 @@ program f_to_d
     !配列確保
     allocate(t(1:n),inp(1:n),c(1:n/2),f(1:n/2),p(1:n/2))
 
-	
+
     !fftするデータの読み込み
     open(51,file='inp1.dat',action='read')
       do i=1,nd
@@ -108,13 +108,13 @@ program f_to_d
 
  !    allocate(t(1:n),jh(1:n),c(1:n/2),f(1:n/2),p(1:n/2))
 !    write(*,*) 'データ数nd,nの２乗数',nd,n
-    
+
  !   if (nd>n) then
  !!   write(*,*) "nd must < n"
   !  endif
 
   !  allocate(jh(1:n))
-    
+
     !fftするデータの読み込み
 !	open(52,file=inp2,action='read')          !!!!!!!!!!!!!!  n>ndが崩れるときがある
  !   read(52,*) jh(1:nd)

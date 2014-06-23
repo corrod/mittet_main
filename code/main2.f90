@@ -76,9 +76,9 @@ write(*,*) istep
     call Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)
 
     !境界条件 CPML_E
-    call CPML_E(ex,ey,ez,hx,hy,hz,sig)!,cmax)  !
+!     call CPML_E(ex,ey,ez,hx,hy,hz,sig)!,cmax)  !
 !     call cerjan_e(ex,ey,ez) !!!だめ
-!     call cerjan2_e(ex,ey,ez)  !cerjanの吸収境界!!!ok
+    call cerjan2_e(ex,ey,ez)  !cerjanの吸収境界!!!ok
 !     call mur_yz(ex,ey,ez) !Murの吸収境界
 !     call mur_zx(ex,ey,ez)!Murの吸収境界
 !     call mur_xy(ex,ey,ez)!Murの吸収境界
@@ -90,9 +90,9 @@ t = t + dt*0.5d0  !時間の更新--------------------------
     call Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 
     !境界条件 CPML_H
-    call CPML_H(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)
+!     call CPML_H(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)
 !     call cerjan_h(hx,hy,hz) !!!だめ
-!     call cerjan2_h(hx,hy,hz) !!!ok
+    call cerjan2_h(hx,hy,hz) !!!ok
 !     call h_pml(ex,ey,ez,hx,hy,hz)!Normal PML
 
 t = t + dt*0.5d0 !時間の更新---------------------------

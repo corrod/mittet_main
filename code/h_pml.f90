@@ -15,7 +15,9 @@ subroutine h_pml(ex,ey,ez,hx,hy,hz)
   real(8) :: cxel(nx),cyel(ny),czel(nz)
   real(8) :: cxhl(nx),cyhl(ny),czhl(nz)
   real(8) :: shx,shy,shz,sex,sey,sez
-  real(8) :: sigmax
+  real(8) :: sigmax,sig(npml)
+  complex(kind(0d0)),intent(in) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
+  complex(kind(0d0)),intent(inout) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
     sigmax = - (M+1)*epsi0*cmax/2.0d0/dble(npml)/dx *log(1.0d0/Rcoef)
 
@@ -31,9 +33,9 @@ subroutine h_pml(ex,ey,ez,hx,hy,hz)
       cyh(j) = (1.0d0 - sig(j)*dt/2.0d0/epsi0) /(1.0d0 + sig(j)*dt/2.0d0/epsi0)
       czh(k) = (1.0d0 - sig(k)*dt/2.0d0/epsi0) /(1.0d0 + sig(k)*dt/2.0d0/epsi0)
 
-      cxhl(i) = - (dt/myu0) / (1.0d0 + sig(i)*dt/2.0d0/epsi0)/dx
-      cyhl(j) = - (dt/myu0) / (1.0d0 + sig(j)*dt/2.0d0/epsi0)/dy
-      czhl(k) = - (dt/myu0) / (1.0d0 + sig(k)*dt/2.0d0/epsi0)/dz
+      cxhl(i) = - (dt/MU0) / (1.0d0 + sig(i)*dt/2.0d0/epsi0)/dx
+      cyhl(j) = - (dt/MU0) / (1.0d0 + sig(j)*dt/2.0d0/epsi0)/dy
+      czhl(k) = - (dt/MU0) / (1.0d0 + sig(k)*dt/2.0d0/epsi0)/dz
         enddo
       enddo
     enddo

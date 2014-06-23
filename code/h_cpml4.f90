@@ -48,10 +48,10 @@ subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sig,myu)!,cmax)
     complex(kind(0d0))  :: psi_Hzx1(nx,ny,nz),psi_Hyx1(nx,ny,nz)
     complex(kind(0d0))  :: psi_Hxy1(nx,ny,nz),psi_Hzy1(nx,ny,nz)
     complex(kind(0d0))  :: psi_Hyz1(nx,ny,nz),psi_Hxz1(nx,ny,nz)
+    complex(kind(0d0)), intent(in) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
+    complex(kind(0d0)), intent(inout) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 !     complex(kind(0d0)), intent(in)    :: Ex(-1:nx+2,-1:ny+2,-1:nz+2),Ey(-1:nx+2,-1:ny+2,-1:nz+2),Ez(-1:nx+2,-1:ny+2,-1:nz+2)
 !     complex(kind(0d0)), intent(inout) :: Hx(-1:nx+2,-1:ny+2,-1:nz+2),Hy(-1:nx+2,-1:ny+2,-1:nz+2),Hz(-1:nx+2,-1:ny+2,-1:nz+2)
-     complex(kind(0d0)), intent(in) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
-     complex(kind(0d0)), intent(inout) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
    !Holberg optimization scheme
   !  alpha(1,1)   = 1.00235d0
     !alpha(2,1:2) = (/1.14443d0,-0.04886d0/)

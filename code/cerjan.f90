@@ -5,7 +5,7 @@
 subroutine cerjan_e(ex,ey,ez)
 	use const_para
 	implicit none
-		integer, parameter :: beta = 20
+		integer, parameter :: beta = 20  !吸収層数
 		real(8), parameter :: alpha = 5.5d-2
 	    complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
 
@@ -15,7 +15,7 @@ subroutine cerjan_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -25,7 +25,7 @@ subroutine cerjan_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -35,7 +35,7 @@ subroutine cerjan_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -47,7 +47,7 @@ subroutine cerjan_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -57,7 +57,7 @@ subroutine cerjan_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -67,7 +67,7 @@ subroutine cerjan_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -85,7 +85,7 @@ end subroutine cerjan_e
 subroutine cerjan_h(hx,hy,hz)
 	use const_para
 	implicit none
-		integer, parameter :: beta = 20
+		integer, parameter :: beta = 20 !吸収層数
 		real(8), parameter :: alpha = 5.5d-2
 	    complex(kind(0d0)), intent(inout) :: hx(nx,ny,nz),hy(nx,ny,nz),hz(nx,ny,nz)
 
@@ -95,7 +95,7 @@ subroutine cerjan_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -105,7 +105,7 @@ subroutine cerjan_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -115,7 +115,7 @@ subroutine cerjan_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -127,7 +127,7 @@ subroutine cerjan_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -137,7 +137,7 @@ subroutine cerjan_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -147,7 +147,7 @@ subroutine cerjan_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -176,7 +176,7 @@ subroutine cerjan2_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -186,7 +186,7 @@ subroutine cerjan2_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -196,7 +196,7 @@ subroutine cerjan2_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -208,7 +208,7 @@ subroutine cerjan2_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -218,7 +218,7 @@ subroutine cerjan2_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -228,7 +228,7 @@ subroutine cerjan2_e(ex,ey,ez)
 	    			ex(i,j,k)= ex(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
 	    			ey(i,j,k)= ey(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
 	    			ez(i,j,k)= ez(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -265,7 +265,7 @@ subroutine cerjan2_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-i)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -275,7 +275,7 @@ subroutine cerjan2_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-j)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -285,7 +285,7 @@ subroutine cerjan2_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-k)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -297,7 +297,7 @@ subroutine cerjan2_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-(nx-i)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -307,7 +307,7 @@ subroutine cerjan2_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-(ny-j)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 
@@ -317,7 +317,7 @@ subroutine cerjan2_h(hx,hy,hz)
 	    			hx(i,j,k)= hx(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
 	    			hy(i,j,k)= hy(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
 	    			hz(i,j,k)= hz(i,j,k)*exp(-alpha*dble(beta-(nz-k)+1)**2.0d0)
-	    		enddo	
+	    		enddo
 	    	enddo
 	    enddo
 

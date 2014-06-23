@@ -7,7 +7,7 @@ subroutine f_to_d
 
 end subroutine f_to_d
 
-!!by kusu
+!!by ku
 subroutine f_to_d_matrix
 	use const_para
 	implicit none
@@ -19,7 +19,7 @@ subroutine f_to_d_matrix
 		enddo
 end subroutine f_to_d_matrix
 
-!by imamu
+!by im
 subroutine laplace_fft
 	use const_para
 	implicit none
