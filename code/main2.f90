@@ -12,6 +12,9 @@
 !   H'(x,omega')=sqrt(-iomega/2omega0)H(x,omega)
 !   J'(x,omega')=sqrt(-iomega/2omega0)J(x,omega)
 !   K'(x,omega')=K(x,omega)
+!
+! 組み込み手続きは必ず"総称名"でつかうこと!
+!
 !***************************************************
 
 

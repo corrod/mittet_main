@@ -14,7 +14,7 @@ subroutine f_to_d_matrix
 
 		do j=1,s
 			do k=1,s
-				A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1/s)))*cexp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/s))
+				A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ) )   *exp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ))
 			enddo
 		enddo
 end subroutine f_to_d_matrix
@@ -34,10 +34,10 @@ subroutine laplace_fft
 
 		do k=1,it
 			EX_w(n) = EX_w(n) &
-					 + EX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *cexp(I_u*sqrt(omega0*om*n)*k*dt)
+					 + EX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
 
 			JX_w(n) = JX_w(n) &
-					+ csqrt(-2.0d0*omega0/I_u/om/n)*JX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *cexp(I_u*sqrt(omega0*om*n)*k*dt)
+					+ sqrt(-2.0d0*omega0/I_u/om/dble(n)) * JX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
 		enddo
 			JX_w(0) = 2.0d0 * omega0  !!!要確認
 

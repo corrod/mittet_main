@@ -64,17 +64,17 @@ subroutine fourier_trans()
 		om = 2.0d0*pi/N/dt
 		Jx_f(n) = 0.0d0
 		do tt=1,N
-			JX_f(n) = JX_f(n) + JX_f(n) *cexp(I*2.0d0*pi*tt*n/N)
+			JX_f(n) = JX_f(n) + JX_f(n) *exp(I_u*2.0d0*pi*tt*n/dble(N))
 		enddo
-			JX_w(n) = csqrt(-I_u*om*n/2.0d0/omega0) * JX_f(n)
+			JX_w(n) = sqrt(-I_u*om*dble(n)/2.0d0/omega0) * JX_f(n)
 	enddo
 
 	open(1,file='inv_JF')
-		write(1) om*n, real(JX_f(n)),real(I*JX_f(n)),real(JX_f(n))*real(JX_f(n))+real(I*JX_f(n))*real(I*JX_f(n)),atan(real(JX_f(n)*I)/real(JX_f(n)))
+		write(1) om*n, real(JX_f(n)),real(I_u*JX_f(n)),real(JX_f(n))*real(JX_f(n))+real(I_u*JX_f(n))*real(I_u*JX_f(n)),atan(real(JX_f(n)*I_u)/real(JX_f(n)))
 		close(1)
 
 	open(2)
-		write(2,file='inv_JW') om*n, real(JX_w[n]),real(I*JX_w[n]), real(JX_w[n])*real(JX_w[n])+real(I*JX_w[n])*real(I*JX_w[n]),atan(real(JX_w[n]*I)/real(JX_w[n]))
+		write(2,file='inv_JW') om*n, real(JX_w[n]),real(I_u*JX_w[n]), real(JX_w[n])*real(JX_w[n])+real(I_u*JX_w[n])*real(I_u*JX_w[n]),atan(real(JX_w[n]*I_u)/real(JX_w[n]))
 		close(2)
 	end subroutine fourier_trans
 
@@ -87,7 +87,7 @@ subroutine inv_fourier
 	do k=1,N
 		om = 2.0d0*pi/N/dt
 		do n=1,N
-			JX_t(k) =JX_t(k) + (I+1) * csqrt(-I/2.0d0)/4.0d0/pi+JX_f(n)*cexp(sqrt(om*n*omega0)*k*dt)*cexp(-I*sqrt(om*n*omega0)*k*t)
+			JX_t(k) =JX_t(k) + (I_u+1) * sqrt(-I_u/2.0d0)/4.0d0/pi+JX_f(n)*exp(sqrt(om*n*omega0)*k*dt)*exp(-I_u*sqrt(om*dble(n)*omega0)*dble(k)*t)
 
 	open()
 	write() dt*k,real(JX_t(k)),real(I*JX_t(k))
