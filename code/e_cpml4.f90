@@ -49,10 +49,10 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig)!,cmax)
     complex(kind(0d0))  :: psi_Ezx1(nx,ny,nz),psi_Eyx1(nx,ny,nz)
     complex(kind(0d0))  :: psi_Exy1(nx,ny,nz),psi_Ezy1(nx,ny,nz)
     complex(kind(0d0))  :: psi_Eyz1(nx,ny,nz),psi_Exz1(nx,ny,nz)
-!     complex(kind(0d0)), intent(inout) :: Ex(-1:nx+2,-1:ny+2,-1:nz+2),Ey(-1:nx+2,-1:ny+2,-1:nz+2),Ez(-1:nx+2,-1:ny+2,-1:nz+2)
-!     complex(kind(0d0)), intent(in)    :: Hx(-1:nx+2,-1:ny+2,-1:nz+2),Hy(-1:nx+2,-1:ny+2,-1:nz+2),Hz(-1:nx+2,-1:ny+2,-1:nz+2)
     complex(kind(0d0)), intent(inout) ::Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in) ::   Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
+!     complex(kind(0d0)), intent(inout) :: Ex(-1:nx+2,-1:ny+2,-1:nz+2),Ey(-1:nx+2,-1:ny+2,-1:nz+2),Ez(-1:nx+2,-1:ny+2,-1:nz+2)
+!     complex(kind(0d0)), intent(in)    :: Hx(-1:nx+2,-1:ny+2,-1:nz+2),Hy(-1:nx+2,-1:ny+2,-1:nz+2),Hz(-1:nx+2,-1:ny+2,-1:nz+2)
 
     epsi(1:nx,1:ny,1:nz)=sig(1:nx,1:ny,1:nz)/(2.0d0*omega0)
     sig_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) * optToMax  !!x方向だけ？
@@ -170,7 +170,8 @@ if(j<=ncpml) then
       kedy(j)    = ekappa_y(j)*dy
       khdy(j)    = mkappa_y(j)*dy
     endif
-!係数の設定
+
+!係数の設定z
 if(k<=ncpml) then
       esig_z(k)  = sig_max * ((dble(ncpml)-dble(k)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
       msig_z(k)  = sig_max * ((dble(ncpml)-dble(k)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
@@ -653,8 +654,15 @@ enddo
 !       enddo
 !   enddo
 
+
+
+
+
+
+
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!field-update loop!!!!!!!!!!!!!!!!!!!!!!!!!
-!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      !x-update
 !    do  k=2,nz-1
 !        do  j=2,ny-1

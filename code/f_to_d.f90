@@ -14,7 +14,7 @@ subroutine f_to_d_matrix
 
 		do j=1,s
 			do k=1,s
-				A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1/s)))*exp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/s))
+				A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1/s)))*cexp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/s))
 			enddo
 		enddo
 end subroutine f_to_d_matrix

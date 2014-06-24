@@ -162,7 +162,7 @@ end subroutine cerjan_h
 
 
 
-
+!better
 subroutine cerjan2_e(ex,ey,ez)
 	use const_para
 	implicit none
@@ -248,10 +248,7 @@ end subroutine cerjan2_e
 
 
 
-
-
-
-
+!better
 subroutine cerjan2_h(hx,hy,hz)
 	use const_para
 	implicit none

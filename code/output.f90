@@ -40,18 +40,18 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     endif
 
 !!!!境界の監視
-    if (mod(istep,30)==0) then
+    if (mod(istep,50)==0) then
    l=10000+istep/50
     write(name,"(I5)") l
     open(9,file="bd"//name//".d")
             do i=1,nx
-                 write(7,*) t,i,real(hz(i,y0,z0))
+                 write(9,*) t,i,real(hz(i,y0,z0))
             enddo
     close(9)
     endif
             end subroutine output_EH
 
-            
+
  !   open(1,file='Exfield.d', position='append')
  !   open(2,file='Eyfield.d', position='append')
  !   open(3,file='Ezfield.d', position='append')
