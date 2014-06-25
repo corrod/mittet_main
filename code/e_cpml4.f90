@@ -31,6 +31,7 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz,sig)!,cmax)
     real(8), parameter  :: optToMax  = 10.0d0 !10.0d0
     real(8), parameter  :: Rcoef     = 0.01d0 !R should be [10^-2, 10^-12]
     real(8), parameter  :: c1        = 1.125d0, c2 = -0.04167d0 !pml4の係数 from taylor Expansion
+!     real(8), parameter  :: c1=1.14443d0,c2=-0.04886d0 !from optimization scheme
     real(8),parameter   :: epsir     = 1.0d0
     real(8)             :: delta = ncpml*dx
 !     real(8), intent(in) :: cmax
@@ -218,136 +219,6 @@ if(k<=ncpml) then
     endif
 
 
-
-!do j = 1,ny
-!  if(j<=ncpml) then
-!    esig_y(j)   = sig_max * ((dble(ncpml)-dble(j))/(dble(ncpml)-1.0d0))**dble(nn+order)
-!    ekappa_y(j) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(ncpml)-dble(j))/(dble(ncpml)-1.0d0) )**dble(nn)
-!    ae_y(j)     = a_max * ((dble(j)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
-!
-!    be_y(j)    = exp(-(esig_y(j)/ekappa_y(j)+ae_y(j))*dt) !/epsi0)
-!    ce_y(j)    = esig_y(j)*(be_y(j)-1.0d0) / (esig_y(j)+ekappa_y(j)*ae_y(j)) / ekappa_y(j)
-!    kedy(j)    = ekappa_y(j)*dy  !!!
-!
-!  else if(j>=ny-ncpml+1) then
-!    esig_y(j)   = sig_max * ((dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
-!    ekappa_y(j) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(j)-dble(ny)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
-!    ae_y(j)     = a_max * ((dble(-j)+dble(ny)  )/(dble(ncpml)-1.0d0))**dble(ma)
-!
-!    be_y(j)    = exp(-(esig_y(j)/ekappa_y(j)+ae_y(j))*dt) !/epsi0)
-!    ce_y(j)    = esig_y(j)*(be_y(j)-1.0d0) / (esig_y(j)+ekappa_y(j)*ae_y(j)) / ekappa_y(j)
-!    kedy(j)    = ekappa_y(j)*dy  !!!
-!
-!  else
-!    esig_y(j)   = 0.0d0
-!    ekappa_y(j) = 1.0d0
-!    ae_y(j)     = 0.0d0
-!    be_y(j)    = 0.0d0
-!    ce_y(j)    = 0.0d0
-!    kedy(j)    = ekappa_y(j)*dy
-!      endif
-!  enddo
-!
-!
-!!係数の設定ze
-!
-!do k = 1,nz
-!  if(k<=ncpml) then
-!    esig_z(k)   = sig_max * ((dble(ncpml)-dble(k))/(dble(ncpml)-1.0d0))**dble(nn+order)
-!    ekappa_z(k) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(ncpml)-dble(k))/(dble(ncpml)-1.0d0) )**dble(nn)
-!    ae_z(k)     = a_max*((dble(k)-1.0d0)/(dble(ncpml)-1.0d0))**dble(ma)
-!
-!    be_z(k)    = exp(-(esig_z(k)/ekappa_z(k)+ae_z(k))*dt) !/epsi0)
-!    ce_z(k)    = esig_z(k)*(be_z(k)-1.0d0) / (esig_z(k)+ekappa_z(k)*ae_z(k)) / ekappa_z(k)
-!    kedz(k)    = ekappa_z(k)*dz  !!!
-!
-!  else if(k>=nz-ncpml+1) then
-!    esig_z(k)   = sig_max * ((dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
-!    ekappa_z(k) = 1.0d0 + (kappa_max-1.0d0) * ( (dble(k)-dble(nz)-1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0) )**dble(nn)
-!    ae_z(k)     = a_max * ((dble(-k)+dble(nz)  )/(dble(ncpml)-1.0d0))**dble(ma)
-!
-!    be_z(k)    = exp(-(esig_z(k)/ekappa_z(k)+ae_z(k))*dt) !/epsi0)
-!    ce_z(k)    = esig_z(k)*(be_z(k)-1.0d0) / (esig_z(k)+ekappa_z(k)*ae_z(k)) / ekappa_z(k)
-!    kedz(k)    = ekappa_z(k)*dz  !!!
-!
-!  else
-!    esig_z(k)   = 0.0d0
-!    ekappa_z(k) = 1.0d0
-!    ae_z(k)     = 0.0d0
-!    be_z(k)    = 0.0d0
-!    ce_z(k)    = 0.0d0
-!    kedz(k)    = ekappa_z(k)*dz
-!  endif
-!enddo
-
-
-do k=1,nz
-  do j=1,ny
-    do i=1,nx
-    !imamu system
-    ca_x(i,j,k) = (1.0d0-esig_x(i)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+esig_x(i)*dt/(2.0d0*epsi(i,j,k)))
-    ca_y(i,j,k) = (1.0d0-esig_y(j)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+esig_y(j)*dt/(2.0d0*epsi(i,j,k)))
-    ca_z(i,j,k) = (1.0d0-esig_z(k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+esig_z(k)*dt/(2.0d0*epsi(i,j,k)))
-    cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+esig_x(i)*dt/(2.0d0*epsi(i,j,k)))
-    cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+esig_y(j)*dt/(2.0d0*epsi(i,j,k)))
-    cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+esig_z(k)*dt/(2.0d0*epsi(i,j,k)))
-
-    !saito system
-   ! ca_x(i,j,k) = (1.0d0-sig(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-   ! ca_y(i,j,k) = (1.0d0-sig(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-   ! ca_z(i,j,k) = (1.0d0-sig(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-   ! cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-   ! cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-   ! cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
-    enddo
-  enddo
-enddo
-
-!for(i=0;i<ix;i++){
-!            ijk  = k*iy*ix + j*ix + i;
-!            eps2 = sig2[ijk] /2.f /omega_0;
-!            // CPML Coefficient
-!            // coef1
-!            ca_x[ijk]   = (1.0f - ((esigx[i]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((esigx[i]*dt)/(2.f*eps2)));
-!            ca_y[ijk]   = (1.0f - ((esigy[j]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((esigy[j]*dt)/(2.f*eps2)));
-!            ca_z[ijk]   = (1.0f - ((esigz[k]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((esigz[k]*dt)/(2.f*eps2)));
-!            // coef2
-!            da_x[ijk]   = (1.0f - ((msigx[i]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((msigx[i]*dt)/(2.f*eps2)));
-!            da_y[ijk]   = (1.0f - ((msigy[j]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((msigy[j]*dt)/(2.f*eps2)));
-!            da_z[ijk]   = (1.0f - ((msigz[k]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((msigz[k]*dt)/(2.f*eps2)));
-!            // coef3
-!            cb_x[ijk] = dt/eps2 /(1.f+(esigx[i]*dt)/(2.f*eps2));
-!            cb_y[ijk] = dt/eps2 /(1.f+(esigy[j]*dt)/(2.f*eps2));
-!            cb_z[ijk] = dt/eps2 /(1.f+(esigz[k]*dt)/(2.f*eps2));
-!            // coef4
-!            db_x[ijk] = dt/MU0 /(1.f+(msigx[i]*dt)/(2.f*eps2));
-!            db_y[ijk] = dt/MU0 /(1.f+(msigy[j]*dt)/(2.f*eps2));
-!            db_z[ijk] = dt/MU0 /(1.f+(msigz[k]*dt)/(2.f*eps2));
-
-
-! int i,j,k,ijk;
-!  double sigx2,gradmax;
-!  FILE *ophi;
-!  sigx2 = sig[0];
-!  gradmax = grad[0];
-!  for(k=0;k<iz;k++){
-!    for(j=0;j<iy;j++){
-!      for(i=0;i<ix;i++){
-!        ijk = k*ix*iy + j*ix + i;
-!        if(k<=iseabed){
-!          if(sig[ijk]  > sigx2)  sigx2 = sig[ijk];
-!          if(grad[ijk] > gradmax)  gradmax = grad[ijk];
-!        }
-!      }
-!    }
-!  }
-
 !  scaler = 0.01f * sigx2/gradmax;
 !  //scaler = 0.01f * sigx2;
 !sig2[ijk] = sig[ijk] - scaler * grad[ijk];
@@ -382,6 +253,27 @@ enddo
 !   enddo
 
 
+do k=1,nz
+  do j=1,ny
+    do i=1,nx
+    !imamu system
+    ca_x(i,j,k) = (1.0d0-esig_x(i)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+esig_x(i)*dt/(2.0d0*epsi(i,j,k)))
+    ca_y(i,j,k) = (1.0d0-esig_y(j)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+esig_y(j)*dt/(2.0d0*epsi(i,j,k)))
+    ca_z(i,j,k) = (1.0d0-esig_z(k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+esig_z(k)*dt/(2.0d0*epsi(i,j,k)))
+    cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+esig_x(i)*dt/(2.0d0*epsi(i,j,k)))
+    cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+esig_y(j)*dt/(2.0d0*epsi(i,j,k)))
+    cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+esig_z(k)*dt/(2.0d0*epsi(i,j,k)))
+
+    !saito system
+   ! ca_x(i,j,k) = (1.0d0-sig(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   ! ca_y(i,j,k) = (1.0d0-sig(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   ! ca_z(i,j,k) = (1.0d0-sig(i,j,k)*dt/(2.0d0*epsi(i,j,k))) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   ! cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   ! cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   ! cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+    enddo
+  enddo
+enddo
 
 
 
@@ -471,6 +363,41 @@ enddo
     enddo
 
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!field-update loop!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     !x-update
+!    do  k=2,nz-1
+!        do  j=2,ny-1
+!           do i=1,nx-1
+!               Ex(i,j,k) = ca_x(i,j,k)*Ex(i,j,k)&
+!                           +cb_x(i,j,k)*((Hz(i,j,k)-Hz(i,j-1,k))/kedy(j) &
+!                                       - (Hy(i,j,k)-Hy(i,j,k-1))/kedz(k))
+!            enddo
+!        enddo
+!    enddo
+
+!     !y-update
+!    do  k=2,nz-1
+!        do  j=1,ny-1
+!            do i=2,nx-1
+!                Ey(i,j,k) = ca_y(i,j,k)*Ey(i,j,k)&
+!                           +cb_y(i,j,k)*((Hx(i,j,k)-Hx(i,j,k-1))/kedz(k) &
+!                                       - (Hz(i,j,k)-Hz(i-1,j,k))/kedx(i))
+!            enddo
+!        enddo
+!    enddo
+
+!     !z-update
+!     do k=1,nz-1
+!       do  j=2,ny-1
+!            do  i=2,nx-1
+!                Ez(i,j,k) = ca_z(i,j,k)*Ez(i,j,k)&
+!                           +cb_z(i,j,k)*((Hy(i,j,k)-Hy(i-1,j,k))/kedx(i) &
+!                                       - (Hx(i,j,k)-Hx(i,j-1,k))/kedy(j))
+!            enddo
+!        enddo
+!     enddo
+        end subroutine CPML_E
 
 
 
@@ -661,38 +588,3 @@ enddo
 
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!field-update loop!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     !x-update
-!    do  k=2,nz-1
-!        do  j=2,ny-1
-!           do i=1,nx-1
-!               Ex(i,j,k) = ca_x(i,j,k)*Ex(i,j,k)&
-!                           +cb_x(i,j,k)*((Hz(i,j,k)-Hz(i,j-1,k))/kedy(j) &
-!                                       - (Hy(i,j,k)-Hy(i,j,k-1))/kedz(k))
-!            enddo
-!        enddo
-!    enddo
-
-!     !y-update
-!    do  k=2,nz-1
-!        do  j=1,ny-1
-!            do i=2,nx-1
-!                Ey(i,j,k) = ca_y(i,j,k)*Ey(i,j,k)&
-!                           +cb_y(i,j,k)*((Hx(i,j,k)-Hx(i,j,k-1))/kedz(k) &
-!                                       - (Hz(i,j,k)-Hz(i-1,j,k))/kedx(i))
-!            enddo
-!        enddo
-!    enddo
-
-!     !z-update
-!     do k=1,nz-1
-!       do  j=2,ny-1
-!            do  i=2,nx-1
-!                Ez(i,j,k) = ca_z(i,j,k)*Ez(i,j,k)&
-!                           +cb_z(i,j,k)*((Hy(i,j,k)-Hy(i-1,j,k))/kedx(i) &
-!                                       - (Hx(i,j,k)-Hx(i,j-1,k))/kedy(j))
-!            enddo
-!        enddo
-!     enddo
-        end subroutine CPML_E

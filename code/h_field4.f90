@@ -11,6 +11,8 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
     integer, intent(in) :: istep
     real(8), intent(in) :: t
     real(8), parameter  :: c1 = 1.125d0, c2 = -0.04167d0 !from taylor expansion
+!         real(8), parameter  :: c1=1.14443d0,c2=-0.04886d0 !from optimization scheme
+
     real(8), intent(in) :: myu(1:nx,1:ny,1:nz)
     real(8), intent(in) :: Jh(nstep)
     real(8)             :: CHXLY(1:nx,1:ny,1:nz), CHYLZ(1:nx,1:ny,1:nz), CHZLX(1:nx,1:ny,1:nz)

@@ -29,7 +29,7 @@ end subroutine
 !-------------------------------------------------------------------------------
 
 subroutine ecur_infinitesimal_dipole_source
-   use consts 
+   use consts
    use fdtd
    implicit none
 

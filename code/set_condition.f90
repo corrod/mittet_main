@@ -52,25 +52,34 @@ subroutine set_d_txyz
     write(*,*) 'sig_fe,myu_fe',sigfe,myufe
 
 
-!!!グリッド間隔dxの設定;グリッド分散!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+!!!グリッド間隔:dxの設定;グリッド分散!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 if(dx>(cmax/fmax)) then
-    write(*,*) '*****grid dispersion may happen*****'
+    write(*,*) '*****grid dispersion may happen***** dx is too large'
 endif
+
+if(dx>(0.999d0*cmin/fmax/Glim)) then
+    write(*,*) '*****grid dispersion may happen***** dx is too large'
+
 
 !!!タイムステップdtの計算;クーラン条件!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !クーラン条件
-    courant = 1.0d0/cmax/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0)
     dt_max = (2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !こっちのほうがぽい
+
+    courant = 1.0d0/cmax/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0)
 
     dt_ideal = courant*6.0d0/7.0d0*0.999d0        !デカすぎ
 
-    dt_mittet = dx/(3*0.5d0)/cmax !standard 2nd order space schme
+    dt_mittet = dx/(3.0d0*0.5d0)/cmax !standard 2nd order space schme
 
     write(*,*) '#courant imamu dt_max', dt_max
     write(*,*) '#courant dt_ideal',dt_ideal  !デカすぎ
     write(*,*) '#dt mittet',dt_mittet
+
+
 
 
 !CFL limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -81,6 +90,7 @@ endif
     endif
 
 
+
 !Fourier limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     fourier_limit = cmax*dt/dx*pi/2.0d0*(3.0d0**0.5d0)
@@ -89,7 +99,9 @@ endif
     endif
 
 
-!!!the number of timestep nstepの計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+!!!the number of timestep :nstepの計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      S=0.6d0  !S =[0.5:1.0]
 
@@ -104,7 +116,9 @@ endif
     endif
 
 
-!最大の周波数の確認!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+!最大の周波数:fmaxの確認!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !     cmin = sqrt(2.0d0*omega0/MU0/1.0d0)
     fmax_w = cmin /Glim /max(dx,dy,dz)

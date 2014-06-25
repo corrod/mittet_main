@@ -26,6 +26,7 @@ module const_para
     real(8), parameter :: f0 = 1.0d0 !f0が小さいとdtがでかくなる
     real(8), parameter :: omega0 = 2.0d0*pi*f0 !2πf0, !ω0
     real(8), parameter :: Glim = 10.4d0 ! Taylor expansion参 ln=2
+!     real(8), parameter :: Glim = 6.70d0 ! optimization sheme ln=2
     complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
 !     real(8), parameter :: tau0     = 0.02d0!1.6d-4 !送信源出力時間
 

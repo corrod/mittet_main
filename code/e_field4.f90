@@ -11,6 +11,8 @@ subroutine Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
     real(8), parameter  :: c1 = 1.125d0, c2 = -0.04167d0 ! from Tayor expansion
+!         real(8), parameter  :: c1=1.14443d0,c2=-0.04886d0 !from optimization scheme
+
     real(8), intent(in) :: Je(nstep)
     real(8), intent(in) :: sig(1:nx,1:ny,1:nz)
     real(8)             :: etaxx(nx,ny,nz),etayy(nx,ny,nz),etazz(nx,ny,nz)

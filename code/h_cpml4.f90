@@ -28,6 +28,8 @@ subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sig,myu)!,cmax)
     real(8), parameter  :: optToMax  = 10.0d0
     real(8), parameter  :: Rcoef     = 0.01d0 !R should be [10^-2, 10^-12]
     real(8), parameter  :: c1        = 1.125d0, c2 = -0.04167d0 !pml4の係数 from taylor expansion
+!     real(8), parameter  :: c1=1.14443d0,c2=-0.04886d0 !from optimization scheme
+
     real(8),parameter   :: epsir     = 1.0d0
     real(8)             :: delta     = ncpml*dx
 !     real(8), intent(in) :: cmax
@@ -216,162 +218,8 @@ if(k<=ncpml) then
       khdz(k)    = mkappa_z(k)*dz
     endif
 
-!係数の設定xh
-
-! do i = 1,nx
-! if (i<=ncpml) then
-!     msig_x(i)   = sig_max * ((dble(ncpml)-dble(i)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
-!     mkappa_x(i) = 1.0d0 + (kappa_max-1.0d0) * ((dble(ncpml)-dble(i)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
-!     am_x(i)     = a_max * ((dble(i)-0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
-
-!     bh_x(i)     = exp(-(msig_x(i)/mkappa_x(i)+am_x(i)) *dt) !/epsi0)
-!     ch_x(i)     = msig_x(i)*(bh_x(i)-1.0d0) / (msig_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i)
-!     khdx(i)     = mkappa_x(i)*dx !!!(i-1/2)dxの取り扱い
-
-
-! else if(i>=nx-ncpml+1) then
-!     msig_x(i)   = sig_max * ((dble(i)-dble(nx)+0.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
-!     mkappa_x(i) = 1.0d0 + (kappa_max-1.0d0) * ((dble(i)-dble(nx)+0.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
-!     am_x(i)     = a_max * ((dble(-i)+nx+0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
-
-!     bh_x(i)     = exp(-(msig_x(i)/mkappa_x(i)+am_x(i)) *dt) !/epsi0)
-!     ch_x(i)     = msig_x(i)*(bh_x(i)-1.0d0) / (msig_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i)
-!     khdx(i)     = mkappa_x(i)*dx !!!(i-1/2)dxの取り扱い
-
-! else
-!     msig_x(i) = 0.0d0
-!     mkappa_x(i) = 1.0d0
-!     am_x(i)     = 0.0d0
-!     bh_x(i)     = 0.0d0
-!     ch_x(i)     = 0.0d0
-!     khdx(i)     = mkappa_x(i)*dx
-!     endif
-!         enddo
-
-
-! !係数の設定yh
-
-! do j = 1,ny
-! if (j<=ncpml) then
-!     msig_y(j)   = sig_max * ((dble(ncpml)-dble(j)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
-!     mkappa_y(j) = 1.0d0 + (kappa_max-1.0d0) * ((dble(ncpml)-dble(j)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
-!     am_y(j)     = a_max * ((dble(j)-0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
-
-!     bh_y(j)     = exp(-(msig_y(j)/mkappa_y(j)+am_y(j)) *dt) !/epsi0)
-!     ch_y(j)     = msig_y(j)*(bh_y(j)-1.0d0) / (msig_y(j) + mkappa_y(j)*am_y(j)) / mkappa_y(j)
-!     khdy(j)     = mkappa_y(j)*dx !!!(i-1/2)dxの取り扱い
-
-! else if(j>=ny-ncpml+1) then
-!     msig_y(j)   = sig_max * ((dble(j)-dble(ny)+0.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
-!     mkappa_y(j) = 1.0d0 + (kappa_max-1.0d0) * ((dble(j)-dble(ny)+0.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
-!     am_y(j)     = a_max * ((dble(-j)+ny+0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
-
-!     bh_y(j)     = exp(-(msig_y(j)/mkappa_y(j)+am_y(j)) *dt) !/epsi0)
-!     ch_y(j)     = msig_y(j)*(bh_y(j)-1.0d0) / (msig_y(j) + mkappa_y(j)*am_y(j)) / mkappa_y(j)
-!     khdy(j)     = mkappa_y(j)*dy !!!(i-1/2)dxの取り扱い
-
-! else
-!     msig_y(j) = 0.0d0
-!     mkappa_y(j) = 1.0d0
-!     am_y(j)     = 0.0d0
-!     bh_y(j)     = 0.0d0
-!     ch_y(j)     = 0.0d0
-!     khdy(j)     = mkappa_y(j)*dy
-!     endif
-!         enddo
-
-
-! !係数の設定zh
-
-! do k = 1,nz
-! if (k<=ncpml) then
-!     msig_z(k)   = sig_max * ((dble(ncpml)-dble(k)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
-!     mkappa_z(k) = 1.0d0 + (kappa_max-1.0d0) * ((dble(ncpml)-dble(k)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
-!     am_z(k)     = a_max * ((dble(k)-0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
-
-!     bh_z(k)     = exp(-(msig_z(k)/mkappa_z(k)+am_z(k)) *dt) !/epsi0)
-!     ch_z(k)     = msig_z(k)*(bh_z(k)-1.0d0) / (msig_z(k) + mkappa_z(k)*am_z(k)) / mkappa_z(k)
-!     khdz(k)     = mkappa_z(k)*dz !!!(i-1/2)dxの取り扱い
-
-! else if(k>=nz-ncpml+1) then
-!     msig_z(k)   = sig_max * ((dble(k)-dble(nz)+0.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取り扱い
-!     mkappa_z(k) = 1.0d0 + (kappa_max-1.0d0) * ((dble(k)-dble(nz)+0.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)  !!!-i-1/2の取扱い
-!     am_z(k)     = a_max * ((dble(-k)+nz+0.5d0)/(dble(ncpml)-1.0d0))**dble(ma) !!!-i-1/2の取り扱い
-
-!     bh_z(k)     = exp(-(msig_z(k)/mkappa_z(k)+am_z(k)) *dt) !/epsi0)
-!     ch_z(k)     = msig_z(k)*(bh_z(k)-1.0d0) / (msig_z(k) + mkappa_z(k)*am_z(k)) / mkappa_z(k)
-!     khdz(k)     = mkappa_z(k)*dz !!!(i-1/2)dxの取り扱い
-
-! else
-!     msig_z(k) = 0.0d0
-!     mkappa_z(k) = 1.0d0
-!     am_z(k)     = 0.0d0
-!     bh_z(k)     = 0.0d0
-!     ch_z(k)     = 0.0d0
-!     khdz(k)     = mkappa_z(k)*dz
-!     endif
-!         enddo
 
 !!!sig=simga*
-
-do k=1,nz
-    do j=1,ny
-        do i=1,nx
-        !imamu system
-        da_x(i,j,k) = (1.0d0 - ((msig_x(i)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msig_x(i)*dt)/(2.0d0*epsi(i,j,k))))
-        da_y(i,j,k) = (1.0d0 - ((msig_y(j)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msig_y(j)*dt)/(2.0d0*epsi(i,j,k))))
-        da_z(i,j,k) = (1.0d0 - ((msig_z(k)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msig_z(k)*dt)/(2.0d0*epsi(i,j,k))))
-        !!!****imamu systemではmyu→MU0 myu→eps2
-        db_x(i,j,k) = dt/MU0/(1.0d0+(msig_x(i)*dt)/(2.0d0*epsi(i,j,k)))
-        db_y(i,j,k) = dt/MU0/(1.0d0+(msig_y(j)*dt)/(2.0d0*epsi(i,j,k)))
-        db_z(i,j,k) = dt/MU0/(1.0d0+(msig_z(k)*dt)/(2.0d0*epsi(i,j,k)))
-
-         !saito system
-    !   da_x(i,j,k) = (1.0d0-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) !sig=σ*
-    !   da_y(i,j,k) = (1.0d0-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))!導磁率σ
-    !   da_z(i,j,k) = (1.0d0-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
-    !   saito system
-    !   db_x(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
-    !   db_y(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
-    !   db_z(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
-!!!sig_x(i)?sig(i,j,k)?
-        enddo
-    enddo
-enddo
-
-
-! eps2 = sig2[ijk] /2.f /omega_0;
-!            // CPML Coefficient
-!            // coef1
-!            ca_x[ijk]   = (1.0f - ((esigx[i]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((esigx[i]*dt)/(2.f*eps2)));
-!            ca_y[ijk]   = (1.0f - ((esigy[j]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((esigy[j]*dt)/(2.f*eps2)));
-!            ca_z[ijk]   = (1.0f - ((esigz[k]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((esigz[k]*dt)/(2.f*eps2)));
-!            // coef2
-!            da_x[ijk]   = (1.0f - ((msigx[i]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((msigx[i]*dt)/(2.f*eps2)));
-!            da_y[ijk]   = (1.0f - ((msigy[j]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((msigy[j]*dt)/(2.f*eps2)));
-!            da_z[ijk]   = (1.0f - ((msigz[k]*dt)/(2.f*eps2))) \
-!                        / (1.0f + ((msigz[k]*dt)/(2.f*eps2)));
-!            // coef3
-!            cb_x[ijk] = dt/eps2 /(1.f+(esigx[i]*dt)/(2.f*eps2));
-!            cb_y[ijk] = dt/eps2 /(1.f+(esigy[j]*dt)/(2.f*eps2));
-!            cb_z[ijk] = dt/eps2 /(1.f+(esigz[k]*dt)/(2.f*eps2));
-!            // coef4
-!            db_x[ijk] = dt/MU0 /(1.f+(msigx[i]*dt)/(2.f*eps2));
-!            db_y[ijk] = dt/MU0 /(1.f+(msigy[j]*dt)/(2.f*eps2));
-!            db_z[ijk] = dt/MU0 /(1.f+(msigz[k]*dt)/(2.f*eps2));
-
-
-!
-!msig_max=esig_max*MU0/epsi2
-!  scaler = 0.01f * sigx2/gradmax;
-!  //scaler = 0.01f * sigx2;
-!sig2[ijk] = sig[ijk] - scaler * grad[ijk];
-
 
 !     (+)の係数
 !     do i=1,ncpml
@@ -400,6 +248,34 @@ enddo
 !         bh_z(nz-(k-1)) = bh_z(k)
 !         ch_z(nz-(k-1)) = ch_z(k)
 !     enddo
+
+do k=1,nz
+    do j=1,ny
+        do i=1,nx
+        !imamu system
+        da_x(i,j,k) = (1.0d0 - ((msig_x(i)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msig_x(i)*dt)/(2.0d0*epsi(i,j,k))))
+        da_y(i,j,k) = (1.0d0 - ((msig_y(j)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msig_y(j)*dt)/(2.0d0*epsi(i,j,k))))
+        da_z(i,j,k) = (1.0d0 - ((msig_z(k)*dt)/(2.0d0*epsi(i,j,k)))) / (1.0d0 + ((msig_z(k)*dt)/(2.0d0*epsi(i,j,k))))
+        !!!****imamu systemではmyu→MU0 myu→eps2
+        db_x(i,j,k) = dt/MU0/(1.0d0+(msig_x(i)*dt)/(2.0d0*epsi(i,j,k)))
+        db_y(i,j,k) = dt/MU0/(1.0d0+(msig_y(j)*dt)/(2.0d0*epsi(i,j,k)))
+        db_z(i,j,k) = dt/MU0/(1.0d0+(msig_z(k)*dt)/(2.0d0*epsi(i,j,k)))
+
+         !saito system
+    !   da_x(i,j,k) = (1.0d0-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) !sig=σ*
+    !   da_y(i,j,k) = (1.0d0-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))!導磁率σ
+    !   da_z(i,j,k) = (1.0d0-(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k))) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+    !   saito system
+    !   db_x(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+    !   db_y(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+    !   db_z(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
+!!!sig_x(i)?sig(i,j,k)?
+        enddo
+    enddo
+enddo
+
+
+
 
 
 
@@ -488,6 +364,7 @@ enddo
                             enddo
 
 
+            end subroutine CPML_H
 
 
 
@@ -710,4 +587,3 @@ enddo
 !                            enddo
 !                                enddo
 !                                    enddo
-            end subroutine CPML_H
