@@ -11,7 +11,7 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
     integer, intent(in) :: istep
     real(8), intent(in) :: t
     real(8), intent(in) :: myu(1:nx,1:ny,1:nz)
-    real(8), intent(in) :: Jh(nstep)
+    complex(kind(0d0)), intent(in) :: Jh(nstep)
     real(8)             :: CHXLY(1:nx,1:ny,1:nz), CHYLZ(1:nx,1:ny,1:nz), CHZLX(1:nx,1:ny,1:nz)
     real(8)             :: CHXLZ(1:nx,1:ny,1:nz), CHYLX(1:nx,1:ny,1:nz), CHZLY(1:nx,1:ny,1:nz)
     complex(kind(0d0)), intent(in)   :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)

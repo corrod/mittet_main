@@ -10,7 +10,7 @@ subroutine Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     integer :: l
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
-    real(8), intent(in) :: Je(nstep)
+    complex(kind(0d0)), intent(in) :: Je(nstep)
     real(8), intent(in) :: sig(1:nx,1:ny,1:nz)
     real(8)             :: etaxx(nx,ny,nz),etayy(nx,ny,nz),etazz(nx,ny,nz)
     real(8)             :: CEXLY(1:nx,1:ny,1:nz),CEYLZ(1:nx,1:ny,1:nz),CEZLX(1:nx,1:ny,1:nz)

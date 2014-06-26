@@ -1,6 +1,10 @@
 ! ficticious E'(t') to diffusive frequency domain E(ω), using DFT
 ! frequency green function GX_w(ω)
 ! DFT
+! DFT後の横軸 2*pi*k/ns は間違ってるかも
+! DFTの際にdt'幅×必要あるかも
+! taper間違ってるかも 要確認
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 program f_to_d!(ns)
 	use const_para
 	implicit none
@@ -18,7 +22,7 @@ program f_to_d!(ns)
 	complex(kind(0d0)),allocatable ::GX_w(:) !GX_w(0:ns-1) !diffusive domain Green's function
 	character(3) :: name
 !	omega=2.0d0*pi*k/ns
-
+	write(*,*) '*********f_to_d.f90 start********'
 
  !!! データの読み込み------------------------------------------------------------
 
@@ -84,11 +88,16 @@ program f_to_d!(ns)
 	enddo
 
 
-	EX_w(0:nd-1) = 0.0d0
-	JX_w(0:nd-1) = 0.0d0
+
+
+
+
 
 !DFT開始----------------------------------------------------------------------------
     ns = nd  !サンプリング数
+
+	EX_w(0:ns-1) = 0.0d0
+	JX_w(0:ns-1) = 0.0d0
 
 
 	do k=0,ns-1  !周波数用ループ
@@ -110,6 +119,8 @@ program f_to_d!(ns)
 
 	enddo
 
+
+
 !出力-------------------------------------------------------------------------------------
 ! 		write(name,'(I3)') l  受信点位置とかがいいかも
 		!ある点での周波数領域EX_w
@@ -117,7 +128,7 @@ program f_to_d!(ns)
 		open(60,file='out1.dat')
 
 		do k=0,ns-1
-			write(60,*) k * 2.0d0*pi/ns, real(EX_w(k)),aimag(EX_w(k))
+			write(60,*) k * 2.0d0*pi/ns, real(EX_w(k)),aimag(EX_w(k))   !!!横軸周波数の書き方違うかも
 		enddo
 		close(60)
 
@@ -142,7 +153,8 @@ program f_to_d!(ns)
 
 
 deallocate ( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JX_w,JX_f,GX_w )
-end program f_to_d
+
+		end program f_to_d
 
 
 
