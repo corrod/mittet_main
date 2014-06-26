@@ -26,8 +26,8 @@ program main
 
     integer            :: istep !タイムステップ
     real(8)            :: t !経過時間
-    real(8)            :: Je(nstep) !電流源
-    real(8)            :: Jh(nstep) !磁流源
+    complex(kind(0d0)) :: Je(nstep) !電流源
+    complex(kind(0d0)) :: Jh(nstep) !磁流源
     real(8)            :: sig(nx,ny,nz),myu(nx,ny,nz)
     complex(kind(0d0)) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
@@ -43,6 +43,12 @@ program main
     open(15,file='hz1020.d')
     open(16,file='hz1030.d')
     open(17,file='jh_fic.d')
+
+    open(20,file='ex1000.d')
+    open(21,file='ex1010.d')
+    open(22,file='ex1020.d')
+    open(23,file='ex1030.d')
+
 
 write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
 
@@ -114,4 +120,9 @@ enddo !*反復計算終了
     close(15)
     close(16)
     close(17)
+
+    close(20)
+    close(21)
+    close(22)
+    close(23)
             end program main

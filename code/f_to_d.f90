@@ -7,10 +7,10 @@ program f_to_d!(ns)
 
 	integer :: nd,ios
 	real(8), allocatable :: inp1_r(:),inp1_i(:),inp2_r(:),inp2_i(:),t1(:),t2(:)
-	real(8) :: w(:) !窓関数
+	real(8), allocatable :: w(:) !窓関数
 
 	integer :: n , l
-	integer,intent(in) :: ns !sampling数
+	integer :: ns !sampling数
 	complex(kind(0d0)),allocatable ::EX_w(:) !EX_w(0:ns-1) !周波数領域のEX
 	complex(kind(0d0)),allocatable ::EX_f(:) !EX_f(0:ns-1) !ficticiousのE'x
 	complex(kind(0d0)),allocatable ::JX_w(:) !JX_w(0:ns-1) !ficticiousのJ'x
@@ -37,15 +37,15 @@ program f_to_d!(ns)
 
      !DFTするEXデータの読み込み
     open(51,file='inp1.dat',action='read')
-      do i=1,nd
+      do i=0,nd-1
       read(51,*) t1(i), inp1_r(i), inp2_i(i)
       enddo
     close(51)
 
-    EX_f(0:ns-1) = inp1_r(0:ns-1) + (0.0d0,1.0d0)*inp1_i(0:ns-1)
+    EX_f(0:nd-1) = inp1_r(0:nd-1) + (0.0d0,1.0d0)*inp1_i(0:nd-1)
 
 
-    !窓関数をかける----------------
+    !窓関数をかけるtaper----------------
     call window_cos(nd,w)
 
 	!taper かけて
@@ -66,7 +66,7 @@ program f_to_d!(ns)
 
      !DFTするJXデータの読み込み
     open(51,file='inp2.dat',action='read')
-      do i=1,nd
+      do i=0,nd-1
       read(51,*) t2(i), inp2_r(i), inp2_i(i)
       enddo
     close(51)
@@ -84,8 +84,8 @@ program f_to_d!(ns)
 	enddo
 
 
-	EX_w(0:ns-1) = 0.0d0
-	JX_w(0:ns-1) = 0.0d0
+	EX_w(0:nd-1) = 0.0d0
+	JX_w(0:nd-1) = 0.0d0
 
 !DFT開始----------------------------------------------------------------------------
     ns = nd  !サンプリング数
@@ -96,17 +96,17 @@ program f_to_d!(ns)
 		do n=0,ns-1 !時間用ループ
 
 		EX_w(k) = EX_w(k) &
-				+ EX_f(n) * exp( sqrt(2.0d0*pi*omega0*k/dble(ns)) * (I_u-1.0d0) * n )
+				+ EX_f(n) * exp( sqrt(2.0d0*pi*omega0*k/dble(ns)) * (I_u-1.0d0) * n )    !*dt
 
 		JX_w(k) = JX_w(k) &
 				+ exp( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(ns)) ) &
-				* JX_f(n) * exp( sqrt(2.0d0*pi*omega0*k/dble(ns)) * (I_u-1.0d0) * n )
+				* JX_f(n) * exp( sqrt(2.0d0*pi*omega0*k/dble(ns)) * (I_u-1.0d0) * n )    !*dt
 
 		enddo
 
 ! 		JX_w(0) = 2.0d0 * omega0  !!!要確認
 
-		GX_w(ｋ) = EX_w(ｋ) / JX_w(k)  !JX_w /= 0
+		GX_w(k) = EX_w(k) / JX_w(k)  !JX_w /= 0
 
 	enddo
 
@@ -114,31 +114,31 @@ program f_to_d!(ns)
 ! 		write(name,'(I3)') l  受信点位置とかがいいかも
 		!ある点での周波数領域EX_w
 ! 		open(50,file='EX_w'//name/'.d')
-		open(50,file='out1.dat')
+		open(60,file='out1.dat')
 
 		do k=0,ns-1
-			write(50,*) k * 2.0d0*pi/ns, real(EX_w(k)),aimag(EX_w(k))
+			write(60,*) k * 2.0d0*pi/ns, real(EX_w(k)),aimag(EX_w(k))
 		enddo
-		close(50)
+		close(60)
 
 		!ある点での周波数領域JX_w
-! 		open(51,file='JX_w'//name/'.d')
-		open(51,file='out2.dat')
+! 		open(61,file='JX_w'//name/'.d')
+		open(61,file='out2.dat')
 
 		do k=0,ns-1
-			write(51,*) k * 2.0d0*pi/ns, real(JX_w(k)),aimag(JX_w(k))
+			write(61,*) k * 2.0d0*pi/ns, real(JX_w(k)),aimag(JX_w(k))
 		enddo
-		close(51)
+		close(61)
 
 
 		!ある点での周波数領域グリーン関数
-! 		open(52,file='GX_w'//name/'.d')
-		open(52,file='out3.dat')
+! 		open(62,file='GX_w'//name/'.d')
+		open(62,file='out3.dat')
 
 		do k=0,ns-1
-			write(52,*) k * 2.0d0*pi/ns, real(GX_w(k)),aimag(GX_w(k))
+			write(62,*) k * 2.0d0*pi/ns, real(GX_w(k)),aimag(GX_w(k))
 		enddo
-		close(52)
+		close(62)
 
 
 deallocate ( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JX_w,JX_f,GX_w )

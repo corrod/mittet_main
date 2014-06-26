@@ -8,9 +8,9 @@ subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
 
     integer, intent(in)  :: istep
     real(8), intent(in)  :: t
-    real(8)              :: signal(nstep)!1st derivatice gaussian
-    real(8), intent(out) :: Je(nstep)!電場ソース
-    real(8), intent(out) :: Jh(nstep)!磁場ソース
+    complex(kind(0d0))              :: signal(nstep)!1st derivatice gaussian
+    complex(kind(0d0)), intent(out) :: Je(nstep)!電場ソース
+    complex(kind(0d0)), intent(out) :: Jh(nstep)!磁場ソース
     real(8), intent(in)  :: sig(nx,ny,nz)
     real(8), intent(in)  :: myu(nx,ny,nz)
     real(8)              :: etaxx(x0,y0,z0)
