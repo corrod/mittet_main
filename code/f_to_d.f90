@@ -4,6 +4,7 @@
 ! DFT後の横軸 2*pi*k/ns は間違ってるかも
 ! DFTの際にdt'幅×必要あるかも
 ! taper間違ってるかも 要確認
+!JX_w GX_w ひとつめNAN
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 program f_to_d!(ns)
 	use const_para
@@ -113,7 +114,7 @@ program f_to_d!(ns)
 
 		enddo
 
-! 		JX_w(0) = 2.0d0 * omega0  !!!要確認
+ 		JX_w(0) = 2.0d0 * omega0  !!!要確認
 
 		GX_w(k) = EX_w(k) / JX_w(k)  !JX_w /= 0
 

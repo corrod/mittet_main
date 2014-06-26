@@ -17,8 +17,8 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     write(13,*) t, real(hz(x0,y0,nz-1)),  aimag(hz(x0,y0,nz-1))    !hz1050.d
     write(14,*) t, real(hz(x0,y0,z0+10)), aimag(hz(x0,y0,z0+10)) !hz1010.d
     write(15,*) t, real(hz(x0,y0,z0+20)), aimag(hz(x0,y0,z0+20))   !hz1030.d
-    write(16,*) t, real(hz(x0,y0,z0+30)), aimag(hz(x0,y0,z0+30)) !jh_fic.d
-    write(17,*) t, real(Jh(istep))      , aimag(Jh(istep))
+    write(16,*) t, real(hz(x0,y0,z0+30)), aimag(hz(x0,y0,z0+30))
+    write(17,*) t, real(Jh(istep))      , aimag(Jh(istep))       !jh_fic.d
 
     write(20,*) t, real(ex(x0,y0,z0)),    aimag(ex(x0,y0,z0))    !ex1000.d
     write(21,*) t, real(ex(x0+10,y0,z0)), aimag(ex(x0+10,y0,z0)) !ex1010.d
