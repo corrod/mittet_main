@@ -1,6 +1,6 @@
 module fft_lib
 !============================================================================
-   !******** physical constant ******** 
+   !******** physical constant ********
    complex(kind(0d0)),parameter :: complex_j=(0.0d0,1.0d0) ! imaginary number
    real(8),parameter :: pi=3.1415927d0          ! circular constant
    !******** time data ********
@@ -9,22 +9,22 @@ module fft_lib
    complex(kind(0d0)),dimension(:),allocatable :: x,a,b        ! output spectrum
    !******** fft parameters ********
    integer :: s       ! total sampling numbers
-   integer :: gamma   ! s=2**gamma -> gamma=log10(s)/log10(2) 
+   integer :: gamma   ! s=2**gamma -> gamma=log10(s)/log10(2)
    real(8) :: t       ! delta time (t0/s) [sec]
    real(8) :: t0      ! assumed cycle [sec]
    !******** input file ********
-   integer :: code          ! 
+   integer :: code          !
    integer :: count=0       !
    integer :: idm     ! dummy data in integer type
    real(8) :: rdm,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15     ! dummy data in real type
    real(8) :: col1    ! data under consideration
    character(90) file1      !
 !============================================================================
-end module fft_lib  
+end module fft_lib
 
 program fft_ver3
-!***********************************************************************     
-!   Fast Fourier Transform based on the 2**gamma  version 1.00   
+!***********************************************************************
+!   Fast Fourier Transform based on the 2**gamma  version 1.00
 !   coded by Yusuke Kusama   <kusama@dt.takuma-ct.ac.jp>
 !
 !   fisrt date    : 2003/10/06 !
@@ -32,7 +32,7 @@ program fft_ver3
 !***********************************************************************
    use fft_lib
    implicit none
-   integer :: n,k !  
+   integer :: n,k !
    integer :: ts,te,t_rate,t_max,diff
   call system_clock(ts)
 
@@ -53,10 +53,10 @@ end program fft_ver3
 !*************************************************************************
 ! initial data
 !*************************************************************************
-subroutine initial 
+subroutine initial
    use fft_lib
    implicit none
-   integer :: n !   
+   integer :: n !
 
    !******** read input data information ********
    file1= 'func_gauss1f.dat'
@@ -79,14 +79,14 @@ subroutine initial
    !******** array initialize ********
    do n=0,s-1
       h(n)=0.0d0
-      x(n)=(0.0d0,0.0d0) 
+      x(n)=(0.0d0,0.0d0)
       a(n)=(0.0d0,0.0d0)
       b(n)=(0.0d0,0.0d0)
    end do
 
    !******** initial data confirmation ********
    write(50,*)
-   write(50,'(1x, "sampling number     :",i6)') s   
+   write(50,'(1x, "sampling number     :",i6)') s
    write(50,'(1x, "gamma               :",i6)') gamma
    write(50,'(1x, "sampling interval   :",d18.10)') t
    write(50,'(1x, "assumed period t0   :",d18.10)') t0
@@ -97,7 +97,7 @@ end subroutine initial
 !*************************************************************************
 ! read data
 !*************************************************************************
-subroutine read_data 
+subroutine read_data
    use fft_lib
    implicit none
    integer :: n !
@@ -108,7 +108,7 @@ subroutine read_data
         read(10,*,iostat=code) idm,rdm,r1
         if(code<0)exit
         h(count)=r1
-        count=count+1 
+        count=count+1
      end do
    close(10)
 
@@ -117,12 +117,12 @@ subroutine read_data
       a(n)=h(n)+complex_j*0.0d0
    end do
 
-   !******** read data re-confirm!! ******** 
+   !******** read data re-confirm!! ********
    open(unit=22,file="readdata_fic_dif_j")
       do n=0,s-1
          write(22,*) n,real(a(n)),aimag(a(n))
          a(n)=h(n)+complex_j*0.0d0
-      end do   
+      end do
    close(unit=22)
 
 
@@ -130,11 +130,11 @@ subroutine read_data
 
 
 end subroutine read_data
-  
+
 !*****************************************************************************
-! the fictitious domain to the diffusive domain 
+! the fictitious domain to the diffusive domain
 !****************************************************************************
-   
+
 subroutine CDFT_ftod
   use fft_lib
   implicit none
@@ -153,8 +153,8 @@ subroutine CDFT_ftod
 !     print *, j,x(j)
   end do
   x(0)=1.0d4+2.0d3*complex_j
- end subroutine   
-     
+ end subroutine
+
 
 !************************************************************************
 ! output spectrum
@@ -162,7 +162,7 @@ subroutine CDFT_ftod
 subroutine output
    use fft_lib
    implicit none
-   integer :: n 
+   integer :: n
 
    !******** output ********
    open(unit=11,file="dft_gauss1f.dat")
@@ -174,7 +174,7 @@ subroutine output
 !      do n=1, s-1
 !         b(n)=1/x(n)
 !      end do
-      
+
 !      do n=0,s-1
 !      write(12,*) n,n/(s*t),cdabs(b(n)),real(b(n)),aimag(b(n))
 !      end do

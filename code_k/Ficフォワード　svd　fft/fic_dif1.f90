@@ -1,33 +1,33 @@
 module fft_lib
 !============================================================================
-   !******** physical constant ******** 
+   !******** physical constant ********
    complex,parameter :: complex_j=(0.0d0,1.0d0) ! imaginary number
    real(8),parameter :: pi=3.1415927d0          ! circular constant
    !******** time data ********
    real(8),dimension(:),allocatable :: h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15        ! input time domain data
    !******** frequency spectrum data ********
-   complex(kind(0d0)),dimension(:),allocatable :: a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15        
+   complex(kind(0d0)),dimension(:),allocatable :: a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15
    complex(kind(0d0)),dimension(:),allocatable :: x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15        ! output spectrum
 
    !******** fft parameters ********
    integer :: s       ! total sampling numbers
-   integer :: gamma   ! s=2**gamma -> gamma=log10(s)/log10(2) 
+   integer :: gamma   ! s=2**gamma -> gamma=log10(s)/log10(2)
    real(8) :: t       ! delta time (t0/s) [sec]
    real(8) :: t0      ! assumed cycle [sec]
    !******** input file ********
-   integer :: code          ! 
+   integer :: code          !
    integer :: count=0       !
    integer :: idm     ! dummy data in integer type
    real(8) :: rdm,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15     ! dummy data in real type
    real(8) :: col1    ! data under consideration
    character(90) file1      !
 !============================================================================
-end module fft_lib  
+end module fft_lib
 
 program fft_ver3
    use fft_lib
    implicit none
-   integer :: n,k !  
+   integer :: n,k !
    integer :: ts,te,t_rate,t_max,diff
   call system_clock(ts)
 
@@ -48,10 +48,10 @@ end program fft_ver3
 !*************************************************************************
 ! initial data
 !*************************************************************************
-subroutine initial 
+subroutine initial
    use fft_lib
    implicit none
-   integer :: n !   
+   integer :: n !
 
    !******** read input data information ********
    file1= 'receiver_0108_m6hEy.dat'
@@ -65,7 +65,7 @@ subroutine initial
    !==== sampling interval T ====
    print *, "enter sampling width T"
    t=1.14315354400754132d-3
-!   t=3.61496891435735771E-003 
+!   t=3.61496891435735771E-003
    gamma=nint(log10(real(s))/log10(real(2)))
    t0=s*t
 
@@ -84,7 +84,7 @@ subroutine initial
    end do
 
    do n=0,s-1
-      x1(n)=(0.0d0,0.0d0) 
+      x1(n)=(0.0d0,0.0d0)
    end do
 
    do n=0,s-1
@@ -93,7 +93,7 @@ subroutine initial
 
    !******** initial data confirmation ********
    write(50,*)
-   write(50,'(1x, "sampling number     :",i6)') s   
+   write(50,'(1x, "sampling number     :",i6)') s
    write(50,'(1x, "gamma               :",i6)') gamma
    write(50,'(1x, "sampling interval   :",d18.10)') t
    write(50,'(1x, "assumed period t0   :",d18.10)') t0
@@ -104,7 +104,7 @@ end subroutine initial
 !*************************************************************************
 ! read data
 !*************************************************************************
-subroutine read_data 
+subroutine read_data
    use fft_lib
    implicit none
    integer :: n !
@@ -115,7 +115,7 @@ subroutine read_data
         read(10,*,iostat=code) idm,rdm,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15
         if(code<0)exit
         h1(count)=r11
-        count=count+1 
+        count=count+1
      end do
    close(10)
 
@@ -124,13 +124,13 @@ subroutine read_data
       a1(n)=h1(n)+complex_j*0.0d0
    end do
 
-   !******** read data re-confirm!! ******** 
+   !******** read data re-confirm!! ********
    open(unit=22,file="fic4_t6_11.dat")
 !    open(unit=22,file="readdata")
       do n=0,s-1
          write(22,*) n,n*t,real(a1(n)),aimag(a1(n)),cdabs(a1(n))
          a1(n)=h1(n)+complex_j*0.0d0
-      end do   
+      end do
    close(unit=22)
 
 
@@ -138,11 +138,11 @@ subroutine read_data
 
 
 end subroutine read_data
-  
+
 !*****************************************************************************
 ! DFT
 !*****************************************************************************
-   
+
 subroutine CDFT
   use fft_lib
   implicit none
@@ -153,8 +153,8 @@ subroutine CDFT
      end do
      print *, j
   end do
-  end subroutine   
-     
+  end subroutine
+
 
 !************************************************************************
 ! output spectrum
@@ -162,7 +162,7 @@ subroutine CDFT
 subroutine output
    use fft_lib
    implicit none
-   integer :: n 
+   integer :: n
 
    !******** output ********
    open(unit=11,file="dif4_m6_11")

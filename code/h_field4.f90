@@ -10,17 +10,14 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
     integer :: l
     integer, intent(in) :: istep
     real(8), intent(in) :: t
-    real(8), parameter  :: c1 = 1.125d0, c2 = -0.04167d0 !from taylor expansion
-!         real(8), parameter  :: c1=1.14443d0,c2=-0.04886d0 !from optimization scheme
-
     real(8), intent(in) :: myu(1:nx,1:ny,1:nz)
     real(8), intent(in) :: Jh(nstep)
     real(8)             :: CHXLY(1:nx,1:ny,1:nz), CHYLZ(1:nx,1:ny,1:nz), CHZLX(1:nx,1:ny,1:nz)
     real(8)             :: CHXLZ(1:nx,1:ny,1:nz), CHYLX(1:nx,1:ny,1:nz), CHZLY(1:nx,1:ny,1:nz)
-!     complex(kind(0d0)), intent(in)   :: Ex(-1:nx+2,-1:ny+2,-1:nz+2),Ey(-1:nx+2,-1:ny+2,-1:nz+2),Ez(-1:nx+2,-1:ny+2,-1:nz+2)
-!     complex(kind(0d0)), intent(inout):: Hx(-1:nx+2,-1:ny+2,-1:nz+2),Hy(-1:nx+2,-1:ny+2,-1:nz+2),Hz(-1:nx+2,-1:ny+2,-1:nz+2)
     complex(kind(0d0)), intent(in)   :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(inout):: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
+!     complex(kind(0d0)), intent(in)   :: Ex(-1:nx+2,-1:ny+2,-1:nz+2),Ey(-1:nx+2,-1:ny+2,-1:nz+2),Ez(-1:nx+2,-1:ny+2,-1:nz+2)
+!     complex(kind(0d0)), intent(inout):: Hx(-1:nx+2,-1:ny+2,-1:nz+2),Hy(-1:nx+2,-1:ny+2,-1:nz+2),Hz(-1:nx+2,-1:ny+2,-1:nz+2)
 !     real(8)             :: alpha(ln,ln)
 !     real(8)             :: temp1(0:ln), temp2(0:ln)
 !     temp1(0) = 0.0d0

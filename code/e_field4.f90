@@ -10,18 +10,15 @@ subroutine Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     integer :: l
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
-    real(8), parameter  :: c1 = 1.125d0, c2 = -0.04167d0 ! from Tayor expansion
-!         real(8), parameter  :: c1=1.14443d0,c2=-0.04886d0 !from optimization scheme
-
     real(8), intent(in) :: Je(nstep)
     real(8), intent(in) :: sig(1:nx,1:ny,1:nz)
     real(8)             :: etaxx(nx,ny,nz),etayy(nx,ny,nz),etazz(nx,ny,nz)
     real(8)             :: CEXLY(1:nx,1:ny,1:nz),CEYLZ(1:nx,1:ny,1:nz),CEZLX(1:nx,1:ny,1:nz)
     real(8)             :: CEXLZ(1:nx,1:ny,1:nz),CEYLX(1:nx,1:ny,1:nz),CEZLY(1:nx,1:ny,1:nz)
-!     complex(kind(0d0)), intent(inout):: Ex(-1:nx+2,-1:ny+2,-1:nz+2),Ey(-1:nx+2,-1:ny+2,-1:nz+2),Ez(-1:nx+2,-1:ny+2,-1:nz+2)
-!     complex(kind(0d0)), intent(in)   :: Hx(-1:nx+2,-1:ny+2,-1:nz+2),Hy(-1:nx+2,-1:ny+2,-1:nz+2),Hz(-1:nx+2,-1:ny+2,-1:nz+2)
     complex(kind(0d0)), intent(inout):: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in)   :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
+!     complex(kind(0d0)), intent(inout):: Ex(-1:nx+2,-1:ny+2,-1:nz+2),Ey(-1:nx+2,-1:ny+2,-1:nz+2),Ez(-1:nx+2,-1:ny+2,-1:nz+2)
+!     complex(kind(0d0)), intent(in)   :: Hx(-1:nx+2,-1:ny+2,-1:nz+2),Hy(-1:nx+2,-1:ny+2,-1:nz+2),Hz(-1:nx+2,-1:ny+2,-1:nz+2)
                                       !   complex(kind(0d0)), intent(in) :: sigxx(nx,ny,nz)
                                       !     real(8)             :: alpha(ln,ln)
                                       !     real(8)             :: temp1(0:ln),temp2(0:ln)

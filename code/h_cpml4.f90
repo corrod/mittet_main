@@ -27,10 +27,7 @@ subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz,sig,myu)!,cmax)
     real(8), parameter  :: order     = 0.0d0 !order should be (0,3]
     real(8), parameter  :: optToMax  = 10.0d0
     real(8), parameter  :: Rcoef     = 0.01d0 !R should be [10^-2, 10^-12]
-    real(8), parameter  :: c1        = 1.125d0, c2 = -0.04167d0 !pml4の係数 from taylor expansion
-!     real(8), parameter  :: c1=1.14443d0,c2=-0.04886d0 !from optimization scheme
-
-    real(8),parameter   :: epsir     = 1.0d0
+    real(8), parameter   :: epsir     = 1.0d0
     real(8)             :: delta     = ncpml*dx
 !     real(8), intent(in) :: cmax
     real(8), intent(in) :: myu(nx,ny,nz)

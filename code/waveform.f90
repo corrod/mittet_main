@@ -1,5 +1,6 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!送信源the first derivative of Gaussian!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz ←割る必要あるのか？
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
     use const_para

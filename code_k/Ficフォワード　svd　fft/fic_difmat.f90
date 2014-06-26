@@ -3,7 +3,7 @@ module init
   integer,parameter :: s=5750
   integer :: idm
   real(8),parameter :: pi=3.1415926539
-  real(8) :: r2,i2,rdm,d 
+  real(8) :: r2,i2,rdm,d
   real(8) :: re2(s),im2(s)
   complex(kind(0d0)):: A(s,s)
   complex(kind(0d0)) :: f_t(s),df(s)
@@ -27,7 +27,7 @@ program fic_difmatrix
   do j=1,s
      do k=1,s
         A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/s))*exp(complex_j*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/s))
-        write(10,*) A(j,k) 
+        write(10,*) A(j,k)
      end do
      print *, j
   end do
@@ -42,4 +42,4 @@ program fic_difmatrix
   end if
   print "(A,F10.3)","time it took was:", diff/dble(t_rate)
 
-end program 
+end program

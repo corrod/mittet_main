@@ -36,7 +36,7 @@ program main
      diff=te-ts
   end if
   print "(A,F10.3)","time it took was:", diff/dble(t_rate)
-  
+
    stop
 end program
 
@@ -181,7 +181,7 @@ subroutine   matrix_pseudo_inversion
       print *,i
    end do
    cond=sing_val(1)/cond
-   
+
  !  open(11,file="cond_t7_11t13.dat")
      open(11,file="cond_test.dat")
    write(11,*) "CONDITION NUMBER=",cond
@@ -190,7 +190,7 @@ subroutine   matrix_pseudo_inversion
    ! SVD: A    =U    *S    *VT
    !      [m,n] [m,m] [m,n] [n,n]
    ! pseudo_inverse(A)=VT^H*S^(-1)*U^H
-   ! M^H means Hermitian conjugate of matrix M 
+   ! M^H means Hermitian conjugate of matrix M
 
    ! A x = b
    ! x = pseudo_inverse(A) b
@@ -267,7 +267,7 @@ subroutine   matrix_pseudo_inversion
    !stop
 
    ! 結果の表示
-   
+
    open(15,file='fic4_t7_11t13_85.dat')
    do i=1,n
       write(15,*) i,(i-1)*t,real(b_wk1(i)),aimag(b_wk1(i))
