@@ -1,5 +1,6 @@
 ! ficticious E'(t') to diffusive frequency domain E(ω), using DFT
 ! frequency green function GX_w(ω)
+! DFT
 program f_to_d!(ns)
 	use const_para
 	implicit none
@@ -112,14 +113,18 @@ program f_to_d!(ns)
 !出力-------------------------------------------------------------------------------------
 ! 		write(name,'(I3)') l  受信点位置とかがいいかも
 		!ある点での周波数領域EX_w
-		open(50,file='EX_w'//name/'.d')
+! 		open(50,file='EX_w'//name/'.d')
+		open(50,file='out1.dat')
+
 		do k=0,ns-1
 			write(50,*) k * 2.0d0*pi/ns, real(EX_w(k)),aimag(EX_w(k))
 		enddo
 		close(50)
 
 		!ある点での周波数領域JX_w
-		open(51,file='JX_w'//name/'.d')
+! 		open(51,file='JX_w'//name/'.d')
+		open(51,file='out2.dat')
+
 		do k=0,ns-1
 			write(51,*) k * 2.0d0*pi/ns, real(JX_w(k)),aimag(JX_w(k))
 		enddo
@@ -127,7 +132,9 @@ program f_to_d!(ns)
 
 
 		!ある点での周波数領域グリーン関数
-		open(52,file='GX_w'//name/'.d')
+! 		open(52,file='GX_w'//name/'.d')
+		open(52,file='out3.dat')
+
 		do k=0,ns-1
 			write(52,*) k * 2.0d0*pi/ns, real(GX_w(k)),aimag(GX_w(k))
 		enddo
@@ -146,66 +153,66 @@ end program f_to_d
 
 
 
-!!by k
-subroutine f_to_d_matrix
-	use const_para
-	implicit none
-		integer :: s !sampling number 2**○
-		do j=1,s
-			do k=1,s
-				A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ) )   *exp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ))
-			enddo
-		enddo
-end subroutine f_to_d_matrix
+! !!by k
+! subroutine f_to_d_matrix
+! 	use const_para
+! 	implicit none
+! 		integer :: s !sampling number 2**○
+! 		do j=1,s
+! 			do k=1,s
+! 				A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ) )   *exp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ))
+! 			enddo
+! 		enddo
+! end subroutine f_to_d_matrix
 
-!by i
-subroutine laplace_fft
-	use const_para
-	implicit none
-		integer :: n
-		integer :: it
-! 		integer :: istep!!
-		real(8) :: om
-		complex(kind(0d0)) :: Ex_w(nstep)
-		complex(kind(0d0)) :: Jx_w(nstep)
-		complex(kind(0d0)) :: Gx_w(nstep)
+! !by i
+! subroutine laplace_fft
+! 	use const_para
+! 	implicit none
+! 		integer :: n
+! 		integer :: it
+! ! 		integer :: istep!!
+! 		real(8) :: om
+! 		complex(kind(0d0)) :: Ex_w(nstep)
+! 		complex(kind(0d0)) :: Jx_w(nstep)
+! 		complex(kind(0d0)) :: Gx_w(nstep)
 
-		om =2.0d0*pi/it/dt
-! 		om =2.0d0*pi/nstep/dt
-! 		om =2.0d0*pi/istep/dt
-		t0=pi/fmax_w
-		beta=pi*fmax**2.0d0
-
-
-	do n=1,it  !what's it? !0~? 1~?
-
-		do k=1,it
-			EX_w(n) = EX_w(n) &
-					 + EX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
-
-			JX_w(n) = JX_w(n) &
-					+ sqrt(-2.0d0*omega0/I_u/om/dble(n)) * JX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
-		enddo
-			JX_w(0) = 2.0d0 * omega0  !!!要確認
-
-			GX_w(n) = EX_w(n) / JX_w(n)
-
-	enddo
-end subroutine laplace_fft
+! 		om =2.0d0*pi/it/dt
+! ! 		om =2.0d0*pi/nstep/dt
+! ! 		om =2.0d0*pi/istep/dt
+! 		t0=pi/fmax_w
+! 		beta=pi*fmax**2.0d0
 
 
+! 	do n=1,it  !what's it? !0~? 1~?
 
-subroutine convolution_GJ_to_E
-	use const_para
-	implicit none
-		complex(kind(0d0)) :: in_G
-		complex(kind(0d0)) :: in_J
-		complex(kind(0d0)) :: in_EF
-		complex(kind(0d0)) :: out_G
-		complex(kind(0d0)) :: out_J
-		complex(kind(0d0)) :: out_ET
+! 		do k=1,it
+! 			EX_w(n) = EX_w(n) &
+! 					 + EX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
 
-end subroutine convolution_GJ_to_E
+! 			JX_w(n) = JX_w(n) &
+! 					+ sqrt(-2.0d0*omega0/I_u/om/dble(n)) * JX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
+! 		enddo
+! 			JX_w(0) = 2.0d0 * omega0  !!!要確認
+
+! 			GX_w(n) = EX_w(n) / JX_w(n)
+
+! 	enddo
+! end subroutine laplace_fft
+
+
+
+! subroutine convolution_GJ_to_E
+! 	use const_para
+! 	implicit none
+! 		complex(kind(0d0)) :: in_G
+! 		complex(kind(0d0)) :: in_J
+! 		complex(kind(0d0)) :: in_EF
+! 		complex(kind(0d0)) :: out_G
+! 		complex(kind(0d0)) :: out_J
+! 		complex(kind(0d0)) :: out_ET
+
+! end subroutine convolution_GJ_to_E
 
 
 
