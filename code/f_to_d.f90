@@ -4,7 +4,8 @@
 ! DFT後の横軸 2*pi*k/ns は間違ってるかも
 ! DFTの際にdt'幅×必要あるかも
 ! taper間違ってるかも 要確認
-!JX_w GX_w ひとつめNAN
+!JX_w GX_w ひとつめNAN  >> Jx(0) =2omega_0
+!n> dt*n ?
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 program f_to_d!(ns)
 	use const_para
@@ -13,6 +14,7 @@ program f_to_d!(ns)
 	integer :: nd,ios
 	real(8), allocatable :: inp1_r(:),inp1_i(:),inp2_r(:),inp2_i(:),t1(:),t2(:)
 	real(8), allocatable :: w(:) !窓関数
+	real(8) :: om
 
 	integer :: n , l
 	integer :: ns !sampling数
@@ -98,6 +100,7 @@ program f_to_d!(ns)
 !DFT開始---------------------------------------------------------------------------
 !kとn逆かも注意
     ns = nd  !サンプリング数
+    om   = 2.f*M_PI/ns /dt
 
 	EX_w(0:ns-1) = 0.0d0
 	JX_w(0:ns-1) = 0.0d0
