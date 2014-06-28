@@ -62,11 +62,13 @@ subroutine set_d_txyz
 !!!グリッド間隔:dxの設定;グリッド分散!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 if(dx>(cmax/fmax)) then
-    write(*,*) '*****grid dispersion may happen***** dx is too large'
+    write(*,*) '*****grid dispersion may happen** dx>(cmax/fmax)'
 endif
 
+
 if(dx>(0.999d0*cmin/fmax/Glim)) then
-    write(*,*) '*****grid dispersion may happen***** dx is too large'
+    write(*,*) '(0.999d0*cmin/fmax/Glim)',(0.999d0*cmin/fmax/Glim)
+    write(*,*) '*****grid dispersion may happen***** dx>(0.999d0*cmin/fmax/Glim)'
 endif
 
 !!!タイムステップdtの計算;クーラン条件!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -80,9 +82,9 @@ endif
 
     dt_mittet = dx/(3.0d0*0.5d0)/cmax !standard 2nd order space schme
 
-    write(*,*) '#courant imamu dt_max', dt_max
-    write(*,*) '#courant dt_ideal',dt_ideal  !デカすぎ
-    write(*,*) '#dt mittet',dt_mittet
+    write(*,*) '#courant imamu dt_max', dt_max , dt
+    write(*,*) '#courant dt_ideal',dt_ideal ,dt  !デカすぎ
+    write(*,*) '#dt mittet',dt_mittet ,dt
 
 
 
@@ -114,7 +116,7 @@ endif
 
      Nt2=int(S*nx/(3.0d0**0.5))!*sqrt(sigmax/sigmin))
 
-    write(*,*) '#number of timestep Nt1,Nt2',Nt1,Nt2
+    write(*,*) '#number of timestep Nt1,Nt2',Nt1,Nt2,nstep
 
      if(Nt1 >nstep) then
     write(*,*) "******* time step nstep is violated *******"
@@ -128,8 +130,9 @@ endif
 !     cmin = sqrt(2.0d0*omega0/MU0/1.0d0)
     fmax_w = cmin /Glim /max(dx,dy,dz)
 
-    write(*,*) "#fmax_w",fmax_w
+    write(*,*) "#fmax_w",fmax_w, fmax
+
      if(fmax_w <fmax) then
-    write(*,*), "******* fmax is violated *******\n"
+    write(*,*), "******* fmax is violated ****fmax > cmin /Glim /max(dx,dy,dz)"
     endif
             end subroutine set_d_txyz

@@ -95,7 +95,8 @@ program f_to_d!(ns)
 
 
 
-!DFT開始----------------------------------------------------------------------------
+!DFT開始---------------------------------------------------------------------------
+!kとn逆かも注意
     ns = nd  !サンプリング数
 
 	EX_w(0:ns-1) = 0.0d0
@@ -107,11 +108,12 @@ program f_to_d!(ns)
 		do n=0,ns-1 !時間用ループ
 
 		EX_w(k) = EX_w(k) &
-				+ EX_f(n) * exp( sqrt(2.0d0*pi*omega0*k/dble(ns)) * (I_u-1.0d0) * n )    !*dt
+				+ EX_f(n) *dt &
+				* exp( sqrt(2.0d0*pi*omega0*k/dble(ns)) * (I_u-1.0d0) * n )    !*dt
 
 		JX_w(k) = JX_w(k) &
-				+ exp( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(ns)) ) &
-				* JX_f(n) * exp( sqrt(2.0d0*pi*omega0*k/dble(ns)) * (I_u-1.0d0) * n )    !*dt
+				+ exp( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(ns)) ) * JX_f(n) *dt &
+				* exp( sqrt(2.0d0*pi*omega0*k/dble(ns)) * (I_u-1.0d0) * n )    !*dt
 
 		enddo
 

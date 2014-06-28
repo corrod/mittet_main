@@ -592,7 +592,7 @@ void e_field4(double *EX, double *EY, double *EZ, double *HX, double *HY, double
         }
       }
     }
-//  
+//
     #ifdef _OPENMP
     #pragma omp for
     #endif
@@ -781,7 +781,7 @@ void output(double *EX, double *EY, double *EZ, double *HX, double *HY, double *
         fprintf(ofe2[i],"%lf    %e\n",(step+0.f)*dt,EY[ijk]);
         fprintf(ofe3[i],"%lf    %e\n",(step+0.f)*dt,EZ[ijk]);
       }
-// output in files at all point 
+// output in files at all point
 //      if((step%10) == 0){
 //        FILE *fptime1,*fptime2,*fptime3;
 //        sprintf(stt1, "./data2/time_ex_%05d.dat",step);
@@ -978,7 +978,7 @@ void e_field4_bp(double *EX, double *EY, double *EZ, double *HX, double *HY, dou
         }
       }
     }
-//  
+//
     #ifdef _OPENMP
     #pragma omp for
     #endif
@@ -2139,7 +2139,7 @@ void laplaceToFreq_2(int isource)
 
           ijkw = isource*upperF*ix*iy*iz + w*ix*iy*iz + jz*ix*iy + jy*ix + jx;
           ijks = w*ix*iy*iz + jz*ix*iy + jy*ix + jx;
-          // convolution G * J 
+          // convolution G * J
           EcalX_ff[ijks] = ctmp_gx[w] * out_True[w];
           EcalY_ff[ijks] = ctmp_gy[w] * out_True[w];
           EcalZ_ff[ijks] = ctmp_gz[w] * out_True[w];
@@ -2372,7 +2372,7 @@ void init_iterate()
             EcalX_back[ijkw] = 0.f;
             EcalY_back[ijkw] = 0.f;
             EcalZ_back[ijkw] = 0.f;
-          } 
+          }
         }
       }
     }
@@ -2686,7 +2686,7 @@ void laplaceToFreq_3()
           ctmp_gy[w] = ctmp_ey[w] / ctmp_j[w];
           ctmp_gz[w] = ctmp_ez[w] / ctmp_j[w];
           ijkw = w*ix*iy*iz + jz*ix*iy + jy*ix + jx;
-          // convolution G * J 
+          // convolution G * J
           EcalX_ff2[ijkw] = ctmp_gx[w] * out_True[w];
           EcalY_ff2[ijkw] = ctmp_gy[w] * out_True[w];
           EcalZ_ff2[ijkw] = ctmp_gz[w] * out_True[w];
