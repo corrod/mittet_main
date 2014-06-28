@@ -38,7 +38,8 @@ program f_to_d!(ns)
     close(51)
 
      !配列確保
-    allocate( w(0:nd-1),t1(0:nd-1),inp1_r(0:nd-1),inp1_i(0:nd-1),t2(0:nd-1),inp2_r(0:nd-1),inp2_i(0:nd-1),EX_w(0:nd-1),EX_f(0:nd-1),JX_w(0:nd-1),JX_f(0:nd-1),GX_w(0:nd-1) )
+    allocate(t1(0:nd-1),inp1_r(0:nd-1),inp1_i(0:nd-1),t2(0:nd-1),inp2_r(0:nd-1),inp2_i(0:nd-1))
+    allocate(w(0:nd-1),EX_w(0:nd-1),EX_f(0:nd-1),JX_w(0:nd-1),JX_f(0:nd-1),GX_w(0:nd-1))
 
      !DFTするEXデータの読み込み
     open(51,file='inp1.dat',action='read')
