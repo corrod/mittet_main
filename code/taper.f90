@@ -3,70 +3,85 @@
 ! 範囲要確認
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-!cos window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine window_cos(nd,w)
-		use const_para
-		implicit none
-		integer, intent(in)  :: nd !taper幅
-		real(8) :: w(0:nd-1) !window function重み
+! !cos window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! subroutine window_cos(nd,w)
+! 		use const_para
+! 		implicit none
+! 		integer, intent(in)  :: nd !taper幅
+! 		real(8),intent(out) :: w(0:nd-1) !window function重み
 
-	    do i=0,nd-1
-	    	w(i) = cos(acos(-1.0d0)*0.5d0*dble(i-20)/12.0d0)
-! 		    write(*,*) w(i)
-	    enddo
-end subroutine window_cos
+! 	    do i=0,nd-1
+! 	    	w(i) = cos(acos(-1.0d0)*0.5d0*dble(i-20)/12.0d0)
+! ! 		    write(*,*) w(i)
+! 	    enddo
+! end subroutine window_cos
 
 !Bartlett window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine window_bartlett(nd,w)
-		use const_para
-		implicit none
-		integer, parameter   :: m=5 !taper幅
-		integer, intent(in)  :: nd !taper幅
-		real(8) :: w(0:nd-1) !window function重み
+! subroutine window_bartlett(nd,w)
+! 		use const_para
+! 		implicit none
+! 		integer, intent(in)  :: nd !taper幅
+! 		real(8),intent(out) :: w(0:nd-1) !window function重み
 
-	    do i=1,m/2
-		    w(i) = (dble(m)/2.0d0-dble(i))*2.0d0/dble(m) !n<=m/2
-	    enddo
-end subroutine window_bartlett
+! 	    do i=0,nd/2
+! 		    w(i) = (dble(nd)/2.0d0-dble(i))*2.0d0/dble(nd) !n<=nd/2
+! 	    enddo
+! end subroutine window_bartlett
 
 !Hanning window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 subroutine window_hanning(nd,w)
 	use const_para
 		implicit none
-		integer, parameter   :: m=5 !taper幅
 		integer, intent(in)  :: nd !taper幅
-		real(8) :: w(0:nd-1) !window function重み
+		real(8), intent(out) :: w(0:nd-1) !window function重み
 
-	    do i=1,m/2
-		    w(i) = cos(pi*dble(i)/dble(m) )     !n<=m/2
+	    do i=0,nd-1
+	    	w(i) = 1.0d0-(cos(pi*dble(i)/dble(nd-1)))**2.0d0
 	    enddo
 end subroutine window_hanning
 
-!Hamming window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!flattop!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+subroutine window_flattop(nd,w)
+	use const_para
+		implicit none
+		integer, intent(in)  :: nd !should be even number
+		real(8) :: w1(0:nd-1)
+		real(8),intent(out) :: w(0:nd-1) !window function重み
+	if(mod(nd,2)==1) then
+		write(*,*) '*********nd should be even number!!*****************'
+	endif
+		do i=0,nd-1
+		       	w1(i) = (4.0d0*pi*(dble(i)-dble(nd-1)/2.0d0)/dble(nd-1.0d0))
+		    	w(i) = (0.54d0+0.46d0*cos(0.5d0*w1(i)))*sin(w1(i))/w1(i)
+	    enddo
+end subroutine window_flattop
+
+
+!Hamming window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!0にはならない！！
 subroutine window_hamming(nd,w)
 	use const_para
 		implicit none
-		integer, parameter   :: m=5 !taper幅
 		integer, intent(in)  :: nd !taper幅
-		real(8) :: w(0:nd-1) !window function重み
+		real(8),intent(out) :: w(0:nd-1) !window function重み
 
-	    do i=1,m/2
-		    w(i) = 0.54d0 + 0.46d0*cos(2.0d0*pi*dble(i)/dble(m))      !n<=m/2
+	    do i=0,nd-1
+	    	w(i) = 0.54d0-0.46d0*cos(2.0d0*pi*dble(i)/dble(nd-1))
 	    enddo
 end subroutine window_hamming
 
-!Blackman window!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine window_blackman(nd,w)
-	use const_para
-		implicit none
-		integer, parameter   :: m=5 !taper幅
-		integer, intent(in)  :: nd !taper幅
-		real(8) :: w(0:nd-1) !window function重み
 
-		do i=1,m/2
-		    w(i) = 0.42d0 + 0.5d0*cos(2.0d0*pi*dble(i)/dble(m)) - 0.08d0*cos(4.0d0*pi*dble(i)/dble(m))      !n<=m/2
-	    enddo
-end subroutine window_blackman
+!Blackman window!!!!!!!!!!!!!!!!ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+! subroutine window_blackman(nd,w)
+! 	use const_para
+! 		implicit none
+! 		integer, intent(in)  :: nd !taper幅
+! 		real(8) :: w(0:nd-1) !window function重み
+
+! 		do i=0,nd-1
+! 		    w(i) = 0.42d0 - 0.5d0*cos(2.0d0*pi*dble(i)/dble(nd-1.0d0)) - 0.08d0*cos(4.0d0*pi*dble(i)/dble(nd-1.0d0))      !n<=m/2
+! 	    enddo
+! end subroutine window_blackman
 
 
 

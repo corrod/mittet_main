@@ -53,8 +53,9 @@ program f_to_d!(ns)
     EX_f(0:nd-1) = inp1_r(0:nd-1) + (0.0d0,1.0d0)*inp1_i(0:nd-1)
 
 
-    !窓関数をかけるtaper----------------
-    call window_cos(nd,w)
+    !窓関数をかけるhamming window----------------
+    call window_hamming(nd,w) !hamming 両端が0にはならない窓
+!     call window_hanning(nd,w) !hanning 両端が0になる窓
 
 	!taper かけて
     do i=0,nd-1
@@ -83,8 +84,10 @@ program f_to_d!(ns)
     JX_f(0:nd-1) = inp2_r(0:nd-1) + (0.0d0,1.0d0)*inp2_i(0:nd-1)
 
 
-    !窓関数をかける cos_window-----------------
-    call window_cos(nd,w)
+    !窓関数をかける hamming window-----------------
+    call window_hamming(nd,w) !hamming 両端が0にはならない窓
+!     call window_hamming(nd,w) !hanning 両端が0になる窓
+
 
 	!taper かけて
     do i=0,nd-1
@@ -100,7 +103,7 @@ program f_to_d!(ns)
 !DFT開始---------------------------------------------------------------------------
 !kとn逆かも注意
     ns = nd  !サンプリング数
-    om   = 2.f*M_PI/ns /dt
+    om   = 2.d0*pi/ns/dt
 
 	EX_w(0:ns-1) = 0.0d0
 	JX_w(0:ns-1) = 0.0d0
@@ -135,7 +138,7 @@ program f_to_d!(ns)
 		open(60,file='out1.dat')
 
 		do k=0,ns-1
-			write(60,*) k * 2.0d0*pi/ns, real(EX_w(k)),aimag(EX_w(k))   !!!横軸周波数の書き方違うかも
+			write(60,*) k*om, real(EX_w(k)),aimag(EX_w(k))   !!!横軸周波数の書き方違うかも
 		enddo
 		close(60)
 
@@ -144,7 +147,7 @@ program f_to_d!(ns)
 		open(61,file='out2.dat')
 
 		do k=0,ns-1
-			write(61,*) k * 2.0d0*pi/ns, real(JX_w(k)),aimag(JX_w(k))
+			write(61,*) k*om, real(JX_w(k)),aimag(JX_w(k))
 		enddo
 		close(61)
 
@@ -154,7 +157,7 @@ program f_to_d!(ns)
 		open(62,file='out3.dat')
 
 		do k=0,ns-1
-			write(62,*) k * 2.0d0*pi/ns, real(GX_w(k)),aimag(GX_w(k))
+			write(62,*) k*om, real(GX_w(k)),aimag(GX_w(k))
 		enddo
 		close(62)
 
