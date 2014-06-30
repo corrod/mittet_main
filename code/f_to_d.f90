@@ -1,12 +1,12 @@
-! ficticious E'(t') to diffusive frequency domain E(ω), using DFT
+! ficticious E'(t') to diffusive frequency domain E(ω), using DFT  /////////
 ! frequency green function GX_w(ω)
 ! DFT
-! DFT後の横軸 2*pi*k/ns は間違ってるかも
-! DFTの際にdt'幅×必要あるかも
+! DFT後の横軸 2*pi*k/ns は間違ってるかも /dt必要?
+! DFTの際にdt'幅かける必要あるかも
 ! taper間違ってるかも 要確認
 !JX_w GX_w ひとつめNAN  >> Jx(0) =2omega_0
 !n> dt*n ?
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!//////////////////////////////////////////////////////////////////////////
 program f_to_d!(ns)
 	use const_para
 	implicit none
@@ -32,11 +32,11 @@ program f_to_d!(ns)
     !EXファイル（データ）の長さNDを調べる-------------------------------------
     open(51,file='inp1.dat',action='read')
       nd=0
-    do
-        read(51,'(f12.0)',iostat=ios)
-        if (ios<0) exit !ファイルの末尾にきたらループを抜ける
-         nd=nd+1
-    enddo
+	    do
+	        read(51,'(f12.0)',iostat=ios)
+	        if (ios<0) exit !ファイルの末尾にきたらループを抜ける
+	         nd=nd+1
+	    enddo
     close(51)
 
      !配列確保
@@ -46,53 +46,60 @@ program f_to_d!(ns)
      !DFTするEXデータの読み込み
     open(51,file='inp1.dat',action='read')
       do i=0,nd-1
-      read(51,*) t1(i), inp1_r(i), inp2_i(i)
+	    read(51,*) t1(i), inp1_r(i), inp1_i(i)
+	  EX_f(i) = inp1_r(i) + (0.0d0,1.0d0)*inp1_i(i)
       enddo
     close(51)
 
-    EX_f(0:nd-1) = inp1_r(0:nd-1) + (0.0d0,1.0d0)*inp1_i(0:nd-1)
 
 
     !窓関数をかけるhamming window----------------
     call window_hamming(nd,w) !hamming 両端が0にはならない窓
 !     call window_hanning(nd,w) !hanning 両端が0になる窓
 
-	!taper かけて
-    do i=0,nd-1
-    	Ex_f(i) = Ex_f(i) * w(i)
-	enddo
+
+		!taper かけて
+	    do i=0,nd-1
+	    	write(8,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かける前
+	    	Ex_f(i) = Ex_f(i) * w(i)
+	    	write(9,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かけた後
+		enddo
 
 	!JXファイル（データ）の長さNDを調べる------------------------------------
     open(51,file='inp2.dat',action='read')
       nd=0
-    do
-        read(51,'(f12.0)',iostat=ios)
-        if (ios<0) exit !ファイルの末尾にきたらループを抜ける
-         nd=nd+1
-    enddo
+	    do
+	        read(51,'(f12.0)',iostat=ios)
+	        if (ios<0) exit !ファイルの末尾にきたらループを抜ける
+	         nd=nd+1
+	    enddo
     close(51)
 
 
      !DFTするJXデータの読み込み
     open(51,file='inp2.dat',action='read')
       do i=0,nd-1
-      read(51,*) t2(i), inp2_r(i), inp2_i(i)
+	      read(51,*) t2(i), inp2_r(i), inp2_i(i)
+	  JX_f(i) = inp2_r(i) + (0.0d0,1.0d0)*inp2_i(i)
       enddo
     close(51)
 
-
-    JX_f(0:nd-1) = inp2_r(0:nd-1) + (0.0d0,1.0d0)*inp2_i(0:nd-1)
 
 
     !窓関数をかける hamming window-----------------
     call window_hamming(nd,w) !hamming 両端が0にはならない窓
 !     call window_hamming(nd,w) !hanning 両端が0になる窓
+		do i=0,nd-1
+	    write(7,*) w(i)
+	    enddo
 
 
 	!taper かけて
-    do i=0,nd-1
-    	Jx_f(i) = Jx_f(i) * w(i)
-	enddo
+	    do i=0,nd-1
+			write(10,*) i*dt,real(JX_f(i)),aimag(JX_f(i))!かける前出力
+	    	Jx_f(i) = Jx_f(i) * w(i)
+		    write(11,*) i*dt,real(JX_f(i)),aimag(JX_f(i))!かけた後出力
+		enddo
 
 
 
@@ -162,8 +169,11 @@ program f_to_d!(ns)
 		close(62)
 
 
-deallocate ( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JX_w,JX_f,GX_w )
 
+!! freq to time using FFTw/////////////////////////////////////////////////////
+
+
+	deallocate ( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JX_w,JX_f,GX_w )
 		end program f_to_d
 
 
@@ -171,6 +181,17 @@ deallocate ( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JX_w,JX_f,GX_w )
 
 
 
+! subroutine convolution_GJ_to_E
+! 	use const_para
+! 	implicit none
+! 		complex(kind(0d0)) :: in_G
+! 		complex(kind(0d0)) :: in_J
+! 		complex(kind(0d0)) :: in_EF
+! 		complex(kind(0d0)) :: out_G
+! 		complex(kind(0d0)) :: out_J
+! 		complex(kind(0d0)) :: out_ET
+
+! end subroutine convolution_GJ_to_E
 
 
 
@@ -224,19 +245,172 @@ deallocate ( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JX_w,JX_f,GX_w )
 
 
 
-! subroutine convolution_GJ_to_E
+
+
+
+
+!!ficticiou wave domain からdiffusive frequency using FFT //////////////////////////
+! FFTW
+!入出力の列数に注意
+!deallocateするとプログラム止まる問題ありls
+!///////////////////////////////////////////////////////////////////////////////////
+
+! program f_to_d
 ! 	use const_para
-! 	implicit none
-! 		complex(kind(0d0)) :: in_G
-! 		complex(kind(0d0)) :: in_J
-! 		complex(kind(0d0)) :: in_EF
-! 		complex(kind(0d0)) :: out_G
-! 		complex(kind(0d0)) :: out_J
-! 		complex(kind(0d0)) :: out_ET
+! 		implicit none
 
-! end subroutine convolution_GJ_to_E
+!     		integer                         :: n,nd,ios
+!     		!real(8)                        :: omega
+!         real(8), allocatable            :: inp(:), t(:), f(:), p(:)
+!         complex(kind(0d0)), allocatable :: c(:)
+!     	!	complex(kind(0d0)), allocatable :: Gxn(:,:,:),Gyn(:,:,:),Gzn(:,:,:)
+!     	!	real(8), allocatable :: jh(:)
+!        ! character(8) :: inp1
+!        ! character(8) :: out1,out2,out3
+!        ! character(5), parameter :: inp2='jh.d'
+!        ! character(12),parameter :: out4='jh_as.out',out5='jh_ps.out',out6='jh_fft.out'
+!         integer :: plan(8)
 
 
+! 	! FFTW3を呼び出すのに必要なヘッダーファイルを include する
+!     include 'fftw3.f'
+
+!     !!! 開始------------------------------------------------------------
+!     !ファイル（データ）の長さNDを調べる
+!     open(51,file='inp1.dat',action='read')
+!       nd=0
+!     do
+!         read(51,'(f12.0)',iostat=ios)
+!         if (ios<0) exit !ファイルの末尾にきたらループを抜ける
+!          nd=nd+1
+!     enddo
+!     close(51)
+
+
+!   	!データの長さをnの２乗になるように決めて
+!     !電場exデータ、複素フーリエ係数、フーリエ振幅、フーリエ位相の配列を確保
+!     n = 2**int(log(dble(nd))/ log(2.0d0)+0.5d0)
+
+!     !配列確保
+!     allocate(t(1:n),inp(1:n),c(1:n/2),f(1:n/2),p(1:n/2))
+
+
+!     !fftするデータの読み込み
+!     open(51,file='inp1.dat',action='read')
+!       do i=1,nd
+!       read(51,*) t(i), inp(i)
+!       enddo
+!     close(51)
+
+
+!    	!不足分は0パッディング
+!     inp(nd+1:n) = 0.0d0
+
+
+!     !fftwの実行
+!     call dfftw_plan_dft_r2c_1d(plan,n,inp,c,fftw_estimate)
+!     call dfftw_execute(plan)
+!     call dfftw_destroy_plan(plan)
+
+
+!     ! フーリエ振幅スペクトル，フーリエ位相スペクトルを求める
+!     f= abs(c)
+!     p= atan2(aimag(c),dble(c))
+
+
+! 	! フーリエ振幅スペクトル，フーリエ位相スペクトルの書き出し
+!     open(61,file='out1.dat')!,status='replace',action='write')
+!       do i=1,n/2
+!       write(61,*) dble(i-1)/(dble(n)*dt), f(i)
+!       enddo
+!     close(61)
+
+
+!     open(61,file='out2.dat')!,status='replace',action='write')
+!       do i=1,n/2
+!       write(61,*) dble(i-1)/(dble(n)*dt), p(i)
+!       enddo
+!     close(61)
+
+
+!      !フーリエ変換後のdiffusive freqency domainのinp
+!     open(61,file='out3.dat')!,status='replace',action='write')
+!       do i=1,n/2
+!       write(61,*) dble(i-1)/(dble(n)*dt), real(c(i)), aimag(c(i))
+!       enddo
+!     close(61)
+
+!     end program f_to_d
+
+! 	!!!jh-------------------------------------------------------------------
+! 	!ファイル（データ）の長さNDを調べる
+! !    open(52,file=inp2,action='read')
+! !    nd=0
+! !    do
+! !        read(52,'(f12.0)',iostat=ios)
+! !        if (ios<0) exit !ファイルの末尾にきたらループを抜ける
+! !         nd=nd+1
+! !!    enddo
+!  !   close(52)
+
+!  	!データの長さをnの２乗になるように決めて
+!     !電場exデータ、複素フーリエ係数、フーリエ振幅、フーリエ位相の配列を確保
+! !     n=2**int(log(dble(nd))/ log(2.0d0)+0.5d0)
+
+!  !    allocate(t(1:n),jh(1:n),c(1:n/2),f(1:n/2),p(1:n/2))
+! !    write(*,*) 'データ数nd,nの２乗数',nd,n
+
+!  !   if (nd>n) then
+!  !!   write(*,*) "nd must < n"
+  !  endif
+
+  !  allocate(jh(1:n))
+
+    !fftするデータの読み込み
+!	open(52,file=inp2,action='read')          !!!!!!!!!!!!!!  n>ndが崩れるときがある
+ !   read(52,*) jh(1:nd)
+  !  close(52)
+
+
+ 	!不足分は0パッディング
+  !  jh(nd+1:n)=0.0d0
+
+    !fftwの実行
+ !   call dfftw_plan_dft_r2c_1d(plan,n,jh,c,fftw_estimate)
+  !  call dfftw_execute(plan)
+   ! call dfftw_destroy_plan(plan)
+
+    ! フーリエ振幅スペクトル，フーリエ位相スペクトルを求める
+    !f= abs(c)
+    !p= atan2(aimag(c),dble(c))
+
+	! フーリエ振幅スペクトル，フーリエ位相スペクトルの書き出し
+ !   open(61,file=out4,status='replace',action='write')
+  !  do i=1,n/2
+   ! write(61,*) f(i)
+    !enddo
+ !   close(61)
+
+  !  open(61,file=out5,status='replace',action='write')
+  !  do i=1,n/2
+  !  write(61,*) p(i)
+  !  enddo
+  !  close(61)
+
+     !フーリエ変換後のdiffusive freqency domainのjh
+        !√-2omega0/iomeagaをかける
+!    jh(1:n) = sqrt(-2.0d0*omega0/(i*omega)) * c(0:n/2)
+ !   open(61,file=out6,status='replace',action='write')
+  !  do i=1,n/2
+   ! write(61,*) (i-1)/(n*5.0d-4),real(c(i)),aimag(c(i))
+    !enddo
+    !close(61)
+
+
+!!!グリーン関数を求める-------------------------------------------------
+!	Gxn(:,:,:) = Ex / jh
+!	Gyn(:,:,:) = Ey / jh
+!	Gzn(:,:,:) = Ez / jh
 
 
 

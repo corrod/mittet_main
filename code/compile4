@@ -24,7 +24,7 @@ time ./ficticious
 # #ある点でのHZの時間分布
   ./gnu.sh
 # #HZの伝播movie
-   ./movie.sh
+   # ./movie.sh
 
 
 

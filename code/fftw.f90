@@ -1,5 +1,5 @@
 !!ficticiou wave domain からdiffusive frequency !!!!!!!
-!
+! FFTW
 !入出力の列数に注意
 !deallocateするとプログラム止まる問題ありls
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
