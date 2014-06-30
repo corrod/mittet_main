@@ -6,6 +6,9 @@
 ! taper間違ってるかも 要確認
 !JX_w GX_w ひとつめNAN  >> Jx(0) =2omega_0
 !n> dt*n ?
+!Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
+!JX_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
+!としているが、JX_f = signal(istep) かもしれない
 !//////////////////////////////////////////////////////////////////////////
 program f_to_d!(ns)
 	use const_para
@@ -24,8 +27,14 @@ program f_to_d!(ns)
 	complex(kind(0d0)),allocatable ::JX_f(:) !JX_f(0:ns-1)
 	complex(kind(0d0)),allocatable ::GX_w(:) !GX_w(0:ns-1) !diffusive domain Green's function
 	character(3) :: name
+
+	complex(kind(0d0)),allocatable :: in1(:), in2(:), in3(:)
+	complex(kind(0d0)),allocatable :: out1(:), out2(:), out3(:)
+	integer(8) :: plan1, plan2, plan3
+	complex(kind(0d0)),allocatable :: JX_t(:), EX_t(:),GX_t(:)
+
 !	omega=2.0d0*pi*k/ns
-	write(*,*) '*********f_to_d.f90 start********'
+	write(*,*) '*********DFT start********'
 
  !!! データの読み込み------------------------------------------------------------
 
@@ -42,6 +51,10 @@ program f_to_d!(ns)
      !配列確保
     allocate(t1(0:nd-1),inp1_r(0:nd-1),inp1_i(0:nd-1),t2(0:nd-1),inp2_r(0:nd-1),inp2_i(0:nd-1))
     allocate(w(0:nd-1),EX_w(0:nd-1),EX_f(0:nd-1),JX_w(0:nd-1),JX_f(0:nd-1),GX_w(0:nd-1))
+
+	allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
+	allocate( out1(0:nd-1), out2(0:nd-1), out3(0:nd-1) )
+	allocate( EX_t(0:nd-1),JX_t(0:nd-1),GX_t(0:nd-1) )
 
      !DFTするEXデータの読み込み
     open(51,file='inp1.dat',action='read')
@@ -100,8 +113,6 @@ program f_to_d!(ns)
 	    	Jx_f(i) = Jx_f(i) * w(i)
 		    write(11,*) i*dt,real(JX_f(i)),aimag(JX_f(i))!かけた後出力
 		enddo
-
-
 
 
 
@@ -169,11 +180,91 @@ program f_to_d!(ns)
 		close(62)
 
 
+! FREQUENCY JX_w,EX_w,GX_w to TIME JX_t,EX_t,GX_t---------------------------------------------
+	do k=0,nd-1
+		do n=0,nd-1
+		JX_t(k) = JX_t(k) &
+				+ JX_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
+		EX_t(k) = EX_t(k) &
+				+ EX_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
+		GX_t(k) = GX_t(k) &
+				+ GX_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
+		enddo
+	enddo
 
-!! freq to time using FFTw/////////////////////////////////////////////////////
+		open(71,file='invGJ')
+		open(72,file='invGE')
+		open(73,file='invGG')
+	do k=0,nd-1
+		write(71,*) k*dt, real(JX_t(k)), aimag(JX_t(k))
+		write(72,*) k*dt, real(EX_t(k)), aimag(EX_t(k))
+		write(73,*) k*dt, real(GX_t(k)), aimag(GX_t(k))
+	enddo
+		close(71)
+		close(72)
+		close(73)
+
+!//////////////////////////////////////////////////////////////////////////////////
+! freq to time transformation using FFT
+!////////////////////////////////////////////////////////////////////////////////
+! include 'fftw3.f'
+
+! 	do j=0,nd-1
+! 		in1(j) = Jx_w(j)
+! 		in2(j) = Ex_w(j)
+! 		in3(j) = GX_w(j)
+! 	enddo
+
+!////////////////////////////////////////////////////////////
+! make plans
+!////////////////////////////////////////////////////////////
+! 	!call dfttw_plan_dft_r2c_1d(plan1,nd,in1,out1,fftw_estimate) !real array入力
+! 	!call dfttw_plan_dft_r2c_1d(plan2,nd,in2,out2,fftw_estimate)
+! 	!call dfttw_plan_dft_r2c_1d(plan3,nd,in3,out3,fftw_estimate)
+!	call dfttw_plan_dft_1d(plan1,nd,in1,out1,fftw_estimate) !complex array入力
+! 	call dfttw_plan_dft_1d(plan2,nd,in2,out2,fftw_estimate)
+! 	call dfttw_plan_dft_1d(plan3,nd,in3,out3,fftw_estimate)
+
+!///////////////////////////////////////////////////////////
+! carry out fourier transformation
+!///////////////////////////////////////////////////////////
+! 	call dfftw_execute(plan1)
+! 	call dfftw_execute(plan2)
+! 	call dfftw_execute(plan3)
+
+!///////////////////////////////////////////////////////////
+! destruction
+!///////////////////////////////////////////////////////////
+! 	call dfftw_destory_plan(plan1)
+! 	call dfftw_destory_plan(plan2)
+! 	call dfftw_destory_plan(plan3)
 
 
-	deallocate ( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JX_w,JX_f,GX_w )
+! 	do k=0,nd-1
+! 	open(71,file='invGJ')
+! 	open(72,file='invGE')
+! 	open(73,file='invGG')
+! 	out1(k) = out1(k)/nd/dt*2.0d0
+! 	out2(k) = out2(k)/nd/dt*2.0d0
+! 	out3(k) = out3(k)/nd/dt*2.0d0
+
+! 	write(71,*) k*dt, real(out1(k)), aimag(out1(k))
+! 	write(72,*) k*dt, real(out2(k)), aimag(out2(k))
+! 	write(73,*) k*dt, real(out3(k)), aimag(out3(k))
+! 	close(71)
+! 	close(72)
+! 	close(73)
+! 	enddo
+
+
+! 	call dfftw_destroy_plan(p1)
+! 	call dfftw_destroy_plan(p2)
+! 	call dfftw_destroy_plan(p3)
+
+
+
+	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JX_w,JX_f,GX_w )
+	deallocate( in1,in2,in3,out1,out2,out3,EX_t,JX_t,GX_t )
 		end program f_to_d
 
 
