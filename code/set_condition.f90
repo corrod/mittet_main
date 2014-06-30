@@ -87,8 +87,6 @@ endif
     write(*,*) '#dt mittet',dt_mittet ,dt
 
 
-
-
 !CFL limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     cfl_limit = cmax*dt/dx*(3.0d0**0.5d0)
@@ -97,15 +95,12 @@ endif
     endif
 
 
-
 !Fourier limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     fourier_limit = cmax*dt/dx*pi/2.0d0*(3.0d0**0.5d0)
     if(fourier_limit>1) then
         write(*,*) '*****Fourier limit is violated*****'
     endif
-
-
 
 
 !!!the number of timestep :nstepの計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -123,8 +118,6 @@ endif
     endif
 
 
-
-
 !最大の周波数:fmaxの確認!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !     cmin = sqrt(2.0d0*omega0/MU0/1.0d0)
@@ -136,3 +129,24 @@ endif
     write(*,*), "******* fmax is violated ****fmax > cmin /Glim /max(dx,dy,dz)"
     endif
             end subroutine set_d_txyz
+
+
+
+
+!初期ehfield set 0
+subroutine set_zero_eh(EX,EY,EZ,HX,HY,HZ)
+        use const_para
+        implicit none
+
+        complex(kind(0d0)), intent(out) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
+        complex(kind(0d0)), intent(out) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
+
+        EX(1:nx,1:ny,1:nz) = 0.0d0
+        EZ(1:nx,1:ny,1:nz) = 0.0d0
+        EY(1:nx,1:ny,1:nz) = 0.0d0
+        HX(1:nx,1:ny,1:nz) = 0.0d0
+        HZ(1:nx,1:ny,1:nz) = 0.0d0
+        HY(1:nx,1:ny,1:nz) = 0.0d0
+end subroutine set_zero_eh
+
+

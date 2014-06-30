@@ -1,4 +1,5 @@
-! ficticious E'(t') to diffusive frequency domain E(ω), using DFT  /////////
+!///////////////////////////////////////////////////////////////////////////
+! ficticious E'(t') to diffusive frequency domain E(ω), using DFT, FFT
 ! frequency green function GX_w(ω)
 ! DFT
 ! DFT後の横軸 2*pi*k/ns は間違ってるかも /dt必要?
@@ -10,7 +11,7 @@
 !JX_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
 !としているが、JX_f = signal(istep) かもしれない
 !//////////////////////////////////////////////////////////////////////////
-program f_to_d!(ns)
+program f_to_d
 	use const_para
 	implicit none
 
@@ -28,16 +29,20 @@ program f_to_d!(ns)
 	complex(kind(0d0)),allocatable ::GX_w(:) !GX_w(0:ns-1) !diffusive domain Green's function
 	character(3) :: name
 
+	integer(8) :: plan1, plan2, plan3
 	complex(kind(0d0)),allocatable :: in1(:), in2(:), in3(:)
 	complex(kind(0d0)),allocatable :: out1(:), out2(:), out3(:)
-	integer(8) :: plan1, plan2, plan3
 	complex(kind(0d0)),allocatable :: JX_t(:), EX_t(:),GX_t(:)
+
+! include 'fftw3.f'
+
 
 !	omega=2.0d0*pi*k/ns
 	write(*,*) '*********DFT start********'
 
- !!! データの読み込み------------------------------------------------------------
-
+!/////////////////////////////////////////////////////////////////////////////
+! データの読み込み
+!/////////////////////////////////////////////////////////////////////////////
     !EXファイル（データ）の長さNDを調べる-------------------------------------
     open(51,file='inp1.dat',action='read')
       nd=0
@@ -66,17 +71,19 @@ program f_to_d!(ns)
 
 
 
-    !窓関数をかけるhamming window----------------
+!////////////////////////////////////////////////////////////////////////////
+!EX_fに窓関数をかける hamming window
+!///////////////////////////////////////////////////////////////////////////
     call window_hamming(nd,w) !hamming 両端が0にはならない窓
 !     call window_hanning(nd,w) !hanning 両端が0になる窓
-
-
 		!taper かけて
 	    do i=0,nd-1
 	    	write(8,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かける前
 	    	Ex_f(i) = Ex_f(i) * w(i)
 	    	write(9,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かけた後
 		enddo
+
+
 
 	!JXファイル（データ）の長さNDを調べる------------------------------------
     open(51,file='inp2.dat',action='read')
@@ -98,15 +105,14 @@ program f_to_d!(ns)
     close(51)
 
 
-
-    !窓関数をかける hamming window-----------------
+!////////////////////////////////////////////////////////////////////////////
+!JX_fに窓関数をかける hamming window
+!///////////////////////////////////////////////////////////////////////////
     call window_hamming(nd,w) !hamming 両端が0にはならない窓
 !     call window_hamming(nd,w) !hanning 両端が0になる窓
 		do i=0,nd-1
 	    write(7,*) w(i)
 	    enddo
-
-
 	!taper かけて
 	    do i=0,nd-1
 			write(10,*) i*dt,real(JX_f(i)),aimag(JX_f(i))!かける前出力
@@ -117,16 +123,16 @@ program f_to_d!(ns)
 
 
 
-
-!DFT開始---------------------------------------------------------------------------
+!/////////////////////////////////////////////////////////////////////////////////
+! DFT開始 ficticious to diffusive freq
+!/////////////////////////////////////////////////////////////////////////////////
 !kとn逆かも注意
     ns = nd  !サンプリング数
     om   = 2.d0*pi/ns/dt
 
 	EX_w(0:ns-1) = 0.0d0
 	JX_w(0:ns-1) = 0.0d0
-
-
+	GX_w(0:ns-1) = 0.0d0
 	do k=0,ns-1  !周波数用ループ
 
 		do n=0,ns-1 !時間用ループ
@@ -148,13 +154,11 @@ program f_to_d!(ns)
 	enddo
 
 
-
-!出力-------------------------------------------------------------------------------------
+!出力---------------------------------------------------------------------------------
 ! 		write(name,'(I3)') l  受信点位置とかがいいかも
 		!ある点での周波数領域EX_w
 ! 		open(50,file='EX_w'//name/'.d')
 		open(60,file='out1.dat')
-
 		do k=0,ns-1
 			write(60,*) k*om, real(EX_w(k)),aimag(EX_w(k))   !!!横軸周波数の書き方違うかも
 		enddo
@@ -163,7 +167,6 @@ program f_to_d!(ns)
 		!ある点での周波数領域JX_w
 ! 		open(61,file='JX_w'//name/'.d')
 		open(61,file='out2.dat')
-
 		do k=0,ns-1
 			write(61,*) k*om, real(JX_w(k)),aimag(JX_w(k))
 		enddo
@@ -173,15 +176,20 @@ program f_to_d!(ns)
 		!ある点での周波数領域グリーン関数
 ! 		open(62,file='GX_w'//name/'.d')
 		open(62,file='out3.dat')
-
 		do k=0,ns-1
 			write(62,*) k*om, real(GX_w(k)),aimag(GX_w(k))
 		enddo
 		close(62)
 
 
-! FREQUENCY JX_w,EX_w,GX_w to TIME JX_t,EX_t,GX_t---------------------------------------------
-	do k=0,nd-1
+!///////////////////////////////////////////////////////////////////////////////////////
+! FREQUENCY JX_w,EX_w,GX_w to TIME JX_t,EX_t,GX_t
+!///////////////////////////////////////////////////////////////////////////////////////
+	JX_t(0:nd-1) = 0.0d0
+	EX_t(0:nd-1) = 0.0d0
+	GX_t(0:nd-1) = 0.0d0
+
+ 	do k=0,nd-1
 		do n=0,nd-1
 		JX_t(k) = JX_t(k) &
 				+ JX_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
@@ -204,11 +212,15 @@ program f_to_d!(ns)
 		close(72)
 		close(73)
 
+
+
+
+
+
+
 !//////////////////////////////////////////////////////////////////////////////////
 ! freq to time transformation using FFT
 !////////////////////////////////////////////////////////////////////////////////
-! include 'fftw3.f'
-
 ! 	do j=0,nd-1
 ! 		in1(j) = Jx_w(j)
 ! 		in2(j) = Ex_w(j)
@@ -217,10 +229,15 @@ program f_to_d!(ns)
 
 !////////////////////////////////////////////////////////////
 ! make plans
+!       FFTW_FORWARD (-1) or FFTW_BACKWARD (+1)
 !////////////////////////////////////////////////////////////
 ! 	!call dfttw_plan_dft_r2c_1d(plan1,nd,in1,out1,fftw_estimate) !real array入力
 ! 	!call dfttw_plan_dft_r2c_1d(plan2,nd,in2,out2,fftw_estimate)
 ! 	!call dfttw_plan_dft_r2c_1d(plan3,nd,in3,out3,fftw_estimate)
+!	!call dfttw_plan_dft_1d(plan1,nd,in1,out1,FFTW_FORWARD,fftw_estimate) !complex array入力
+! 	!call dfttw_plan_dft_1d(plan2,nd,in2,out2,FFTW_FORWARD,fftw_estimate)
+! 	!call dfttw_plan_dft_1d(plan3,nd,in3,out3,FFTW_FORWARD,fftw_estimate)
+
 !	call dfttw_plan_dft_1d(plan1,nd,in1,out1,fftw_estimate) !complex array入力
 ! 	call dfttw_plan_dft_1d(plan2,nd,in2,out2,fftw_estimate)
 ! 	call dfttw_plan_dft_1d(plan3,nd,in3,out3,fftw_estimate)
@@ -228,9 +245,12 @@ program f_to_d!(ns)
 !///////////////////////////////////////////////////////////
 ! carry out fourier transformation
 !///////////////////////////////////////////////////////////
-! 	call dfftw_execute(plan1)
-! 	call dfftw_execute(plan2)
-! 	call dfftw_execute(plan3)
+! 	!call dfftw_execute(plan1)
+! 	!call dfftw_execute(plan2)
+! 	!call dfftw_execute(plan3)
+! 	call dfftw_execute(plan1,in1,out1)
+! 	call dfftw_execute(plan2,in2,out2)
+! 	call dfftw_execute(plan3,in3,out3)
 
 !///////////////////////////////////////////////////////////
 ! destruction
@@ -240,6 +260,8 @@ program f_to_d!(ns)
 ! 	call dfftw_destory_plan(plan3)
 
 
+! 出力-----------------------------------------------------
+!
 ! 	do k=0,nd-1
 ! 	open(71,file='invGJ')
 ! 	open(72,file='invGE')
@@ -255,13 +277,6 @@ program f_to_d!(ns)
 ! 	close(72)
 ! 	close(73)
 ! 	enddo
-
-
-! 	call dfftw_destroy_plan(p1)
-! 	call dfftw_destroy_plan(p2)
-! 	call dfftw_destroy_plan(p3)
-
-
 
 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JX_w,JX_f,GX_w )
 	deallocate( in1,in2,in3,out1,out2,out3,EX_t,JX_t,GX_t )

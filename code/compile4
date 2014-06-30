@@ -38,7 +38,7 @@ max=30
 
 while [ $j -le $max ]; do
 cp ex$i.d inp1.dat
-ifort -o f_to_d parameter.f90 taper.f90 f_to_d.f90 -check all -CB -traceback -g -r8
+ifort -o f_to_d parameter.f90 taper.f90 f_to_d.f90 #-I/usr/local/include -lfftw3 #-check all -CB -traceback -g -r8
 ./f_to_d
 cp out1.dat EX_w$i.dat
 cp out2.dat JX_w$i.dat

@@ -3,6 +3,7 @@
 !入出力の列数に注意
 !deallocateするとプログラム止まる問題ありls
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! FFTW_FORWARD (-1) or FFTW_BACKWARD (+1)
 
 program f_to_d
 	use const_para

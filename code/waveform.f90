@@ -1,16 +1,15 @@
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!送信源the first derivative of Gaussian!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz ←割る必要あるのか？
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
+!//////////////////////////////////////////////////////////////////////////
+! 送信源の設定
+!/////////////////////////////////////////////////////////////////////////
+subroutine read_source_3d(istep,t,Hz,sig,myu,signal)
     use const_para
     implicit none
 
     integer, intent(in)  :: istep
     real(8), intent(in)  :: t
-    complex(kind(0d0))              :: signal(nstep)!1st derivatice gaussian
-    complex(kind(0d0)), intent(out) :: Je(nstep)!電場ソース
-    complex(kind(0d0)), intent(out) :: Jh(nstep)!磁場ソース
+    complex(kind(0d0)),intent(in)   :: signal(nstep)!1st derivatice gaussian
+    complex(kind(0d0))   :: Ex(x0,y0,z0) !, intent(in) :: Ex(x0,y0,z0)!電場ソース
+    complex(kind(0d0)), intent(inout) :: Hz(x0,y0,z0)!磁場ソース
     real(8), intent(in)  :: sig(nx,ny,nz)
     real(8), intent(in)  :: myu(nx,ny,nz)
     real(8)              :: etaxx(x0,y0,z0)
@@ -18,19 +17,71 @@ subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
     real(8), parameter   :: beta = pi*(fmax**2)
 
     !1st_derivative gaussian
-!     Jn(istep) = -(2.0d0*beta*(t-t0)*sqrt(beta/pi))*exp(-beta*(t-t0)**2.0d0)
-    signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
+!     signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
 
     !電場ソースの設定
     etaxx(x0,y0,z0) = (2.0d0*omega0) / sig(x0,y0,z0)
-
-    Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
+    Ex(x0,y0,z0) = Ex(x0,y0,z0) &
+                    - dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 
     !磁場ソースの設定
-    Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
+    Hz(x0,y0,z0) = Hz(x0,y0,z0) &
+                    - signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
+        end subroutine read_source_3d
 
-        end subroutine firstderiv_gauss
 
+
+!1st derivative gauss////////////////////////////
+subroutine firstderiv_gauss(istep,t,signal)
+    use const_para
+    implicit none
+    integer, intent(in) :: istep
+    real(8), intent(in) :: t
+    real(8), parameter   :: t0 = pi/fmax
+    real(8), parameter   :: beta = pi*(fmax**2)
+    complex(kind(0d0)),intent(out) :: signal(nstep)
+
+    signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
+
+end subroutine firstderiv_gauss
+
+
+
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!送信源the first derivative of Gaussian!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz ←割る必要あるのか？ ある！！
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! subroutine firstderiv_gauss(istep,t,Je,Jh,sig,myu)
+!     use const_para
+!     implicit none
+
+!     integer, intent(in)  :: istep
+!     real(8), intent(in)  :: t
+!     complex(kind(0d0))              :: signal(nstep)!1st derivatice gaussian
+!     complex(kind(0d0)), intent(out) :: Je(nstep)!電場ソース
+!     complex(kind(0d0)), intent(out) :: Jh(nstep)!磁場ソース
+!     real(8), intent(in)  :: sig(nx,ny,nz)
+!     real(8), intent(in)  :: myu(nx,ny,nz)
+!     real(8)              :: etaxx(x0,y0,z0)
+!     real(8), parameter   :: t0 = pi/fmax
+!     real(8), parameter   :: beta = pi*(fmax**2)
+
+!     !1st_derivative gaussian
+! !     Jn(istep) = -(2.0d0*beta*(t-t0)*sqrt(beta/pi))*exp(-beta*(t-t0)**2.0d0)
+!     signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
+
+!     !電場ソースの設定
+!     etaxx(x0,y0,z0) = (2.0d0*omega0) / sig(x0,y0,z0)
+
+!     Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
+
+!     !磁場ソースの設定
+!     Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
+!         end subroutine firstderiv_gauss
 
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

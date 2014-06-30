@@ -49,6 +49,8 @@ program main
     open(22,file='ex1020.d')
     open(23,file='ex1030.d')
 
+    !set eh-field to 0
+    call set_zero_eh(EX,EY,EZ,HX,HY,HZ)
 
 write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
 
@@ -79,10 +81,10 @@ do istep = 1, nstep !反復計算開始----------------------
 write(*,*) istep
 
     !入力波源の設定
-    call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
-
+!     call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
+    call read_source_3d(istep,t,Ex,Hz,sig,myu,signal)
     !電場計算 E
-    call Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)
+    call Efield(istep,t,Je,Ex,Ey,Ez,Hx,Hy,Hz,sig)
 
     !境界条件 CPML_E
 !     call CPML_E(ex,ey,ez,hx,hy,hz,sig)!,cmax)  !
