@@ -1,16 +1,17 @@
-!!!仮想領域での電磁場の計算E-field!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!/////////////////////////////////////////////////////////////////////////////////
+! 仮想領域での電磁場の計算E-field
 !
-!  subroutine の統合
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!//////////////////////////////////////////////////////////////////////////////////
 
-subroutine Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)
+
+subroutine Efield4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     use const_para
     implicit none
 
     integer :: l
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
-    complex(kind(0d0)), intent(in) :: Je(nstep)
+!     complex(kind(0d0)), intent(in) :: Je(nstep)
     real(8), intent(in) :: sig(1:nx,1:ny,1:nz)
     real(8)             :: etaxx(nx,ny,nz),etayy(nx,ny,nz),etazz(nx,ny,nz)
     real(8)             :: CEXLY(1:nx,1:ny,1:nz),CEYLZ(1:nx,1:ny,1:nz),CEZLX(1:nx,1:ny,1:nz)
@@ -439,4 +440,4 @@ subroutine Efield(istep,t,Je,Ex,Ey,EZ,Hx,Hy,Hz,sig)
 !    !ソース項
 !!   Ez(x0,y0,z0) = Ez(x0,y0,z0) - Je(istep)
 
-end subroutine Efield
+end subroutine Efield4

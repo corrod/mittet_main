@@ -42,7 +42,8 @@ program main
     open(14,file='hz1010.d')
     open(15,file='hz1020.d')
     open(16,file='hz1030.d')
-    open(17,file='jh_fic.d')
+    open(17,file='je_fic.d')
+    open(18,file='jh_fic.d')
 
     open(20,file='ex1000.d')
     open(21,file='ex1010.d')
@@ -52,39 +53,27 @@ program main
     !set eh-field to 0
     call set_zero_eh(EX,EY,EZ,HX,HY,HZ)
 
-write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
+    write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
 
-    t=0.0d0!開始時間---------------------------------------
-
-!   Ex,Ey,Ez,Hx,Hy,Hzの初期化
-!     Ex(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-!     Ey(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-!     Ez(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-!     Hx(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-!     Hy(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-!     Hz(-1:nx+2,-1:ny+2,-1:nz+2)=0.0d0
-    Ex(1:nx,1:ny,1:nz)=0.0d0
-    Ey(1:nx,1:ny,1:nz)=0.0d0
-    Ez(1:nx,1:ny,1:nz)=0.0d0
-    Hx(1:nx,1:ny,1:nz)=0.0d0
-    Hy(1:nx,1:ny,1:nz)=0.0d0
-    Hz(1:nx,1:ny,1:nz)=0.0d0
-
+t=0.0d0!開始時間-----------------------------------
 
     !モデルの読み込み
     call model(sig,myu)
 
     !cmax,cminの計算 dt,dx,dy,dzの設定
-    call set_d_txyz !(cmax)
+    call confirm_parameter !(cmax)
 
 do istep = 1, nstep !反復計算開始----------------------
-write(*,*) istep
+    write(*,*) istep
 
     !入力波源の設定
 !     call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
-    call read_source_3d(istep,t,Ex,Hz,sig,myu,signal)
+    call read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
+!     call read_source_3d(istep,t,sig,myu,EX,Je,Jh)
+
     !電場計算 E
-    call Efield(istep,t,Je,Ex,Ey,Ez,Hx,Hy,Hz,sig)
+!     call Efield4(istep,t,Je,Ex,Ey,Ez,Hx,Hy,Hz,sig)
+    call Efield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,sig)
 
     !境界条件 CPML_E
 !     call CPML_E(ex,ey,ez,hx,hy,hz,sig)!,cmax)  !
@@ -98,7 +87,8 @@ write(*,*) istep
 t = t + dt*0.5d0  !時間の更新--------------------------
 
     !磁場計算 H
-    call Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
+!     call Hfield4(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
+    call Hfield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 
     !境界条件 CPML_H
 !     call CPML_H(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)
@@ -109,7 +99,7 @@ t = t + dt*0.5d0  !時間の更新--------------------------
 t = t + dt*0.5d0 !時間の更新---------------------------
 
     !アウトプットE-field、H-field
-    call output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
+    call output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
 enddo !*反復計算終了
 
@@ -122,6 +112,7 @@ enddo !*反復計算終了
     close(15)
     close(16)
     close(17)
+    close(18)
 
     close(20)
     close(21)

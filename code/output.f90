@@ -2,7 +2,8 @@
 !ファイル出力用サブルーチン
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
+subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
+
     use const_para
     implicit none
 
@@ -10,6 +11,7 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     integer, intent(in) :: istep
     real(8), intent(in) :: t
     complex(kind(0d0)), intent(in) :: Jh(nstep)
+    complex(kind(0d0)), intent(in) :: Je(nstep)
     complex(kind(0d0)), intent(in) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     character(5) :: name
@@ -18,7 +20,8 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     write(14,*) t, real(hz(x0,y0,z0+10)), aimag(hz(x0,y0,z0+10)) !hz1010.d
     write(15,*) t, real(hz(x0,y0,z0+20)), aimag(hz(x0,y0,z0+20))   !hz1030.d
     write(16,*) t, real(hz(x0,y0,z0+30)), aimag(hz(x0,y0,z0+30))
-    write(17,*) t, real(Jh(istep))      , aimag(Jh(istep))       !jh_fic.d
+    write(17,*) t, real(Je(istep))      , aimag(Je(istep))       !je_fic.d
+    write(18,*) t, real(Jh(istep))      , aimag(Jh(istep))       !jh_fic.d
 
     write(20,*) t, real(ex(x0,y0,z0)),    aimag(ex(x0,y0,z0))    !ex1000.d
     write(21,*) t, real(ex(x0+10,y0,z0)), aimag(ex(x0+10,y0,z0)) !ex1010.d
@@ -54,7 +57,7 @@ subroutine output_EH(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
             enddo
     close(9)
     endif
-            end subroutine output_EH
+            end subroutine output_EH_J
 
 
  !   open(1,file='Exfield.d', position='append')

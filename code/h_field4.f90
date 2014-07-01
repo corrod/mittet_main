@@ -1,9 +1,10 @@
-!仮想領域での磁場計算 Hfield !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!/////////////////////////////////////////////////////////////////////////////////////
+!仮想領域での磁場計算 Hfield
 !
-!subroutine の統合
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!/////////////////////////////////////////////////////////////////////////////////////
 
-subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
+subroutine  Hfield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,myu)
     use const_para
     implicit none
 
@@ -11,29 +12,29 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
     integer, intent(in) :: istep
     real(8), intent(in) :: t
     real(8), intent(in) :: myu(1:nx,1:ny,1:nz)
-    complex(kind(0d0)), intent(in) :: Jh(nstep)
+!     complex(kind(0d0)), intent(in) :: Jh(nstep)
     real(8)             :: CHXLY(1:nx,1:ny,1:nz), CHYLZ(1:nx,1:ny,1:nz), CHZLX(1:nx,1:ny,1:nz)
     real(8)             :: CHXLZ(1:nx,1:ny,1:nz), CHYLX(1:nx,1:ny,1:nz), CHZLY(1:nx,1:ny,1:nz)
     complex(kind(0d0)), intent(in)   :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(inout):: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
-!     complex(kind(0d0)), intent(in)   :: Ex(-1:nx+2,-1:ny+2,-1:nz+2),Ey(-1:nx+2,-1:ny+2,-1:nz+2),Ez(-1:nx+2,-1:ny+2,-1:nz+2)
-!     complex(kind(0d0)), intent(inout):: Hx(-1:nx+2,-1:ny+2,-1:nz+2),Hy(-1:nx+2,-1:ny+2,-1:nz+2),Hz(-1:nx+2,-1:ny+2,-1:nz+2)
-!     real(8)             :: alpha(ln,ln)
-!     real(8)             :: temp1(0:ln), temp2(0:ln)
-!     temp1(0) = 0.0d0
-!     temp2(0) = 0.0d0
+        !     complex(kind(0d0)), intent(in)   :: Ex(-1:nx+2,-1:ny+2,-1:nz+2),Ey(-1:nx+2,-1:ny+2,-1:nz+2),Ez(-1:nx+2,-1:ny+2,-1:nz+2)
+        !     complex(kind(0d0)), intent(inout):: Hx(-1:nx+2,-1:ny+2,-1:nz+2),Hy(-1:nx+2,-1:ny+2,-1:nz+2),Hz(-1:nx+2,-1:ny+2,-1:nz+2)
+        !     real(8)             :: alpha(ln,ln)
+        !     real(8)             :: temp1(0:ln), temp2(0:ln)
+        !     temp1(0) = 0.0d0
+        !     temp2(0) = 0.0d0
 
-    !Holberg optimization scheme
-  !   alpha(1,1) = 1.00235d0
-  !  alpha(2,1:2) = (/1.14443d0, -0.04886d0/)
-  !  alpha(3,1:3) = (/1.20282d0, -0.08276d0, 0.00950d0/)
-  !  alpha(4,1:4) = (/1.23041d0, -0.10313d0, 0.02005d0, -0.00331d0/)
+            !Holberg optimization scheme
+          !   alpha(1,1) = 1.00235d0
+          !  alpha(2,1:2) = (/1.14443d0, -0.04886d0/)
+          !  alpha(3,1:3) = (/1.20282d0, -0.08276d0, 0.00950d0/)
+          !  alpha(4,1:4) = (/1.23041d0, -0.10313d0, 0.02005d0, -0.00331d0/)
 
-    !Taylor expansion
-!     alpha(1,1)   = 1.0d0
-!     alpha(2,1:2) = (/1.12500d0,-0.04167d0/)
-!     alpha(3,1:3) = (/1.17188d0,-0.06510d0,0.00469d0/)
-!     alpha(4,1:4) = (/1.19629d0,-0.07975d0,-0.00070d0/)
+            !Taylor expansion
+        !     alpha(1,1)   = 1.0d0
+        !     alpha(2,1:2) = (/1.12500d0,-0.04167d0/)
+        !     alpha(3,1:3) = (/1.17188d0,-0.06510d0,0.00469d0/)
+        !     alpha(4,1:4) = (/1.19629d0,-0.07975d0,-0.00070d0/)
 
 
 
@@ -420,4 +421,4 @@ subroutine  Hfield(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !    !ソース項
 !    Hz(x0,y0,z0) = Hz(x0,y0,z0) - Jh(istep)
 
-            end subroutine Hfield
+            end subroutine Hfield4
