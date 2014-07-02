@@ -70,6 +70,19 @@ module const_para
     complex(kind(0d0)) :: exy1(nx,ny,nz),exy2(nx,ny,nz),ezy1(nx,ny,nz),ezy2(nx,ny,nz)
     complex(kind(0d0)) :: exz1(nx,ny,nz),exz2(nx,ny,nz),eyz1(nx,ny,nz),eyz2(nx,ny,nz)
 
+!CPML
+    integer, parameter  :: m         = 4, ma = 1 !mの代わりにnn
+    real(8), parameter  :: kappa_max = 1.0d0 !!!
+    real(8), parameter  :: a_max     = 0.2d0     !!!
+    real(8), parameter  :: nn        = 3.0d0 !nn should be [2,6]
+    real(8), parameter  :: order     = 0.0d0 !order should be (0,3]
+    real(8), parameter  :: optToMax  = 10.0d0
+    real(8), parameter  :: Rcoef     = 0.01d0 !R should be [10^-2, 10^-12]
+    real(8), parameter   ::epsir     = 1.0d0
+    real(8)             :: delta     = ncpml*dx
+
+
+
 !     real(8)            :: sigxx(nx,ny,nz) !diagonal sig x
 !     real(8)            :: sigyy(nx,ny,nz) !diagonal sig y
 !     real(8)            :: sigzz(nx,ny,nz) !diagonal sig z
