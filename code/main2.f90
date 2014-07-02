@@ -64,7 +64,7 @@ t=0.0d0!開始時間-----------------------------------
     call confirm_parameter !(cmax)
 
 do istep = 1, nstep !反復計算開始----------------------
-    write(*,*) istep
+!     write(*,*) istep
 
     !入力波源の設定
 !     call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
