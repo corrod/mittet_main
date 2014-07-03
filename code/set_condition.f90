@@ -1,3 +1,162 @@
+
+!/////////////////////////////////////////////////////////////////////////////////
+!!!dt,dx,dy,dzの設定cmax,cminの計算
+!////////////////////////////////////////////////////////////////////////////////
+subroutine confirm_parameter
+    use const_para
+    implicit none
+
+    integer :: Nt1,Nt2,Nt3
+    real(8) :: S !タイムステップ数を求める際の係数
+!     real(8) :: cwa, cfe, cair
+    real(8) :: courant
+!     real(8), intent(out) :: cmax
+!     real(8) :: cmin
+    real(8) :: t_cal !計測時間
+    real(8) :: dt2,dt4,dt_wh
+    real(8) :: fmax_w !最大周波数（上限）
+    real(8) :: dt_ideal !クーラン条件を満たすdt
+    real(8) :: cfl_limit
+    real(8) :: fourier_limit
+    real(8) :: skinwa, skinfe
+
+
+
+!媒質中の伝播速度cmax,cmin計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!     cwa  = sqrt(2.0d0*omega0/myuwa/sigwa)   !!!!cmin=sqrt(2.0d0*omega0/myuwa/maxv)
+!     cfe  = sqrt(2.0d0*omega0/myufe/sigfe)   !!!!cmax=sqrt(2.0d0*omega0/myufe/maxv)
+!     cair = 1.0d0 / sqrt(myuair*epsiair)
+
+!     cmax = cwa  !max(cwa,cfe,cair)!   最大伝播速度cmax計算
+!     cmin = cwa  !min(cwa,cfe,cair)
+!     cmin = sqrt(2.0d0*omega0/MU0/1.0d0)  !!別の求め方もあるだり
+
+
+
+!計算条件の出力!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    write(*,*)  'nstep',nstep
+    write(*,*)  'dt',dt
+    write(*,*)  'fmax', fmax
+    write(*,*)  'omega0',omega0
+    write(*,'(a,3i5)')      'nx,ny,nz',nx,ny,nz
+    write(*,'(a,3e12.4)')   'dx,dy,dz',dx,dy,dz
+    write(*,*)              '波長λ wa, fe', cmax/fmax, cmin/fmax
+    write(*,*) 'cwa',cwa
+    write(*,*) 'cfe',cfe
+    write(*,*) 'cmax',cmax
+!     write(*,*) 'cmin',cmin
+    write(*,*) '反射波の到達時間 (nx-10)*dx/c', (nx-10)*dx/cmax
+    write(*,*) 'propagate distance c*t', cwa*dt*nstep
+    write(*,*) '１/2辺の長さdx*nx/2',dx*nx*0.5d0
+    write(*,*) 'dt*nstep',dt*nstep
+    write(*,*) 'sig_wa,myu_wa',sigwa,myuwa
+    write(*,*) 'sig_fe,myu_fe',sigfe,myufe
+
+
+
+!!!skin depth の計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    skinwa = sqrt(1.0d0 / (pi*fmax*sigwa*myuwa))
+    skinfe = sqrt(1.0d0 / (pi*fmax*sigfe*myufe))
+
+    write(*,*) '# skindepth wa, fe', skinwa, skinfe
+
+
+
+!!! dx グリッド間隔:dxの設定;グリッド分散!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+if(dx>(cmax/fmax)) then
+    write(*,*) '*****grid dispersion may happen** dx>(cmax/fmax)***************'
+    write(*,*) "# cmax/fmax" , cmax/fmax
+endif
+
+
+if(dx>(0.999d0*cmin/fmax/Glim)) then
+    write(*,*) '*****grid dispersion may happen***** dx>(0.999d0*cmin/fmax/Glim) ********'
+endif
+    write(*,*) '# dx should  less than (0.999d0*cmin/fmax/Glim)',(0.999d0*cmin/fmax/Glim)
+
+
+
+!!! dt タイムステップdtの計算;クーラン条件!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !クーラン条件
+    !standard 2nd order space schme
+    dt2 = dx/(3.0d0*0.5d0)/cmax
+    !fourth order scheme with taylor operator
+    dt4 = (2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !こっちのほうがぽい
+    !参照不明
+    courant = 1.0d0/cmax/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0)
+    dt_ideal = courant*6.0d0/7.0d0*0.999d0        !デカすぎ
+    !Wang and Hohman
+    dt_wh = 0.15d0 * sqrt(MU0*sigmin)  !myuの値max min どちらに合わせる？
+    if(dt>dt4) then
+    write(*,*) '****************courant 条件確認!! ********************************'
+    endif
+    write(*,*) '# courant 2nd order scheme with taylor operator dt2', dt2
+    write(*,*) '# courant 4th order scheme with taylor operator dt4', dt4
+    write(*,*) '# courant dt_ideal, dt',dt_ideal !デカすぎ
+    write(*,*) '# courant Wang and Hohman dt_wh', dt_wh
+
+
+
+
+!CFL limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    cfl_limit = cmax*dt/dx*(3.0d0**0.5d0)
+    if(cfl_limit>1) then
+        write(*,*) '*****CFL limit is violated*****'
+    endif
+
+
+
+
+!Fourier limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    fourier_limit = cmax*dt/dx*pi/2.0d0*(3.0d0**0.5d0)
+    if(fourier_limit>1) then
+        write(*,*) '*****Fourier limit is violated*****'
+    endif
+
+
+
+
+!!!the number of timestep :nstepの計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     S=0.6d0  !S =[0.5:1.0]
+
+    Nt1=int( S*nx/sqrt( 1.0d0/dx**2 +1.0d0/dy**2 + 1.0d0/dz**2 ) )
+
+    Nt2=int( S*nx*(3.0d0**0.5)*sqrt(sigmax/sigmin) )
+
+    Nt3=int( S*nx*(3.0d0**0.5d0)*cmax/cmin )
+
+    write(*,*) '# number of timestep Nt1,Nt2,Nt3,nstep',Nt1,Nt2,Nt3
+
+     if(Nt1 >nstep) then
+    write(*,*) "******* time step nstep is violated *******"
+    endif
+
+
+
+
+!最大の周波数:fmaxの確認!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! grid dispersionと同じ
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!     cmin = sqrt(2.0d0*omega0/MU0/1.0d0)
+!     fmax_w = cmin /Glim /max(dx,dy,dz)
+
+!     write(*,*) "# fmax_w",fmax_w, fmax
+
+!      if(fmax_w <fmax) then
+!     write(*,*), "******* fmax is violated ****fmax > cmin /Glim /max(dx,dy,dz)"
+!     endif
+            end subroutine confirm_parameter
+
+
+
+
 !//////////////////////////////////////////////////////////////////////////
 !初期ehfield set 0
 !////////////////////////////////////////////////////////////////////////
@@ -34,141 +193,6 @@ subroutine set_zero_eh(EX,EY,EZ,HX,HY,HZ)
 !         psi_hyz1(1:nx,1:ny,1:nz) = 0.0d0
 !         psi_hxz1(1:nx,1:ny,1:nz) = 0.0d0
 end subroutine set_zero_eh
-
-
-!/////////////////////////////////////////////////////////////////////////////////
-!!!dt,dx,dy,dzの設定cmax,cminの計算
-!////////////////////////////////////////////////////////////////////////////////
-subroutine confirm_parameter
-    use const_para
-    implicit none
-
-    integer :: Nt1,Nt2
-    real(8) :: S !タイムステップ数を求める際の係数
-!     real(8) :: cwa, cfe, cair
-    real(8) :: courant
-!     real(8), intent(out) :: cmax
-!     real(8) :: cmin
-    real(8) :: t_cal !計測時間
-    real(8) :: dt_max
-    real(8) :: fmax_w !最大周波数（上限）
-    real(8) :: dt_ideal !クーラン条件を満たすdt
-    real(8) :: cfl_limit
-    real(8) :: fourier_limit
-    real(8) :: dt_mittet
-
-
-
-!媒質中の伝播速度cmax,cmin計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!     cwa  = sqrt(2.0d0*omega0/myuwa/sigwa)   !!!!cmin=sqrt(2.0d0*omega0/myuwa/maxv)
-!     cfe  = sqrt(2.0d0*omega0/myufe/sigfe)   !!!!cmax=sqrt(2.0d0*omega0/myufe/maxv)
-!     cair = 1.0d0 / sqrt(myuair*epsiair)
-
-!     cmax = cwa  !max(cwa,cfe,cair)!   最大伝播速度cmax計算
-!     cmin = cwa  !min(cwa,cfe,cair)
-!     cmin = sqrt(2.0d0*omega0/MU0/1.0d0)  !!別の求め方もあるだり
-
-
-
-!計算条件の出力!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    write(*,*)  'nstep',nstep
-    write(*,*)  'dt',dt
-    write(*,*)  'fmax', fmax
-    write(*,*)  'omega0',omega0
-    write(*,'(a,3i5)')      'nx,ny,nz',nx,ny,nz
-    write(*,'(a,3e12.4)')   'dx,dy,dz',dx,dy,dz
-    write(*,*)              '波長λ', cmax/fmax
-    write(*,*) 'cwa',cwa
-    write(*,*) 'cfe',cfe
-    write(*,*) 'cmax',cmax
-!     write(*,*) 'cmin',cmin
-    write(*,*) 'propagate distance c*t', cwa*dt*nstep
-    write(*,*) '１/2辺の長さdx*nx/2',dx*nx*0.5d0
-    write(*,*) 'dt*nstep',dt*nstep
-    write(*,*) 'sig_wa,myu_wa',sigwa,myuwa
-    write(*,*) 'sig_fe,myu_fe',sigfe,myufe
-
-
-
-!!!skin depth の計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
-
-!!!グリッド間隔:dxの設定;グリッド分散!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-if(dx>(cmax/fmax)) then
-    write(*,*) '*****grid dispersion may happen** dx>(cmax/fmax)'
-endif
-
-
-if(dx>(0.999d0*cmin/fmax/Glim)) then
-    write(*,*) '(0.999d0*cmin/fmax/Glim)',(0.999d0*cmin/fmax/Glim)
-    write(*,*) '*****grid dispersion may happen***** dx>(0.999d0*cmin/fmax/Glim)'
-endif
-
-!!!タイムステップdtの計算;クーラン条件!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !クーラン条件
-    dt_max = (2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !こっちのほうがぽい
-
-    courant = 1.0d0/cmax/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0)
-
-    dt_ideal = courant*6.0d0/7.0d0*0.999d0        !デカすぎ
-
-    dt_mittet = dx/(3.0d0*0.5d0)/cmax !standard 2nd order space schme
-
-    write(*,*) '#courant imamu dt_max', dt_max , dt
-    write(*,*) '#courant dt_ideal',dt_ideal ,dt  !デカすぎ
-    write(*,*) '#dt mittet',dt_mittet ,dt
-
-
-!CFL limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    cfl_limit = cmax*dt/dx*(3.0d0**0.5d0)
-    if(cfl_limit>1) then
-        write(*,*) '*****CFL limit is violated*****'
-    endif
-
-
-!Fourier limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    fourier_limit = cmax*dt/dx*pi/2.0d0*(3.0d0**0.5d0)
-    if(fourier_limit>1) then
-        write(*,*) '*****Fourier limit is violated*****'
-    endif
-
-
-!!!the number of timestep :nstepの計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     S=0.6d0  !S =[0.5:1.0]
-
-     Nt1=int(S*nx/sqrt( 1.0d0/dx**2 +1.0d0/dy**2 + 1.0d0/dz**2 ) )
-
-     Nt2=int(S*nx/(3.0d0**0.5))!*sqrt(sigmax/sigmin))
-
-    write(*,*) '#number of timestep Nt1,Nt2',Nt1,Nt2,nstep
-
-     if(Nt1 >nstep) then
-    write(*,*) "******* time step nstep is violated *******"
-    endif
-
-
-!最大の周波数:fmaxの確認!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!     cmin = sqrt(2.0d0*omega0/MU0/1.0d0)
-    fmax_w = cmin /Glim /max(dx,dy,dz)
-
-    write(*,*) "#fmax_w",fmax_w, fmax
-
-     if(fmax_w <fmax) then
-    write(*,*), "******* fmax is violated ****fmax > cmin /Glim /max(dx,dy,dz)"
-    endif
-            end subroutine confirm_parameter
-
 
 
 

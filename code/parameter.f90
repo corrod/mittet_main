@@ -8,16 +8,18 @@
 !   H'(x,omega')=sqrt(-iomega/2omega0)H(x,omega)
 !   J'(x,omega')=sqrt(-iomega/2omega0)J(x,omega)
 !   K'(x,omega')=K(x,omega)
+
+!sigmax,sigmmin,cmax,cmin = waterにしている
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 module const_para
     implicit none
 
     integer :: i,j,k
-    integer, parameter :: nstep = 2000 !2000 !総タイムステップ数
+    integer, parameter :: nstep = 3000 !2000 !総タイムステップ数
     integer, parameter :: nx = 100,ny=100,nz=100 !100, ny = 100, nz = 100 !グリッド数
-    real(8), parameter :: dx = 20.0d0, dy = 20.0d0, dz = 20.0d0!dx=1.0d-2,dy=1.0d-2,dz=1.0d-2
-    real(8), parameter :: dt = 3.0d-4 !4.0d-4 !タイムステップ長 s
+    real(8), parameter :: dx=1.0d0,dy=1.0d0,dz=1.0d0!dx = 20.0d0, dy = 20.0d0, dz = 20.0d0!dx=1.0d-2,dy=1.0d-2,dz=1.0d-2
+    real(8), parameter :: dt = 5.0d-5 !4.0d-4 !タイムステップ長 s
     integer, parameter :: x0 = nx/2,y0=ny/2,z0=nz/2!=51, y0 = 51, z0 = 51  !送信源位置
     real(8), parameter :: fmax = 25.0d0 !12.5kusuda!送信源の最大周波数
     integer, parameter :: ncpml = 5   !nxpml1   = 10,nypml1=10,nzpml1=10!CPMLのgrid数
@@ -36,6 +38,8 @@ module const_para
     real(8), parameter :: sigair = 0.0d0     !空気の導電率 S/m
     real(8), parameter :: sigfe  = 1.03d7 !鉄の導電率 S/m
     real(8), parameter :: sigwa  = 3.2d0  !海水の導電率 S/m
+    real(8), parameter :: sigmin = sigwa
+    real(8), parameter :: sigmax = sigwa!sigfe
     real(8), parameter :: MU0      = 1.2566370614d-6 !真空の透磁率 H/m
     real(8), parameter :: myurair  = 1.0d0        !空気の比透磁率
     real(8), parameter :: myurfe   = 4.0d3         !鉄の比透磁率
@@ -53,11 +57,11 @@ module const_para
 
 
 !伝播速度設定
-    real(8), parameter :: CC       = 2.997924580d0 !光速
+    real(8), parameter :: CC = 2.997924580d0 !光速
     real(8), parameter :: cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
     real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe)
     real(8), parameter :: cmax = cwa
-    real(8), parameter :: cmin = cwa
+    real(8), parameter :: cmin = cwa!cfe
 
 !mur 変数
     real(8) :: cxd,cxu,cxx
@@ -78,9 +82,10 @@ module const_para
     real(8), parameter  :: order     = 0.0d0 !order should be (0,3]
     real(8), parameter  :: optToMax  = 10.0d0
     real(8), parameter  :: Rcoef     = 0.01d0 !R should be [10^-2, 10^-12]
-    real(8), parameter   ::epsir     = 1.0d0
-    real(8)             :: delta     = ncpml*dx
+    real(8), parameter  :: epsir     = 1.0d0
+    real(8), parameter  :: delta     = ncpml*dx
 
+!
 
 
 !     real(8)            :: sigxx(nx,ny,nz) !diagonal sig x
