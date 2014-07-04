@@ -1,5 +1,5 @@
 #!/bin/sh
-
+date
 #メインスクリプト::::::::::::::::::::::::::::::
 # export OMP_NUM_THREADS=5
 # all in

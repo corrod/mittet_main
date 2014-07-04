@@ -68,6 +68,10 @@ subroutine CPML_E2(Ex,Ey,Ez,Hx,Hy,Hz,sig)!,cmax)
 
 !係数の設定x
 open(97,file='fxcpml.d')
+write(97,"(13a)")  "#  i, esig_x(i), msig_x(i), ekappa_x(i), mkappa_x(i), ae_x(i),  &
+  am_x(i),    be_x(i),    bh_x(i),    ce_x(i),    ch_x(i),    kedx(i),    khdx(i)"
+
+
  do i = 1,nx
     if(i<=ncpml) then
       esig_x(i)  = sig_max * ((dble(ncpml)-dble(i)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
@@ -121,6 +125,9 @@ close(97)
 
 !係数の設定y
 open(98,file='fycpml.d')
+write(98,"(13a)")  " # j, esig_y(j), msig_y(j), ekappa_y(j), mkappa_y(j), ae_y(j),   &
+ am_y(j),    be_y(j),    bh_y(j),    ce_y(j),    ch_y(j),    kedy(j),    khdy(j)"
+
 do j=1,ny
 if(j<=ncpml) then
       esig_y(j)  = sig_max * ((dble(ncpml)-dble(j)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
@@ -172,6 +179,8 @@ close(98)
 
 !係数の設定z
 open(99,file='fzcpml.d')
+write(97,"(13a)")  " # k, esig_z(k), msig_z(k), ekappa_z(k), mkappa_z(k), ae_z(k),   &
+ am_z(k),    be_z(k),    bh_z(k),    ce_z(k),    ch_z(k),    kedz(k),    khdz(k)"
 do k=1,nz
 if(k<=ncpml) then
       esig_z(k)  = sig_max * ((dble(ncpml)-dble(k)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
