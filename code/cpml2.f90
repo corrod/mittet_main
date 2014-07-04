@@ -121,6 +121,7 @@ close(97)
 
 !係数の設定y
 open(98,file='fycpml.d')
+do j=1,ny
 if(j<=ncpml) then
       esig_y(j)  = sig_max * ((dble(ncpml)-dble(j)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
       msig_y(j)  = sig_max * ((dble(ncpml)-dble(j)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
@@ -166,10 +167,12 @@ if(j<=ncpml) then
       khdy(j)    = mkappa_y(j)*dy
     endif
 write(98,"(I3,12e12.4)")  j,esig_y(j),msig_y(j),ekappa_y(j),mkappa_y(j),ae_y(j),am_y(j),be_y(j),bh_y(j), ce_y(j),ch_y(j), kedy(j),khdy(j)
+enddo
 close(98)
 
 !係数の設定z
 open(99,file='fzcpml.d')
+do k=1,nz
 if(k<=ncpml) then
       esig_z(k)  = sig_max * ((dble(ncpml)-dble(k)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
       msig_z(k)  = sig_max * ((dble(ncpml)-dble(k)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
@@ -215,6 +218,7 @@ if(k<=ncpml) then
       khdz(k)    = mkappa_z(k)*dz
     endif
 write(99,"(I3,12e12.4)")  k,esig_z(k),msig_z(k),ekappa_z(k),mkappa_z(k),ae_z(k),am_z(k),be_z(k),bh_z(k), ce_z(k),ch_z(k), kedz(k),khdz(k)
+enddo
 close(99)
 
 !  scaler = 0.01f * sigx2/gradmax;
