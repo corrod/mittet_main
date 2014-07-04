@@ -8,7 +8,7 @@
 !   H'(x,omega')=sqrt(-iomega/2omega0)H(x,omega)
 !   J'(x,omega')=sqrt(-iomega/2omega0)J(x,omega)
 !   K'(x,omega')=K(x,omega)
-
+!
 !sigmax,sigmmin,cmax,cmin = waterにしている
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

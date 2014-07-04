@@ -6,7 +6,7 @@ subroutine confirm_parameter
     use const_para
     implicit none
 
-    integer :: Nt1,Nt2,Nt3
+    integer :: Nt1,Nt2,Nt3,Nt4
     real(8) :: S !タイムステップ数を求める際の係数
 !     real(8) :: cwa, cfe, cair
     real(8) :: courant
@@ -127,13 +127,12 @@ endif
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      S=0.6d0  !S =[0.5:1.0]
 
-    Nt1=int( S*nx/sqrt( 1.0d0/dx**2 +1.0d0/dy**2 + 1.0d0/dz**2 ) )
+    Nt1=int( S*nx/sqrt( 1.0d0/dx**2 + 1.0d0/dy**2 + 1.0d0/dz**2 ) )
+    Nt2=int( S*nx/sqrt( 1.0d0/dx**2 + 1.0d0/dy**2 + 1.0d0/dz**2 ) )* sqrt(sigmax/sigmin)
+    Nt3=int( S*nx*(3.0d0**0.5)*sqrt(sigmax/sigmin) )
+    Nt4=int( S*nx*(3.0d0**0.5d0)*cmax/cmin )
 
-    Nt2=int( S*nx*(3.0d0**0.5)*sqrt(sigmax/sigmin) )
-
-    Nt3=int( S*nx*(3.0d0**0.5d0)*cmax/cmin )
-
-    write(*,*) '# number of timestep Nt1,Nt2,Nt3,nstep',Nt1,Nt2,Nt3
+    write(*,*) '# number of timestep Nt1,Nt2,Nt3,nstep',Nt1,Nt2,Nt3,Nt4
 
      if(Nt1 >nstep) then
     write(*,*) "******* time step nstep is violated *******"
@@ -145,13 +144,13 @@ endif
 !最大の周波数:fmaxの確認!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! grid dispersionと同じ
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !     cmin = sqrt(2.0d0*omega0/MU0/1.0d0)
-!     fmax_w = cmin /Glim /max(dx,dy,dz)
+    fmax_w = cmin /Glim /max(dx,dy,dz)
 
 !     write(*,*) "# fmax_w",fmax_w, fmax
 
-!      if(fmax_w <fmax) then
-!     write(*,*), "******* fmax is violated ****fmax > cmin /Glim /max(dx,dy,dz)"
-!     endif
+     if(fmax_w <fmax) then
+    write(*,*), "******* fmax is violated ****fmax > cmin /Glim /max(dx,dy,dz)"
+    endif
             end subroutine confirm_parameter
 
 

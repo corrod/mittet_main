@@ -17,10 +17,13 @@ subroutine model(sig,myu)
     !myu()=myuwa
 
 !     !鉄板
-!     do k= z0+10,z0+20
-!         sig(1:nx,1:ny,k) = sigfe
-!         sig(1:nx,1:ny,k) = myufe
+!     do k= z0+10,z0+16
+!         do j= y0-3,y0+3
+!             do i=x0-3,x0+3
+!         sig(i,j,k) = sigfe
+!         myu(i,j,k) = myufe
+!             enddo
+!         enddo
 !     enddo
-    !sig()=sigfe
-    !myu()=myufe
+
             end subroutine model

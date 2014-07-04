@@ -1,6 +1,6 @@
+# makefile for fwd simulation
 TARGET = mittet
-OBJECTS = parameter.o main2.o set_condition.o waveform.o model.o \
-	e_field4.o e_cpml4.o h_field4.o h_cpml4.o output.o
+OBJECTS = parameter.o set_condition.o waveform.o model.o output.o e_field4.o h_field4.o cpml.o cpml2.o mur2.o cerjan.o pml.o main2.o
 MOD_FILES  = parameter.mod
 #FC = gfortran
 FC = ifort
@@ -15,13 +15,14 @@ ifeq (${FC},gfortran)
 endif
 
 # for ifort
-ifeq (${FC},ifort)
-	MKLROOT = /opt/intel/composer_xe_2011_sp1.7.256/mkl
-	FFLAGS  += -I${MKLROOT}/include/ia32 -I${MKLROOT}/include
-	LDFLAGS += -L${MKLROOT}/lib/ia32 ${MKLROOT}/lib/ia32/libmkl_blas95.a
-	LDFLAGS += ${MKLROOT}/lib/ia32/libmkl_lapack95.a
-	LDFLAGS += -lmkl_intel -lmkl_intel_thread -lmkl_core -openmp -lpthread -lm
-endif
+ ifeq (${FC},ifort)
+# 	MKLROOT = /opt/intel/composer_xe_2013.1.117/mkl
+# 	FFLAGS  += -I${MKLROOT}/include/ia32 -I${MKLROOT}/include #-check all -CB -traceback -g -r8
+	LDFLAGS += -lfftw3
+# 	LDFLAGS += -L${MKLROOT}/lib/ia32 ${MKLROOT}/lib/ia32/libmkl_blas95.a
+# 	LDFLAGS += ${MKLROOT}/lib/ia32/libmkl_lapack95.a
+# 	LDFLAGS += -lmkl_intel -lmkl_intel_thread -lmkl_core -openmp -lpthread -lm
+ endif
 
 
 .SUFFIXES : .o .f90
