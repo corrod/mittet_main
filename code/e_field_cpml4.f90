@@ -3,9 +3,36 @@
 !//////////////////////////////////////////////////////////////////////////////
 subroutine media_coeff
 	use const_para
-	ca_x(i,j,k) = (1.0d0 - ((esigx(i)*dt)/(2.0d0*epsi)))
 	implicit none
+	do k=1,nz
+		do j=1,ny
+			do i=1,nx
+				eps2(i,j,k) = sig2(i,j,k) / 2.0d0 / omega0
+				!CPML coefficient
+				ca_x(i,j,k) = (1.0d0 - ((esig_x(i)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((esig_x(i)*dt)/(2.0d0*eps2(i,j,k))))
+				ca_y(i,j,k) = (1.0d0 - ((esig_y(j)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((esig_y(j)*dt)/(2.0d0*eps2(i,j,k))))
+				ca_z(i,j,k) = (1.0d0 - ((esig_z(k)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((esig_z(k)*dt)/(2.0d0*eps2(i,j,k))))
+
+				da_x(i,j,k) = (1.0d0 - ((msig_x(i)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((msig_x(i)*dt)/(2.0d0*eps2(i,j,k))))
+				da_y(i,j,k) = (1.0d0 - ((msig_y(j)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((msig_y(j)*dt)/(2.0d0*eps2(i,j,k))))
+				da_z(i,j,k) = (1.0d0 - ((msig_z(k)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((msig_z(k)*dt)/(2.0d0*eps2(i,j,k))))
+
+				cb_x(i,j,k) = dt/eps2 /(1.0d0+(esig_x(i)*dt)/(2.0d0*eps2(i,j,k)))
+				cb_y(i,j,k) = dt/eps2 /(1.0d0+(esig_y(j)*dt)/(2.0d0*eps2(i,j,k)))
+				cb_z(i,j,k) = dt/eps2 /(1.0d0+(esig_z(k)*dt)/(2.0d0*eps2(i,j,k)))
+
+				db_x(i,j,k) = dt/MU0 /(1.0d0+(msig_x(i)*dt)/(2.0d0*eps2(i,j,k)))
+				db_y(i,j,k) = dt/MU0 /(1.0d0+(msig_y(j)*dt)/(2.0d0*eps2(i,j,k)))
+				db_z(i,j,k) = dt/MU0 /(1.0d0+(msig_z(k)*dt)/(2.0d0*eps2(i,j,k)))
 end subroutine media_coeff
+
+
 
 
 subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
@@ -15,9 +42,6 @@ subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
     real(8), intent(in) :: sig(1:nx,1:ny,1:nz)
-!     real(8)             :: etaxx(nx,ny,nz),etayy(nx,ny,nz),etazz(nx,ny,nz)
-!     real(8)             :: CEXLY(1:nx,1:ny,1:nz),CEYLZ(1:nx,1:ny,1:nz),CEZLX(1:nx,1:ny,1:nz)
-!     real(8)             :: CEXLZ(1:nx,1:ny,1:nz),CEYLX(1:nx,1:ny,1:nz),CEZLY(1:nx,1:ny,1:nz)
     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in)    :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
@@ -56,6 +80,7 @@ subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
 end subroutine e_field_cpml4
 
 
+
 subroutine e_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
 	use const_para
     implicit none
@@ -63,9 +88,6 @@ subroutine e_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
     real(8), intent(in) :: sig(1:nx,1:ny,1:nz)
-!     real(8)             :: etaxx(nx,ny,nz),etayy(nx,ny,nz),etazz(nx,ny,nz)
-!     real(8)             :: CEXLY(1:nx,1:ny,1:nz),CEYLZ(1:nx,1:ny,1:nz),CEZLX(1:nx,1:ny,1:nz)
-!     real(8)             :: CEXLZ(1:nx,1:ny,1:nz),CEYLX(1:nx,1:ny,1:nz),CEZLY(1:nx,1:ny,1:nz)
     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in)    :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 ! +-反転
@@ -106,6 +128,10 @@ end subroutine e_field_cpml4bp
 
 
 
+
+!     real(8)             :: etaxx(nx,ny,nz),etayy(nx,ny,nz),etazz(nx,ny,nz)
+!     real(8)             :: CEXLY(1:nx,1:ny,1:nz),CEYLZ(1:nx,1:ny,1:nz),CEZLX(1:nx,1:ny,1:nz)
+!     real(8)             :: CEXLZ(1:nx,1:ny,1:nz),CEYLX(1:nx,1:ny,1:nz),CEZLY(1:nx,1:ny,1:nz)
 
 
 

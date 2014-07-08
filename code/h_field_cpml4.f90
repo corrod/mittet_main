@@ -1,6 +1,43 @@
 !//////////////////////////////////////////////////////////////////////////////
 ! H_field CPML ver
 !//////////////////////////////////////////////////////////////////////////////
+subroutine media_coeff
+	use const_para
+	implicit none
+				sigmax2 = sig(0)
+				gradmax = grad(0)
+				scaler = 0.01d0 * sigmax2/gradmax
+				sig2(i,j,k) = sig(i,j,k) - scaler * grad(i,j,k)
+	do k=1,nz
+		do j=1,ny
+			do i=1,nx
+				eps2(i,j,k) = sig2(i,j,k) / 2.0d0 / omega0
+				!CPML coefficient
+				ca_x(i,j,k) = (1.0d0 - ((esig_x(i)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((esig_x(i)*dt)/(2.0d0*eps2(i,j,k))))
+				ca_y(i,j,k) = (1.0d0 - ((esig_y(j)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((esig_y(j)*dt)/(2.0d0*eps2(i,j,k))))
+				ca_z(i,j,k) = (1.0d0 - ((esig_z(k)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((esig_z(k)*dt)/(2.0d0*eps2(i,j,k))))
+
+				da_x(i,j,k) = (1.0d0 - ((msig_x(i)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((msig_x(i)*dt)/(2.0d0*eps2(i,j,k))))
+				da_y(i,j,k) = (1.0d0 - ((msig_y(j)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((msig_y(j)*dt)/(2.0d0*eps2(i,j,k))))
+				da_z(i,j,k) = (1.0d0 - ((msig_z(k)*dt)/(2.0d0*eps2(i,j,k)))) &
+							/ (1.0d0 + ((msig_z(k)*dt)/(2.0d0*eps2(i,j,k))))
+
+				cb_x(i,j,k) = dt/eps2 /(1.0d0+(esig_x(i)*dt)/(2.0d0*eps2(i,j,k)))
+				cb_y(i,j,k) = dt/eps2 /(1.0d0+(esig_y(j)*dt)/(2.0d0*eps2(i,j,k)))
+				cb_z(i,j,k) = dt/eps2 /(1.0d0+(esig_z(k)*dt)/(2.0d0*eps2(i,j,k)))
+
+				db_x(i,j,k) = dt/MU0 /(1.0d0+(msig_x(i)*dt)/(2.0d0*eps2(i,j,k)))
+				db_y(i,j,k) = dt/MU0 /(1.0d0+(msig_y(j)*dt)/(2.0d0*eps2(i,j,k)))
+				db_z(i,j,k) = dt/MU0 /(1.0d0+(msig_z(k)*dt)/(2.0d0*eps2(i,j,k)))
+end subroutine media_coeff
+
+
+
 
 subroutine h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
 	use const_para
@@ -9,8 +46,6 @@ subroutine h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     integer, intent(in) :: istep
     real(8), intent(in) :: t
     real(8), intent(in) :: myu(1:nx,1:ny,1:nz)
-!     real(8)             :: CHXLY(1:nx,1:ny,1:nz), CHYLZ(1:nx,1:ny,1:nz), CHZLX(1:nx,1:ny,1:nz)
-!     real(8)             :: CHXLZ(1:nx,1:ny,1:nz), CHYLX(1:nx,1:ny,1:nz), CHZLY(1:nx,1:ny,1:nz)
     complex(kind(0d0)), intent(in)   :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(inout):: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
@@ -48,6 +83,8 @@ subroutine h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     enddo
 end subroutine h_field_cpml4
 
+
+
 subroutine h_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
 	use const_para
     implicit none
@@ -55,11 +92,9 @@ subroutine h_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     integer, intent(in) :: istep
     real(8), intent(in) :: t
     real(8), intent(in) :: myu(1:nx,1:ny,1:nz)
-!     real(8)             :: CHXLY(1:nx,1:ny,1:nz), CHYLZ(1:nx,1:ny,1:nz), CHZLX(1:nx,1:ny,1:nz)
-!     real(8)             :: CHXLZ(1:nx,1:ny,1:nz), CHYLX(1:nx,1:ny,1:nz), CHZLY(1:nx,1:ny,1:nz)
     complex(kind(0d0)), intent(in)   :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(inout):: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
-
+!+-反転
 !hxcpml4
     do k = 2,nz-2
         do j = 2,ny-2
@@ -94,6 +129,13 @@ subroutine h_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
     enddo
 end subroutine h_field_cpml4bp
 
+
+
+
+
+
+!     real(8)             :: CHXLY(1:nx,1:ny,1:nz), CHYLZ(1:nx,1:ny,1:nz), CHZLX(1:nx,1:ny,1:nz)
+!     real(8)             :: CHXLZ(1:nx,1:ny,1:nz), CHYLX(1:nx,1:ny,1:nz), CHZLY(1:nx,1:ny,1:nz)
 ! !Hx4
 !     do k = 1,nz
 !        do j = 1,ny

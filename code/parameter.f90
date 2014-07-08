@@ -83,15 +83,79 @@ module const_para
     real(8), parameter  :: optToMax  = 10.0d0
     real(8), parameter  :: Rcoef     = 0.01d0 !R should be [10^-2, 10^-12]
     real(8), parameter  :: epsir     = 1.0d0
-    real(8), parameter  :: delta     = ncpml*dx
+    real(8) :: delta
+
+    real(8) :: sig2(nx,ny,nz)
+    real(8) :: eps2(nx,ny,nz)
+
+    real(8) :: ca_x(nx,ny,nz)
+    real(8) :: ca_y(nx,ny,nz)
+    real(8) :: ca_z(nx,ny,nz)
+    real(8) :: da_x(nx,ny,nz)
+    real(8) :: da_y(nx,ny,nz)
+    real(8) :: da_z(nx,ny,nz)
+    real(8) :: cb_x(nx,ny,nz)
+    real(8) :: cb_y(nx,ny,nz)
+    real(8) :: cb_z(nx,ny,nz)
+    real(8) :: db_x(nx,ny,nz)
+    real(8) :: db_y(nx,ny,nz)
+    real(8) :: db_z(nx,ny,nz)
+
+    complex(kind(0d0)) :: psi_Eyx1(nx,ny,nz)
+    complex(kind(0d0)) :: psi_Ezx1(nx,ny,nz)
+    complex(kind(0d0)) :: psi_Ezy1(nx,ny,nz)
+    complex(kind(0d0)) :: psi_Exy1(nx,ny,nz)
+    complex(kind(0d0)) :: psi_Exz1(nx,ny,nz)
+    complex(kind(0d0)) :: psi_Eyz1(nx,ny,nz)
+
+    complex(kind(0d0)) :: psi_Hyx1(nx,ny,nz)
+    complex(kind(0d0)) :: psi_Hzx1(nx,ny,nz)
+    complex(kind(0d0)) :: psi_Hzy1(nx,ny,nz)
+    complex(kind(0d0)) :: psi_Hxy1(nx,ny,nz)
+    complex(kind(0d0)) :: psi_Hxz1(nx,ny,nz)
+    complex(kind(0d0)) :: psi_Hyz1(nx,ny,nz)
+
+    real(8) :: be_x(nx)
+    real(8) :: be_y(ny)
+    real(8) :: be_z(nz)
+    real(8) :: bh_x(nx)
+    real(8) :: bh_y(ny)
+    real(8) :: bh_z(nz)
+    real(8) :: ce_x(nx)
+    real(8) :: ce_y(ny)
+    real(8) :: ce_z(nz)
+    real(8) :: ch_x(nx)
+    real(8) :: ch_y(ny)
+    real(8) :: ch_z(nz)
+
+    real(8) :: esig_x(nx)
+    real(8) :: esig_y(ny)
+    real(8) :: esig_z(nz)
+    real(8) :: msig_x(nx)
+    real(8) :: msig_y(ny)
+    real(8) :: msig_z(nz)
+    real(8) :: ae_x(nx)
+    real(8) :: ae_y(ny)
+    real(8) :: ae_z(nz)
+    real(8) :: am_x(nx)
+    real(8) :: am_y(ny)
+    real(8) :: am_z(nz)
+    real(8) :: ekappa_x(nx)
+    real(8) :: ekappa_y(ny)
+    real(8) :: ekappa_z(nz)
+    real(8) :: mkappa_x(nx)
+    real(8) :: mkappa_y(ny)
+    real(8) :: mkappa_z(nz)
+    real(8) :: kedx(nx)
+    real(8) :: kedy(ny)
+    real(8) :: kedz(nz)
+    real(8) :: khdx(nx)
+    real(8) :: khdy(ny)
+    real(8) :: khdz(nz)
+
+    real(8) :: epsi(nx,ny,nz)
 
 
-
-
-
-
-
-!
 
 !     real(8)            :: sigxx(nx,ny,nz) !diagonal sig x
 !     real(8)            :: sigyy(nx,ny,nz) !diagonal sig y
