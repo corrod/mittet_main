@@ -205,9 +205,9 @@ include 'fftw3.f'
 		enddo
 	enddo
 
-		open(71,file='invGE')
-		open(72,file='invGJ')
-		open(73,file='invGG')
+		open(71,file='invGH.dat')
+		open(72,file='invGJ.dat')
+		open(73,file='invGG.dat')
 	do k=0,nd-1
 		write(71,*) k*dt, real(Hz_t(k)), aimag(Hz_t(k))
 		write(72,*) k*dt, real(JX_t(k)), aimag(JX_t(k))
@@ -289,9 +289,9 @@ end program f_to_d
 !////////////////////////////////////////////////////////////
 ! output
 !////////////////////////////////////////////////////////////
-! 	open(81,file='invGE')
-! 	open(82,file='invGJ')
-! 	open(83,file='invGG')
+! 	open(81,file='invGH.dat')
+! 	open(82,file='invGJ.dat')
+! 	open(83,file='invGG.dat')
 ! 	do k=0,nd-1
 	! 	out1(k) = out1(k)/nd/dt*2.0d0
 	! 	out2(k) = out2(k)/nd/dt*2.0d0

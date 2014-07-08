@@ -85,6 +85,12 @@ module const_para
     real(8), parameter  :: epsir     = 1.0d0
     real(8), parameter  :: delta     = ncpml*dx
 
+
+
+
+
+
+
 !
 
 !     real(8)            :: sigxx(nx,ny,nz) !diagonal sig x
