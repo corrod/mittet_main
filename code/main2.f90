@@ -58,8 +58,8 @@ t=0.0d0!開始時間-----------------------------------
 
     !モデルの読み込み
     call model
-    call media_coeff
-    call init_cpml
+    call media_coeff !伝播の係数
+    call init_cpml !cpmlの係数
 
     !cmax,cminの計算 dt,dx,dy,dzの設定
     call confirm_parameter

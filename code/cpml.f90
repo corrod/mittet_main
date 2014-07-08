@@ -1,11 +1,9 @@
 !///////////////////////////////////////////////////////////////////////////////
 ! CPML係数設定
 !///////////////////////////////////////////////////////////////////////////////
-subroutine init_cpml!(sig,myu)
+subroutine init_cpml
   use const_para
   implicit none
-!     real(8), intent(in) :: sig(nx,ny,nz)
-!     real(8), intent(in) :: myu(nx,ny,nz)
     epsi(1:nx,1:ny,1:nz)=sig(1:nx,1:ny,1:nz)/(2.0d0*omega0)
 !     real(8)             :: sig_opt
     !     real(8), parameter :: lnR0 = -100.0d0  !ln|R(0)|

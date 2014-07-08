@@ -8,7 +8,6 @@ subroutine h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
 
     integer, intent(in) :: istep
     real(8), intent(in) :: t
-!     real(8), intent(in) :: myu(1:nx,1:ny,1:nz) !!
     complex(kind(0d0)), intent(in)   :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(inout):: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
@@ -55,7 +54,6 @@ subroutine h_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
 
     integer, intent(in) :: istep
     real(8), intent(in) :: t
-!     real(8), intent(in) :: myu(1:nx,1:ny,1:nz) !!
     complex(kind(0d0)), intent(in)   :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(inout):: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 !+-反転
