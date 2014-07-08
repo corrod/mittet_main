@@ -83,6 +83,7 @@ module const_para
     real(8), parameter  :: optToMax  = 10.0d0
     real(8), parameter  :: Rcoef     = 0.01d0 !R should be [10^-2, 10^-12]
     real(8), parameter  :: epsir     = 1.0d0
+    real(8) :: sig_max
     real(8) :: delta
 
     real(8) :: sig2(nx,ny,nz)

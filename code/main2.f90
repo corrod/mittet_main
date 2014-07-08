@@ -17,7 +17,6 @@
 !
 !***************************************************
 
-
 !ficticious wave domain
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 program main
@@ -59,6 +58,8 @@ t=0.0d0!開始時間-----------------------------------
 
     !モデルの読み込み
     call model(sig,myu)
+    call media_coeff
+    call init_cpml(sig,myu)
 
     !cmax,cminの計算 dt,dx,dy,dzの設定
     call confirm_parameter !(cmax)
@@ -74,6 +75,7 @@ do istep = 1, nstep !反復計算開始----------------------
     !電場計算 E
 !     call Efield4(istep,t,Je,Ex,Ey,Ez,Hx,Hy,Hz,sig)
     call Efield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,sig)
+    call e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
     !境界条件 CPML_E
     call CPML_E(ex,ey,ez,hx,hy,hz,sig)!,cmax)
@@ -90,6 +92,7 @@ t = t + dt*0.5d0  !時間の更新--------------------------
     !磁場計算 H
 !     call Hfield4(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
     call Hfield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,myu)
+    call h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
     !境界条件 CPML_H
     call CPML_H(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)

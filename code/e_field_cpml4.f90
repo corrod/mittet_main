@@ -1,13 +1,17 @@
-!//////////////////////////////////////////////////////////////////////////////
-! E_field CPML ver
-!//////////////////////////////////////////////////////////////////////////////
+!////////////////////////////////////////////////////////////////////
+! CPMl用の伝播計算の係数
+!///////////////////////////////////////////////////////////////////
 subroutine media_coeff
 	use const_para
 	implicit none
-				sigmax2 = sig(0)
-				gradmax = grad(0)
-				scaler = 0.01d0 * sigmax2/gradmax
-				sig2(i,j,k) = sig(i,j,k) - scaler * grad(i,j,k)
+		sigmax2 = sig(0)
+		gradmax = grad(0)
+		scaler = 0.01d0 * sigmax2/gradmax
+		sig2(i,j,k) = sig(i,j,k) - scaler * grad(i,j,k)
+
+!  //scaler = 0.01f * sigx2;
+
+
 	do k=1,nz
 		do j=1,ny
 			do i=1,nx
@@ -82,19 +86,22 @@ do k=1,nz
 	    enddo
 	enddo
 
-
 end subroutine media_coeff
 
 
 
 
-subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
+!//////////////////////////////////////////////////////////////////////////////
+! E_field CPML ver
+!//////////////////////////////////////////////////////////////////////////////
+subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
+! subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
 	use const_para
     implicit none
 
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
-    real(8), intent(in) :: sig(1:nx,1:ny,1:nz)
+!     real(8), intent(in) :: sig(1:nx,1:ny,1:nz)
     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in)    :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
@@ -134,13 +141,14 @@ end subroutine e_field_cpml4
 
 
 
-subroutine e_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig)
+subroutine e_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
+! subroutine e_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,sig) !!
 	use const_para
     implicit none
 
     integer, intent(in) :: istep
     real(8), intent(in) :: t !経過時間
-    real(8), intent(in) :: sig(1:nx,1:ny,1:nz)
+!     real(8), intent(in) :: sig(1:nx,1:ny,1:nz)  !!
     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in)    :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 ! +-反転
