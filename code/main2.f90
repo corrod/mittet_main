@@ -27,7 +27,7 @@ program main
     real(8)            :: t !経過時間
     complex(kind(0d0)) :: Je(nstep) !電流源
     complex(kind(0d0)) :: Jh(nstep) !磁流源
-    real(8)            :: sig(nx,ny,nz),myu(nx,ny,nz)
+!     real(8)            :: sig(nx,ny,nz),myu(nx,ny,nz)
     complex(kind(0d0)) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 !     complex(kind(0d0)) :: Ex(-1:nx+2,-1:ny+2,-1:nz+2)
@@ -57,9 +57,9 @@ program main
 t=0.0d0!開始時間-----------------------------------
 
     !モデルの読み込み
-    call model(sig,myu)
+    call model!(sig,myu)
     call media_coeff
-    call init_cpml(sig,myu)
+    call init_cpml!(sig,myu)
 
     !cmax,cminの計算 dt,dx,dy,dzの設定
     call confirm_parameter !(cmax)
@@ -69,16 +69,17 @@ do istep = 1, nstep !反復計算開始----------------------
 
     !入力波源の設定
 !     call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
-    call read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
+    call read_source_3d(istep,t,Hz,Je,Jh)
+                    !     call read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
 !     call read_source_3d(istep,t,sig,myu,EX,Je,Jh)
 
     !電場計算 E
 !     call Efield4(istep,t,Je,Ex,Ey,Ez,Hx,Hy,Hz,sig)
-    call Efield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,sig)
+!     call Efield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,sig)
     call e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
     !境界条件 CPML_E
-    call CPML_E(ex,ey,ez,hx,hy,hz,sig)!,cmax)
+    call CPML_E(ex,ey,ez,hx,hy,hz)!,sig)!,cmax)
 !     call CPML_E2(ex,ey,ez,hx,hy,hz,sig)!,cmax)
 !     call cerjan_e(ex,ey,ez) !!!だめ
 !     call cerjan2_e(ex,ey,ez)  !cerjanの吸収境界!!!ok
@@ -91,11 +92,11 @@ t = t + dt*0.5d0  !時間の更新--------------------------
 
     !磁場計算 H
 !     call Hfield4(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
-    call Hfield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,myu)
+!     call Hfield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,myu)
     call h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
     !境界条件 CPML_H
-    call CPML_H(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)
+    call CPML_H(ex,ey,ez,hx,hy,hz)!,sig,myu)!,cmax)
 !     call CPML_H2(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)
 !     call cerjan_h(hx,hy,hz) !!!だめ
 !     call cerjan2_h(hx,hy,hz) !!!ok

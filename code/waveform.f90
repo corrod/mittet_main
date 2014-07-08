@@ -1,7 +1,8 @@
 !//////////////////////////////////////////////////////////////////////////
 ! 送信源の設定
 !/////////////////////////////////////////////////////////////////////////
-subroutine read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
+subroutine read_source_3d(istep,t,Hz,Je,Jh)
+! subroutine read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
 
     use const_para
     implicit none
@@ -13,8 +14,8 @@ subroutine read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
     complex(kind(0d0)), intent(out) :: Jh(nstep)!磁場ソース
 !     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz)!電場ソース
     complex(kind(0d0)), intent(inout) :: Hz(nx,ny,nz)!磁場ソース
-    real(8), intent(in)  :: sig(nx,ny,nz)
-    real(8), intent(in)  :: myu(nx,ny,nz)
+!     real(8), intent(in)  :: sig(nx,ny,nz)
+!     real(8), intent(in)  :: myu(nx,ny,nz)
     real(8)              :: etaxx(x0,y0,z0)
     real(8), parameter   :: t0 = pi/fmax
     real(8), parameter   :: beta = pi*(fmax**2)

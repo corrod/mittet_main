@@ -55,6 +55,8 @@ module const_para
     real(8), parameter :: epsife   = epsirfe * epsi0   !鉄の比誘電率
     real(8), parameter :: epsiwa   = epsirwa * epsi0   !海水の比誘電率
 
+    real(8) :: sig(nx,ny,nz)
+    real(8) :: myu(nx,ny,nz)
 
 !伝播速度設定
     real(8), parameter :: CC = 2.997924580d0 !光速
