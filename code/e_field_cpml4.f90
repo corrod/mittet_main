@@ -4,11 +4,16 @@
 subroutine media_coeff
 	use const_para
 	implicit none
-		sigmax2 = sig(0)
-		gradmax = grad(0)
+		sigmax2 = 1.0d0!sig(1)
+		gradmax = 1.0d0!grad(1)
 		scaler = 0.01d0 * sigmax2/gradmax
-		sig2(i,j,k) = sig(i,j,k) - scaler * grad(i,j,k)
-
+		do k=1,nz
+			do j=1,ny
+				do i=1,nx
+					sig2(i,j,k) = sig(i,j,k) - scaler * grad(i,j,k)
+				enddo
+			enddo
+		enddo
 !  //scaler = 0.01f * sigx2;
 
 
@@ -31,9 +36,9 @@ subroutine media_coeff
 				da_z(i,j,k) = (1.0d0 - ((msig_z(k)*dt)/(2.0d0*eps2(i,j,k)))) &
 							/ (1.0d0 + ((msig_z(k)*dt)/(2.0d0*eps2(i,j,k))))
 
-				cb_x(i,j,k) = dt/eps2 /(1.0d0+(esig_x(i)*dt)/(2.0d0*eps2(i,j,k)))
-				cb_y(i,j,k) = dt/eps2 /(1.0d0+(esig_y(j)*dt)/(2.0d0*eps2(i,j,k)))
-				cb_z(i,j,k) = dt/eps2 /(1.0d0+(esig_z(k)*dt)/(2.0d0*eps2(i,j,k)))
+				cb_x(i,j,k) = dt/eps2(i,j,k) /(1.0d0+(esig_x(i)*dt)/(2.0d0*eps2(i,j,k)))
+				cb_y(i,j,k) = dt/eps2(i,j,k) /(1.0d0+(esig_y(j)*dt)/(2.0d0*eps2(i,j,k)))
+				cb_z(i,j,k) = dt/eps2(i,j,k) /(1.0d0+(esig_z(k)*dt)/(2.0d0*eps2(i,j,k)))
 
 				db_x(i,j,k) = dt/MU0 /(1.0d0+(msig_x(i)*dt)/(2.0d0*eps2(i,j,k)))
 				db_y(i,j,k) = dt/MU0 /(1.0d0+(msig_y(j)*dt)/(2.0d0*eps2(i,j,k)))
@@ -61,6 +66,10 @@ do k=1,nz
    ! cb_x(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
    ! cb_y(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
    ! cb_z(i,j,k) = (dt/epsi(i,j,k)) / (1.0d0+sig(i,j,k)*dt/(2.0d0*epsi(i,j,k)))
+   enddo
+  enddo
+enddo
+
    do k=1,nz
     do j=1,ny
         do i=1,nx

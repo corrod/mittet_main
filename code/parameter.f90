@@ -88,6 +88,10 @@ module const_para
     real(8) :: sig_max
     real(8) :: delta
 
+    real(8) :: sigmax2
+    real(8) :: gradmax
+    real(8) :: scaler
+    real(8) :: grad(nx,ny,nz)
     real(8) :: sig2(nx,ny,nz)
     real(8) :: eps2(nx,ny,nz)
 
