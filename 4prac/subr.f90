@@ -42,7 +42,18 @@ program subr
 
 	call abc
 	call def
+	call ghi
 	do i=1,100
 	write(*,*) aaa(i),bbb(i),ccc(i)
 	enddo
 end program subr
+
+subroutine ghi
+	use para
+	implicit none
+	do i=1,100
+		aaa(i) = aaa(i) *3.0d0
+		bbb(i) = bbb(i) * (-1.0d0)
+		ccc(i) = ccc(i) * 1000.0d0
+	enddo
+end subroutine ghi
