@@ -57,12 +57,12 @@ program main
 t=0.0d0!開始時間-----------------------------------
 
     !モデルの読み込み
-    call model!(sig,myu)
+    call model
     call media_coeff
-    call init_cpml!(sig,myu)
+    call init_cpml
 
     !cmax,cminの計算 dt,dx,dy,dzの設定
-    call confirm_parameter !(cmax)
+    call confirm_parameter
 
 do istep = 1, nstep !反復計算開始----------------------
 !     write(*,*) istep
@@ -79,8 +79,8 @@ do istep = 1, nstep !反復計算開始----------------------
     call e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
     !境界条件 CPML_E
-    call CPML_E(ex,ey,ez,hx,hy,hz)!,sig)!,cmax)
-!     call CPML_E2(ex,ey,ez,hx,hy,hz,sig)!,cmax)
+    call CPML_E(ex,ey,ez,hx,hy,hz)!,sig)!
+!     call CPML_E2(ex,ey,ez,hx,hy,hz,sig)!
 !     call cerjan_e(ex,ey,ez) !!!だめ
 !     call cerjan2_e(ex,ey,ez)  !cerjanの吸収境界!!!ok
 !     call mur_yz(ex,ey,ez) !Murの吸収境界
