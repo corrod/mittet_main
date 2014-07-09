@@ -21,7 +21,7 @@ program f_to_d
 	real(8) :: om
 
 	integer :: n !, l
-	complex(kind(0d0)),allocatable ::EX_w(:) !EX_w(0:nd-1) !周波数領域のEX
+	complex(kind(0d0)),allocatable ::EX_w(:) !EX_w(0:nd-1) !周波数領域のEx
 	complex(kind(0d0)),allocatable ::EX_f(:) !EX_f(0:nd-1) !ficticiousのE'x
 	complex(kind(0d0)),allocatable ::JX_w(:) !JX_w(0:nd-1) !ficticiousのJ'x
 	complex(kind(0d0)),allocatable ::JX_f(:) !JX_f(0:nd-1)
@@ -30,7 +30,7 @@ program f_to_d
 	!IDFT, IFFT用
 	complex(kind(0d0)),allocatable :: EX_t(:), JX_t(:),GX_t(:)
 	complex(kind(0d0)),allocatable :: in1(:), in2(:), in3(:) !IFFT用
-	complex(kind(0d0)),allocatable :: out1(:), out2(:), out3(:)
+	complex(kind(0d0)),allocatable :: out1(:), out2(:), out3(:)!IFFT用
 	integer(8) :: plan1, plan2, plan3
 
 include 'fftw3.f'
@@ -209,25 +209,12 @@ include 'fftw3.f'
 	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,fftw_estimate)
 	call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,fftw_estimate)
 
-					!call dfftw_plan_dft_r2c_1d(plan1,nd,in1,out1,fftw_estimate) !real array入力
-					!call dfftw_plan_dft_r2c_1d(plan2,nd,in2,out2,fftw_estimate)
-					!call dfftw_plan_dft_r2c_1d(plan3,nd,in3,out3,fftw_estimate)
-! 					call dfftw_plan_dft_1d(plan1,nd,in1,out1,fftw_estimate) !complex array入力
-! 					call dfftw_plan_dft_1d(plan2,nd,in2,out2,fftw_estimate)
-! 					call dfftw_plan_dft_1d(plan3,nd,in3,out3,fftw_estimate)
-
-
 !///////////////////////////////////////////////////////////
 ! carry out fourier transformation
 !///////////////////////////////////////////////////////////
 	call dfftw_execute(plan1,in1,out1)
 	call dfftw_execute(plan2,in2,out2)
 	call dfftw_execute(plan3,in3,out3)
-
-					!call dfftw_execute(plan1)
-					!call dfftw_execute(plan2)
-					!call dfftw_execute(plan3)
-
 
 !///////////////////////////////////////////////////////////
 ! destroy plan
