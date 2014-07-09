@@ -2,7 +2,7 @@
 ! H_field CPML ver
 !//////////////////////////////////////////////////////////////////////////////
 subroutine h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
-! subroutine h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,myu) !!
+
 	use const_para
     implicit none
 
@@ -48,7 +48,7 @@ end subroutine h_field_cpml4
 
 
 subroutine h_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
-! subroutine h_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz,myu) !!
+
 	use const_para
     implicit none
 

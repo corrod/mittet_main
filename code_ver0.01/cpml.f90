@@ -1,5 +1,6 @@
 !///////////////////////////////////////////////////////////////////////////////
 ! CPML係数設定
+! optToMaxをどうする？
 !///////////////////////////////////////////////////////////////////////////////
 subroutine init_cpml
   use const_para
@@ -207,7 +208,7 @@ end subroutine init_cpml
 !operator half length ln = 2
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz)!,sig)!,cmax)
+subroutine CPML_E4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig)!,cmax)
     use const_para
     implicit none
 
@@ -297,7 +298,7 @@ subroutine CPML_E(Ex,Ey,Ez,Hx,Hy,Hz)!,sig)!,cmax)
         enddo
     enddo
 
-end subroutine CPML_E
+end subroutine CPML_E4
 
 
 
@@ -320,7 +321,7 @@ end subroutine CPML_E
 !operator half length ln = 2
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
+subroutine CPML_H4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
     use const_para
     implicit none
 
@@ -410,7 +411,7 @@ subroutine CPML_H(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
         enddo
     enddo
 
-end subroutine CPML_H
+end subroutine CPML_H4
 
 
 

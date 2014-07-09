@@ -79,7 +79,7 @@ do istep = 1, nstep !反復計算開始----------------------
     call e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
     !境界条件 CPML_E
-    call CPML_E(ex,ey,ez,hx,hy,hz)!,sig)!
+    call CPML_E4(ex,ey,ez,hx,hy,hz)!,sig)!
 !     call CPML_E2(ex,ey,ez,hx,hy,hz,sig)!
 !     call cerjan_e(ex,ey,ez) !!!だめ
 !     call cerjan2_e(ex,ey,ez)  !cerjanの吸収境界!!!ok
@@ -96,7 +96,7 @@ t = t + dt*0.5d0  !時間の更新--------------------------
     call h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
     !境界条件 CPML_H
-    call CPML_H(ex,ey,ez,hx,hy,hz)!,sig,myu)!,cmax)
+    call CPML_H4(ex,ey,ez,hx,hy,hz)!,sig,myu)!,cmax)
 !     call CPML_H2(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)
 !     call cerjan_h(hx,hy,hz) !!!だめ
 !     call cerjan2_h(hx,hy,hz) !!!ok
