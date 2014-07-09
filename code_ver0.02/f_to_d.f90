@@ -232,9 +232,9 @@ include 'fftw3.f'
 !///////////////////////////////////////////////////////////
 ! destroy plan
 !///////////////////////////////////////////////////////////
-	call dfftw_destoroy_plan(plan1)
-	call dfftw_destoroy_plan(plan2)
-	call dfftw_destoroy_plan(plan3)
+	call dfftw_destroy_plan(plan1)
+	call dfftw_destroy_plan(plan2)
+	call dfftw_destroy_plan(plan3)
 
 
 !////////////////////////////////////////////////////////////
