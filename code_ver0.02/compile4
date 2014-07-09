@@ -42,7 +42,7 @@ max=30
 while [ $j -le $max ]; do
 cp ex$i.d inp1.dat #E'
 
-ifort -o f_to_d parameter.f90 window_function.f90 f_to_d.f90 -I/usr/local/include -lfftw3 #-check all -CB -traceback -g -r8
+ifort -o f_to_d parameter.f90 window_function.f90 f_to_d_e.f90 -lfftw3 #-check all -CB -traceback -g -r8  #-I/usr/local/include -lfftw3 #-check all -CB -traceback -g -r8
 ./f_to_d
 
 cp out1.dat EX_w$i.dat
@@ -68,7 +68,7 @@ rm out*.dat invG*.dat
 # while [ $j -le $max ]; do
 # cp Hz$i.d inp1.dat #H'
 
-# ifort -o f_to_d parameter.f90 taper.f90 f_to_d2.f90 -lfftw3 -check all -CB -traceback -g -r8
+# ifort -o f_to_d parameter.f90 taper.f90 f_to_d_h.f90 -lfftw3 -check all -CB -traceback -g -r8
 # ./f_to_d
 
 # cp out1.dat HZ_w$i.dat
