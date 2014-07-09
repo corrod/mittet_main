@@ -20,7 +20,8 @@ subroutine media_coeff
 	do k=1,nz
 		do j=1,ny
 			do i=1,nx
-				eps2 = sig2(i,j,k) / 2.0d0 / omega0
+! 				eps2 = sig2(i,j,k) / 2.0d0 / omega0 !***
+                eps2 = sig(i,j,k) / 2.0d0 / omega0
 				!CPML coefficient
 				ca_x(i,j,k) = (1.0d0 - ((esig_x(i)*dt)/(2.0d0*eps2))) &
 							/ (1.0d0 + ((esig_x(i)*dt)/(2.0d0*eps2)))
@@ -43,9 +44,8 @@ subroutine media_coeff
 				db_x(i,j,k) = dt/MU0 /(1.0d0+(msig_x(i)*dt)/(2.0d0*eps2))
 				db_y(i,j,k) = dt/MU0 /(1.0d0+(msig_y(j)*dt)/(2.0d0*eps2))
 				db_z(i,j,k) = dt/MU0 /(1.0d0+(msig_z(k)*dt)/(2.0d0*eps2))
-
-	    enddo
-	  enddo
+    	    enddo
+    	enddo
 	enddo
 end subroutine media_coeff
 
