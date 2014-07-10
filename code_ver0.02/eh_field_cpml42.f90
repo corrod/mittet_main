@@ -23,27 +23,27 @@ subroutine media_coeff
 ! 				eps2 = sig2(i,j,k) / 2.0d0 / omega0 !***
                 eps2 = sig(i,j,k) / 2.0d0 / omega0
 				!CPML coefficient
-				ca_x(i,j,k) = (1.0d0 - ((esig_x(i)*dt)/(2.0d0*eps2))) &
+				ca_x(i,j,k) = (1.0d0 - ((esig_x(i)*dt)/(2.0d0*eps2))) &  !!!esig_x wheare from???
 							/ (1.0d0 + ((esig_x(i)*dt)/(2.0d0*eps2)))
 				ca_y(i,j,k) = (1.0d0 - ((esig_y(j)*dt)/(2.0d0*eps2))) &
 							/ (1.0d0 + ((esig_y(j)*dt)/(2.0d0*eps2)))
 				ca_z(i,j,k) = (1.0d0 - ((esig_z(k)*dt)/(2.0d0*eps2))) &
 							/ (1.0d0 + ((esig_z(k)*dt)/(2.0d0*eps2)))
 
-				da_x(i,j,k) = (1.0d0 - ((msig_x(i)*dt)/(2.0d0*eps2))) &
-							/ (1.0d0 + ((msig_x(i)*dt)/(2.0d0*eps2)))
+                cb_x(i,j,k) = dt/eps2 /(1.0d0 + (esig_x(i)*dt)/(2.0d0*eps2))
+                cb_y(i,j,k) = dt/eps2 /(1.0d0 + (esig_y(j)*dt)/(2.0d0*eps2))
+                cb_z(i,j,k) = dt/eps2 /(1.0d0 + (esig_z(k)*dt)/(2.0d0*eps2))
+
+				da_x(i,j,k) = (1.0d0 - ((msig_x(i)*dt)/(2.0d0*eps2))) &   !msig_x from where ??
+							/ (1.0d0 + ((msig_x(i)*dt)/(2.0d0*eps2)))        !msigx means σ*
 				da_y(i,j,k) = (1.0d0 - ((msig_y(j)*dt)/(2.0d0*eps2))) &
 							/ (1.0d0 + ((msig_y(j)*dt)/(2.0d0*eps2)))
 				da_z(i,j,k) = (1.0d0 - ((msig_z(k)*dt)/(2.0d0*eps2))) &
 							/ (1.0d0 + ((msig_z(k)*dt)/(2.0d0*eps2)))
 
-				cb_x(i,j,k) = dt/eps2 /(1.0d0+(esig_x(i)*dt)/(2.0d0*eps2))
-				cb_y(i,j,k) = dt/eps2 /(1.0d0+(esig_y(j)*dt)/(2.0d0*eps2))
-				cb_z(i,j,k) = dt/eps2 /(1.0d0+(esig_z(k)*dt)/(2.0d0*eps2))
-
-				db_x(i,j,k) = dt/MU0 /(1.0d0+(msig_x(i)*dt)/(2.0d0*eps2))
-				db_y(i,j,k) = dt/MU0 /(1.0d0+(msig_y(j)*dt)/(2.0d0*eps2))
-				db_z(i,j,k) = dt/MU0 /(1.0d0+(msig_z(k)*dt)/(2.0d0*eps2))
+				db_x(i,j,k) = dt/MU0 /(1.0d0 + (msig_x(i)*dt)/(2.0d0*eps2))  !Mu0 >> myu ???
+				db_y(i,j,k) = dt/MU0 /(1.0d0 + (msig_y(j)*dt)/(2.0d0*eps2))
+				db_z(i,j,k) = dt/MU0 /(1.0d0 + (msig_z(k)*dt)/(2.0d0*eps2))
     	    enddo
     	enddo
 	enddo
