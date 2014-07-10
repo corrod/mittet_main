@@ -16,7 +16,7 @@ module const_para
     implicit none
 
     integer :: i,j,k
-    integer, parameter :: nstep = 500 !2000 !総タイムステップ数
+    integer, parameter :: nstep = 1000 !2000 !総タイムステップ数
     integer, parameter :: nx = 100,ny=100,nz=100 !100, ny = 100, nz = 100 !グリッド数
     real(8), parameter :: dx=0.16d0,dy=0.16d0,dz=0.16d0!dx = 20.0d0, dy = 20.0d0, dz = 20.0d0!dx=1.0d-2,dy=1.0d-2,dz=1.0d-2
     real(8), parameter :: dt = 1.0d-5!3.3d-5 !4.0d-4 !タイムステップ長 s

@@ -24,7 +24,7 @@ subroutine media_coeff
                 eps2 = sig(i,j,k) / 2.0d0 / omega0
 				!CPML coefficient
 				ca_x(i,j,k) = (1.0d0 - ((esig_x(i)*dt)/(2.0d0*eps2))) &  !!!esig_x wheare from???
-							/ (1.0d0 + ((esig_x(i)*dt)/(2.0d0*eps2)))
+							/ (1.0d0 + ((esig_x(i)*dt)/(2.0d0*eps2)))!　　　　　!esig_x(i)>>sig(i,j,k)??
 				ca_y(i,j,k) = (1.0d0 - ((esig_y(j)*dt)/(2.0d0*eps2))) &
 							/ (1.0d0 + ((esig_y(j)*dt)/(2.0d0*eps2)))
 				ca_z(i,j,k) = (1.0d0 - ((esig_z(k)*dt)/(2.0d0*eps2))) &

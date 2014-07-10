@@ -17,8 +17,9 @@ open(97,file='fxcpml.d')
   delta = ncpml*dx
   sig_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) * optToMax  !!x方向だけoptToMaxかけるの？
 
-do i = 1,nx
-    if(i<=ncpml) then
+! do i = 1,nx
+!     if(i<=ncpml) then
+do i=1,ncpml
       esig_x(i)  = sig_max * ((dble(ncpml)-dble(i)      )/(dble(ncpml)-1.0d0))**dble(nn+order)
       msig_x(i)  = sig_max * ((dble(ncpml)-dble(i)-0.5d0)/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
       ekappa_x(i)= 1.0d0 + (kappa_max-1.0d0) * ((dble(ncpml)-dble(i)      )/(dble(ncpml)-1.0d0))**dble(nn)
@@ -32,8 +33,9 @@ do i = 1,nx
       ch_x(i)    = msig_x(i)*(bh_x(i)-1.0d0) / (msig_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i)
       kedx(i)    = ekappa_x(i)*dx
       khdx(i)    = mkappa_x(i)*dx !!!(i-1/2)dxの取り扱い
-
-    else if(i>=nx-ncpml+1) then
+enddo
+!     else if(i>=nx-ncpml+1) then
+do i=nx-ncpml+1,nx
       esig_x(i)  = sig_max * ((dble(i)-dble(nx)+1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
       msig_x(i)  = sig_max * ((dble(i)-dble(nx)+0.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
       ekappa_x(i)= 1.0d0 + (kappa_max-1.0d0) * ((dble(i)-dble(nx)+1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)
@@ -47,8 +49,9 @@ do i = 1,nx
       ch_x(i)    = msig_x(i)*(bh_x(i)-1.0d0) / (msig_x(i) + mkappa_x(i)*am_x(i)) / mkappa_x(i)
       kedx(i)    = ekappa_x(i)*dx
       khdx(i)    = mkappa_x(i)*dx !!!(i-1/2)dxの取り扱い
-
-    else
+enddo
+!     else
+do i=ncpml+1,nx-ncpml
       esig_x(i)  = 0.0d0
       msig_x(i)  = 0.0d0
       ekappa_x(i)= 1.0d0
@@ -61,9 +64,12 @@ do i = 1,nx
       ch_x(i)    = 0.0d0
       kedx(i)    = ekappa_x(i)*dx
       khdx(i)    = mkappa_x(i)*dx
-    endif
+!     endif
+enddo
+do i=1,nx
     write(97,"(I3,12e12.4)")  i,esig_x(i),msig_x(i),ekappa_x(i),mkappa_x(i),ae_x(i),am_x(i),be_x(i),bh_x(i),ce_x(i),ch_x(i), kedx(i),khdx(i)
 enddo
+! enddo
 close(97)
 
 
