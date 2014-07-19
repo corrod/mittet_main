@@ -49,6 +49,9 @@ program main
     open(22,file='ex1020.d')
     open(23,file='ex1030.d')
 
+
+open(24,file='hzleft.d')   !!!反射波の確認
+open(25,file='hzright.d')  !!!反射波の確認
     !set eh-field to 0
     call set_zero_eh(EX,EY,EZ,HX,HY,HZ)
 
@@ -107,6 +110,10 @@ t = t + dt*0.5d0 !時間の更新---------------------------
     !アウトプットE-field、H-field
     call output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
+
+write(24,*) t, real(hz(x0,y0,3)), aimag(hz(x0,y0,3))
+write(25,*) t, real(hz(x0,y0,98)), aimag(hz(x0,y0,98))
+
 enddo !*反復計算終了
 
     !グリーン関数の導出
@@ -124,4 +131,7 @@ enddo !*反復計算終了
     close(21)
     close(22)
     close(23)
+
+close(24)
+close(25)
             end program main
