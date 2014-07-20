@@ -17,7 +17,7 @@ open(97,file='fxcpml.d')
       write(97,"(13a)")  " # i, esig_x(i), msig_x(i), ekappa_x(i), mkappa_x(i), ae_x(i),   &
        am_x(i),    be_x(i),    bh_x(i),    ce_x(i),    ch_x(i),    kedx(i),    khdx(i)"
   delta = ncpml*dx
-  sig_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) * optToMax  !!x方向だけoptToMaxかけるの？
+  sig_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) !* optToMax  !!x方向だけoptToMaxかけるの？
 
 
 
