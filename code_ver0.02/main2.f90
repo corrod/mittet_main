@@ -111,8 +111,8 @@ t = t + dt*0.5d0 !時間の更新---------------------------
     call output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
 
-write(24,*) t, real(hz(x0,y0,3)), aimag(hz(x0,y0,3))
-write(25,*) t, real(hz(x0,y0,98)), aimag(hz(x0,y0,98))
+write(24,*) t, real(hz(x0,y0,2)), aimag(hz(x0,y0,2))
+write(25,*) t, real(hz(x0,y0,99)), aimag(hz(x0,y0,99))
 
 enddo !*反復計算終了
 
