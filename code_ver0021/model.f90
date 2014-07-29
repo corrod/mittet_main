@@ -9,21 +9,19 @@ subroutine model !(sig,myu)
 !     real(8),intent(out) :: myu(nx,ny,nz)
 
     !海水一様モデル
+!     sig(1:nx,1:ny,1:nz) = sigwa
+!     myu(1:nx,1:ny,1:nz) = myuwa
+
+    !海水
     sig(1:nx,1:ny,1:nz) = sigwa
     myu(1:nx,1:ny,1:nz) = myuwa
 
-    !海水
-    !sig()=sigwa
-    !myu()=myuwa
+    !鉄板
+    sig(1:nx,1:ny,nz-10:nz) = sigfe
+    myu(1:nx,1:ny,nz-10:nz) = myufe
 
-!     !鉄板
-!     do k= z0+10,z0+16
-!         do j= y0-3,y0+3
-!             do i=x0-3,x0+3
-!         sig(i,j,k) = sigfe
-!         myu(i,j,k) = myufe
-!             enddo
-!         enddo
-!     enddo
+    !欠陥
+    sig(x0-5:x0+5,y0-5:y0+5,nz-10:nz-5) = sigwa
+    myu(x0-5:x0+5,y0-5:y0+5,nz-10:nz-5) = myuwa
 
             end subroutine model
