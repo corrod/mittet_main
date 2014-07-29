@@ -20,7 +20,7 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
 
     !1st_derivative gaussian
     signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
-
+    write(*,*) signal(istep) !　　　
     !電場ソースの設定
     etaxx(x0,y0,z0) = (2.0d0*omega0) / sig(x0,y0,z0)
     Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
@@ -29,9 +29,9 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
 !                     - dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 
     !磁場ソースの設定
-    Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
+    Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz!　　　
     Hz(x0,y0,z0) = Hz(x0,y0,z0) &
-                    - signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
+                    - signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz!　　　
         end subroutine read_source_3d
 
 

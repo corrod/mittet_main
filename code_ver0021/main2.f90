@@ -112,7 +112,7 @@ t = t + dt*0.5d0 !時間の更新---------------------------
 
 
 write(24,*) t, real(hz(x0,y0,2)), aimag(hz(x0,y0,2))
-write(25,*) t, real(hz(x0,y0,99)), aimag(hz(x0,y0,99))
+write(25,*) t, real(hz(x0,y0,nz-5)), aimag(hz(x0,y0,nz-5))
 
 enddo !*反復計算終了
 
