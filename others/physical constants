@@ -1,0 +1,22 @@
+鉄
+    比誘電率 εr = 1.0d0
+    比透磁率 μr = 4.0d3
+    誘電率 ε = 7.17d-010 F/m
+    透磁率 μ = 5.02d-3 H/m
+    導電率 σ = 1.03d7 S/m, (75度　7.5d6 S/m from 3dfem)
+
+海水
+    比誘電率 εr = 81.0d0
+    比透磁率 μr = 0.999991
+    誘電率 ε = 8.85d-012 F/m
+    透磁率 μ = 1.25d-6 H/m
+    導電率 σ = 3.2d7 S/m
+
+skindepth
+    d = sqrt(1.0d0 / (pi*f*sigma*myu))
+
+グリッド間隔
+    dx < (0.999d0*cmin/fmax/Glim) :from mittet Glim =10.4
+    dx < cmax/fmax
+    dx < cmin/fmax
+    dx < cmin/fmax /10 :波長の1/10以下

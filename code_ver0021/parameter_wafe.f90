@@ -16,12 +16,12 @@ module const_para
     implicit none
 
     integer :: i,j,k
-    integer, parameter :: nstep = 6443 !2000 総タイムステップ数　　　
+    integer, parameter :: nstep = 160690 !2000 総タイムステップ数　　　
     integer, parameter :: nx = 101,ny=31,nz=21 !100, ny = 100, nz = 100 !グリッド数　　　
-    real(8), parameter :: dx=1.d-4,dy=1.d-4,dz=1.d-4!dx=1.0d-2,dy=1.0d-2,dz=1.0d-2!dx=0.16d0!dx = 20.0d0!dx=1.0d-2　　　
-    real(8), parameter :: dt = 3d-5!3.05d-10!dt =1.95d-6! 1.0d-5!3.3d-5 !4.0d-4 !タイムステップ長 s　　　
+    real(8), parameter :: dx=1.75d-5,dy=1.75d-5,dz=1.75d-5!dx=1.0d-2,dy=1.0d-2,dz=1.0d-2!dx=0.16d0!dx = 20.0d0!dx=1.0d-2　　　
+    real(8), parameter :: dt = 3.630d-9!3.05d-10!dt =1.95d-6! 1.0d-5!3.3d-5 !4.0d-4 !タイムステップ長 s　　　
     integer, parameter :: x0=(nx+1)/2, y0=(ny+1)/2, z0=(nz+1)/2!=51, y0 = 51, z0 = 51  !送信源位置
-    real(8), parameter :: fmax = 1.0d1 !10000.0d0!25.0d0 !12.5kusuda!送信源の最大周波数　　　
+    real(8), parameter :: fmax = 1.0d2 !10000.0d0!25.0d0 !12.5kusuda!送信源の最大周波数　　　
     integer, parameter :: ncpml = 6   !nxpml1   = 10,nypml1=10,nzpml1=10!CPMLのgrid数
         !     integer, parameter :: ln = 1 !operator half rength
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
@@ -36,7 +36,7 @@ module const_para
 
 !媒質パラメータ
     real(8), parameter :: sigair = 0.0d0     !空気の導電率 S/m
-    real(8), parameter :: sigfe  = 1.03d7 !鉄の導電率 S/m
+    real(8), parameter :: sigfe  = 7.5d6 !1.03d7 !鉄の導電率 S/m
     real(8), parameter :: sigwa  = 3.2d0  !海水の導電率 S/m
     real(8), parameter :: sigmin = sigwa
     real(8), parameter :: sigmax = sigfe
@@ -61,7 +61,7 @@ module const_para
 !伝播速度設定
     real(8), parameter :: CC = 2.997924580d0 !光速
     real(8), parameter :: cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
-    real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe)
+    real(8), parameter :: cfe = sqrt(2.0d0*omega0/myuwa/sigfe) !myufe >> myuwa　　　
     real(8), parameter :: cmax = cwa
     real(8), parameter :: cmin = cfe
 

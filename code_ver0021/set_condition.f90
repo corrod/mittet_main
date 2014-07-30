@@ -45,14 +45,14 @@ subroutine confirm_parameter
     write(*,*)              '波長λ wa, fe', cmax/fmax, cmin/fmax
     write(*,*) 'cwa',cwa
     write(*,*) 'cfe',cfe
-    write(*,*) 'cmax',cmax
-!     write(*,*) 'cmin',cmin
+    write(*,*) 'cmax,cmin',cmax,cmin
+    write(*,*) 'c_test myufe>myuwa',sqrt(2.0d0*omega0/myuair/sigfe)
     write(*,*) '反射波の到達時間 (nx-10)*dx/c', (nx-10)*dx/cmax
-    write(*,*) 'propagate distance c*t', cwa*dt*nstep
+    write(*,*) 'propagate distance cmax*t', cmax*dt*nstep, cmin*dt*nstep
     write(*,*) '１/2辺の長さdx*nx/2',dx*nx*0.5d0
     write(*,*) 'dt*nstep',dt*nstep
-    write(*,*) 'sig_wa,myu_wa',sigwa,myuwa
-    write(*,*) 'sig_fe,myu_fe',sigfe,myufe
+    write(*,*) 'sig_wa,myu_wa,epsi_wa',sigwa,myuwa,epsiwa
+    write(*,*) 'sig_fe,myu_fe,epsi_fe',sigfe,myufe,epsife
 
 
 
@@ -67,17 +67,21 @@ subroutine confirm_parameter
 
 !!! dx グリッド間隔:dxの設定;グリッド分散!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-if(dx>(cmax/fmax)) then
-    write(*,*) '*****grid dispersion may happen** dx>(cmax/fmax)***************'
-    write(*,*) "# cmax/fmax" , cmax/fmax
-endif
+! if(dx>(cmax/fmax)) then
+!     write(*,*) '*****grid dispersion may happen** dx>(cmax/fmax)***************'
+!     write(*,*) "# cmax/fmax" , cmax/fmax
+! endif
 
+! if(dx>(cmin/fmax)) then
+!     write(*,*) '*****grid dispersion may happen** dx>(cmin/fmax)***************'
+!     write(*,*) "# cmin/fmax" , cmin/fmax
+! endif
 
 if(dx>(0.999d0*cmin/fmax/Glim)) then
     write(*,*) '*****grid dispersion may happen***** dx>(0.999d0*cmin/fmax/Glim) ********'
 endif
     write(*,*) '# dx should  less than (0.999d0*cmin/fmax/Glim)',(0.999d0*cmin/fmax/Glim)
-    write(*,*) '# dx should  less than (0.999d0*cmax/fmax/Glim)',(0.999d0*cmax/fmax/Glim)
+!     write(*,*) '# dx should  less than (0.999d0*cmax/fmax/Glim)',(0.999d0*cmax/fmax/Glim)
 
 
 !!! dt タイムステップdtの計算;クーラン条件!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -95,14 +99,13 @@ endif
     if(dt>dt4) then
     write(*,*) '****************courant 条件確認!! ********************************'
     endif
-    write(*,*) '# courant 2nd order scheme with taylor operator dt2', dt2,&
-    dx/(3.0d0*0.5d0)/cmin
-    write(*,*) '# courant 4th order scheme with taylor operator dt4', dt4, &
-    (2.0d0*dx)/((3.0d0**0.5d0)*pi*cmin)
-    write(*,*) '# courant dt_ideal, dt',dt_ideal,&
-    1.0d0/cmin/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0)*6.0/7.0/0.999d0
-    write(*,*) '# courant Wang and Hohman dt_wh', dt_wh,&
-    0.15d0 * sqrt(MU0*sigmax)
+    write(*,*) '# courant 2nd order scheme with taylor operator dt2', dt2!,&
+    !dx/(3.0d0*0.5d0)/cmin
+    write(*,*) '# courant 4th order scheme with taylor operator dt4', dt4!, &
+    !(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmin)
+    write(*,*) '# courant dt (courant*6.0d0/7.0d0*0.999d0)', dt_ideal!,&
+!     1.0d0/cmin/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0)*6.0/7.0/0.999d0
+!     write(*,*) '# courant Wang and Hohman dt_wh', dt_wh, 0.15d0 * sqrt(MU0*sigmax)
 
 
 
@@ -111,20 +114,16 @@ endif
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     cfl_limit = cmax*dt/dx*(3.0d0**0.5d0)
     if(cfl_limit>1) then
-        write(*,*) '*****CFL limit is violated*****'
+        write(*,*) '***************CFL limit is violated*****************'
     endif
-
-
 
 
 !Fourier limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     fourier_limit = cmax*dt/dx*pi/2.0d0*(3.0d0**0.5d0)
     if(fourier_limit>1) then
-        write(*,*) '*****Fourier limit is violated*****'
+        write(*,*) '************Fourier limit is violated*******************'
     endif
-
-
 
 
 !!!the number of timestep :nstepの計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
