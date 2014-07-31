@@ -43,10 +43,10 @@ subroutine confirm_parameter
     write(*,'(a,3i5)')      'nx,ny,nz',nx,ny,nz
     write(*,'(a,3e12.4)')   'dx,dy,dz',dx,dy,dz
     write(*,*)              '波長λ wa, fe', cmax/fmax, cmin/fmax
-    write(*,*) 'cwa',cwa
-    write(*,*) 'cfe',cfe
-    write(*,*) 'cmax,cmin',cmax,cmin
-    write(*,*) 'c_test myufe>myuwa',sqrt(2.0d0*omega0/myuair/sigfe)
+!     write(*,*) 'cwa',cwa
+!     write(*,*) 'cfe',cfe
+    write(*,*) 'cmax=cwa,cmin=cfe',cmax,cmin
+!     write(*,*) 'c_test myufe>myuwa',sqrt(2.0d0*omega0/myuair/sigfe)
     write(*,*) '反射波の到達時間 (nx-10)*dx/c', (nx-10)*dx/cmax
     write(*,*) 'propagate distance cmax*t', cmax*dt*nstep, cmin*dt*nstep
     write(*,*) '１/2辺の長さdx*nx/2',dx*nx*0.5d0

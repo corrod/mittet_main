@@ -16,13 +16,13 @@ module const_para
     implicit none
 
     integer :: i,j,k
-    integer, parameter :: nstep = 160690 !2000 総タイムステップ数　　　
-    integer, parameter :: nx = 101,ny=31,nz=21 !100, ny = 100, nz = 100 !グリッド数　　　
-    real(8), parameter :: dx=1.75d-5,dy=1.75d-5,dz=1.75d-5!dx=1.0d-2,dy=1.0d-2,dz=1.0d-2!dx=0.16d0!dx = 20.0d0!dx=1.0d-2　　　
-    real(8), parameter :: dt = 3.630d-9!3.05d-10!dt =1.95d-6! 1.0d-5!3.3d-5 !4.0d-4 !タイムステップ長 s　　　
-    integer, parameter :: x0=(nx+1)/2, y0=(ny+1)/2, z0=(nz+1)/2!=51, y0 = 51, z0 = 51  !送信源位置
-    real(8), parameter :: fmax = 1.0d2 !10000.0d0!25.0d0 !12.5kusuda!送信源の最大周波数　　　
-    integer, parameter :: ncpml = 6   !nxpml1   = 10,nypml1=10,nzpml1=10!CPMLのgrid数
+    integer, parameter :: nstep = 365920 !2000 総タイムステップ数　　　
+    integer, parameter :: nx =23,ny=23,nz=23  !グリッド数　　　
+    real(8), parameter :: dx=1.100d-4,dy=1.100d-4,dz=1.100d-4 !　　　
+    real(8), parameter :: dt = 2.280d-8 !3.00d-7 !タイムステップ長 s　　　
+    real(8), parameter :: fmax = 1.0d3!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数　　　
+    integer, parameter :: x0=(nx+1)/2, y0=(ny+1)/2, z0=(nz+1)/2 !送信源位置
+    integer, parameter :: ncpml = 6 !CPMLのgrid数
         !     integer, parameter :: ln = 1 !operator half rength
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
     real(8), parameter :: f0 = 1.0d0 !f0が小さいとdtがでかくなる

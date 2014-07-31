@@ -17,16 +17,16 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     character(5) :: name
 
     write(13,*) t, real(hz(x0,y0,nz-1)),  aimag(hz(x0,y0,nz-1))    !hz1050.d
-    write(14,*) t, real(hz(x0-5,y0,z0)), aimag(hz(x0-5,y0,z0)) !hz1010.d
-    write(15,*) t, real(hz(x0-10,y0,z0)), aimag(hz(x0-10,y0,z0))   !hz1020.d
-    write(16,*) t, real(hz(x0-15,y0,z0)), aimag(hz(x0-15,y0,z0))   !hz1030.d
+    write(14,*) t, real(hz(x0-3,y0,z0)), aimag(hz(x0-3,y0,z0)) !hz1010.d
+    write(15,*) t, real(hz(x0-6,y0,z0)), aimag(hz(x0-6,y0,z0))   !hz1020.d
+    write(16,*) t, real(hz(x0-9,y0,z0)), aimag(hz(x0-9,y0,z0))   !hz1030.d
     write(17,*) t, real(Je(istep))      , aimag(Je(istep))       !je_fic.d
     write(18,*) t, real(Jh(istep))      , aimag(Jh(istep))       !jh_fic.d
 
     write(20,*) t, real(ex(x0,y0,z0)),    aimag(ex(x0,y0,z0))    !ex1000.d
-    write(21,*) t, real(ex(x0-5,y0,z0)), aimag(ex(x0-5,y0,z0)) !ex1010.d
-    write(22,*) t, real(ex(x0-10,y0,z0)), aimag(ex(x0-10,y0,z0)) !ex1020.d
-    write(23,*) t, real(ex(x0-15,y0,z0)), aimag(ex(x0-15,y0,z0)) !ex1030.d
+    write(21,*) t, real(ex(x0-3,y0,z0)), aimag(ex(x0-3,y0,z0)) !ex1010.d
+    write(22,*) t, real(ex(x0-6,y0,z0)), aimag(ex(x0-6,y0,z0)) !ex1020.d
+    write(23,*) t, real(ex(x0-9,y0,z0)), aimag(ex(x0-9,y0,z0)) !ex1030.d
 
 
 

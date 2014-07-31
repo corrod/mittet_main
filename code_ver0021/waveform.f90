@@ -20,7 +20,7 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
 
     !1st_derivative gaussian
     signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
-    write(*,*) signal(istep) !　　　
+!     write(*,*) signal(istep) !　　　
     !電場ソースの設定
     etaxx(x0,y0,z0) = (2.0d0*omega0) / sig(x0,y0,z0)
     Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
