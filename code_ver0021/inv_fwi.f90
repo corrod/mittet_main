@@ -1,76 +1,106 @@
 !/////////////////////////////////////////////////////////////////////////////
 ! Full Waveform Inversion
 !
-!
+! flaw chartの作成
 !//////////////////////////////////////////////////////////////////////////
 
 
-program inv_fwi
-  use const_para
-  implicit none
+! program inv_fwi
+!   use const_para
+!   implicit none
 
-  write(*,*) "****************** Initial Condition **********************"
-  write(*,*) "****************** Backward calculation **********************"
-  write(*,*) "****************** Forward calculation **********************"
-  write(*,*) "****************** Start FWI **********************"
-  write(*,*) "******************  **********************"
-  write(*,*) "******************  **********************"
-  write(*,*) "******************  **********************"
-  write(*,*) "******************  **********************"
+!   write(*,*) "****************** Initial Condition **********************"
+!   write(*,*) "****************** Backward calculation **********************"
+!   write(*,*) "****************** Forward calculation **********************"
+!   write(*,*) "****************** Start FWI **********************"
+!   write(*,*) "******************  **********************"
+!   write(*,*) "******************  **********************"
+!   write(*,*) "******************  **********************"
+!   write(*,*) "******************  **********************"
 
-end program inv_fwi
-
-
+! end program inv_fwi
 
 
+1.initicial Condition
 
+  shot record位置の読み込み
+  入力波形の設定
+  グリッド作成
+  境界条件の初期設定
+  グラディエントの初期設定
 
+2. 反復開始
 
+  0クリア
+  媒質の設定
 
+  2.1 backpropagation
+    電磁場計算 a
+      temporalに
+        電磁場aの実部を配列EcalX_bに保存 b
+        bを仮想領域から実領域へ c
+        cからグリーン関数を求め、配列EcalX_bb,...に保存 d
 
+  2.2 obserbed EMfieldの読み込み
+        Eobs
+        0クリア ehfield
+        媒質の設定
 
+  2.3 fowardpropagation
+    電磁場計算 a
+      sourceの読み込み
+        電磁場aの実部を配列EcalX_bに保存 b
+         bを仮想領域から実領域へ c
+         cからグリーン関数を求め d
+         dによるconvolutionに(G*J)をEcalX_ff,...に保存 e
+         同時に、EcalX_ffLをもとめる f
+    eの出力
 
+  2.4 residual error の計算
+    delE_f を求める delE_f = Eobs - EcalX_ff
+    err_sum = err_sum + abs(delE_f)
 
+  2.5 sensitivity の計算
+    sensitiv = sensitiv + abs(EcalX_ff * EcalX_bb)
+    sensitiv = sensitiv + abs(EcalY_ff * EcalY_bb)
+    sensitiv = sensitiv + abs(EcalZ_ff * EcalZ_bb)
 
+  2.6 delE を green fucntion と convolutoin する
+    EcalX_back = EcalX_back + EcalX_bb * conjg(delEx_f)
 
+  2.7 γ の計算
+    grad = grad + real(EcalX_ff * EcalX_back
+                     + EcalY_ff * EcalY_back
+                     + EcalZ_ff * EcalZ_back) / sensitiv
 
+  2.8 calc phi
+    scaler = 0.01 * sigmax2 / gradmax
+    sig2 = sig - scaler * grad
 
+  2.9 媒質パラメータ2の作成
 
+2回目
+  2.10 foward propagatoin
+    電磁場計算 a
+    EcalX_b から EcalX_ff2をもとめ、
 
+  2.11 calc alpha
+    EcalX_ff2とEcalX_ffLを使用し、
+    k1,k2を求める
+    k1 = k1 + delEx_f * (EcalX_ff2 - EcalX_ffL)
+    k1 = k1 + delEy_f * (EcalY_ff2 - EcalY_ffL)
+    k1 = k1 + delEz_f * (EcalZ_ff2 - EcalZ_ffL)
+    k2 = k2 + (EcalX_ff2 - EcalX_ffL)
+    k2 = k2 + (EcalY_ff2 - EcalY_ffL)
+    k2 = k2 + (EcalZ_ff2 - EcalZ_ffL)
 
+  2.12 パラメータの更新
+    alpha = 3 * abs(k1) / abs(k2)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    sig = sig + alpha * scaler * grad
+    sig = minval (if sig < minval)
+    sig = maxval (if sig >maxval)
+    grad_p() = grad()
 
 
 
