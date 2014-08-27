@@ -34,7 +34,7 @@
   0クリア
   媒質の設定
 
-  2.1 backpropagation
+  2.1 back propagation
     電磁場計算 a
       temporalに
         電磁場aの実部を配列EcalX_bに保存 b
@@ -46,7 +46,7 @@
         0クリア ehfield
         媒質の設定
 
-  2.3 fowardpropagation
+  2.3 foward propagation
     電磁場計算 a
       sourceの読み込み
         電磁場aの実部を配列EcalX_bに保存 b

@@ -16,8 +16,8 @@ module const_para
     implicit none
 
     integer :: i,j,k
-    integer, parameter :: nstep = 365920 !2000 総タイムステップ数　　　
-    integer, parameter :: nx =23,ny=23,nz=23  !グリッド数　　　
+    integer, parameter :: nstep = 3659 !2000 総タイムステップ数　　　
+    integer, parameter :: nx =40,ny=40,nz=40  !グリッド数　　　
     real(8), parameter :: dx=1.100d-4,dy=1.100d-4,dz=1.100d-4 !　　　
     real(8), parameter :: dt = 2.280d-8 !3.00d-7 !タイムステップ長 s　　　
     real(8), parameter :: fmax = 1.0d3!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数　　　

@@ -1,0 +1,13 @@
+以下のような内容のファイルがあった時，2列目の数値の最大，最小，平均をawkで求める．
+
+a 211
+
+b 342
+
+c 643
+
+d 289
+
+最大：cat file | awk '{if(m<$2) m=$2} END{print m}'
+最小：cat file | awk 'BEGIN{m=1000000} {if($2 != "" && m>$2) m=$2} END{print m}'
+平均：cat file | awk '{m+=$2} END{print m/NR}'

@@ -10,7 +10,7 @@
     比透磁率 μr = 0.999991
     誘電率 ε = 8.85d-012 F/m
     透磁率 μ = 1.25d-6 H/m
-    導電率 σ = 3.2d7 S/m
+    導電率 σ = 3.2 S/m
     v = 1772 m/s (omega0=1) 56049 (omega0=1000)
 skindepth
     d = sqrt(1.0d0 / (pi*f*sigma*myu))

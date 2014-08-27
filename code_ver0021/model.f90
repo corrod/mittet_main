@@ -24,4 +24,44 @@ myu(1:nx,1:ny,nz-10:nz) = myufe
 sig(x0-3:x0+3,y0-3:y0+3,nz-10:nz-5) = sigwa
 myu(x0-3:x0+3,y0-3:y0+3,nz-10:nz-5) = myuwa
 
+!x-z　鉛直断面
+open(100,file='model_sig.dat')
+do k = 1,nz
+     j = (ny+1)/2
+        do i = 1,nx
+            write(100,*) i,j,k,sig(i,j,k)
+        enddo
+
+enddo
+close(100)
+
+open(101,file='model_myu.dat')
+do k = 1,nz
+     j = (ny+1)/2
+        do i = 1,nx
+            write(101,*) i,j,k,myu(i,j,k)
+        enddo
+
+enddo
+close(101)
+
+!x-y　水平断面
+open(102,file='model_sig_xy.dat')
+ k = nz-10
+    do j = 1,ny
+        do i = 1,nx
+            write(102,*) i,j,k,sig(i,j,k)
+        enddo
+    enddo
+close(102)
+
+open(103,file='model_myu_xy.dat')
+ k = nz-10
+    do j = 1,ny
+        do i = 1,nx
+            write(103,*) i,j,k,myu(i,j,k)
+        enddo
+    enddo
+close(103)
+
 end subroutine model
