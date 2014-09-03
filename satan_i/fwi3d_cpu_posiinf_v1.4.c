@@ -67,7 +67,7 @@ printf("aaaa");
     recz[i]  = 16;
   }
 
-// Output in model_env.dat 
+// Output in model_env.dat
   fprintf(fp1,"%d\n",nx);
   fprintf(fp1,"%d\n",ny);
   fprintf(fp1,"%d\n",nz);

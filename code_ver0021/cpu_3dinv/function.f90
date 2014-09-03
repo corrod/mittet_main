@@ -251,7 +251,7 @@ subroutine media_coeff_sig_tmp()
                 db_y(i,j,k) = dt / MU0 / (1.0d0 + (msigy(j)*dt)/(2.0d0*eps2))
                 db_z(i,j,k) = dt / MU0 / (1.0d0 + (msigz(k)*dt)/(2.0d0*eps2))
 
-                !　　　
+                !　　　　　
                 write(1,*) ca_x(i,j,k), ca_y(i,j,k), ca_z(i,j,k),cb_x(i,j,k),cb_y(i,j,k),cb_z(i,j,k)
                 write(2,*) da_x(i,j,k), da_y(i,j,k), da_z(i,j,k),db_x(i,j,k),db_y(i,j,k),db_z(i,j,k)
                 write(3,*) esigx(i),esigy(j),esigz(k),msigx(i),msigy(j),msigz(k)
@@ -327,3 +327,8 @@ call dfftw_destroy_plan(plan1)
         EcalZ_ff2() = ctmp_gz(w) * out_True(w)
 
 end subroutine laplaceToFreq
+
+
+
+
+
