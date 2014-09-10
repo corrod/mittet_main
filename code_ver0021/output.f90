@@ -34,8 +34,8 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     if (mod(istep,50)==0) then
    l=10000+istep/50
     write(name,"(I5)") l
-    open(7,file="hz"//name//".d")
-    open(8,file="ex"//name//".d")
+    open(7,file="./out1/hz"//name//".d")
+    open(8,file="./out2/ex"//name//".d")
 
         do j=1,ny
             do i=1,nx
