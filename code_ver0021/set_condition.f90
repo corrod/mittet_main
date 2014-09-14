@@ -48,7 +48,7 @@ subroutine confirm_parameter
     write(*,*) 'cmax=cwa,cmin=cfe',cmax,cmin
 !     write(*,*) 'c_test myufe>myuwa',sqrt(2.0d0*omega0/myuair/sigfe)
     write(*,*) '反射波の到達時間 (nx-10)*dx/c', (nx-10)*dx/cmax
-    write(*,*) 'propagate distance cmax*t', cmax*dt*nstep, cmin*dt*nstep
+    write(*,*) '到達距離 cmax*t,cmin*t', cmax*dt*nstep, cmin*dt*nstep
     write(*,*) '１/2辺の長さdx*nx/2',dx*nx*0.5d0
     write(*,*) 'dt*nstep',dt*nstep
     write(*,*) 'sig_wa,myu_wa,epsi_wa',sigwa,myuwa,epsiwa
@@ -131,6 +131,7 @@ endif
      S=0.6d0  !S =[0.5:1.0]
 
     Nt1=int( S*nx/sqrt( 1.0d0/dx**2 + 1.0d0/dy**2 + 1.0d0/dz**2 ) )
+!     Nt1= S*dble(nx)/sqrt( 1.0d0/dble(dx)**2.0d0 + 1.0d0/dble(dy)**2.0d0 + 1.0d0/dble(dz)**2.0d0 )
     Nt2=int( S*nx/sqrt( 1.0d0/dx**2 + 1.0d0/dy**2 + 1.0d0/dz**2 ) )* sqrt(sigmax/sigmin)
     Nt3=int( S*nx*(3.0d0**0.5)*sqrt(sigmax/sigmin) )
     Nt4=int( S*nx*(3.0d0**0.5d0)*cmax/cmin )
@@ -160,7 +161,7 @@ endif
 
 
 !//////////////////////////////////////////////////////////////////////////
-!初期ehfield set 0
+!初期 ehfield set 0
 !////////////////////////////////////////////////////////////////////////
 subroutine set_zero_eh(EX,EY,EZ,HX,HY,HZ)
         use const_para

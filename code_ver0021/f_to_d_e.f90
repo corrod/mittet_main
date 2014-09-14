@@ -28,7 +28,7 @@ program f_to_d
 	complex(kind(0d0)),allocatable ::GX_w(:) !GX_w(0:nd-1) !diffusive domain Green's function
 	character(3) :: name
 	!IDFT, IFFT用
-	complex(kind(0d0)),allocatable :: EX_t(:), JX_t(:),GX_t(:)
+	complex(kind(0d0)),allocatable :: EX_t(:), JX_t(:), GX_t(:)
 	complex(kind(0d0)),allocatable :: in1(:), in2(:), in3(:) !IFFT用
 	complex(kind(0d0)),allocatable :: out1(:), out2(:), out3(:)!IFFT用
 	integer(8) :: plan1, plan2, plan3

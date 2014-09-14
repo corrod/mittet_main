@@ -1,0 +1,15 @@
+import numpy as np
+>>import matplotlib.pyplot as plt
+
+
+>>data = np.loadtxt('model_sig_xz.dat',dtype={'names':('x','y','z','value'),'formats':('i1','i1','i1','f8')})
+
+>>data['x']
+>>data['y']
+>>data['value']
+
+or
+
+>>x,y,z,w = np.loadtxt('model_sig_xz.dat', unpack=True)
+
+z_min,z_max = np.abs(data['value']).min(),np.abs(data['value'].max()
