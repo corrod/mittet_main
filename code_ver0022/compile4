@@ -4,7 +4,7 @@ date
 # export OMP_NUM_THREADS=5
 
 #構造改革
-ifort -o ficticious_fwd_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 main2.f90  -check all -CB -traceback -g -r8
+ifort -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 cerjan.f90 main2.f90 # -check all -CB -traceback -g -r8
 
 
 # # all in
@@ -22,13 +22,13 @@ ifort -o ficticious_fwd_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 m
 # PML
 # ifort -o ficticious parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field4.f90 e_pml.f90 h_field4.f90 h_pml.f90 main2.f90 #-check all -CB -traceback -g -r8
 
-time ./ficticious_fwd_cpml
+time ./ficticious_fwi_cpml
 
 # #画像出力::::::::::::::::::::::::::::::::::::
 # #ある点でのH'zの時間分布
   sh gnu.sh
 # #H'zの伝播movie
-   # sh movie.sh
+    # sh movie.sh
 
 
 
@@ -58,6 +58,8 @@ done
 rm out*.dat invG*.dat
 
 
+
+python subplot.py
 #DFT,IDFT,IFFTスクリプト(H)::::::::::::::::::::::::::::::
 # cp jh_fic.d inp2.dat #source J'
 

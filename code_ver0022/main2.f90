@@ -37,10 +37,13 @@ program main
 !     complex(kind(0d0)) :: Hy(-1:nx+2,-1:ny+2,-1:nz+2)
 !     complex(kind(0d0)) :: Hz(-1:nx+2,-1:ny+2,-1:nz+2)
 
-    open(13,file='hz1100.d')
-    open(14,file='hz1010.d')
-    open(15,file='hz1020.d')
-    open(16,file='hz1030.d')
+    open(31,file='hz1000.d')
+    open(32,file='hz1010.d')
+    open(33,file='hz1020.d')
+    open(34,file='hz1030.d')
+    open(35,file='hz1040.d')
+    open(36,file='hz1050.d')
+
     open(17,file='je_fic.d')
     open(18,file='jh_fic.d')
 
@@ -50,8 +53,14 @@ program main
     open(23,file='ex1030.d')
 
 
-open(24,file='hzleft.d')   !!!反射波の確認
-open(25,file='hzright.d')  !!!反射波の確認
+open(24,file='hzleft1.d')   !!!反射波の確認
+open(25,file='hzright1.d')  !!!反射波の確認
+open(26,file='hzleft2.d')
+open(27,file='hzright2.d')
+open(28,file='hzleft3.d')
+open(29,file='hzright3.d')
+
+
     !set eh-field to 0
     call set_zero_eh(EX,EY,EZ,HX,HY,HZ)
 
@@ -71,21 +80,21 @@ do istep = 1, nstep !反復計算開始----------------------
 !     write(*,*) istep
 
     !入力波源の設定
-!     call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
     call read_source_3d(istep,t,Hz,Je,Jh)
+!     call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
                     !     call read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
 !     call read_source_3d(istep,t,sig,myu,EX,Je,Jh)
 
     !電場計算 E
+    call e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 !     call Efield4(istep,t,Je,Ex,Ey,Ez,Hx,Hy,Hz,sig)
 !     call Efield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,sig)
-    call e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
     !境界条件 CPML_E
-    call CPML_E4(ex,ey,ez,hx,hy,hz)!,sig)!
+!     call CPML_E4(ex,ey,ez,hx,hy,hz)!,sig)!
 !     call CPML_E2(ex,ey,ez,hx,hy,hz,sig)!
 !     call cerjan_e(ex,ey,ez) !!!だめ
-!     call cerjan2_e(ex,ey,ez)  !cerjanの吸収境界!!!ok
+    call cerjan2_e(ex,ey,ez)  !cerjanの吸収境界!!!ok
 !     call mur_yz(ex,ey,ez) !Murの吸収境界
 !     call mur_zx(ex,ey,ez)!Murの吸収境界
 !     call mur_xy(ex,ey,ez)!Murの吸収境界
@@ -94,15 +103,15 @@ do istep = 1, nstep !反復計算開始----------------------
 t = t + dt*0.5d0  !時間の更新--------------------------
 
     !磁場計算 H
+    call h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 !     call Hfield4(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !     call Hfield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,myu)
-    call h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
     !境界条件 CPML_H
-    call CPML_H4(ex,ey,ez,hx,hy,hz)!,sig,myu)!,cmax)
+!     call CPML_H4(ex,ey,ez,hx,hy,hz)!,sig,myu)!,cmax)
 !     call CPML_H2(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)
 !     call cerjan_h(hx,hy,hz) !!!だめ
-!     call cerjan2_h(hx,hy,hz) !!!ok
+    call cerjan2_h(hx,hy,hz) !!!ok
 !     call h_pml(ex,ey,ez,hx,hy,hz)!Normal PML
 
 t = t + dt*0.5d0 !時間の更新---------------------------
@@ -111,19 +120,20 @@ t = t + dt*0.5d0 !時間の更新---------------------------
     call output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
 
-write(24,*) t, real(hz(x0,y0,2)), aimag(hz(x0,y0,2))
-write(25,*) t, real(hz(x0,y0,nz-5)), aimag(hz(x0,y0,nz-5))
-
 enddo !*反復計算終了
 
     !グリーン関数の導出
     !call green()
 
 
-    close(13)
-    close(14)
-    close(15)
-    close(16)
+    close(31)
+    close(32)
+    close(33)
+    close(34)
+    close(35)
+    close(36)
+
+
     close(17)
     close(18)
 
@@ -134,4 +144,8 @@ enddo !*反復計算終了
 
 close(24)
 close(25)
+close(26)
+close(27)
+close(28)
+close(29)
             end program main

@@ -18,9 +18,15 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
     real(8), parameter   :: t0 = pi/fmax
     real(8), parameter   :: beta = pi*(fmax**2)
 
+    !入射波形の設定
+
     !1st_derivative gaussian
-    signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
+     signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
 !     write(*,*) signal(istep) !　　　
+    !sin波
+    !signal(istep) = sin(2.0d0*pi*fmax*istep*dt)
+
+
     !電場ソースの設定
     etaxx(x0,y0,z0) = (2.0d0*omega0) / sig(x0,y0,z0)
     Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
@@ -31,8 +37,18 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
     !磁場ソースの設定
     Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz!　　　
 !     write(*,*) Jh(istep) !　　　
-    Hz(x0,y0,z0) = Hz(x0,y0,z0) &
-                    - signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz!　　　
+
+    !送信源位置の設定
+!     !ソース1
+!     Hz(x0,y0,z0) = Hz(x0,y0,z0) &
+!                     - signal(istep) * dt / myu(x0,y0,z0) /dx/dy/dz!　　　
+!     !ソース２
+!     Hz(x0-2,y0,z0) = Hz(x0-2,y0,z0) &
+!                     - signal(istep)*dt / myu(x0-2,y0,z0) /dx/dy/dz!　　　
+    !ソース３
+    Hz(x0,y0,z0+5) = Hz(x0,y0,z0+5) &
+                    - signal(istep)*dt / myu(x0,y0,z0+5) /dx/dy/dz!　　　
+
         end subroutine read_source_3d
 
 

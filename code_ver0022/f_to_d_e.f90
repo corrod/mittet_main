@@ -76,7 +76,7 @@ include 'fftw3.f'
 		!taper かけて
 	    do i=0,nd-1
 	    	write(8,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かける前
-	    	Ex_f(i) = Ex_f(i) * w(i)
+	    Ex_f(i) = Ex_f(i) * w(i)
 	    	write(9,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かけた後
 		enddo
 
@@ -112,9 +112,10 @@ include 'fftw3.f'
 	!taper かけて
 	    do i=0,nd-1
 			write(10,*) i*dt,real(JX_f(i)),aimag(JX_f(i))!かける前出力
-	    	Jx_f(i) = Jx_f(i) * w(i)
+	    Jx_f(i) = Jx_f(i) * w(i)
 		    write(11,*) i*dt,real(JX_f(i)),aimag(JX_f(i))!かけた後出力
 		enddo
+
 
 
 !/////////////////////////////////////////////////////////////////////////////////
@@ -128,9 +129,9 @@ include 'fftw3.f'
 	JX_w(0:nd-1) = 0.0d0
 	GX_w(0:nd-1) = 0.0d0
 !kとn逆かも注意
-	do k=0,nd-1  !周波数用ループ
+	do k=0,nd-1  !周波数用ループ   　　　何故０から
 
-		do n=0,nd-1 !時間用ループ
+		do n=0,nd-1 !時間用ループ  　　　何故０から
 
 		EX_w(k) = EX_w(k) &
 				+ EX_f(n) *dt &
@@ -147,6 +148,7 @@ include 'fftw3.f'
 		GX_w(k) = EX_w(k) / JX_w(k)  !JX_w /= 0
 
 	enddo
+
 
 !///////////////////////////////////////////////////////////////////////////////
 ! output
@@ -177,6 +179,7 @@ include 'fftw3.f'
 		enddo
 		close(62)
 
+write(*,*) nd
 
 !//////////////////////////////////////////////////////////////////////////////////
 !
@@ -192,19 +195,22 @@ include 'fftw3.f'
 	out2(0:nd-1) = 0.0d0
 	out3(0:nd-1) = 0.0d0
 
-	do j=0,nd-1
+! 	do j=0,nd-1 　　　
+    do j=1,nd-1
 		in1(j) = Ex_w(j)
 		in2(j) = Jx_w(j)
 		in3(j) = GX_w(j)
 	enddo
 
+
+
 !////////////////////////////////////////////////////////////
 ! make plans
 !      FFTW_FORWARD (-1) or FFTW_BACKWARD (+1)
 !////////////////////////////////////////////////////////////
-	call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,fftw_estimate) !complex array入力
-	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,fftw_estimate)
-	call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,fftw_estimate)
+	call dfftw_plan_dft_1d(plan1,nd-1,in1,out1,FFTW_BACKWARD,fftw_estimate) !complex array入力
+	call dfftw_plan_dft_1d(plan2,nd-1,in2,out2,FFTW_BACKWARD,fftw_estimate)
+	call dfftw_plan_dft_1d(plan3,nd-1,in3,out3,FFTW_BACKWARD,fftw_estimate)
 
 !///////////////////////////////////////////////////////////
 ! carry out fourier transformation
@@ -226,7 +232,8 @@ include 'fftw3.f'
 	open(81,file='invGE.dat')
 	open(82,file='invGJ.dat')
 	open(83,file='invGG.dat')
-	do k=0,nd-1
+! 	do k=0,nd-1 　　　　
+    do k=1,nd-1
 		out1(k) = out1(k)/nd/dt*2.0d0
 		out2(k) = out2(k)/nd/dt*2.0d0
 		out3(k) = out3(k)/nd/dt*2.0d0

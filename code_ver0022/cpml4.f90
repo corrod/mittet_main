@@ -51,8 +51,8 @@ do i=1,ncpml
       kedx(nx-(i-1))    = kedx(i)
       khdx(nx-(i-1))    = khdx(i)
 enddo
+
 ! do i=nx-ncpml+1,nx
-! do i=nx-ncpml+2,nx
 !       esig_x(i)  = sig_max * ((dble(i)-dble(nx)+1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
 !       msig_x(i)  = sig_max * ((dble(i)-dble(nx)+0.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い
 !       ekappa_x(i)= 1.0d0 + (kappa_max-1.0d0) * ((dble(i)-dble(nx)+1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn)
@@ -68,7 +68,7 @@ enddo
 !       khdx(i)    = mkappa_x(i)*dx !!!(i-1/2)dxの取り扱い
 ! enddo
 
-! do i=ncpml+1,nx-ncpml
+
 do i=ncpml+1,nx-ncpml
       esig_x(i)  = 0.0d0
       msig_x(i)  = 0.0d0
@@ -204,6 +204,7 @@ do k=1,ncpml
       kedz(nz-(k-1))    = kedz(k)
       khdz(nz-(k-1))    = khdz(k)
 enddo
+
 ! do k=nz-ncpml+1,ny
 !       esig_z(k)  = sig_max * ((dble(k)-dble(nz)+1.0d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)
 !       msig_z(k)  = sig_max * ((dble(k)-dble(nz)+0.5d0+dble(ncpml))/(dble(ncpml)-1.0d0))**dble(nn+order)  !!!-i-1/2の取り扱い

@@ -16,32 +16,49 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     character(5) :: name
 
-    write(14,*) t, real(hz(x0+3,y0,z0)), aimag(hz(x0+3,y0,z0))  !hz1010.d
-    write(15,*) t, real(hz(x0+6,y0,z0)), aimag(hz(x0+6,y0,z0))  !hz1020.d
-    write(16,*) t, real(hz(x0+9,y0,z0)), aimag(hz(x0+9,y0,z0))  !hz1030.d
-    write(13,*) t, real(hz(x0,y0,nz-1)), aimag(hz(x0,y0,nz-1))  !hz1050.d
-
+    !hzレシーバー
+    write(31,*) t, real(hz(x0,y0,z0+5)), aimag(hz(x0,y0,z0+5))  !hz1000.d
+    write(32,*) t, real(hz(x0+1,y0,z0+5)), aimag(hz(x0+1,y0,z0+5))  !hz1010.d
+    write(33,*) t, real(hz(x0+2,y0,z0+5)), aimag(hz(x0+2,y0,z0+5))  !hz1020.d
+    write(34,*) t, real(hz(x0+3,y0,z0+5)), aimag(hz(x0+3,y0,z0+5))  !hz1030.d
+    write(35,*) t, real(hz(x0+4,y0,z0+5)), aimag(hz(x0+4,y0,z0+5))  !hz1030.d
+    write(36,*) t, real(hz(x0+5,y0,z0+5)), aimag(hz(x0+5,y0,z0+5))  !hz1030.d
+    !ソース波形
     write(17,*) t, real(Je(istep))     , aimag(Je(istep))       !je_fic.d
     write(18,*) t, real(Jh(istep))     , aimag(Jh(istep))       !jh_fic.d
-
+    !exレシーバー
     write(20,*) t, real(ex(x0,y0,z0)),    aimag(ex(x0,y0,z0))  !ex1000.d
-    write(21,*) t, real(ex(x0+3,y0,z0)), aimag(ex(x0+3,y0,z0)) !ex1010.d
-    write(22,*) t, real(ex(x0+6,y0,z0)), aimag(ex(x0+6,y0,z0)) !ex1020.d
-    write(23,*) t, real(ex(x0+9,y0,z0)), aimag(ex(x0+9,y0,z0)) !ex1030.d
+    write(21,*) t, real(ex(x0+1,y0,z0+5)), aimag(ex(x0+1,y0,z0+5)) !ex1010.d
+    write(22,*) t, real(ex(x0+10,y0,z0+5)), aimag(ex(x0+10,y0,z0+5)) !ex1020.d
+    write(23,*) t, real(ex(x0+15,y0,z0+5)), aimag(ex(x0+15,y0,z0+5)) !ex1030.d
 
-!　　　
-write(*,*) istep,t, real(ex(x0+5,y0,z0))
+    !対称性確認
+    write(24,*) t, real(hz(x0,y0,z0-1)), aimag(hz(x0-1,y0,z0))  !hzleft1.d
+    write(25,*) t, real(hz(x0,y0,z0+1)), aimag(hz(x0+1,y0,z0))  !hzright1.d
+    write(26,*) t, real(hz(x0,y0,z0-5)), aimag(hz(x0-5,y0,z0))  !hzleft2.d
+    write(27,*) t, real(hz(x0,y0,z0+5)), aimag(hz(x0+5,y0,z0))  !hzright2.d
+    write(28,*) t, real(hz(x0,y0,z0-10)), aimag(hz(x0-10,y0,z0))  !hzleft3.d
+    write(29,*) t, real(hz(x0,y0,z0+10)), aimag(hz(nz+10,y0,z0))  !hzright3.d
 
-!-----------------シェル用出力-------------------------------
+
+
+! 　　　
+! write(*,*) istep,t, real(ex(x0+5,y0,z0))
+
+!-----------------シェル用出力 MOVIE-------------------------------
     if (mod(istep,50)==0) then
    l=10000+istep/50
     write(name,"(I5)") l
     open(7,file="./out1/hz"//name//".d")
     open(8,file="./out2/ex"//name//".d")
+        do k =1,nz
+            do i =1,nx
+                 write(7,*) t,i,k,real(hz(i,y0,k))
+            enddo
+        enddo
 
         do j=1,ny
             do i=1,nx
-                 write(7,*) t,i,j,real(hz(i,j,z0))
                  write(8,*) t,i,j,real(ex(i,j,z0))
             enddo
         enddo

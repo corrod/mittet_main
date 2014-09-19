@@ -16,12 +16,17 @@ module const_para
     implicit none
 
     integer :: i, j, k
-    integer, parameter :: nstep = 1000!1000 !2000 総タイムステップ数 　　　
-    integer, parameter :: nx = 101, ny = 41, nz = 41  !グリッド数　　　
-    real(8), parameter :: dx = 1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　　　101,51,41
-    real(8), parameter :: dt = 2.280d-8 !3.00d-7 !タイムステップ長 s 　　　
+    integer, parameter :: nstep = 4000!2500!1000 !2000 総タイムステップ数 　　　
+    integer, parameter :: nx=91,ny=91,nz=91!nx = 61, ny = 61, nz = 61  !グリッド数 奇数　　　
+    real(8), parameter :: dx = 9.0d-3,dy=9.0d-3,dz=9.0d-3!9.0d-3,dy=9.0d-3,dz=9.0d-3 !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　　　101,51,41
+    real(8), parameter :: dt = 1.870d-6!3.00d-7 !タイムステップ長 s 　　　
     real(8), parameter :: fmax = 1.0d3!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数 　　　
     integer, parameter :: x0 = (nx+1)/2, y0 = (ny+1)/2, z0 = (nz+1)/2 !送信源位置
+    integer, parameter :: x1 = (nx+1)/2, y1 = (ny+1)/2, z1 = (nz+1)/2
+    integer, parameter :: x2 = (nx+1)/2, y2 = (ny+1)/2, z2 = (nz+1)/2
+    integer, parameter :: x3 = (nx+1)/2, y3 = (ny+1)/2, z3 = (nz+1)/2
+    integer, parameter :: x4 = (nx+1)/2, y4 = (ny+1)/2, z4 = (nz+1)/2
+    integer, parameter :: x5 = (nx+1)/2, y5 = (ny+1)/2, z5 = (nz+1)/2
     integer, parameter :: ncpml = 6 !CPMLのgrid数
         !     integer, parameter :: ln = 1 !operator half rength
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
@@ -35,20 +40,21 @@ module const_para
             !     real(8), parameter :: tau0     = 0.02d0!1.6d-4 !送信源出力時間
 
 !媒質パラメータ
+!conductivity 導電率
     real(8), parameter :: sigair = 0.0d0  !空気の導電率 S/m
-    real(8), parameter :: sigfe  = 7.5d6  !1.03d7 !鉄の導電率 S/m
+    real(8), parameter :: sigfe  = 1.0d3! 　　　7.5d6  !1.03d7 !鉄の導電率 S/m
     real(8), parameter :: sigwa  = 3.2d0  !海水の導電率 S/m
     real(8), parameter :: sigmin = sigwa
     real(8), parameter :: sigmax = sigfe
-
+!permeability 透磁率
     real(8), parameter :: MU0      = 1.2566370614d-6 !真空の透磁率 H/m
     real(8), parameter :: myurair  = 1.0d0        !空気の比透磁率
-    real(8), parameter :: myurfe   = 4.0d3         !鉄の比透磁率
+    real(8), parameter :: myurfe   = 1.0d0!　　　         !鉄の比透磁率
     real(8), parameter :: myurwa   = 0.999991d0     !海水の比透磁率
     real(8), parameter :: myuair   = myurair * MU0 !空気の透磁率 H/m
     real(8), parameter :: myufe    = myurfe * MU0   !鉄の透磁率 H/m
     real(8), parameter :: myuwa    = myurwa * MU0   !鉄の透磁率 H/m
-
+!permittivity 誘電率
     real(8), parameter :: epsi0    = 8.854d-12   !真空の誘電率F/m
     real(8), parameter :: epsirair = 1.0006d0  !空気の比誘電率
     real(8), parameter :: epsirfe  = 1.0d0     !鉄の比誘電率
@@ -60,11 +66,10 @@ module const_para
     real(8) :: sig(nx,ny,nz)
     real(8) :: myu(nx,ny,nz)
 !     real(8) :: epsi(nx,ny,nz)
-
 !伝播速度設定
     real(8), parameter :: CC = 2.997924580d0 !光速
     real(8), parameter :: cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
-    real(8), parameter :: cfe = sqrt(2.0d0*omega0/myuwa/sigfe) !myufe >> myuwa 　　　
+    real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe) !myufe >> myuwa 　　　
     real(8), parameter :: cmax = cwa
     real(8), parameter :: cmin = cfe
 
