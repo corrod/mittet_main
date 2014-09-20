@@ -22,6 +22,7 @@ subroutine media_coeff
 			do i=1,nx
 ! 				eps2 = sig2(i,j,k) / 2.0d0 / omega0 !***
                 eps2 = sig(i,j,k) / 2.0d0 / omega0
+
 				!CPML coefficient
 				ca_x(i,j,k) = (1.0d0 - ((esig_x(i)*dt)/(2.0d0*eps2))) &  !!!esig_x wheare from???
 							/ (1.0d0 + ((esig_x(i)*dt)/(2.0d0*eps2)))!　　　　　!esig_x(i)>>sig(i,j,k)??
@@ -92,9 +93,9 @@ end subroutine media_coeff
 !     !   db_y(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
 !     !   db_z(i,j,k) = (dt/myu(i,j,k)) / (1.0d0+(sig(i,j,k)*dt)/(2.0d0*myu(i,j,k)))
 ! !!!sig_x(i)?sig(i,j,k)?
-! 	        enddo
-! 	    enddo
-! 	enddo
+!           enddo
+!       enddo
+!   enddo
 
 
 
@@ -105,7 +106,7 @@ end subroutine media_coeff
 !//////////////////////////////////////////////////////////////////////////////
 subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
-	use const_para
+    use const_para
     implicit none
 
     integer, intent(in) :: istep
@@ -113,24 +114,25 @@ subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in)    :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
+
     !ex_cpml
      do k = 3,nz-1
         do j = 3,ny-1
             do i = 1,nx-1
                 Ex(i,j,k) = ca_x(i,j,k) * Ex(i,j,k) &
                           + cb_x(i,j,k) * (( c1*Hz(i,j,k) - c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k) - c2*Hz(i,j-2,k) ) /kedy(j) &
-                          				-  ( c1*Hy(i,j,k) - c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1) - c2*Hy(i,j,k-2) ) /kedz(k))
+                                        -  ( c1*Hy(i,j,k) - c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1) - c2*Hy(i,j,k-2) ) /kedz(k))
             enddo
         enddo
     enddo
 
     !ey_cpml
-	do k = 3,nz-1
+    do k = 3,nz-1
         do j = 1,ny-1
             do i = 3,nx-1
                 Ey(i,j,k) = ca_y(i,j,k) * Ey(i,j,k) &
                           + cb_y(i,j,k) * (( c1*Hx(i,j,k) - c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1) - c2*Hx(i,j,k-2) ) / kedz(k) &
-                        				-  ( c1*Hz(i,j,k) - c1*Hz(i-1,j,k) + c2*Hz(i+1,j,k) - c2*Hz(i-2,j,k) ) / kedx(i))
+                                        -  ( c1*Hz(i,j,k) - c1*Hz(i-1,j,k) + c2*Hz(i+1,j,k) - c2*Hz(i-2,j,k) ) / kedx(i))
             enddo
         enddo
     enddo
