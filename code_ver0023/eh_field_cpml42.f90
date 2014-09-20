@@ -27,8 +27,8 @@ subroutine media_coeff
                 eps2 = sig(i,j,k) / 2.0d0 / omega0
 
 				!CPML coefficient
-				ca_x(i,j,k) = (1.0d0 - ((esig_x(i)*dt)/(2.0d0*eps2))) &  !!!esig_x wheare from???
-							/ (1.0d0 + ((esig_x(i)*dt)/(2.0d0*eps2))) !esig_x(i)>>sig(i,j,k)??　　　
+				ca_x(i,j,k) = (1.0d0 - ((esig_x(i)*dt)/(2.0d0*eps2))) &  !!!esig_x ; init_cpmlで定義
+							/ (1.0d0 + ((esig_x(i)*dt)/(2.0d0*eps2)))
 				ca_y(i,j,k) = (1.0d0 - ((esig_y(j)*dt)/(2.0d0*eps2))) &
 							/ (1.0d0 + ((esig_y(j)*dt)/(2.0d0*eps2)))
 				ca_z(i,j,k) = (1.0d0 - ((esig_z(k)*dt)/(2.0d0*eps2))) &
@@ -38,16 +38,16 @@ subroutine media_coeff
                 cb_y(i,j,k) = dt/eps2 /(1.0d0 + (esig_y(j)*dt)/(2.0d0*eps2) )
                 cb_z(i,j,k) = dt/eps2 /(1.0d0 + (esig_z(k)*dt)/(2.0d0*eps2) )
 
-				da_x(i,j,k) = (1.0d0 - ((msig_x(i)*dt)/(2.0d0*eps2))) &   !msig_x from where ??
+				da_x(i,j,k) = (1.0d0 - ((msig_x(i)*dt)/(2.0d0*eps2))) &   !msig_x ; init_cpmlで定義
 							/ (1.0d0 + ((msig_x(i)*dt)/(2.0d0*eps2)))        !msigx means σ*
 				da_y(i,j,k) = (1.0d0 - ((msig_y(j)*dt)/(2.0d0*eps2))) &
 							/ (1.0d0 + ((msig_y(j)*dt)/(2.0d0*eps2)))
 				da_z(i,j,k) = (1.0d0 - ((msig_z(k)*dt)/(2.0d0*eps2))) &
 							/ (1.0d0 + ((msig_z(k)*dt)/(2.0d0*eps2)))
 
-				db_x(i,j,k) = dt/MU0 /(1.0d0 + (msig_x(i)*dt)/(2.0d0*eps2))  !Mu0 >> myu ???　　　
-				db_y(i,j,k) = dt/MU0 /(1.0d0 + (msig_y(j)*dt)/(2.0d0*eps2))
-				db_z(i,j,k) = dt/MU0 /(1.0d0 + (msig_z(k)*dt)/(2.0d0*eps2))
+				db_x(i,j,k) = dt/myu(i,j,k) /(1.0d0 + (msig_x(i)*dt)/(2.0d0*eps2))  !myu(i,j,k) = MU0?　
+                db_y(i,j,k) = dt/myu(i,j,k) /(1.0d0 + (msig_y(j)*dt)/(2.0d0*eps2))
+				db_z(i,j,k) = dt/myu(i,j,k) /(1.0d0 + (msig_z(k)*dt)/(2.0d0*eps2))
     	    enddo
     	enddo
 	enddo
@@ -125,7 +125,6 @@ subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
                 Ex(i,j,k) = ca_x(i,j,k) * Ex(i,j,k) &
                           + cb_x(i,j,k) * (( c1*Hz(i,j,k) - c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k) - c2*Hz(i,j-2,k) ) /kedy(j) &
                                         -  ( c1*Hy(i,j,k) - c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1) - c2*Hy(i,j,k-2) ) /kedz(k))
-write(*,*) kedz(k)! 　　　
             enddo
         enddo
     enddo
