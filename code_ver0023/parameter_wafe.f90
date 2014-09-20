@@ -65,8 +65,8 @@ module const_para
 
     real(8) :: sig(nx,ny,nz)
     real(8) :: myu(nx,ny,nz)
-!     real(8) :: epsi(nx,ny,nz)
-!伝播速度設定
+
+!伝播速度設定 cmax, cmin
     real(8), parameter :: CC = 2.997924580d0 !光速
     real(8), parameter :: cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
     real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe) !myufe >> myuwa 　　　
