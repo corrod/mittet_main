@@ -27,7 +27,7 @@ module const_para
     integer, parameter :: x3 = (nx+1)/2, y3 = (ny+1)/2, z3 = (nz+1)/2
     integer, parameter :: x4 = (nx+1)/2, y4 = (ny+1)/2, z4 = (nz+1)/2
     integer, parameter :: x5 = (nx+1)/2, y5 = (ny+1)/2, z5 = (nz+1)/2
-    integer, parameter :: ncpml = 6 !CPMLのgrid数
+    integer, parameter :: ncpml = 10 !CPMLのgrid数
         !     integer, parameter :: ln = 1 !operator half rength
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
     real(8), parameter :: f0 = 1.0d0 !f0が小さいとdtがでかくなる
