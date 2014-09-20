@@ -1,5 +1,8 @@
 !////////////////////////////////////////////////////////////////////
 ! CPMl用の伝播計算の係数
+
+! MU0をmyu(i,j,k)におきかえた方がいいかも
+
 !///////////////////////////////////////////////////////////////////
 subroutine media_coeff
 	use const_para
@@ -20,7 +23,7 @@ subroutine media_coeff
 	do k=1,nz
 		do j=1,ny
 			do i=1,nx
-! 				eps2 = sig2(i,j,k) / 2.0d0 / omega0 !***
+
                 eps2 = sig(i,j,k) / 2.0d0 / omega0
 
 				!CPML coefficient
