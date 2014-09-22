@@ -1,5 +1,6 @@
 #!/bin/sh
 date
+
 #メインスクリプト::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  export OMP_NUM_THREADS=5
 
@@ -24,11 +25,8 @@ ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 wave
 
 time ./ficticious_fwi_cpml
 
-# #画像出力::::::::::::::::::::::::::::::::::::
-# #ある点でのH'zの時間分布
-  sh gnu.sh
-# #H'zの伝播movie
-    # sh movie.sh
+
+
 
 
 
@@ -59,7 +57,6 @@ rm out*.dat invG*.dat
 
 
 
-python subplot.py
 #DFT,IDFT,IFFTスクリプト(H)::::::::::::::::::::::::::::::
 # cp jh_fic.d inp2.dat #source J'
 
@@ -93,13 +90,13 @@ python subplot.py
 
 
 
-				# # #DFTスクリプト(Jh)::::::::::::::::::::::::::::
-				# cp jh_fic.d inp1.dat
-				# ifort -o fftw_jh ../code/parameter_wafe.f90 f_to_d.f90 -I/usr/local/include -lfftw3 #-check all -CB -traceback -g
-				# ./fftw_jh
-				# cp out1.dat asjh.out
-				# cp out2.dat psjh.out
-				# cp out3.dat jh_dif.out
+                # # #DFTスクリプト(Jh)::::::::::::::::::::::::::::
+                # cp jh_fic.d inp1.dat
+                # ifort -o fftw_jh ../code/parameter_wafe.f90 f_to_d.f90 -I/usr/local/include -lfftw3 #-check all -CB -traceback -g
+                # ./fftw_jh
+                # cp out1.dat asjh.out
+                # cp out2.dat psjh.out
+                # cp out3.dat jh_dif.out
 
 
 #FFTスクリプト(H)::::::::::::::::::::::::::::::
@@ -146,3 +143,12 @@ python subplot.py
 # done
 
 
+
+
+# #画像出力::::::::::::::::::::::::::::::::::::
+# #ある点でのH'zの時間分布、計算モデルの出力
+  sh gnu.sh
+# #H'zの伝播movie
+    sh movie.sh
+
+# python subplot.py

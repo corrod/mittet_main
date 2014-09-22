@@ -18,11 +18,11 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
     !hzレシーバー
     write(31,*) t, real(hz(x0,y0,z0+5)), aimag(hz(x0,y0,z0+5))  !hz1000.d
-    write(32,*) t, real(hz(x0+1,y0,z0+5)), aimag(hz(x0+1,y0,z0+5))  !hz1010.d
-    write(33,*) t, real(hz(x0+2,y0,z0+5)), aimag(hz(x0+2,y0,z0+5))  !hz1020.d
-    write(34,*) t, real(hz(x0+3,y0,z0+5)), aimag(hz(x0+3,y0,z0+5))  !hz1030.d
-    write(35,*) t, real(hz(x0+4,y0,z0+5)), aimag(hz(x0+4,y0,z0+5))  !hz1030.d
-    write(36,*) t, real(hz(x0+5,y0,z0+5)), aimag(hz(x0+5,y0,z0+5))  !hz1030.d
+    write(32,*) t, real(hz(x0+1,y0+1,z0+5)), aimag(hz(x0+1,y0+1,z0+5))  !hz1010.d
+    write(33,*) t, real(hz(x0+5,y0+5,z0+5)), aimag(hz(x0+5,y0+5,z0+5))  !hz1020.d
+    write(34,*) t, real(hz(x0+9,y0+9,z0+5)), aimag(hz(x0+9,y0+9,z0+5))  !hz1030.d
+    write(35,*) t, real(hz(x0+13,y0+13,z0+5)), aimag(hz(x0+13,y0+13,z0+5))  !hz1030.d
+    write(36,*) t, real(hz(x0+17,y0+17,z0+5)), aimag(hz(x0+17,y0+17,z0+5))  !hz1030.d
     !ソース波形
     write(17,*) t, real(Je(istep))     , aimag(Je(istep))       !je_fic.d
     write(18,*) t, real(Jh(istep))     , aimag(Jh(istep))       !jh_fic.d
