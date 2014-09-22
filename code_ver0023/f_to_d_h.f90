@@ -11,8 +11,8 @@
 !JX_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
 !としているが、JX_f = signal(istep) かもしれない
 !//////////////////////////////////////////////////////////////////////////
-program f_to_d
-	use condt_para
+program f_to_d_h
+	use const_para
 	implicit none
 
 	integer :: nd,ios
@@ -38,7 +38,7 @@ include 'fftw3.f'
 
 
 !/////////////////////////////////////////////////////////////////////////////
-! データの読み込み
+! データの読み込み Hz_f
 !/////////////////////////////////////////////////////////////////////////////
     !Hzファイル（データ）の長さNDを調べる-------------------------------------
     open(51,file='inp1.dat',action='read')
@@ -85,7 +85,7 @@ close(51)
 
 
 !/////////////////////////////////////////////////////////////////////////////
-! データの読み込み
+! データの読み込み JX_f
 !/////////////////////////////////////////////////////////////////////////////
 	!JXファイル（データ）の長さNDを調べる------------------------------------
     open(51,file='inp2.dat',action='read')
@@ -127,7 +127,7 @@ close(51)
 !/////////////////////////////////////////////////////////////////////////////////
 ! DFT開始 ficticious to diffusive freq
 !/////////////////////////////////////////////////////////////////////////////////
-	write(*,*) '*********************        DFT start       ************t********'
+	write(*,*) '*********************        DFT start       ********************'
 
 !kとn逆かも注意
     om   = 2.d0*pi/nd/dt
@@ -185,58 +185,12 @@ close(51)
 		close(62)
 
 
-!///////////////////////////////////////////////////////////////////////////////////////
-!
-! IDFT     Frequency to time trandformation JX_w,Hz_w,GX_w to JX_t,Hz_t,GX_t
-!
-!///////////////////////////////////////////////////////////////////////////////////////
-! 	write(*,*) '*********************        IDFT start       ************t********'
-
-! 	Hz_t(0:nd-1) = 0.0d0
-! 	JX_t(0:nd-1) = 0.0d0
-! 	GX_t(0:nd-1) = 0.0d0
-
-!  	do k=0,nd-1
-! 		do n=0,nd-1
-! 		Hz_t(k) = Hz_t(k) &
-! 				+ Hz_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
-! 		JX_t(k) = JX_t(k) &
-! 				+ JX_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
-! 		GX_t(k) = GX_t(k) &
-! 				+ GX_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
-! 		enddo
-! 	enddo
-
-! 		open(71,file='invGH.dat')
-! 		open(72,file='invGJ.dat')
-! 		open(73,file='invGG.dat')
-! 	do k=0,nd-1
-! 		write(71,*) k*dt, real(Hz_t(k)), aimag(Hz_t(k))
-! 		write(72,*) k*dt, real(JX_t(k)), aimag(JX_t(k))
-! 		write(73,*) k*dt, real(GX_t(k)), aimag(GX_t(k))
-! 	enddo
-! 		close(71)
-! 		close(72)
-! 		close(73)
-
-! 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JX_w,JX_f,GX_w )
-! 	deallocate( Hz_t, JX_t, GX_t )
-
-! end program f_to_d
-
-
-
-
-
-
-
-
 !//////////////////////////////////////////////////////////////////////////////////
 !
 ! IFFT    Frequency to time trandformation   JX_w,Hz_w,GX_w to JX_t,Hz_t,GX_t
 !
 !/////////////////////////////////////////////////////////////////////////////////
-	write(*,*) '********************        IFFT start       ************t********'
+	write(*,*) '********************        IFFT start       ********************'
 
 	Hz_t(0:nd-1) = 0.0d0
 	JX_t(0:nd-1) = 0.0d0
@@ -299,7 +253,63 @@ close(51)
 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JX_w,JX_f,GX_w )
 	deallocate( in1,in2,in3,out1,out2,out3,Hz_t,JX_t,GX_t )
 
-end program f_to_d
+end program f_to_d_h
+
+
+
+
+
+
+
+
+
+
+!///////////////////////////////////////////////////////////////////////////////////////
+!
+! IDFT     Frequency to time trandformation JX_w,Hz_w,GX_w to JX_t,Hz_t,GX_t
+!
+!///////////////////////////////////////////////////////////////////////////////////////
+!   write(*,*) '*********************        IDFT start       ************t********'
+
+!   Hz_t(0:nd-1) = 0.0d0
+!   JX_t(0:nd-1) = 0.0d0
+!   GX_t(0:nd-1) = 0.0d0
+
+!   do k=0,nd-1
+!       do n=0,nd-1
+!       Hz_t(k) = Hz_t(k) &
+!               + Hz_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
+!       JX_t(k) = JX_t(k) &
+!               + JX_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
+!       GX_t(k) = GX_t(k) &
+!               + GX_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
+!       enddo
+!   enddo
+
+!       open(71,file='invGH.dat')
+!       open(72,file='invGJ.dat')
+!       open(73,file='invGG.dat')
+!   do k=0,nd-1
+!       write(71,*) k*dt, real(Hz_t(k)), aimag(Hz_t(k))
+!       write(72,*) k*dt, real(JX_t(k)), aimag(JX_t(k))
+!       write(73,*) k*dt, real(GX_t(k)), aimag(GX_t(k))
+!   enddo
+!       close(71)
+!       close(72)
+!       close(73)
+
+!   deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JX_w,JX_f,GX_w )
+!   deallocate( Hz_t, JX_t, GX_t )
+
+! end program f_to_d
+
+
+
+
+
+
+
+
 
 
 

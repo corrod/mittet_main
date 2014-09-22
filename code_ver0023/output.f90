@@ -38,7 +38,7 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     write(26,*) t, real(hz(x0,y0,z0-5)), aimag(hz(x0-5,y0,z0))  !hzleft2.d
     write(27,*) t, real(hz(x0,y0,z0+5)), aimag(hz(x0+5,y0,z0))  !hzright2.d
     write(28,*) t, real(hz(x0,y0,z0-10)), aimag(hz(x0-10,y0,z0))  !hzleft3.d
-    write(29,*) t, real(hz(x0,y0,z0+10)), aimag(hz(nz+10,y0,z0))  !hzright3.d
+    write(29,*) t, real(hz(x0,y0,z0+10)), aimag(hz(x0+10,y0,z0))  !hzright3.d
 
 
 

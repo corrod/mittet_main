@@ -51,8 +51,9 @@ subroutine confirm_parameter
     write(*,*) '到達距離 cmax*t,cmin*t', cmax*dt*nstep, cmin*dt*nstep
     write(*,*) '１/2辺の長さdx*nx/2',dx*nx*0.5d0
     write(*,*) 'dt*nstep',dt*nstep
-    write(*,*) 'sig_wa,myu_wa,epsi_wa',sigwa,myuwa,epsiwa
-    write(*,*) 'sig_fe,myu_fe,epsi_fe',sigfe,myufe,epsife
+    write(*,*) 'sigfe, sigwa', sigfe, sigwa
+    write(*,*) 'myufe, myuwa', myufe, myuwa
+    write(*,*) 'epsife, epsiwa', epsife, epsiwa
 
 
 

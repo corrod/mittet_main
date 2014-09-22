@@ -17,8 +17,8 @@ gnuplot <<EOF
  set zr[-6.6e+13:6.6e+13]
  splot "./out1/hz$i.d" u 2:3:4
 EOF
-i=`expr $i + 1`
-j=`expr $j + 1`
+i=`expr $i + 5`
+j=`expr $j + 5`
 done
 
 convert 1*.ps hzfield.gif
@@ -43,8 +43,8 @@ gnuplot <<EOF
  set zr[-9e+05:9e+05]
  splot "./out2/ex$i.d" u 2:3:4
 EOF
-i=`expr $i + 1`
-j=`expr $j + 1`
+i=`expr $i + 5`
+j=`expr $j + 5`
 done
 
 convert 1*.ps exfield.gif

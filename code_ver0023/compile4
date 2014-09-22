@@ -1,11 +1,11 @@
 #!/bin/sh
 date
 
-#メインスクリプト::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+#メインスクリプト:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  export OMP_NUM_THREADS=5
 
 #構造改革
-ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 cerjan.f90 main2.f90 # -check all -CB -traceback -g -r8
+ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 cerjan.f90 main2.f90  #-check all -CB -traceback -g -r8
 
 
 # # all in
@@ -30,7 +30,7 @@ time ./ficticious_fwi_cpml
 
 
 
-#DFT,IDFT,IFFTスクリプト(E)::::::::::::::::::::
+#DFT,IDFT,IFFTスクリプト(E)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 cp jh_fic.d inp2.dat #source J'
 
 i=1010
@@ -57,30 +57,30 @@ rm out*.dat invG*.dat
 
 
 
-#DFT,IDFT,IFFTスクリプト(H)::::::::::::::::::::::::::::::
-# cp jh_fic.d inp2.dat #source J'
+#DFT,IDFT,IFFTスクリプト(H)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+cp jh_fic.d inp2.dat #source J'
 
-# i=1010
-# j=`expr $i - 1000`
-# max=30
+i=1010
+j=`expr $i - 1000`
+max=30
 
-# while [ $j -le $max ]; do
-# cp Hz$i.d inp1.dat #H'
+while [ $j -le $max ]; do
+cp hz$i.d inp1.dat #H'
 
-# ifort -o f_to_d parameter_wafe.f90 taper.f90 f_to_d_h.f90 -lfftw3 -check all -CB -traceback -g -r8
-# ./f_to_d
+ifort -parallel -o f_to_d parameter_wafe.f90 window_function.f90 f_to_d_h.f90 -lfftw3 #-check all -CB -traceback -g -r8
+./f_to_d
 
-# cp out1.dat HZ_w$i.dat
-# cp out2.dat JX_w$i.dat
-# cp out3.dat GX_w$i.dat
-# cp invGH.dat HZ_t$i.dat
-# cp invGJ.dat JX_t$i.dat
-# cp invGG.dat GX_t$i.dat
-# i=`expr $i + 10`
-# j=`expr $j + 10`
-# done
+cp out1.dat HZ_w$i.dat
+cp out2.dat JX_w$i.dat
+cp out3.dat GX_w$i.dat
+cp invGH.dat HZ_t$i.dat
+cp invGJ.dat JX_t$i.dat
+cp invGG.dat GX_t$i.dat
+i=`expr $i + 10`
+j=`expr $j + 10`
+done
 
-# rm out*.dat invG*.dat
+rm out*.dat invG*.dat
 
 
 
@@ -149,6 +149,6 @@ rm out*.dat invG*.dat
 # #ある点でのH'zの時間分布、計算モデルの出力
   sh gnu.sh
 # #H'zの伝播movie
-    sh movie.sh
+  sh movie.sh
 
 # python subplot.py

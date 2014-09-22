@@ -11,7 +11,7 @@
 !JX_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
 !としているが、JX_f = signal(istep) かもしれない
 !//////////////////////////////////////////////////////////////////////////
-program f_to_d
+program f_to_d_e
 	use const_para
 	implicit none
 
@@ -50,7 +50,9 @@ include 'fftw3.f'
 	    enddo
     close(51)
 
-     !配列確保
+!///////////////////////////////////////////////////////////////////////////////
+! 配列確保
+!///////////////////////////////////////////////////////////////////////////////
     allocate(t1(0:nd-1),inp1_r(0:nd-1),inp1_i(0:nd-1),t2(0:nd-1),inp2_r(0:nd-1),inp2_i(0:nd-1))
     allocate(w(0:nd-1),EX_w(0:nd-1),EX_f(0:nd-1),JX_w(0:nd-1),JX_f(0:nd-1),GX_w(0:nd-1))
 
@@ -249,7 +251,7 @@ include 'fftw3.f'
 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JX_w,JX_f,GX_w )
 	deallocate( in1,in2,in3,out1,out2,out3,EX_t,JX_t,GX_t )
 
-end program f_to_d
+end program f_to_d_e
 
 
 
