@@ -169,7 +169,7 @@ close(98)
 
 !係数の設定z
 open(99,file='fzcpml.d')
-      write(97,"(13a)")  " # k, esig_z(k), msig_z(k), ekappa_z(k), mkappa_z(k), ae_z(k),   &
+      write(99,"(13a)")  " # k, esig_z(k), msig_z(k), ekappa_z(k), mkappa_z(k), ae_z(k),   &
        am_z(k),    be_z(k),    bh_z(k),    ce_z(k),    ch_z(k),    kedz(k),    khdz(k)"
   delta = ncpml*dz
   sig_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta)

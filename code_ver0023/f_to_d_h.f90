@@ -74,14 +74,14 @@ close(51)
 !////////////////////////////////////////////////////////////////////////////
 !Hz_fに窓関数をかける hamming window
 !///////////////////////////////////////////////////////////////////////////
-    call window_hamming(nd,w) !hamming 両端が0にはならない窓
-!     call window_hanning(nd,w) !hanning 両端が0になる窓
-		!taper かけて
-	    do i=0,nd-1
-	    	write(8,*) i*dt,real(Hz_f(i)),aimag(Hz_f(i))!かける前
-	    	Hz_f(i) = Hz_f(i) * w(i)
-	    	write(9,*) i*dt,real(Hz_f(i)),aimag(Hz_f(i))!かけた後
-		enddo
+!     call window_hamming(nd,w) !hamming 両端が0にはならない窓
+! !     call window_hanning(nd,w) !hanning 両端が0になる窓
+! 		!taper かけて
+! 	    do i=0,nd-1
+! 	    	write(8,*) i*dt,real(Hz_f(i)),aimag(Hz_f(i))!かける前
+! 	    	Hz_f(i) = Hz_f(i) * w(i)
+! 	    	write(9,*) i*dt,real(Hz_f(i)),aimag(Hz_f(i))!かけた後
+! 		enddo
 
 
 !/////////////////////////////////////////////////////////////////////////////
@@ -108,18 +108,18 @@ close(51)
 
 !////////////////////////////////////////////////////////////////////////////
 !JX_fに窓関数をかける hamming window
-!///////////////////////////////////////////////////////////////////////////
-    call window_hamming(nd,w) !hamming 両端が0にはならない窓
-!     call window_hamming(nd,w) !hanning 両端が0になる窓
-		do i=0,nd-1
-	    write(7,*) w(i)
-	    enddo
-	!taper かけて
-	    do i=0,nd-1
-			write(10,*) i*dt,real(JX_f(i)),aimag(JX_f(i))!かける前出力
-	    	Jx_f(i) = Jx_f(i) * w(i)
-		    write(11,*) i*dt,real(JX_f(i)),aimag(JX_f(i))!かけた後出力
-		enddo
+! !///////////////////////////////////////////////////////////////////////////
+!     call window_hamming(nd,w) !hamming 両端が0にはならない窓
+! !     call window_hamming(nd,w) !hanning 両端が0になる窓
+! 		do i=0,nd-1
+! 	    write(7,*) w(i)
+! 	    enddo
+! 	!taper かけて
+! 	    do i=0,nd-1
+! 			write(10,*) i*dt,real(JX_f(i)),aimag(JX_f(i))!かける前出力
+! 	    	Jx_f(i) = Jx_f(i) * w(i)
+! 		    write(11,*) i*dt,real(JX_f(i)),aimag(JX_f(i))!かけた後出力
+! 		enddo
 
 
 
