@@ -82,7 +82,7 @@ myu(x0:x0+3, y0-3:y0+3, z0+10:z0+15) = myuwa
 
         !x-y 水平断面
         open(102,file='model_sig_xy.dat')
-            k = nz-10
+            k = z0+10
             do j = 1, ny
                 do i = 1, nx
                     write(102,*) i,j,k,sig(i,j,k)
@@ -91,7 +91,7 @@ myu(x0:x0+3, y0-3:y0+3, z0+10:z0+15) = myuwa
         close(102)
 
         open(103,file='model_myu_xy.dat')
-            k = nz-10
+            k = z0+10
             do j = 1, ny
                 do i = 1, nx
                     write(103,*) i,j,k,myu(i,j,k)

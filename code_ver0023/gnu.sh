@@ -63,12 +63,12 @@ set size ratio 1
 set style data pm3d
 set style function pm3d
 set xlabel "x"
-set xrange [ 1.00000 : 101.0000 ] noreverse nowriteback
+set xrange [ 1.00000 : 91.0000 ] noreverse nowriteback
 set ylabel "y"
-set yrange [ 1.00000 : 41.0000 ] noreverse nowriteback
+set yrange [ 1.00000 : 91.0000 ] noreverse nowriteback
 #set zrange [ 3.20000 : 7.50000e+06 ] noreverse nowriteback
 set cblabel "[S/m]"
-set cbrange [ 3.20000 : 7.50000e+06 ] noreverse nowriteback
+# set cbrange [ 3.20000 : 7.50000e+06 ] noreverse nowriteback
 set palette rgbformulae 33, 13, 10
 splot 'model_sig_xy.dat' u 1:2:4
 EOF
@@ -84,8 +84,8 @@ set palette rgbformulae 33,11,10
 set xlabel "x"
 set ylabel "z"
 set cblabel "[H/m]"
-set xrange[1:101]
-set yrange[41:1]
+set xrange[1:91]
+set yrange[91:1]
 splot 'model_myu_xz.dat' u 1:3:4
 EOF
 
@@ -100,12 +100,12 @@ set isosamples 10, 10
 set mapping cartesian
 unset hidden3d
 set xlabel "x"
-set xrange [ 1.00000 : 101.0000 ] noreverse nowriteback
+set xrange [ 1.00000 : 91.0000 ] noreverse nowriteback
 set ylabel "y"
-set yrange [ 1.00000 : 41.0000 ] noreverse nowriteback
-set zrange [ 1.25000e-06 : 0.00510000 ] noreverse nowriteback
+set yrange [ 1.00000 : 91.0000 ] noreverse nowriteback
+# set zrange [ 1.25000e-06 : 0.00510000 ] noreverse nowriteback
 set cblabel "[H/m]"
-set cbrange [ 1.25000e-06 : 0.00510000 ] noreverse nowriteback
+# set cbrange [ 1.25000e-06 : 0.00510000 ] noreverse nowriteback
 set palette rgbformulae 33, 13, 10
 splot "model_myu_xy.dat" u 1:2:4
 EOF

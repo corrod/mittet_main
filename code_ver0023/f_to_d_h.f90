@@ -102,6 +102,7 @@ close(51)
       do i=0,nd-1
 	      read(51,*) t2(i), inp2_r(i), inp2_i(i)
 	  JX_f(i) = inp2_r(i) + (0.0d0,1.0d0)*inp2_i(i)
+      write(101,*) i, JX_f(i) !　　　
       enddo
     close(51)
 
@@ -135,17 +136,28 @@ close(51)
 	Hz_w(0:nd-1) = 0.0d0
 	JX_w(0:nd-1) = 0.0d0
 	GX_w(0:nd-1) = 0.0d0
+
 	do k=0,nd-1  !周波数用ループ
 
 		do n=0,nd-1 !時間用ループ
 
-		Hz_w(k) = Hz_w(k) &
-				+ exp( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * Hz_f(n) *dt &
-				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
+        Hz_w(k) = Hz_w(k) &
+                + Hz_f(n) * dt &
+                * exp( sqrt(2.0d0*pi*omega*k/dble(nd)) * (I_u-1.0d0) * n)
 
-		JX_w(k) = JX_w(k) &
-				+ JX_f(n) *dt &
-				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
+        JX_w(k) = JX_w(k) &
+                + exp( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * JX_f(n) * dt &
+                * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )
+
+
+
+! 		Hz_w(k) = Hz_w(k) &
+! 				+ exp( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * Hz_f(n) * dt &
+! 				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
+
+! 		JX_w(k) = JX_w(k) &
+! 				+ JX_f(n) *dt &
+! 				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
 
 		enddo
 

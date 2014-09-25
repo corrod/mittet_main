@@ -149,6 +149,6 @@ rm out*.dat invG*.dat
 # #ある点でのH'zの時間分布、計算モデルの出力
   sh gnu.sh
 # #H'zの伝播movie
-  sh movie.sh
+  # sh movie.sh
 
 # python subplot.py
