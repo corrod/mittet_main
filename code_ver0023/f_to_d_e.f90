@@ -139,13 +139,18 @@ include 'fftw3.f'
 				+ EX_f(n) *dt &
 				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
 
-		JX_w(k) = JX_w(k) &
-				+ exp( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * JX_f(n) *dt &
-				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
+        ! (11) from mittet J(x,omega) = J'(x,omega)
+! 		JX_w(k) = JX_w(k) &
+! 				+ sqrt( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * JX_f(n) *dt &
+! 				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
 
+        ! (11) from mittet  K(x,omega) = K'(x,omega)　　　
+        JX_w(k) = JX_w(k) &
+                + JX_f(n) * dt &
+                * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )
 		enddo
 
- 		JX_w(0) = 2.0d0 * omega0  !!!要確認
+ 		JX_w(0) = 2.0d0 * omega0  !!!　　　
 
 		GX_w(k) = EX_w(k) / JX_w(k)  !JX_w /= 0
 
