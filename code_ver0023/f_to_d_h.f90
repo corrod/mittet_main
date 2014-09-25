@@ -143,7 +143,7 @@ close(51)
 
         Hz_w(k) = Hz_w(k) &
                 + Hz_f(n) * dt &
-                * exp( sqrt(2.0d0*pi*omega*k/dble(nd)) * (I_u-1.0d0) * n)
+                * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n)
 
         JX_w(k) = JX_w(k) &
                 + exp( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * JX_f(n) * dt &
