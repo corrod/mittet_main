@@ -16,6 +16,7 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     character(5) :: name
 
+
     !hzレシーバー
     write(31,*) t, real(hz(x0,y0,z0+5)), aimag(hz(x0,y0,z0+5))  !hz1000.d
     write(32,*) t, real(hz(x0+1,y0+1,z0+5)), aimag(hz(x0+1,y0+1,z0+5))  !hz1010.d
@@ -23,9 +24,6 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     write(34,*) t, real(hz(x0+9,y0+9,z0+5)), aimag(hz(x0+9,y0+9,z0+5))  !hz1030.d
     write(35,*) t, real(hz(x0+13,y0+13,z0+5)), aimag(hz(x0+13,y0+13,z0+5))  !hz1030.d
     write(36,*) t, real(hz(x0+17,y0+17,z0+5)), aimag(hz(x0+17,y0+17,z0+5))  !hz1030.d
-    !ソース波形
-    write(17,*) t, real(Je(istep))     , aimag(Je(istep))       !je_fic.d
-    write(18,*) t, real(Jh(istep))     , aimag(Jh(istep))       !jh_fic.d
     !exレシーバー
     write(20,*) t, real(ex(x0,y0,z0)),    aimag(ex(x0,y0,z0))  !ex1000.d
     write(21,*) t, real(ex(x0+1,y0,z0+5)), aimag(ex(x0+1,y0,z0+5)) !ex1010.d
@@ -33,12 +31,12 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     write(23,*) t, real(ex(x0+15,y0,z0+5)), aimag(ex(x0+15,y0,z0+5)) !ex1030.d
 
     !対称性確認
-    write(24,*) t, real(hz(x0,y0,z0-1)), aimag(hz(x0-1,y0,z0))  !hzleft1.d
-    write(25,*) t, real(hz(x0,y0,z0+1)), aimag(hz(x0+1,y0,z0))  !hzright1.d
-    write(26,*) t, real(hz(x0,y0,z0-5)), aimag(hz(x0-5,y0,z0))  !hzleft2.d
-    write(27,*) t, real(hz(x0,y0,z0+5)), aimag(hz(x0+5,y0,z0))  !hzright2.d
-    write(28,*) t, real(hz(x0,y0,z0-10)), aimag(hz(x0-10,y0,z0))  !hzleft3.d
-    write(29,*) t, real(hz(x0,y0,z0+10)), aimag(hz(x0+10,y0,z0))  !hzright3.d
+    write(24,*) t, real(hz(x0-2,y0,z0+7)), aimag(hz(x0+2,y0,z0+7))  !hzleft1.d
+    write(25,*) t, real(hz(nx-11,y0,z0+7)), aimag(hz(nx-11,y0,z0+7))  !hzright1.d
+    write(26,*) t, real(hz(x0,y0,z0+7)), aimag(hz(x0-5,y0,z0+7))  !hzleft2.d
+    write(27,*) t, real(hz(x0,y0,z0+7)), aimag(hz(x0+5,y0,z0+7))  !hzright2.d
+    write(28,*) t, real(hz(x0,y0,z0+7)), aimag(hz(x0-10,y0,z0+7))  !hzleft3.d
+    write(29,*) t, real(hz(x0,y0,z0+7)), aimag(hz(x0+10,y0,z0+7))  !hzright3.d
 
 
 
@@ -53,13 +51,13 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     open(8,file="./out2/ex"//name//".d")
         do k =1,nz
             do i =1,nx
-                 write(7,*) t,i,k,real(hz(i,y0,k))
+                 write(7,*) t,i,k,real(hz(i,y0,k)) !x-z
             enddo
         enddo
 
         do j=1,ny
             do i=1,nx
-                 write(8,*) t,i,j,real(ex(i,j,z0))
+                 write(8,*) t,i,j,real(ex(i,j,z0)) !x-y
             enddo
         enddo
     close(7)

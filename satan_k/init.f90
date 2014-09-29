@@ -217,7 +217,7 @@ subroutine init
    semx=(-(m+1)*eps_p(3)*c_p(3)*log(dabs(R0)))/(2.0d0*lpml*dx)
    shmx=(mu0*semx)/eps(3)
 
-   print *, semx,shmx 
+   print *, semx,shmx
 
    do i=1,lpml
       sex=(float(lpml+1-i)/lpml)**m*semx
@@ -257,7 +257,7 @@ subroutine init
       cze(nx-k+1)=cze(k)
       czel(nx-k+1)=czel(k)
    end do
-   
+
 
    return
 end subroutine

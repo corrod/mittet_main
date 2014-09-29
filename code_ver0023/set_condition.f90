@@ -94,7 +94,7 @@ endif
     dt4 = (2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !こっちのほうがぽい
     !参照不明
     courant = 1.0d0/cmax/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0)
-    dt_ideal = courant*6.0d0/7.0d0*0.999d0        !デカすぎ
+    dt_ideal = courant*0.999d0!6.0d0/7.0d0*0.999d0        !デカすぎ
     !Wang and Hohman
     dt_wh = 0.15d0 * sqrt(MU0*sigmin)  !myuの値max min どちらに合わせる？
     if(dt>dt4) then
