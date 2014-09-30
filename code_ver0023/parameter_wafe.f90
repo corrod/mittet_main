@@ -18,7 +18,7 @@ module const_para
     integer :: i, j, k
     integer, parameter :: nstep = 4096!2500!1000 !2000 総タイムステップ数 　　　
     integer, parameter :: nx=91, ny=91, nz=91 !nx = 61, ny = 61, nz = 61!グリッド数 奇数　　　
-    real(8), parameter :: dx = 9.0d-3,dy=9.0d-3,dz=9.0d-3!9.0d-3,dy=9.0d-3,dz=9.0d-3 !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　　　101,51,41
+    real(8), parameter :: dx = 9.0d-3, dy=dx, dz=dx!9.0d-3,dy=9.0d-3,dz=9.0d-3 !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　　　101,51,41
     real(8), parameter :: dt = 1.870d-6!3.00d-7 !タイムステップ長 s 　　　
     real(8), parameter :: fmax = 1.0d3!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数 　　　
     integer, parameter :: x0 = (nx+1)/2, y0 = (ny+1)/2, z0 = (nz+1)/2 !送信源位置

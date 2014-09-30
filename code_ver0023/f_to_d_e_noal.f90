@@ -125,7 +125,7 @@ include 'fftw3.f'
 !/////////////////////////////////////////////////////////////////////////////////
 	write(*,*) '*********************        DFT start       ********************'
 
-    om   = 2.d0*pi/dble(nd)/dt
+    om   = 2.d0*pi/nd/dt
 
 	EX_w(0:nd-1) = 0.0d0
 	JZ_w(0:nd-1) = 0.0d0
@@ -139,12 +139,8 @@ include 'fftw3.f'
 
 		EX_w(k) = EX_w(k) &
 				+ EX_f(n) *dt &
-				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u - 1.0d0) * n *dt)    !*dt
-!         EX_w(k) = EX_w(k) &
-!                 + EX_f(n) *dt &
-!                 * exp(-sqrt(omega0*om*k)*n*dt)*exp(I_u*sqrt(omega0*om*k)*n*dt)   !*dt
+				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
 
-! write(*,*) real(exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u - 1.0d0) * n )),real(exp(-sqrt(omega0*om*k)*n*dt)*exp(I_u*sqrt(omega0*om*k)*n*dt))
         ! (11) from mittet J(x,omega) = J'(x,omega)
 ! 		JZ_w(k) = JZ_w(k) &
 ! 				+ sqrt( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * JZ_f(n) *dt &
@@ -153,7 +149,7 @@ include 'fftw3.f'
         ! (11) from mittet  K(x,omega) = K'(x,omega)　　　
         JZ_w(k) = JZ_w(k) &
                 + JZ_f(n) * dt &
-                * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u - 1.0d0) * n )
+                * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )
 		enddo
 
 !  		JZ_w(0) = 2.0d0 * omega0  !!!　　　
@@ -171,7 +167,7 @@ include 'fftw3.f'
 ! 		open(50,file='EX_w'//name/'.d')
 		open(60,file='out1.dat')
 		do k=0,nd-1
-			write(60,*) k*om/2.0d0/pi, real(EX_w(k)),aimag(EX_w(k))   !!!横軸周波数の書き方違うかも
+			write(60,*) k*om, real(EX_w(k)),aimag(EX_w(k))   !!!横軸周波数の書き方違うかも
 		enddo
 		close(60)
 
@@ -179,7 +175,7 @@ include 'fftw3.f'
 ! 		open(61,file='JZ_w'//name/'.d')
 		open(61,file='out2.dat')
 		do k=0,nd-1
-			write(61,*) k*om/2.0d0/pi, real(JZ_w(k)),aimag(JZ_w(k))
+			write(61,*) k*om, real(JZ_w(k)),aimag(JZ_w(k))
 		enddo
 		close(61)
 
@@ -188,35 +184,11 @@ include 'fftw3.f'
 ! 		open(62,file='GXe_w'//name/'.d')
 		open(62,file='out3.dat')
 		do k=0,nd-1
-			write(62,*) k*om/2.0d0/pi, real(GXe_w(k)),aimag(GXe_w(k))
+			write(62,*) k*om, real(GXe_w(k)),aimag(GXe_w(k))
 		enddo
 		close(62)
 
 
-
-        !絶対値__________________________
-        open(70,file='out4.dat')
-        do k=0,nd-1
-            write(70,*) k*om/2.0d0/pi, abs(EX_w(k))  !!!横軸周波数の書き方違うかも
-        enddo
-        close(70)
-
-        !ある点での周波数領域JZ_w
-!       open(61,file='JZ_w'//name/'.d')
-        open(71,file='out5.dat')
-        do k=0,nd-1
-            write(71,*) k*om/2.0d0/pi, abs(JZ_w(k))
-        enddo
-        close(71)
-
-
-        !ある点での周波数領域グリーン関数
-!       open(62,file='GXh_w'//name/'.d')
-        open(72,file='out6.dat')
-        do k=0,nd-1
-            write(72,*) k*om/2.0d0/pi, abs(GXe_w(K))
-        enddo
-        close(72)
 
 !//////////////////////////////////////////////////////////////////////////////////
 !
@@ -232,12 +204,13 @@ include 'fftw3.f'
 	out2(0:nd-1) = 0.0d0
 	out3(0:nd-1) = 0.0d0
 
-	do k=0,nd-1
+	do j=0,nd-1
 !     do j=1,nd-1　　　
-		in1(k) = Ex_w(k)
-		in2(k) = JZ_w(k)
-		in3(k) = GXe_w(k)
+		in1(j) = Ex_w(j)
+		in2(j) = JZ_w(j)
+		in3(j) = GXe_w(j)
 	enddo
+
 
 
 !////////////////////////////////////////////////////////////
@@ -247,10 +220,6 @@ include 'fftw3.f'
 	call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,fftw_estimate) !complex array入力
 	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,fftw_estimate)
 	call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,fftw_estimate)
-
-!     call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_FORWARD,fftw_estimate) !complex array入力
-!     call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_FORWARD,fftw_estimate)
-!     call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_FORWARD,fftw_estimate)
 
 !///////////////////////////////////////////////////////////
 ! carry out fourier transformation

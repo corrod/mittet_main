@@ -26,6 +26,7 @@ program f_to_d_h
 	complex(kind(0d0)),allocatable ::JZ_w(:) !JZ_w(0:nd-1) !ficticiousのJ'x
 	complex(kind(0d0)),allocatable ::JZ_f(:) !JZ_f(0:nd-1)
 	complex(kind(0d0)),allocatable ::GXh_w(:) !GXh_w(0:nd-1) !diffusive domain Green's function
+    complex(kind(0d0)),allocatable :: inv_JZ_w(:)
 	character(3) :: name
 	!IDFT, IFFT用
 	complex(kind(0d0)),allocatable :: Hz_t(:), JZ_t(:),GXh_t(:)
@@ -55,7 +56,7 @@ include 'fftw3.f'
 ! 配列確保
 !///////////////////////////////////////////////////////////////////////////////
     allocate(t1(0:nd-1),inp1_r(0:nd-1),inp1_i(0:nd-1),t2(0:nd-1),inp2_r(0:nd-1),inp2_i(0:nd-1))
-    allocate(w(0:nd-1),Hz_w(0:nd-1),Hz_f(0:nd-1),JZ_w(0:nd-1),JZ_f(0:nd-1),GXh_w(0:nd-1))
+    allocate(w(0:nd-1),Hz_w(0:nd-1),Hz_f(0:nd-1),JZ_w(0:nd-1),JZ_f(0:nd-1),GXh_w(0:nd-1),inv_JZ_w(0:nd-1))
 
 	allocate( Hz_t(0:nd-1),JZ_t(0:nd-1),GXh_t(0:nd-1) )
 	allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
@@ -130,7 +131,7 @@ close(51)
 	write(*,*) '*********************        DFT start       ********************'
 
 !kとn逆かも注意
-    om   = 2.d0*pi/nd/dt
+    om   = 2.d0*pi/dble(nd)/dt
 
 	Hz_w(0:nd-1) = 0.0d0
 	JZ_w(0:nd-1) = 0.0d0
@@ -143,8 +144,8 @@ close(51)
 
         ! mittet(11)の係数参照
 		Hz_w(k) = Hz_w(k) &
-				+ sqrt( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * Hz_f(n) * dt &
-				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
+				+ sqrt( - 2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * Hz_f(n) * dt &
+				* exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u - 1.0d0) * n )    !*dt
 
         ! (11) from mittet J(x,omega) = J'(x,omega)
 !         JZ_w(k) = JZ_w(k) &
@@ -154,8 +155,11 @@ close(51)
         ! (11) from mittet  K(x,omega) = K'(x,omega)　　　
         JZ_w(k) = JZ_w(k) &
                 + JZ_f(n) * dt &
-                * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )
+                * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u - 1.0d0) * n )
 
+!         inv_JZ_w(k) = 1.0d0 /(JZ_w(k) &
+!                 + JZ_f(n) * dt &
+!                 * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u - 1.0d0) * n ))
 		enddo
 
         Hz_w(0) = 2.0d0 * omega0  !!! 　　　
@@ -174,7 +178,7 @@ close(51)
 ! 		open(50,file='Hz_w'//name/'.d')
 		open(60,file='out1.dat')
 		do k=0,nd-1
-			write(60,*) k*om, real(Hz_w(k)),aimag(Hz_w(k))   !!!横軸周波数の書き方違うかも
+			write(60,*) k*om/2.0d0/pi, real(Hz_w(k)),aimag(Hz_w(k))   !!!横軸周波数の書き方違うかも
 		enddo
 		close(60)
 
@@ -182,7 +186,7 @@ close(51)
 ! 		open(61,file='JZ_w'//name/'.d')
 		open(61,file='out2.dat')
 		do k=0,nd-1
-			write(61,*) k*om, real(JZ_w(k)),aimag(JZ_w(k))
+			write(61,*) k*om/2.0d0/pi, real(JZ_w(k)),aimag(JZ_w(k))
 		enddo
 		close(61)
 
@@ -191,10 +195,39 @@ close(51)
 ! 		open(62,file='GXh_w'//name/'.d')
 		open(62,file='out3.dat')
 		do k=0,nd-1
-			write(62,*) k*om, real(GXh_w(k)),aimag(GXh_w(k))
+			write(62,*) k*om/2.0d0/pi, real(GXh_w(k)),aimag(GXh_w(k))
 		enddo
 		close(62)
 
+!         open(63,file='inv_JZ_w.dat')
+!         do k=0,nd-1
+!             write(63,*) k*om, real(inv_JZ_w(k)),aimag(inv_JZ_w(k))
+!         enddo
+!         close(63)
+
+        !絶対値__________________________
+        open(70,file='out4.dat')
+        do k=0,nd-1
+            write(70,*) k*om/2.0d0/pi, abs(HZ_w(k))  !!!横軸周波数の書き方違うかも
+        enddo
+        close(70)
+
+        !ある点での周波数領域JZ_w
+!       open(61,file='JZ_w'//name/'.d')
+        open(71,file='out5.dat')
+        do k=0,nd-1
+            write(71,*) k*om/2.0d0/pi, abs(JZ_w(k))
+        enddo
+        close(71)
+
+
+        !ある点での周波数領域グリーン関数
+!       open(62,file='GXh_w'//name/'.d')
+        open(72,file='out6.dat')
+        do k=0,nd-1
+            write(72,*) k*om/2.0d0/pi, abs(GXh_w(K))
+        enddo
+        close(72)
 
 !//////////////////////////////////////////////////////////////////////////////////
 !
@@ -224,7 +257,9 @@ close(51)
 	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,fftw_estimate)
 	call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,fftw_estimate)
 
-
+!     call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_FORWARD,fftw_estimate) !complex array入力
+!     call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_FORWARD,fftw_estimate)
+!     call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_FORWARD,fftw_estimate)
 
 !///////////////////////////////////////////////////////////
 ! carry out fourier trandformation
@@ -261,7 +296,7 @@ close(51)
 	close(82)
 	close(83)
 
-	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JZ_w,JZ_f,GXh_w )
+	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JZ_w,JZ_f,GXh_w,inv_JZ_w )
 	deallocate( in1,in2,in3,out1,out2,out3,Hz_t,JZ_t,GXh_t )
 
 end program f_to_d_h

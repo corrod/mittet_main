@@ -100,6 +100,7 @@ endif
     if(dt>dt4) then
     write(*,*) '****************courant 条件確認!! ********************************'
     endif
+    write(*,*) '# dt mittet :', (1.0d0/sqrt(3.0d0)) * dx / cmax
     write(*,*) '# courant 2nd order scheme with taylor operator dt2', dt2!,&
     !dx/(3.0d0*0.5d0)/cmin
     write(*,*) '# courant 4th order scheme with taylor operator dt4', dt4!, &

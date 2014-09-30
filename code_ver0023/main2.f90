@@ -44,6 +44,7 @@ program main
     open(35,file='hz1040.d')
     open(36,file='hz1050.d')
 
+    open(16,file='signal.d')
     open(17,file='je_fic.d')
     open(18,file='jh_fic.d')
 
@@ -133,7 +134,7 @@ enddo !*反復計算終了
     close(35)
     close(36)
 
-
+    close(16)
     close(17)
     close(18)
 
