@@ -144,7 +144,7 @@ include 'fftw3.f'
         ! (I_u-1.0d0)*n*dt ◎
         EX_w(k) = EX_w(k) &
                 + EX_f(n) *dt &
-                * exp( sqrt(omega0*om*k) * (I_u - 1.0d0) * n*dt )
+                * exp( (I_u-1.0d0) * sqrt(omega0*om*k) * n*dt )
 
 
         ! (11) from mittet J(x,omega) = J'(x,omega)
@@ -163,7 +163,7 @@ include 'fftw3.f'
 
         JZ_w(k) = JZ_w(k) &
                 + JZ_f(n) * dt &
-                * exp( sqrt(omega0*om*k) * (I_u - 1.0d0) * n*dt )
+                * exp( (I_u-1.0d0) * sqrt(omega0*om*k) * n*dt )
 		enddo !n loop
 
 !  		JZ_w(0) = 2.0d0 * omega0  !!!　　　
@@ -267,14 +267,16 @@ include 'fftw3.f'
 !///////////////////////////////////////////////////////////
 	call dfftw_execute(plan1,in1,out1)
 	call dfftw_execute(plan2,in2,out2)
-	call dfftw_execute(plan3,in3,out3)
+    call dfftw_execute(plan3,in3,out3)
+
 
 !///////////////////////////////////////////////////////////
 ! destroy plan
 !///////////////////////////////////////////////////////////
 	call dfftw_destroy_plan(plan1)
 	call dfftw_destroy_plan(plan2)
-	call dfftw_destroy_plan(plan3)
+    call dfftw_destroy_plan(plan3)
+
 
 !///////////////////////////////////////////////////////////
 ! output
@@ -282,15 +284,21 @@ include 'fftw3.f'
 	open(81,file='invGE.dat')
 	open(82,file='invGJ.dat')
 	open(83,file='invGG.dat')
-	do k=0,nd-1
-!     do k=1,nd-1　　　
-		out1(k) = out1(k)/nd/dt*2.0d0
-		out2(k) = out2(k)/nd/dt*2.0d0
-		out3(k) = out3(k)/nd/dt*2.0d0
+	do n=0,nd-1
+!     do n=1,nd-1　　　
+        !スケール
+! 		out1(n) = out1(n)/nd/dt*2.0d0 !E
+! 		out2(n) = out2(n)/nd/dt*2.0d0 !J
+! 		out3(n) = out3(n)/nd/dt*2.0d0 !GX_t
+        !スケール / nd 　　　
+        out1(n) = out1(n)/nd !E
+        out2(n) = out2(n)/nd !J
+        out3(n) = out3(n)/nd !GX_t
 
-		write(81,*) k*dt, real(out1(k)), aimag(out1(k))
-		write(82,*) k*dt, real(out2(k)), aimag(out2(k))
-		write(83,*) k*dt, real(out3(k)), aimag(out3(k))
+		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
+		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
+		write(83,*) n*dt, real(out3(n)), aimag(out3(n))
+        GXe_t(n) = out3(n)
 	enddo
 	close(81)
 	close(82)
@@ -298,6 +306,8 @@ include 'fftw3.f'
 
 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JZ_w,JZ_f,GXe_w )
 	deallocate( in1,in2,in3,out1,out2,out3,EX_t,JZ_t,GXe_t )
+
+
 
 end program f_to_d_e
 

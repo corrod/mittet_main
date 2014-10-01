@@ -10,6 +10,7 @@
 !Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 !JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
 !としているが、JZ_f = signal(istep) かもしれない
+!fwi3d_cpm_function 行1430~参照
 !//////////////////////////////////////////////////////////////////////////
 program f_to_d_h
 	use const_para
@@ -152,7 +153,7 @@ close(51)
 !                 * exp( sqrt(omega0*om*k) * (I_u - 1.0d0) * n * dt)    !*dt
         Hz_w(k) = Hz_w(k) &
                 + sqrt( - 2.0d0*omega0/I_u/om/k ) * Hz_f(n) * dt &
-                * exp( sqrt(omega0*om*k) * (I_u - 1.0d0) * n*dt )
+                * exp( (I_u - 1.0d0) * sqrt(omega0*om*k) *  n*dt )
 
         ! (11) from mittet J(x,omega) = J'(x,omega)
 !         JZ_w(k) = JZ_w(k) &
@@ -169,7 +170,7 @@ close(51)
 
         JZ_w(k) = JZ_w(k) &
                 + JZ_f(n) * dt &
-                * exp( sqrt(omega0*om*k) * (I_u - 1.0d0) * n*dt )
+                * exp( (I_u - 1.0d0) * sqrt(omega0*om*k) *  n*dt )
 
 !         inv_JZ_w(k) = 1.0d0 /(JZ_w(k) &
 !                 + JZ_f(n) * dt &
@@ -297,14 +298,19 @@ close(51)
 	open(81,file='invGH.dat')
 	open(82,file='invGJ.dat')
 	open(83,file='invGG.dat')
-	do k=0,nd-1
-		out1(k) = out1(k)/nd/dt*2.0d0
-		out2(k) = out2(k)/nd/dt*2.0d0
-		out3(k) = out3(k)/nd/dt*2.0d0
+	do n=0,nd-1
+        !スケール
+! 		out1(n) = out1(n)/nd/dt*2.0d0 !H
+! 		out2(n) = out2(n)/nd/dt*2.0d0 !J
+! 		out3(n) = out3(n)/nd/dt*2.0d0 !G
+        !スケール /nd 　　　
+        out1(n) = out1(n)/nd
+        out2(n) = out2(n)/nd
+        out3(n) = out3(n)/nd
 
-		write(81,*) k*dt, real(out1(k)), aimag(out1(k))
-		write(82,*) k*dt, real(out2(k)), aimag(out2(k))
-		write(83,*) k*dt, real(out3(k)), aimag(out3(k))
+		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
+		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
+		write(83,*) n*dt, real(out3(n)), aimag(out3(n))
 	enddo
 	close(81)
 	close(82)
