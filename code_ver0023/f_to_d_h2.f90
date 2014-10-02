@@ -248,7 +248,8 @@ close(51)
 !/////////////////////////////////////////////////////////////////////////////////
     write(*,*) '********************        IFFT start       ********************'
 
-nd = (nd-1) * 2
+! nd = (nd-1) * 2
+nd = nd * 2
 
     allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
     allocate( Hz_t(1:nd),JZ_t(1:nd),GXh_t(1:nd) )
@@ -298,6 +299,21 @@ nd = (nd-1) * 2
     write(203,*) i, real(in3(i)), aimag(in3(i))
     enddo
 
+    open(101,file='conjg_hzw.dat')
+    do i=0,nd-1
+    write(101,*) i, real(in1(i)), aimag(in1(i))
+    enddo
+    close(101)
+
+    open(102,file='conjg_jzw.dat')
+    do i=0,nd-1
+    write(102,*) i, real(in2(i)), aimag(in2(i))
+    enddo
+
+    open(103,file='conjg_gxhw.dat')
+    do i=0,nd-1
+    write(103,*) i, real(in3(i)), aimag(in3(i))
+    enddo
 
 !////////////////////////////////////////////////////////////////////////////
 ! in1,in2,in3 に窓関数をかける hamming window

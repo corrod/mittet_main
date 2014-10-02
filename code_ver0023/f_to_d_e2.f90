@@ -234,7 +234,9 @@ write(*,*) 'nd : ', nd
 !/////////////////////////////////////////////////////////////////////////////////
     write(*,*) '********************        IFFT start       ********************'
 
-nd = (nd-1) * 2
+! nd = (nd-1) * 2
+
+nd = nd * 2
 write(*,*) '(nd-1)*2', nd
 
     allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
@@ -275,16 +277,26 @@ write(*,*) '(nd-1)*2', nd
         in3(k) = GXe_w(k)
     enddo
 
+
     in1(nd/2+1:nd-1) = conjg(EX_w(nd/2-1:1:-1))
     in2(nd/2+1:nd-1) = conjg(JZ_w(nd/2-1:1:-1))
     in3(nd/2+1:nd-1) = conjg(GXe_w(nd/2-1:1:-1))
 
+    open(101,file='conjg_exw.dat')
     do i=0,nd-1
     write(101,*) i, real(in1(i)), aimag(in1(i))
+    enddo
+    close(101)
+
+    open(102,file='conjg_jzw.dat')
+    do i=0,nd-1
     write(102,*) i, real(in2(i)), aimag(in2(i))
-    write(103,*) i, real(in3(i)), aimag(in3(i))
     enddo
 
+    open(103,file='conjg_gxew.dat')
+    do i=0,nd-1
+    write(103,*) i, real(in3(i)), aimag(in3(i))
+    enddo
 
 !////////////////////////////////////////////////////////////////////////////
 ! in1,in2,in3 に窓関数をかける hamming window
