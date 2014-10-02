@@ -107,7 +107,7 @@ include 'fftw3.f'
 ! JZ_fに窓関数をかける hamming window
 !///////////////////////////////////////////////////////////////////////////
 !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
-! !     call window_hamming(nd,w) !hanning 両端が0になる窓
+! !     call window_hanning(nd,w) !hanning 両端が0になる窓
 ! 		do i=0,nd-1
 ! 	    write(7,*) w(i)
 ! 	    enddo
@@ -228,6 +228,24 @@ include 'fftw3.f'
         enddo
         close(72)
 
+
+!////////////////////////////////////////////////////////////////////////////
+! EX_w,Jz_w,GXe_w に窓関数をかける hamming window
+!///////////////////////////////////////////////////////////////////////////
+! !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
+!     call window_hanning(nd,w) !hanning 両端が0になる窓
+!       do i=0,nd-1
+!       write(7,*) w(i)
+!       enddo
+!   !taper かけて
+!       do k=0,nd-1
+!           write(10,*) k*om/2.0d0/pi,real(EX_w(k)),aimag(EX_w(k))!かける前出力
+!              EX_w(k) = EX_w(k) * w(k)
+!              JZ_w(k) = JZ_w(k) * w(k)
+!              GXe_w(k) = GXe_w(k) * w(k)
+!           write(11,*) k*om/2.0d0/pi,real(EX_w(k)),aimag(EX_w(k))!かけた後出力
+!       enddo
+
 !//////////////////////////////////////////////////////////////////////////////////
 !
 ! IFFT    Frequency to time transformation   JZ_w,EX_w,GXe_w to JZ_t,EX_t,GXe_t
@@ -248,6 +266,21 @@ include 'fftw3.f'
 		in2(k) = JZ_w(k)
 		in3(k) = GXe_w(k)
 	enddo
+
+!////////////////////////////////////////////////////////////////////////////
+! in1,in2,in3 に窓関数をかける hamming window
+!///////////////////////////////////////////////////////////////////////////
+! !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
+!     call window_hanning(nd,w) !hanning 両端が0になる窓
+!       do i=0,nd-1
+!       write(7,*) w(i)
+!       enddo
+!   !taper かけて
+!       do k=0,nd-1
+!              in1(k) = in1(k) * w(k)
+!              in2(k) = in2(k) * w(k)
+!              in3(k) = in3(k) * w(k)
+!       enddo
 
 
 !////////////////////////////////////////////////////////////

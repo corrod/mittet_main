@@ -112,7 +112,7 @@ close(51)
 !JZ_fに窓関数をかける hamming window
 ! !///////////////////////////////////////////////////////////////////////////
 !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
-! !     call window_hamming(nd,w) !hanning 両端が0になる窓
+! !     call window_hanning(nd,w) !hanning 両端が0になる窓
 ! 		do i=0,nd-1
 ! 	    write(7,*) w(i)
 ! 	    enddo
@@ -151,6 +151,7 @@ close(51)
 !         Hz_w(k) = Hz_w(k) &
 !                 + sqrt( - 2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * Hz_f(n) * dt &
 !                 * exp( sqrt(omega0*om*k) * (I_u - 1.0d0) * n * dt)    !*dt
+        !ω=0 k = 0のときは？
         Hz_w(k) = Hz_w(k) &
                 + sqrt( - 2.0d0*omega0/I_u/om/k ) * Hz_f(n) * dt &
                 * exp( (I_u - 1.0d0) * sqrt(omega0*om*k) *  n*dt )
@@ -264,6 +265,22 @@ close(51)
 		in3(j) = GXh_w(j)
 	enddo
 
+!////////////////////////////////////////////////////////////////////////////
+! in1,in2,in3 に窓関数をかける hamming window
+!///////////////////////////////////////////////////////////////////////////
+! !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
+!     call window_hanning(nd,w) !hanning 両端が0になる窓
+!       do i=0,nd-1
+!       write(7,*) w(i)
+!       enddo
+!   !taper かけて
+!       do k=0,nd-1
+!              in1(k) = in1(k) * w(k)
+!              in2(k) = in2(k) * w(k)
+!              in3(k) = in3(k) * w(k)
+!       enddo
+
+
 !////////////////////////////////////////////////////////////
 ! make pland
 !       FFTW_FORWARD (-1) or FFTW_BACKWARD (+1)
@@ -311,6 +328,7 @@ close(51)
 		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
 		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
 		write(83,*) n*dt, real(out3(n)), aimag(out3(n))
+    GXh_t(n) = out3(n)
 	enddo
 	close(81)
 	close(82)

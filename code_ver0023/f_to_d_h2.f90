@@ -109,7 +109,7 @@ close(51)
 !JZ_fに窓関数をかける hamming window
 ! !///////////////////////////////////////////////////////////////////////////
 !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
-! !     call window_hamming(nd,w) !hanning 両端が0になる窓
+! !     call window_hanning(nd,w) !hanning 両端が0になる窓
 !       do i=0,nd-1
 !       write(7,*) w(i)
 !       enddo
@@ -250,34 +250,69 @@ close(51)
 
 nd = (nd-1) * 2
 
-    allocate( Hz_t(0:nd-1),JZ_t(0:nd-1),GXh_t(0:nd-1) )
     allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
+    allocate( Hz_t(1:nd),JZ_t(1:nd),GXh_t(1:nd) )
     allocate( out1(1:nd), out2(1:nd), out3(1:nd) )
 
 
-    Hz_t(0:nd-1) = 0.0d0
-    JZ_t(0:nd-1) = 0.0d0
-    GXh_t(0:nd-1) = 0.0d0
     in1(0:nd-1) = 0.0d0
     in2(0:nd-1) = 0.0d0
     in3(0:nd-1) = 0.0d0
-    out1(0:nd-1) = 0.0d0
-    out2(0:nd-1) = 0.0d0
-	out3(0:nd-1) = 0.0d0
+    Hz_t(1:nd) = 0.0d0
+    JZ_t(1:nd) = 0.0d0
+    GXh_t(1:nd) = 0.0d0
+    out1(1:nd) = 0.0d0
+    out2(1:nd) = 0.0d0
+	out3(1:nd) = 0.0d0
 
-	do k=0,nd-1
+!////////////////////////////////////////////////////////////////////////////
+! HZ_w,Jz_w,GXh_w に窓関数をかける hamming window
+!///////////////////////////////////////////////////////////////////////////
+! !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
+!     call window_hanning(nd,w) !hanning 両端が0になる窓
+!       do i=0,nd-1
+!       write(7,*) w(i)
+!       enddo
+!   !taper かけて
+!       do k=0,nd-1
+!           write(10,*) k*om/2.0d0/pi,real(HZ_w(k)),aimag(HZ_w(k))!かける前出力
+!              HZ_w(k) = HZ_w(k) * w(k)
+!              JZ_w(k) = JZ_w(k) * w(k)
+!              GXh_w(k) = GXe_w(k) * w(k)
+!           write(11,*) k*om/2.0d0/pi,real(HZ_w(k)),aimag(HZ_w(k))!かけた後出力
+!       enddo
+
+	do k=0,nd/2
 		in1(k) = Hz_w(k)
 		in2(k) = JZ_w(k)
 		in3(k) = GXh_w(k)
 	enddo
 
-    in1(n/2+1:n-1) = conjg(Hz_w(n/2-1:1:-1))
-    in2(n/2+1:n-1) = conjg(JZ_w(n/2-1:1:-1))
-    in3(n/2+1:n-1) = conjg(GXh_w(n/2-1:1:-1))
+    in1(nd/2+1:nd-1) = conjg(Hz_w(nd/2-1:1:-1))
+    in2(nd/2+1:nd-1) = conjg(JZ_w(nd/2-1:1:-1))
+    in3(nd/2+1:nd-1) = conjg(GXh_w(nd/2-1:1:-1))
 
-    write(201,*) in(0:nd-1)
-    write(202,*) in(0:nd-1)
-    write(203,*) in(0:nd-1)
+  do i=0,nd-1
+    write(201,*) i, real(in1(i)), aimag(in1(i))
+    write(202,*) i, real(in2(i)), aimag(in2(i))
+    write(203,*) i, real(in3(i)), aimag(in3(i))
+    enddo
+
+
+!////////////////////////////////////////////////////////////////////////////
+! in1,in2,in3 に窓関数をかける hamming window
+!///////////////////////////////////////////////////////////////////////////
+! !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
+!     call window_hanning(nd,w) !hanning 両端が0になる窓
+!       do i=0,nd-1
+!       write(7,*) w(i)
+!       enddo
+!   !taper かけて
+!       do k=0,nd-1
+!              in1(k) = in1(k) * w(k)
+!              in2(k) = in2(k) * w(k)
+!              in3(k) = in3(k) * w(k)
+!       enddo
 
 !////////////////////////////////////////////////////////////
 ! make pland
@@ -326,6 +361,7 @@ nd = (nd-1) * 2
 		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
 		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
 		write(83,*) n*dt, real(out3(n)), aimag(out3(n))
+        GXh_t(n) = out3(n)
 	enddo
 	close(81)
 	close(82)
