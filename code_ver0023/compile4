@@ -33,6 +33,7 @@ time ./ficticious_fwi_cpml
 #DFT,IDFT,IFFTスクリプト(E)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 cp jh_fic.d inp2.dat #source J'
 # cp signal.d inp2.dat
+
 i=1010
 j=`expr $i - 1000`
 max=30
@@ -72,6 +73,7 @@ rm out*.dat invG*.dat conjg*.dat abs*.dat
 #DFT,IDFT,IFFTスクリプト(H)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 cp jh_fic.d inp2.dat #source J'
 # cp signal.d inp2.dat
+
 i=1010
 j=`expr $i - 1000`
 max=30

@@ -360,9 +360,9 @@ write(*,*) '(nd-1)*2', nd
 ! 		out2(n) = out2(n)/nd/dt*2.0d0 !J
 ! 		out3(n) = out3(n)/nd/dt*2.0d0 !GX_t
         !スケール / nd 　　　
-        out1(n) = out1(n)/nd/dt !*2.0d0!E
-        out2(n) = out2(n)/nd/dt !*2.0d0!J
-        out3(n) = out3(n)/nd/dt !*2.0d0!GX_t
+        out1(n) = out1(n)/nd/dt *2.0d0!E
+        out2(n) = out2(n)/nd/dt *2.0d0!J
+        out3(n) = out3(n)/nd/dt *2.0d0!GX_t
 
         GXe_t(n) = out3(n)
 

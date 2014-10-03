@@ -376,9 +376,9 @@ nd = nd * 2
 ! 		out2(n) = out2(n)/nd/dt*2.0d0 !J
 ! 		out3(n) = out3(n)/nd/dt*2.0d0 !G
         !スケール /nd 　　　
-        out1(n) = out1(n)/nd
-        out2(n) = out2(n)/nd
-        out3(n) = out3(n)/nd
+        out1(n) = out1(n)/nd/dt *2.0d0
+        out2(n) = out2(n)/nd/dt *2.0d0
+        out3(n) = out3(n)/nd/dt *2.0d0
 
 		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
 		write(82,*) n*dt, real(out2(n)), aimag(out2(n))

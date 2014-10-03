@@ -320,13 +320,13 @@ include 'fftw3.f'
 	do n=0,nd-1
 !     do n=1,nd-1　　　
         !スケール
-! 		out1(n) = out1(n)/nd/dt*2.0d0 !E
-! 		out2(n) = out2(n)/nd/dt*2.0d0 !J
-! 		out3(n) = out3(n)/nd/dt*2.0d0 !GX_t
+		out1(n) = out1(n)/nd/dt*2.0d0 !E
+		out2(n) = out2(n)/nd/dt*2.0d0 !J
+		out3(n) = out3(n)/nd/dt*2.0d0 !GX_t
         !スケール / nd 　　　
-        out1(n) = out1(n)/nd !E
-        out2(n) = out2(n)/nd !J
-        out3(n) = out3(n)/nd !GX_t
+!         out1(n) = out1(n)/nd !E
+!         out2(n) = out2(n)/nd !J
+!         out3(n) = out3(n)/nd !GX_t
 
 		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
 		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
