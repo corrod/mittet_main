@@ -285,13 +285,13 @@ close(51)
 ! make pland
 !       FFTW_FORWARD (-1) or FFTW_BACKWARD (+1)
 !////////////////////////////////////////////////////////////
-	call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,fftw_estimate) !complex array入力
-	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,fftw_estimate)
-	call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,fftw_estimate)
+	call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,FFTW_ESTIMATE) !complex array入力
+	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,FFTW_ESTIMATE)
+	call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,FFTW_ESTIMATE)
 
-!     call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_FORWARD,fftw_estimate) !complex array入力
-!     call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_FORWARD,fftw_estimate)
-!     call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_FORWARD,fftw_estimate)
+!     call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_FORWARD,FFTW_ESTIMATE) !complex array入力
+!     call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_FORWARD,FFTW_ESTIMATE)
+!     call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_FORWARD,FFTW_ESTIMATE)
 
 !///////////////////////////////////////////////////////////
 ! carry out fourier trandformation

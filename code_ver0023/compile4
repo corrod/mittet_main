@@ -49,19 +49,23 @@ cp out3.dat GXe_w$i.d
 cp out4.dat absEX_w$i.d
 cp out5.dat absJZ_w$i.d
 cp out6.dat absGXe_w$i.d
-# conjg_ver
+# # conjg_ver
 cp conjg_exw.dat conjg_exw$i.d
 cp conjg_jzw.dat conjg_jzw$i.d
 cp conjg_gxew.dat conjg_gxew$i.d
-# time
+# # time
 cp invGE.dat EX_t$i.d
 cp invGJ.dat JZ_t$i.d
 cp invGG.dat GXe_t$i.d
+
+cp absEX_t.dat absEX_t$i.d
+cp absJZ_t.dat absJZ_t$i.d
+cp absGXe_t.dat absGXe_t$i.d
 i=`expr $i + 10`
 j=`expr $j + 10`
 done
 
-rm out*.dat invG*.dat conjg*.dat
+rm out*.dat invG*.dat conjg*.dat abs*.dat
 
 
 
@@ -84,17 +88,22 @@ cp out3.dat GXh_w$i.d
 cp out4.dat absHZ_w$i.d
 cp out5.dat absJZ_w$i.d
 cp out6.dat absGXh_w$i.d
+
 cp conjg_hzw.dat conjg_hzw$i.d
 cp conjg_jzw.dat conjg_jzw$i.d
 cp conjg_gxhw.dat conjg_gxhw$i.d
+
 cp invGH.dat HZ_t$i.d
 cp invGJ.dat JZ_t$i.d
 cp invGG.dat GXh_t$i.d
+cp absHZ_t.dat absHZ_t$i.d
+cp absJZ_t.dat absJZ_t$i.d
+cp absGXh_t.dat absGXh_t$i.d
 i=`expr $i + 10`
 j=`expr $j + 10`
 done
 
-rm out*.dat invG*.dat conjg*.dat
+rm out*.dat invG*.dat conjg*.dat abs*.dat
 
 
 

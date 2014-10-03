@@ -1,4 +1,6 @@
 !///////////////////////////////////////////////////////////////////////////////
+!conjugate version
+!////////////////////////////////////////////////////////////////////////////
 ! ficticious H'(t') to diffusive frequency domain H(ω), using DFT, FFT
 ! frequency green function GXh_w(ω)
 ! DFT
@@ -152,7 +154,7 @@ close(51)
                 + sqrt( - 2.0d0*omega0/I_u/om/k ) * Hz_f(n) * dt &
                 * exp( (I_u - 1.0d0) * sqrt(omega0*om*k) *  n*dt )
 
-        ! (11) from mittet J(x,omega) = J'(x,omega)
+        ! (11) from mittet J(x,omega) = sqrt(-2*omega0/i*omega)*J'(x,omega)
 !         JZ_w(k) = JZ_w(k) &
 !               + sqrt( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * JZ_f(n) *dt &
 !               * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
@@ -176,6 +178,7 @@ close(51)
 
 !         Hz_w(0) = 2.0d0 * omega0  !!! 　　　
 
+        !(C-11)
 !       JZ_w(0) = 2.0d0 * omega0  !!! 　　　
 
         GXh_w(k) = Hz_w(k) / JZ_w(k)  !JZ_w /= 0
@@ -334,13 +337,13 @@ nd = nd * 2
 ! make pland
 !       FFTW_FORWARD (-1) or FFTW_BACKWARD (+1)
 !////////////////////////////////////////////////////////////
-	call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,fftw_estimate) !complex array入力
-	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,fftw_estimate)
-	call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,fftw_estimate)
+	call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,FFTW_ESTIMATE) !complex array入力
+	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,FFTW_ESTIMATE)
+	call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,FFTW_ESTIMATE)
 
-!     call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_FORWARD,fftw_estimate) !complex array入力
-!     call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_FORWARD,fftw_estimate)
-!     call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_FORWARD,fftw_estimate)
+!     call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_FORWARD,FFTW_ESTIMATE) !complex array入力
+!     call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_FORWARD,FFTW_ESTIMATE)
+!     call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_FORWARD,FFTW_ESTIMATE)
 
 !///////////////////////////////////////////////////////////
 ! carry out fourier trandformation
@@ -364,6 +367,9 @@ nd = nd * 2
 	open(81,file='invGH.dat')
 	open(82,file='invGJ.dat')
 	open(83,file='invGG.dat')
+    open(84,file='absHZ_t.dat')
+    open(85,file='absJZ_t.dat')
+    open(86,file='absGXh_t.dat')
 	do n=1,nd
         !スケール
 ! 		out1(n) = out1(n)/nd/dt*2.0d0 !H
@@ -377,11 +383,18 @@ nd = nd * 2
 		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
 		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
 		write(83,*) n*dt, real(out3(n)), aimag(out3(n))
+        write(84,*) n*dt, abs(out1(n))
+        write(85,*) n*dt, abs(out2(n))
+        write(86,*) n*dt, abs(out3(n))
+
         GXh_t(n) = out3(n)
 	enddo
 	close(81)
 	close(82)
-	close(83)
+    close(83)
+    close(84)
+    close(85)
+	close(86)
 
 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JZ_w,JZ_f,GXh_w,inv_JZ_w )
 	deallocate( in1,in2,in3,out1,out2,out3,Hz_t,JZ_t,GXh_t )
