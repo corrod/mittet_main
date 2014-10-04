@@ -296,12 +296,6 @@ nd = nd * 2
     in2(nd/2+1:nd-1) = conjg(JZ_w(nd/2-1:1:-1))
     in3(nd/2+1:nd-1) = conjg(GXh_w(nd/2-1:1:-1))
 
-  do i=0,nd-1
-    write(201,*) i, real(in1(i)), aimag(in1(i))
-    write(202,*) i, real(in2(i)), aimag(in2(i))
-    write(203,*) i, real(in3(i)), aimag(in3(i))
-    enddo
-
     open(101,file='conjg_hzw.dat')
     do i=0,nd-1
     write(101,*) i, real(in1(i)), aimag(in1(i))
