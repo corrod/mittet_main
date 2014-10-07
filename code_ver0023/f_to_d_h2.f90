@@ -130,7 +130,7 @@ close(51)
 !/////////////////////////////////////////////////////////////////////////////////
     write(*,*) '*********************        DFT start       ********************'
 
-!kとn逆かも注意
+
     om   = 2.d0*pi/dble(nd)/dt
 
     Hz_w(0:nd-1) = 0.0d0
@@ -143,37 +143,20 @@ close(51)
         do n=0,nd-1 !時間用ループ
 
         ! mittet(11)の係数参照
-!       Hz_w(k) = Hz_w(k) &
-!               + sqrt( - 2.0d0*omega0/I_u/om/k ) * Hz_f(n) * dt &
-!               * exp( sqrt(omega0*om*k) * (I_u - 1.0d0) * n )    !*dt
-
-!         Hz_w(k) = Hz_w(k) &
-!                 + sqrt( - 2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * Hz_f(n) * dt &
-!                 * exp( sqrt(omega0*om*k) * (I_u - 1.0d0) * n * dt)    !*dt
         Hz_w(k) = Hz_w(k) &
                 + sqrt( - 2.0d0*omega0/I_u/om/k ) * Hz_f(n) * dt &
                 * exp( (I_u - 1.0d0) * sqrt(omega0*om*k) *  n*dt )
 
         ! (11) from mittet J(x,omega) = sqrt(-2*omega0/i*omega)*J'(x,omega)
 !         JZ_w(k) = JZ_w(k) &
-!               + sqrt( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * JZ_f(n) *dt &
-!               * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
-!         JZ_w(k) = JZ_w(k) &
 !               + sqrt( -2.0d0*omega0/I_u/om/k ) * JZ_f(n) *dt &
-!               * exp( sqrt(omega0*om*k) * (I_u-1.0d0) * n )    !*dt
+!               * exp( sqrt(omega0*om*k) * (I_u-1.0d0) * n*dt)
 
         ! (11) from mittet  K(x,omega) = K'(x,omega)　　　
-!         JZ_w(k) = JZ_w(k) &
-!                 + JZ_f(n) * dt &
-!                 * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u - 1.0d0) * n )
-
         JZ_w(k) = JZ_w(k) &
                 + JZ_f(n) * dt &
                 * exp( (I_u - 1.0d0) * sqrt(omega0*om*k) *  n*dt )
 
-!         inv_JZ_w(k) = 1.0d0 /(JZ_w(k) &
-!                 + JZ_f(n) * dt &
-!                 * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u - 1.0d0) * n ))
         enddo !n loop
 
 !         Hz_w(0) = 2.0d0 * omega0  !!! 　　　

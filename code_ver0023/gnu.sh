@@ -1,14 +1,140 @@
 #!/bin/bash
 # HZの伝播確認
+
+# real
+# ficticious
+gnuplot<<EOF
+set xlabel 't[s]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'ex_from_shot.eps'
+p 'ex1010.d' every 10 u 1:2 w l title '10 from shot ex', \
+'ex1020.d' every 10 u 1:2 w l title '20 from shot ex', \
+'ex1030.d' every 10 u 1:2 w l title '30 from shot ex'
+EOF
+
 gnuplot<<EOF
 set xlabel 't[s]'
 set ylabel 'amp'
 set term postscript enhanced color
 set out 'hz_from_shot.eps'
-p 'hz1010.d' every 10 u 1:2 w l title '10 from shot', \
-'hz1020.d' every 10 u 1:2 w l title '20 from shot', \
-'hz1030.d' every 10 u 1:2 w l title '30 from shot'
+p 'hz1010.d' every 10 u 1:2 w l title '10 from shot hz',\
+'hz1020.d' every 10 u 1:2 w l title '20 from shot hz', \
+'hz1030.d' every 10 u 1:2 w l title '30 from shot hz'
 EOF
+
+
+# diffusive freqency
+gnuplot<<EOF
+set xlabel 'f[Hz]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'ex_wfrom_shot.eps'
+p 'EX_w1010.d' every 10 u 1:2 w l title '10 from shot ex_w', \
+'EX_w1020.d' every 10 u 1:2 w l title '20 from shot ex_w', \
+'EX_w1030.d' every 10 u 1:2 w l title '30 from shot ex_w'
+EOF
+
+gnuplot<<EOF
+set xlabel 'f[Hz]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'hz_wfrom_shot.eps'
+p 'HZ_w1010.d' every 10 u 1:2 w l title '10 from shot hz_w', \
+'HZ_w1020.d' every 10 u 1:2 w l title '20 from shot hz_w', \
+'HZ_w1030.d' every 10 u 1:2 w l title '30 from shot hz_w'
+EOF
+
+# diffusive time
+gnuplot<<EOF
+set xlabel 't[s]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'ex_tfrom_shot.eps'
+p 'EX_t1010.d' every 10 u 1:2 w l title '10 from shot ex_t', \
+'EX_t1020.d' every 10 u 1:2 w l title '20 from shot ex_t', \
+'EX_t1030.d' every 10 u 1:2 w l title '30 from shot ex_t'
+EOF
+
+# gnuplot<<EOF
+# set xlabel 't[s]'
+# set ylabel 'amp'
+# set term postscript enhanced color
+# set out 'hz_tfrom_shot.eps'
+# p 'HZ_t1010.d' every 10 u 1:2 w l title '10 from shot hz_t',\
+# 'HZ_t1020.d' every 10 u 1:2 w l title '20 from shot hz_t', \
+# 'HZ_t1030.d' every 10 u 1:2 w l title '30 from shot hz_t'
+# EOF
+
+
+
+
+# imaginary
+# ficticious  imaginary は ない
+# gnuplot<<EOF
+# set xlabel 't[s]'
+# set ylabel 'amp'
+# set term postscript enhanced color
+# set out 'eximag_from_shot.eps'
+# p 'ex1010.d' every 10 u 1:3 w l title '10 from shot ex imag', \
+# 'ex1020.d' every 10 u 1:3 w l title '20 from shot ex imag', \
+# 'ex1030.d' every 10 u 1:3 w l title '30 from shot ex imag'
+# EOF
+
+# gnuplot<<EOF
+# set xlabel 't[s]'
+# set ylabel 'amp'
+# set term postscript enhanced color
+# set out 'hzimag_from_shot.eps'
+# p 'hz1010.d' every 10 u 1:3 w l title '10 from shot hz imag',\
+# 'hz1020.d' every 10 u 1:3 w l title '20 from shot hz imag', \
+# 'hz1030.d' every 10 u 1:3 w l title '30 from shot hz imag'
+# EOF
+
+
+# diffusive freqency
+gnuplot<<EOF
+set xlabel 'f[Hz]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'eximag_wfrom_shot.eps'
+p 'EX_w1010.d' every 10 u 1:3 w l title '10 from shot ex_w imag', \
+'EX_w1020.d' every 10 u 1:3 w l title '20 from shot ex_w imag', \
+'EX_w1030.d' every 10 u 1:3 w l title '30 from shot ex_w imag'
+EOF
+
+gnuplot<<EOF
+set xlabel 'f[Hz]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'hzimag_wfrom_shot.eps'
+p 'HZ_w1010.d' every 10 u 1:3 w l title '10 from shot hz_w imag', \
+'HZ_w1020.d' every 10 u 1:3 w l title '20 from shot hz_w imag', \
+'HZ_w1030.d' every 10 u 1:3 w l title '30 from shot hz_w imag'
+EOF
+
+# diffusive time
+gnuplot<<EOF
+set xlabel 't[s]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'eximag_tfrom_shot.eps'
+p 'EX_t1010.d' every 10 u 1:3 w l title '10 from shot ex_t imag', \
+'EX_t1020.d' every 10 u 1:3 w l title '20 from shot ex_t imag', \
+'EX_t1030.d' every 10 u 1:3 w l title '30 from shot ex_t imag'
+EOF
+
+# gnuplot<<EOF
+# set xlabel 't[s]'
+# set ylabel 'amp'
+# set term postscript enhanced color
+# set out 'hzimag_tfrom_shot.eps'
+# p 'HZ_t1010.d' every 10 u 1:3 w l title '10 from shot hz_t imag',\
+# 'HZ_t1020.d' every 10 u 1:3 w l title '20 from shot hz_t imag', \
+# 'HZ_t1030.d' every 10 u 1:3 w l title '30 from shot hz_t imag'
+# EOF
+
+
 
 # gnuplot<<EOF
 # set xlabel 't[s]'

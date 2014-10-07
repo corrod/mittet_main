@@ -129,62 +129,45 @@ close(51)
 !/////////////////////////////////////////////////////////////////////////////////
 ! DFT開始 ficticious to diffusive freq
 !/////////////////////////////////////////////////////////////////////////////////
-	write(*,*) '*********************        DFT start       ********************'
+    write(*,*) '*********************        DFT start       ********************'
 
-!kとn逆かも注意
+
     om   = 2.d0*pi/dble(nd)/dt
 
-	Hz_w(0:nd-1) = 0.0d0
-	JZ_w(0:nd-1) = 0.0d0
-	GXh_w(0:nd-1) = 0.0d0
+    Hz_w(0:nd-1) = 0.0d0
+    JZ_w(0:nd-1) = 0.0d0
+    GXh_w(0:nd-1) = 0.0d0
 
-	do k=0,nd-1  !周波数用ループ
+    do k=0,nd-1  !周波数用ループ
     Hz_w(k) = 0.0d0
     JZ_w(k) = 0.0d0
-		do n=0,nd-1 !時間用ループ
+        do n=0,nd-1 !時間用ループ
 
         ! mittet(11)の係数参照
-! 		Hz_w(k) = Hz_w(k) &
-! 				+ sqrt( - 2.0d0*omega0/I_u/om/k ) * Hz_f(n) * dt &
-! 				* exp( sqrt(omega0*om*k) * (I_u - 1.0d0) * n )    !*dt
-
-!         Hz_w(k) = Hz_w(k) &
-!                 + sqrt( - 2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * Hz_f(n) * dt &
-!                 * exp( sqrt(omega0*om*k) * (I_u - 1.0d0) * n * dt)    !*dt
-        !ω=0 k = 0のときは？
         Hz_w(k) = Hz_w(k) &
                 + sqrt( - 2.0d0*omega0/I_u/om/k ) * Hz_f(n) * dt &
                 * exp( (I_u - 1.0d0) * sqrt(omega0*om*k) *  n*dt )
 
-        ! (11) from mittet J(x,omega) = J'(x,omega)
-!         JZ_w(k) = JZ_w(k) &
-!               + sqrt( -2.0d0*omega0/I_u/(2.0d0*pi*k/dble(nd)) ) * JZ_f(n) *dt &
-!               * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u-1.0d0) * n )    !*dt
+        ! (11) from mittet J(x,omega) = sqrt(-2*omega0/i*omega)*J'(x,omega)
 !         JZ_w(k) = JZ_w(k) &
 !               + sqrt( -2.0d0*omega0/I_u/om/k ) * JZ_f(n) *dt &
-!               * exp( sqrt(omega0*om*k) * (I_u-1.0d0) * n )    !*dt
+!               * exp( sqrt(omega0*om*k) * (I_u-1.0d0) * n*dt)
 
         ! (11) from mittet  K(x,omega) = K'(x,omega)　　　
-!         JZ_w(k) = JZ_w(k) &
-!                 + JZ_f(n) * dt &
-!                 * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u - 1.0d0) * n )
-
         JZ_w(k) = JZ_w(k) &
                 + JZ_f(n) * dt &
                 * exp( (I_u - 1.0d0) * sqrt(omega0*om*k) *  n*dt )
 
-!         inv_JZ_w(k) = 1.0d0 /(JZ_w(k) &
-!                 + JZ_f(n) * dt &
-!                 * exp( sqrt(2.0d0*pi*omega0*k/dble(nd)) * (I_u - 1.0d0) * n ))
-		enddo !n loop
+        enddo !n loop
 
 !         Hz_w(0) = 2.0d0 * omega0  !!! 　　　
 
-!  		JZ_w(0) = 2.0d0 * omega0  !!! 　　　
+        !(C-11)
+!       JZ_w(0) = 2.0d0 * omega0  !!! 　　　
 
-		GXh_w(k) = Hz_w(k) / JZ_w(k)  !JZ_w /= 0
+        GXh_w(k) = Hz_w(k) / JZ_w(k)  !JZ_w /= 0
 
-	enddo !k loop
+    enddo !k loop
 
 !///////////////////////////////////////////////////////////////////////////////
 ! output

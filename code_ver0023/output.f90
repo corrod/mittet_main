@@ -19,16 +19,16 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
     !hzレシーバー
     write(31,*) t, real(hz(x0,y0,z0+5)), aimag(hz(x0,y0,z0+5))  !hz1000.d
-    write(32,*) t, real(hz(x0+1,y0+1,z0+5)), aimag(hz(x0+1,y0+1,z0+5))  !hz1010.d
-    write(33,*) t, real(hz(x0+5,y0+5,z0+5)), aimag(hz(x0+5,y0+5,z0+5))  !hz1020.d
-    write(34,*) t, real(hz(x0+9,y0+9,z0+5)), aimag(hz(x0+9,y0+9,z0+5))  !hz1030.d
+    write(32,*) t, real(hz(x0+1,y0,z0+8)), aimag(hz(x0+1,y0,z0+8))  !hz1010.d
+    write(33,*) t, real(hz(x0+3,y0,z0+8)), aimag(hz(x0+3,y0,z0+8))  !hz1020.d
+    write(34,*) t, real(hz(x0+5,y0,z0+8)), aimag(hz(x0+5,y0,z0+8))  !hz1030.d
     write(35,*) t, real(hz(x0+13,y0+13,z0+5)), aimag(hz(x0+13,y0+13,z0+5))  !hz1030.d
     write(36,*) t, real(hz(x0+17,y0+17,z0+5)), aimag(hz(x0+17,y0+17,z0+5))  !hz1030.d
     !exレシーバー
     write(20,*) t, real(ex(x0,y0,z0)),    aimag(ex(x0,y0,z0))  !ex1000.d
-    write(21,*) t, real(ex(x0+1,y0,z0+5)), aimag(ex(x0+1,y0,z0+5)) !ex1010.d
-    write(22,*) t, real(ex(x0+10,y0,z0+5)), aimag(ex(x0+10,y0,z0+5)) !ex1020.d
-    write(23,*) t, real(ex(x0+15,y0,z0+5)), aimag(ex(x0+15,y0,z0+5)) !ex1030.d
+    write(21,*) t, real(ex(x0+1,y0,z0+8)), aimag(ex(x0+1,y0,z0+8)) !ex1010.d
+    write(22,*) t, real(ex(x0+3,y0,z0+8)), aimag(ex(x0+3,y0,z0+8)) !ex1020.d
+    write(23,*) t, real(ex(x0+5,y0,z0+8)), aimag(ex(x0+5,y0,z0+8)) !ex1030.d
 
     !対称性確認
     write(24,*) t, real(hz(x0-2,y0,z0+7)), aimag(hz(x0+2,y0,z0+7))  !hzleft1.d
