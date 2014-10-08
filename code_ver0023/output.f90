@@ -39,10 +39,6 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     write(29,*) t, real(hz(x0,y0,z0+7)), aimag(hz(x0+10,y0,z0+7))   !hzright3.d
 
 
-
-! 　　　
-! write(*,*) istep,t, real(ex(x0+5,y0,z0))
-
 !-----------------シェル用出力 MOVIE-------------------------------
     if (mod(istep,50)==0) then
    l=10000+istep/50

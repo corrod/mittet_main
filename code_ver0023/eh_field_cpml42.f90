@@ -5,8 +5,10 @@
 
 !///////////////////////////////////////////////////////////////////
 subroutine media_coeff
+
 	use const_para
 	implicit none
+
 		sigmax2 = 1.0d0!sig(1)
 		gradmax = 1.0d0!grad(1)
 		scaler = 0.01d0 * sigmax2/gradmax

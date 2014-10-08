@@ -8,7 +8,7 @@
 !
 !Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 !JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz ☓
-!JZ_f = signal(istep) 　
+!JZ_f = signal(istep) ◎
 !//////////////////////////////////////////////////////////////////////////
 program f_to_d_e
 	use const_para
@@ -154,9 +154,9 @@ write(*,*) 'nd : ', nd
 
         enddo !n loop
 
-      JZ_w(0) = 2.0d0 * omega0  !!!　
+    JZ_w(0) = 2.0d0 * omega0  !!!　
 
-        GXe_w(k) = EX_w(k) / JZ_w(k)  !JZ_w /= 0
+    GXe_w(k) = EX_w(k) / JZ_w(k)  !JZ_w /= 0
 
     enddo !k
 
@@ -217,16 +217,16 @@ write(*,*) 'nd : ', nd
         close(72)
 
 
-!　　　
-open(3,file='jtest.d')
-open(4,file='jtestabs.d')
-do k=0,nd-1
-J_test(k) = 2.0d0*omega0*exp(-sqrt(om*k*omega0)*pi/fmax)*exp(I_u*sqrt(om*k*omega0)*pi/fmax)*exp(-I_u*om*k*omega0/2.0d0/pi/fmax/fmax)
-write(3,*) om*k/2.0d0/pi, real(J_test(k)), aimag(J_test(k))
-write(4,*) om*k/2.0d0/pi, abs(J_test(k))
-enddo
-close(3)
-close(4)
+! !理論式J　
+! open(3,file='jtest.d')
+! open(4,file='jtestabs.d')
+! do k=0,nd-1
+! J_test(k) = 2.0d0*omega0*exp(-sqrt(om*k*omega0)*pi/fmax)*exp(I_u*sqrt(om*k*omega0)*pi/fmax)*exp(-I_u*om*k*omega0/2.0d0/pi/fmax/fmax)
+! write(3,*) om*k/2.0d0/pi, real(J_test(k)), aimag(J_test(k))
+! write(4,*) om*k/2.0d0/pi, abs(J_test(k))
+! enddo
+! close(3)
+! close(4)
 
 
 

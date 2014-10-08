@@ -7,7 +7,7 @@
 !JZ_w GXh_w ひとつめNAN  >> JZ(0) =2omega_0 　
 !Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 !JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz☓
-!JZ_f = signal(istep) 　
+!JZ_f = signal(istep) ◎
 !
 !fwi3d_cpm_function 行1430~参照
 !//////////////////////////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ close(51)
         !(C-11)
 !       JZ_w(0) = 2.0d0 * omega0  !!! 　　　
 
-        GXh_w(k) = Hz_w(k) / JZ_w(k)  !JZ_w /= 0
+    GXh_w(k) = Hz_w(k) / JZ_w(k)  !JZ_w /= 0
 
     enddo !k loop
 
