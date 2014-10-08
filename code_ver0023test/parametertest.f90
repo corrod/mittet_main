@@ -16,13 +16,11 @@ module const_para
     implicit none
 
     integer :: i, j, k
-    integer, parameter :: nstep = 4096!2500!1000 !2000 総タイムステップ数 　
-    integer, parameter :: nx=91, ny=91, nz=91 !nx = 61, ny = 61, nz = 61!グリッド数 奇数　
-    real(8), parameter :: dx = 9.0d-3, dy=dx, dz=dx !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　
-!     real(8), parameter :: dt = 1.870d-6!3.00d-7 !タイムステップ長 s 　
-!     real(8), parameter :: dx = 1.480d-2, dy=dx, dz=dx !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　
-!     real(8), parameter :: dt = 3.00d-6!3.00d-7 !タイムステップ長 s 　
-    real(8), parameter :: fmax = 1.0d3!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数 　
+    integer, parameter :: nstep = 454!2500!1000 !2000 総タイムステップ数 　
+    integer, parameter :: nx=101, ny=101, nz=101 !nx = 61, ny = 61, nz = 61!グリッド数 奇数　
+    real(8), parameter :: dx = 13.0d0, dy=dx, dz=dx!9.0d-3,dy=9.0d-3,dz=9.0d-3 !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　
+    real(8), parameter :: dt = 2.6d-3 !3.00d-7 !タイムステップ長 s 　
+    real(8), parameter :: fmax = 12.5d0!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数 　
     integer, parameter :: x0 = (nx+1)/2, y0 = (ny+1)/2, z0 = (nz+1)/2 !送信源位置
     integer, parameter :: x1 = (nx+1)/2, y1 = (ny+1)/2, z1 = (nz+1)/2
     integer, parameter :: x2 = (nx+1)/2, y2 = (ny+1)/2, z2 = (nz+1)/2
@@ -30,30 +28,29 @@ module const_para
     integer, parameter :: x4 = (nx+1)/2, y4 = (ny+1)/2, z4 = (nz+1)/2
     integer, parameter :: x5 = (nx+1)/2, y5 = (ny+1)/2, z5 = (nz+1)/2
     integer, parameter :: ncpml = 10 !CPMLのgrid数
+        !     integer, parameter :: ln = 1 !operator half rength
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
     real(8), parameter :: f0 = 1.0d0 !f0が小さいとdtがでかくなる
     real(8), parameter :: omega0 = 2.0d0*pi*f0 !2πf0, !ω0
-
-    real(8), parameter :: Glim = 6.70d0 ! optimization sheme ln=2
-    real(8), parameter :: c1 = 1.14443d0,c2 = - 0.04886d0 !from optimization scheme
-!     real(8), parameter :: Glim = 10.4d0 ! Taylor expansion参 ln=2
-!     real(8), parameter  :: c1 = 1.125d0, c2 = - 0.04167d0 ! from taylor Expansion
-
+    real(8), parameter :: Glim = 10.4d0 ! Taylor expansion参 ln=2
+!     real(8), parameter :: Glim = 6.70d0 ! optimization sheme ln=2
+    real(8), parameter  :: c1 = 1.125d0, c2 = -0.04167d0 !pml4の係数 from taylor Expansion
+!     real(8), parameter  :: c1=1.14443d0,c2=-0.04886d0 !from optimization scheme
     complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
             !     real(8), parameter :: tau0     = 0.02d0!1.6d-4 !送信源出力時間
 
 !媒質パラメータ
 !conductivity 導電率
     real(8), parameter :: sigair = 0.0d0  !空気の導電率 S/m
-    real(8), parameter :: sigfe  = 1.0d3! 　　7.5d6  !1.03d7 !鉄の導電率 S/m
+    real(8), parameter :: sigfe  = 3.2d0! 　7.5d6  !1.03d7 !鉄の導電率 S/m
     real(8), parameter :: sigwa  = 3.2d0  !海水の導電率 S/m
     real(8), parameter :: sigmin = sigwa
     real(8), parameter :: sigmax = sigfe
 !permeability 透磁率
     real(8), parameter :: MU0      = 1.2566370614d-6 !真空の透磁率 H/m
     real(8), parameter :: myurair  = 1.0d0        !空気の比透磁率
-    real(8), parameter :: myurfe   = 1.0d0!　　         !鉄の比透磁率
-    real(8), parameter :: myurwa   = 0.999991d0     !海水の比透磁率
+    real(8), parameter :: myurfe   = 1.0d0!　         !鉄の比透磁率
+    real(8), parameter :: myurwa   = 1.0d0 !0.999991d0     !海水の比透磁率
     real(8), parameter :: myuair   = myurair * MU0 !空気の透磁率 H/m
     real(8), parameter :: myufe    = myurfe * MU0   !鉄の透磁率 H/m
     real(8), parameter :: myuwa    = myurwa * MU0   !鉄の透磁率 H/m
@@ -61,7 +58,7 @@ module const_para
     real(8), parameter :: epsi0    = 8.854d-12   !真空の誘電率F/m
     real(8), parameter :: epsirair = 1.0006d0  !空気の比誘電率
     real(8), parameter :: epsirfe  = 1.0d0     !鉄の比誘電率
-    real(8), parameter :: epsirwa  = 81.0d0      !海水の比誘電率
+    real(8), parameter :: epsirwa  = 1.0d0!81.0d0      !海水の比誘電率
     real(8), parameter :: epsiair  = epsirair * epsi0 !空気の比誘電率
     real(8), parameter :: epsife   = epsirfe * epsi0   !鉄の比誘電率
     real(8), parameter :: epsiwa   = epsirwa * epsi0   !海水の比誘電率
@@ -72,11 +69,9 @@ module const_para
 !伝播速度設定 cmax, cmin
     real(8), parameter :: CC = 2.997924580d0 !光速
     real(8), parameter :: cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
-    real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe) !myufe >> myuwa 　　
+    real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe) !myufe >> myuwa 　
     real(8), parameter :: cmax = cwa
     real(8), parameter :: cmin = cfe
-
-real(8) :: dt = 0.999d0*(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !タイムステップ長 s 　　　
 
 !mur 変数
     real(8) :: cxd, cxu, cxx

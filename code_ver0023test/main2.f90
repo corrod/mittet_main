@@ -81,7 +81,7 @@ do istep = 1, nstep !反復計算開始----------------------
 !     write(*,*) istep
 
     !入力波源の設定
-    call read_source_3d(istep,t,Hz,Je,Jh)
+    call read_source_3d(istep,t,ex,Je,Jh)
 !     call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
                     !     call read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
 !     call read_source_3d(istep,t,sig,myu,EX,Je,Jh)
@@ -92,7 +92,7 @@ do istep = 1, nstep !反復計算開始----------------------
 !     call Efield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,sig)
 
     !境界条件 CPML_E
-!     call CPML_E4(ex,ey,ez,hx,hy,hz)!,sig)!
+    call CPML_E4(ex,ey,ez,hx,hy,hz)!,sig)!
 !     call CPML_E2(ex,ey,ez,hx,hy,hz,sig)!
 !     call cerjan_e(ex,ey,ez) !!!だめ
 !     call cerjan2_e(ex,ey,ez)  !cerjanの吸収境界!!!ok
@@ -109,7 +109,7 @@ t = t + dt*0.5d0  !時間の更新--------------------------
 !     call Hfield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 
     !境界条件 CPML_H
-!     call CPML_H4(ex,ey,ez,hx,hy,hz)!,sig,myu)!,cmax)
+    call CPML_H4(ex,ey,ez,hx,hy,hz)!,sig,myu)!,cmax)
 !     call CPML_H2(ex,ey,ez,hx,hy,hz,sig,myu)!,cmax)
 !     call cerjan_h(hx,hy,hz) !!!だめ
 !     call cerjan2_h(hx,hy,hz) !!!ok

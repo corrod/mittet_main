@@ -8,7 +8,10 @@ subroutine confirm_parameter
 
     integer :: Nt1,Nt2,Nt3,Nt4
     real(8) :: S !タイムステップ数を求める際の係数
+!     real(8) :: cwa, cfe, cair
     real(8) :: courant
+!     real(8), intent(out) :: cmax
+!     real(8) :: cmin
     real(8) :: t_cal !計測時間
     real(8) :: dt2,dt4,dt_wh
     real(8) :: fmax_w !最大周波数（上限）

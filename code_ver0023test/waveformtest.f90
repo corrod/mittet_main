@@ -1,7 +1,7 @@
 !//////////////////////////////////////////////////////////////////////////
 ! 送信源の設定
 !/////////////////////////////////////////////////////////////////////////
-subroutine read_source_3d(istep,t,Hz,Je,Jh)
+subroutine read_source_3d(istep,t,ex,Je,Jh)
 ! subroutine read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
 
     use const_para
@@ -12,8 +12,9 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
     complex(kind(0d0))   :: signal(nstep)!1st derivatice gaussian
     complex(kind(0d0)), intent(out) :: Je(nstep)!電場ソース
     complex(kind(0d0)), intent(out) :: Jh(nstep)!磁場ソース
-!     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz)!電場ソース
-    complex(kind(0d0)), intent(inout) :: Hz(nx,ny,nz)!磁場ソース
+    complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz)!電場ソース
+!     complex(kind(0d0)), intent(inout) :: Hz(nx,ny,nz)!磁場ソース
+
     real(8)              :: etaxx(x0,y0,z0)
     real(8), parameter   :: t0 = pi/fmax
     real(8), parameter   :: beta = pi*(fmax**2)
@@ -22,7 +23,7 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
 
     !1st_derivative gaussian
      signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
-
+!     write(*,*) signal(istep) !　　　
     !sin波
     !signal(istep) = sin(2.0d0*pi*fmax*istep*dt)
 
@@ -31,12 +32,18 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
     etaxx(x0,y0,z0) = (2.0d0*omega0) / sig(x0,y0,z0)
     Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 
-!     Ex(x0,y0,z0) = Ex(x0,y0,z0) &
-!                     - dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
+    Ex(x0,y0,z0) = Ex(x0,y0,z0) &
+                     - dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 
+!     Ex(x0,y0,z0) = - dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
+
+
+!         Ex(x0-20,y0,z0) = Ex(x0-20,y0,z0) &
+!                      - dt*etaxx(x0-20,y0,z0)*signal(istep) /dx/dy/dz
+! write(*,*) etaxx(x0,y0,z0)
     !磁場ソースの設定
     Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz!　　　
-
+!     write(*,*) Jh(istep) !　　　
 
     !送信源位置の設定
 !     !ソース1
@@ -46,8 +53,8 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
 !     Hz(x0-2,y0,z0) = Hz(x0-2,y0,z0) &
 !                     - signal(istep)*dt / myu(x0-2,y0,z0) /dx/dy/dz!　　　
     !ソース３
-    Hz(x0,y0,z0+7) = Hz(x0,y0,z0+7) &
-                    - signal(istep)*dt / myu(x0,y0,z0+7) /dx/dy/dz!　　　
+!     Hz(x0,y0,z0+7) = Hz(x0-20,y0,z0) &
+!                     - signal(istep)*dt / myu(x0-20,y0,z0) /dx/dy/dz!　　　
 
     !ソース波形
     write(16,*) t, real(signal(istep)) , aimag(signal(istep))   !signal.d

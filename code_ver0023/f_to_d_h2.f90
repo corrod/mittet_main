@@ -1,17 +1,14 @@
 !///////////////////////////////////////////////////////////////////////////////
-!conjugate version
+!conjugate version     H
 !////////////////////////////////////////////////////////////////////////////
 ! ficticious H'(t') to diffusive frequency domain H(ω), using DFT, FFT
 ! frequency green function GXh_w(ω)
-! DFT
-! DFT後の横軸 2*pi*k/nd は間違ってるかも /dt必要?
-! DFTの際にdt'幅かける必要あるかも
-! taper間違ってるかも 要確認
+!
 !JZ_w GXh_w ひとつめNAN  >> JZ(0) =2omega_0 　
-!n> dt*n ?
 !Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 !JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
 !としているが、JZ_f = signal(istep) かもしれない
+!
 !fwi3d_cpm_function 行1430~参照
 !//////////////////////////////////////////////////////////////////////////
 program f_to_d_h
@@ -26,7 +23,7 @@ program f_to_d_h
 	integer :: n !, l
 	complex(kind(0d0)),allocatable ::Hz_w(:) !Hz_w(0:nd-1) !周波数領域のHz
 	complex(kind(0d0)),allocatable ::Hz_f(:) !Hz_f(0:nd-1) !ficticiousのH'z
-	complex(kind(0d0)),allocatable ::JZ_w(:) !JZ_w(0:nd-1) !ficticiousのJ'x
+	complex(kind(0d0)),allocatable ::JZ_w(:) !JZ_w(0:nd-1) !diffusiveのJz
 	complex(kind(0d0)),allocatable ::JZ_f(:) !JZ_f(0:nd-1)
 	complex(kind(0d0)),allocatable ::GXh_w(:) !GXh_w(0:nd-1) !diffusive domain Green's function
     complex(kind(0d0)),allocatable :: inv_JZ_w(:)
@@ -347,15 +344,16 @@ nd = nd * 2
     open(84,file='absHZ_t.dat')
     open(85,file='absJZ_t.dat')
     open(86,file='absGXh_t.dat')
+
 	do n=1,nd
-        !スケール
-! 		out1(n) = out1(n)/nd/dt*2.0d0 !H
-! 		out2(n) = out2(n)/nd/dt*2.0d0 !J
-! 		out3(n) = out3(n)/nd/dt*2.0d0 !G
-        !スケール /nd 　　　
+        !スケール /nd/dt*2.0d0 　　　
         out1(n) = out1(n)/nd/dt *2.0d0
         out2(n) = out2(n)/nd/dt *2.0d0
         out3(n) = out3(n)/nd/dt *2.0d0
+         !スケール / nd 　　　
+!         out1(n) = out1(n)/nd !E
+!         out2(n) = out2(n)/nd !J
+!         out3(n) = out3(n)/nd !GX_t
 
 		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
 		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
@@ -377,6 +375,12 @@ nd = nd * 2
 	deallocate( in1,in2,in3,out1,out2,out3,Hz_t,JZ_t,GXh_t )
 
 end program f_to_d_h
+
+
+
+
+
+
 
 
 
@@ -431,77 +435,6 @@ end program f_to_d_h
 
 
 
-
-
-
-
-
-
-
-
-
-
-! subroutine convolution_GJ_to_E
-! 	use condt_para
-! 	implicit none
-! 		complex(kind(0d0)) :: in_G
-! 		complex(kind(0d0)) :: in_J
-! 		complex(kind(0d0)) :: in_EF
-! 		complex(kind(0d0)) :: out_G
-! 		complex(kind(0d0)) :: out_J
-! 		complex(kind(0d0)) :: out_ET
-
-! end subroutine convolution_GJ_to_E
-
-
-
-
-! !!by k
-! subroutine f_to_d_matrix
-! 	use condt_para
-! 	implicit none
-! 		integer :: s !sampling number 2**○
-! 		do j=1,s
-! 			do k=1,s
-! 				A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ) )   *exp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ))
-! 			enddo
-! 		enddo
-! end subroutine f_to_d_matrix
-
-! !by i
-! subroutine laplace_fft
-! 	use condt_para
-! 	implicit none
-! 		integer :: n
-! 		integer :: it
-! ! 		integer :: istep!!
-! 		real(8) :: om
-! 		complex(kind(0d0)) :: Hz_w(ndtep)
-! 		complex(kind(0d0)) :: JZ_w(ndtep)
-! 		complex(kind(0d0)) :: GXh_w(ndtep)
-
-! 		om =2.0d0*pi/it/dt
-! ! 		om =2.0d0*pi/ndtep/dt
-! ! 		om =2.0d0*pi/istep/dt
-! 		t0=pi/fmax_w
-! 		beta=pi*fmax**2.0d0
-
-
-! 	do n=1,it  !what's it? !0~? 1~?
-
-! 		do k=1,it
-! 			EX_w(n) = EX_w(n) &
-! 					 + EX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
-
-! 			JZ_w(n) = JZ_w(n) &
-! 					+ sqrt(-2.0d0*omega0/I_u/om/dble(n)) * JZ_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
-! 		enddo
-! 			JZ_w(0) = 2.0d0 * omega0  !!!要確認
-
-! 			GXh_w(n) = EX_w(n) / JZ_w(n)
-
-! 	enddo
-! end subroutine laplace_fft
 
 
 

@@ -1,11 +1,14 @@
 !///////////////////////////////////////////////////////////////////////////
-!conjugate version     E
-!///////////////////////////////////////////////////////////////////////////
+!conjugate version
+!////////////////////////////////////////////////////////////////////////////
 ! ficticious E'(t') to diffusive frequency domain E(ω), using DFT, FFT
 ! frequency green function GXe_w(ω)
-!
+! DFT
+! DFT後の横軸 2*pi*k/nd は間違ってるかも /dt必要?
+! DFTの際にdt'幅かける必要あるかも
+! taper間違ってるかも 要確認
 !JZ_w GXe_w ひとつめNAN  >> JZ(0) =2omega_0 　
-!
+!n> dt*n ?
 !Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 !JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
 !としているが、JZ_f = signal(istep) かもしれない
@@ -338,16 +341,16 @@ write(*,*) '(nd-1)*2', nd
     open(84,file='absEX_t.dat')
     open(85,file='absJZ_t.dat')
     open(86,file='absGXe_t.dat')
-
 	do n=1,nd
-        !スケール / nd/dt *2.0d0 　
+!     do n=1,nd-1　　　
+        !スケール
+! 		out1(n) = out1(n)/nd/dt*2.0d0 !E
+! 		out2(n) = out2(n)/nd/dt*2.0d0 !J
+! 		out3(n) = out3(n)/nd/dt*2.0d0 !GX_t
+        !スケール / nd 　　　
         out1(n) = out1(n)/nd/dt *2.0d0!E
         out2(n) = out2(n)/nd/dt *2.0d0!J
         out3(n) = out3(n)/nd/dt *2.0d0!GX_t
-        !スケール / nd 　
-!         out1(n) = out1(n)/nd !E
-!         out2(n) = out2(n)/nd !J
-!         out3(n) = out3(n)/nd !GX_t
 
         GXe_t(n) = out3(n)
 
@@ -429,6 +432,103 @@ end program f_to_d_e
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+! subroutine convolution_GJ_to_E
+! 	use const_para
+! 	implicit none
+! 		complex(kind(0d0)) :: in_G
+! 		complex(kind(0d0)) :: in_J
+! 		complex(kind(0d0)) :: in_EF
+! 		complex(kind(0d0)) :: out_G
+! 		complex(kind(0d0)) :: out_J
+! 		complex(kind(0d0)) :: out_ET
+
+! end subroutine convolution_GJ_to_E
+
+
+
+
+! !!by k
+! subroutine f_to_d_matrix
+! 	use const_para
+! 	implicit none
+! 		integer :: s !sampling number 2**○
+! 		do j=1,s
+! 			do k=1,s
+! 				A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ) )   *exp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ))
+! 			enddo
+! 		enddo
+! end subroutine f_to_d_matrix
+
+! !by i
+! subroutine laplace_fft
+! 	use const_para
+! 	implicit none
+! 		integer :: n
+! 		integer :: it
+! ! 		integer :: istep!!
+! 		real(8) :: om
+! 		complex(kind(0d0)) :: Ex_w(nstep)
+! 		complex(kind(0d0)) :: JZ_w(nstep)
+! 		complex(kind(0d0)) :: GXe_w(nstep)
+
+! 		om =2.0d0*pi/it/dt
+! ! 		om =2.0d0*pi/nstep/dt
+! ! 		om =2.0d0*pi/istep/dt
+! 		t0=pi/fmax_w
+! 		beta=pi*fmax**2.0d0
+
+
+! 	do n=1,it  !what's it? !0~? 1~?
+
+! 		do k=1,it
+! 			EX_w(n) = EX_w(n) &
+! 					 + EX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
+
+! 			JZ_w(n) = JZ_w(n) &
+! 					+ sqrt(-2.0d0*omega0/I_u/om/dble(n)) * JZ_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
+! 		enddo
+! 			JZ_w(0) = 2.0d0 * omega0  !!!要確認
+
+! 			GXe_w(n) = EX_w(n) / JZ_w(n)
+
+! 	enddo
+! end subroutine laplace_fft
 
 
 

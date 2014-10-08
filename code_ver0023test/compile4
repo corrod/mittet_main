@@ -5,8 +5,9 @@ date
  export OMP_NUM_THREADS=5
 
 #構造改革
-ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 main2.f90 # -check all -CB -traceback -g -r8
+# ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 cerjan.f90 main2.f90 # -check all -CB -traceback -g -r8
 
+ifort -parallel -o ficticious_fwi_cpml parametertest.f90 set_condition.f90 waveformtest.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 cerjan.f90 main2.f90 # -check all -CB -traceback -g -r8
 
 
 

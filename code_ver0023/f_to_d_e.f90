@@ -1,12 +1,11 @@
 !///////////////////////////////////////////////////////////////////////////
+!conjugate なし version     E
+!///////////////////////////////////////////////////////////////////////////
 ! ficticious E'(t') to diffusive frequency domain E(ω), using DFT, FFT
 ! frequency green function GXe_w(ω)
-! DFT
-! DFT後の横軸 2*pi*k/nd は間違ってるかも /dt必要?
-! DFTの際にdt'幅かける必要あるかも
-! taper間違ってるかも 要確認
+!
 !JZ_w GXe_w ひとつめNAN  >> JZ(0) =2omega_0 　
-!n> dt*n ?
+!
 !Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 !JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
 !としているが、JZ_f = signal(istep) かもしれない
@@ -23,7 +22,7 @@ program f_to_d_e
 	integer :: n !, l
 	complex(kind(0d0)),allocatable ::EX_w(:) !EX_w(0:nd-1) !周波数領域のEx
 	complex(kind(0d0)),allocatable ::EX_f(:) !EX_f(0:nd-1) !ficticiousのE'x
-	complex(kind(0d0)),allocatable ::JZ_w(:) !JZ_w(0:nd-1) !ficticiousのJ'x
+	complex(kind(0d0)),allocatable ::JZ_w(:) !JZ_w(0:nd-1) !diffusiveのJ'x
 	complex(kind(0d0)),allocatable ::JZ_f(:) !JZ_f(0:nd-1)
 	complex(kind(0d0)),allocatable ::GXe_w(:) !GXe_w(0:nd-1) !diffusive domain Green's function
 	character(3) :: name
@@ -56,15 +55,12 @@ include 'fftw3.f'
     allocate(t1(0:nd-1),inp1_r(0:nd-1),inp1_i(0:nd-1),t2(0:nd-1),inp2_r(0:nd-1),inp2_i(0:nd-1))
     allocate(w(0:nd-1),EX_w(0:nd-1),EX_f(0:nd-1),JZ_w(0:nd-1),JZ_f(0:nd-1),GXe_w(0:nd-1))
 
-	allocate( EX_t(0:nd-1),JZ_t(0:nd-1),GXe_t(0:nd-1) )
-	allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
-	allocate( out1(0:nd-1), out2(0:nd-1), out3(0:nd-1) )
 
      !DFTするEXデータの読み込み
     open(51,file='inp1.dat',action='read')
       do i=0,nd-1
-	    read(51,*) t1(i), inp1_r(i), inp1_i(i)
-	  EX_f(i) = inp1_r(i) + (0.0d0,1.0d0)*inp1_i(i)
+        read(51,*) t1(i), inp1_r(i), inp1_i(i)
+      EX_f(i) = inp1_r(i) + (0.0d0,1.0d0)*inp1_i(i)
       enddo
     close(51)
 
@@ -75,31 +71,31 @@ include 'fftw3.f'
 !///////////////////////////////////////////////////////////////////////////
 !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
 ! !     call window_hanning(nd,w) !hanning 両端が0になる窓
-! 		!taper かけて
-! 	    do i=0,nd-1
-! 	    	write(8,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かける前
-! 	    Ex_f(i) = Ex_f(i) * w(i)
-! 	    	write(9,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かけた後
-! 		enddo
+!       !taper かけて
+!       do i=0,nd-1
+!           write(8,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かける前
+!       Ex_f(i) = Ex_f(i) * w(i)
+!           write(9,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かけた後
+!       enddo
 
 !/////////////////////////////////////////////////////////////////////////////
 ! データの読み込み JZ_f
 !/////////////////////////////////////////////////////////////////////////////
-	!JZファイル（データ）の長さNDを調べる------------------------------------
+    !JZファイル（データ）の長さNDを調べる------------------------------------
     open(51,file='inp2.dat',action='read')
       nd=0
-	    do
-	        read(51,'(f12.0)',iostat=ios)
-	        if (ios<0) exit !ファイルの末尾にきたらループを抜ける
-	         nd=nd+1
-	    enddo
+        do
+            read(51,'(f12.0)',iostat=ios)
+            if (ios<0) exit !ファイルの末尾にきたらループを抜ける
+             nd=nd+1
+        enddo
     close(51)
 
      !DFTするJZデータの読み込み
     open(51,file='inp2.dat',action='read')
       do i=0,nd-1
-	      read(51,*) t2(i), inp2_r(i), inp2_i(i)
-	  JZ_f(i) = inp2_r(i) + (0.0d0,1.0d0)*inp2_i(i)
+          read(51,*) t2(i), inp2_r(i), inp2_i(i)
+      JZ_f(i) = inp2_r(i) + (0.0d0,1.0d0)*inp2_i(i)
       enddo
     close(51)
 
@@ -108,15 +104,15 @@ include 'fftw3.f'
 !///////////////////////////////////////////////////////////////////////////
 !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
 ! !     call window_hanning(nd,w) !hanning 両端が0になる窓
-! 		do i=0,nd-1
-! 	    write(7,*) w(i)
-! 	    enddo
-! 	!taper かけて
-! 	    do i=0,nd-1
-! 			write(10,*) i*dt,real(JZ_f(i)),aimag(JZ_f(i))!かける前出力
-! 	    JZ_f(i) = JZ_f(i) * w(i)
-! 		    write(11,*) i*dt,real(JZ_f(i)),aimag(JZ_f(i))!かけた後出力
-! 		enddo
+!       do i=0,nd-1
+!       write(7,*) w(i)
+!       enddo
+!   !taper かけて
+!       do i=0,nd-1
+!           write(10,*) i*dt,real(JZ_f(i)),aimag(JZ_f(i))!かける前出力
+!       JZ_f(i) = JZ_f(i) * w(i)
+!           write(11,*) i*dt,real(JZ_f(i)),aimag(JZ_f(i))!かけた後出力
+!       enddo
 
 
 
@@ -164,31 +160,31 @@ include 'fftw3.f'
 !///////////////////////////////////////////////////////////////////////////////
 ! output
 !//////////////////////////////////////////////////////////////////////////////
-! 		write(name,'(I3)') l  受信点位置とかがいいかも
-		!ある点での周波数領域EX_w
-! 		open(50,file='EX_w'//name/'.d')
-		open(60,file='out1.dat')
-		do k=0,nd-1
-			write(60,*) k*om/2.0d0/pi, real(EX_w(k)),aimag(EX_w(k))   !!!横軸周波数の書き方違うかも
-		enddo
-		close(60)
+!       write(name,'(I3)') l  受信点位置とかがいいかも
+        !ある点での周波数領域EX_w
+!       open(50,file='EX_w'//name/'.d')
+        open(60,file='out1.dat')
+        do k=0,nd-1
+            write(60,*) k*om/2.0d0/pi, real(EX_w(k)),aimag(EX_w(k))   !!!横軸周波数の書き方違うかも
+        enddo
+        close(60)
 
-		!ある点での周波数領域JZ_w
-! 		open(61,file='JZ_w'//name/'.d')
-		open(61,file='out2.dat')
-		do k=0,nd-1
-			write(61,*) k*om/2.0d0/pi, real(JZ_w(k)),aimag(JZ_w(k))
-		enddo
-		close(61)
+        !ある点での周波数領域JZ_w
+!       open(61,file='JZ_w'//name/'.d')
+        open(61,file='out2.dat')
+        do k=0,nd-1
+            write(61,*) k*om/2.0d0/pi, real(JZ_w(k)),aimag(JZ_w(k))
+        enddo
+        close(61)
 
 
-		!ある点での周波数領域グリーン関数
-! 		open(62,file='GXe_w'//name/'.d')
-		open(62,file='out3.dat')
-		do k=0,nd-1
-			write(62,*) k*om/2.0d0/pi, real(GXe_w(k)),aimag(GXe_w(k))
-		enddo
-		close(62)
+        !ある点での周波数領域グリーン関数
+!       open(62,file='GXe_w'//name/'.d')
+        open(62,file='out3.dat')
+        do k=0,nd-1
+            write(62,*) k*om/2.0d0/pi, real(GXe_w(k)),aimag(GXe_w(k))
+        enddo
+        close(62)
 
 
 
@@ -239,21 +235,25 @@ include 'fftw3.f'
 ! IFFT    Frequency to time transformation   JZ_w,EX_w,GXe_w to JZ_t,EX_t,GXe_t
 !
 !/////////////////////////////////////////////////////////////////////////////////
-	write(*,*) '********************        IFFT start       ********************'
+    write(*,*) '********************        IFFT start       ********************'
 
-	EX_t(0:nd-1) = 0.0d0
-	JZ_t(0:nd-1) = 0.0d0
-	GXe_t(0:nd-1) = 0.0d0
-	out1(0:nd-1) = 0.0d0
-	out2(0:nd-1) = 0.0d0
-	out3(0:nd-1) = 0.0d0
+	allocate( EX_t(0:nd-1),JZ_t(0:nd-1),GXe_t(0:nd-1) )
+	allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
+	allocate( out1(0:nd-1), out2(0:nd-1), out3(0:nd-1) )
 
-	do k=0,nd-1
+    EX_t(0:nd-1) = 0.0d0
+    JZ_t(0:nd-1) = 0.0d0
+    GXe_t(0:nd-1) = 0.0d0
+    out1(0:nd-1) = 0.0d0
+    out2(0:nd-1) = 0.0d0
+    out3(0:nd-1) = 0.0d0
+
+    do k=0,nd-1
 !     do j=1,nd-1　　　
-		in1(k) = Ex_w(k)
-		in2(k) = JZ_w(k)
-		in3(k) = GXe_w(k)
-	enddo
+        in1(k) = Ex_w(k)
+        in2(k) = JZ_w(k)
+        in3(k) = GXe_w(k)
+    enddo
 
 !////////////////////////////////////////////////////////////////////////////
 ! in1,in2,in3 に窓関数をかける hamming window
@@ -275,9 +275,9 @@ include 'fftw3.f'
 ! make plans
 !      FFTW_FORWARD (-1) or FFTW_BACKWARD (+1)
 !////////////////////////////////////////////////////////////
-	call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,FFTW_ESTIMATE) !complex array入力
-	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,FFTW_ESTIMATE)
-	call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,FFTW_ESTIMATE)
+    call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,FFTW_ESTIMATE) !complex array入力
+    call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,FFTW_ESTIMATE)
+    call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,FFTW_ESTIMATE)
 
 !     call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_FORWARD,FFTW_ESTIMATE) !complex array入力
 !     call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_FORWARD,FFTW_ESTIMATE)
