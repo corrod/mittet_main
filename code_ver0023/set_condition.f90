@@ -10,7 +10,7 @@ subroutine confirm_parameter
     real(8) :: S !タイムステップ数を求める際の係数
     real(8) :: courant
     real(8) :: t_cal !計測時間
-    real(8) :: dt2,dt4,dt_wh
+    real(8) :: fourier_dt,dt_wh,taylor_dt,optimized_dt
     real(8) :: fmax_w !最大周波数（上限）
     real(8) :: dt_ideal !クーラン条件を満たすdt
     real(8) :: cfl_limit
@@ -84,45 +84,56 @@ endif
 
 !!! dt タイムステップdtの計算;クーラン条件!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  !クーラン条件
-    !standard 2nd order space schme
-    dt2 = dx/(3.0d0*0.5d0)/cmax
-    !fourth order scheme with taylor operator
-    dt4 = (2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !こっちのほうがぽい
-    !参照不明
-    courant = 1.0d0/cmax/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0)
-    dt_ideal = courant*0.999d0!6.0d0/7.0d0*0.999d0        !デカすぎ
-    !Wang and Hohman
-    dt_wh = 0.15d0 * sqrt(MU0*sigmin)  !myuの値max min どちらに合わせる？
-    if(dt>dt4) then
-    write(*,*) '****************courant 条件確認!! ********************************'
+
+
+
+    taylor_dt = dx/cmax/sqrt(3.0d0)/1.16667d0
+    optimized_dt = dx/cmax/sqrt(3.0d0)/1.19329d0
+    fourier_dt = (2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !fourier limit
+!     courant = 1.0d0/cmax/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0)
+!     !Wang and Hohman
+!     dt_wh = 0.15d0 * sqrt(MU0*sigmin)  !myuの値max min どちらに合わせる？
+    if(dt>taylor_dt) then
+    write(*,*) '****************taylor limit is violated *************************'
     endif
-    write(*,*) '# dt mittet :', (1.0d0/sqrt(3.0d0)) * dx / cmax
-    write(*,*) '# courant 2nd order scheme with taylor operator dt2', dt2!,&
-    !dx/(3.0d0*0.5d0)/cmin
-    write(*,*) '# courant 4th order scheme with taylor operator dt4', dt4!, &
-    !(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmin)
-    write(*,*) '# courant dt (courant*6.0d0/7.0d0*0.999d0)', dt_ideal!,&
-!     1.0d0/cmin/sqrt(1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0)*6.0/7.0/0.999d0
-!     write(*,*) '# courant Wang and Hohman dt_wh', dt_wh, 0.15d0 * sqrt(MU0*sigmax)
+    if(dt>optimized_dt) then
+    write(*,*) '****************optimized limit is violated *************************'
+    endif
+    if(dt>fourier_dt) then
+    write(*,*) '****************fourier limit is violated *************************'
+    endif
+
+     if(dt<=taylor_dt) then
+    write(*,*) '****************taylor limit is ok *************************'
+    endif
+    if(dt<=optimized_dt) then
+    write(*,*) '****************optimized limit is ok *************************'
+    endif
+    if(dt<=fourier_dt) then
+    write(*,*) '****************fourier limit is ok *************************'
+    endif
+    write(*,*) '# taylor dt:', taylor_dt
+    write(*,*) '# optimized dt:', optimized_dt
+    write(*,*) '# Fourier limit dt: ', fourier_dt
+
 
 
 
 
 !CFL limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    cfl_limit = cmax*dt/dx*(3.0d0**0.5d0)
-    if(cfl_limit>1) then
-        write(*,*) '***************CFL limit is violated*****************'
-    endif
+!     cfl_limit = cmax*dt/dx*(3.0d0**0.5d0)
+!     if(cfl_limit>1) then
+!         write(*,*) '***************CFL limit is violated*****************'
+!     endif
 
 
 !Fourier limit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    fourier_limit = cmax*dt/dx*pi/2.0d0*(3.0d0**0.5d0)
-    if(fourier_limit>1) then
-        write(*,*) '************Fourier limit is violated*******************'
-    endif
+!     fourier_limit = cmax*dt/dx*pi/2.0d0*(3.0d0**0.5d0)
+!     if(fourier_limit>1) then
+!         write(*,*) '************Fourier limit is violated*******************'
+!     endif
 
 
 !!!the number of timestep :nstepの計算!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

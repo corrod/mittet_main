@@ -7,8 +7,8 @@
 !JZ_w GXe_w ひとつめNAN  >> JZ(0) =2omega_0 　
 !
 !Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
-!JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
-!としているが、JZ_f = signal(istep) かもしれない
+!JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz ☓
+!JZ_f = signal(istep) 　
 !//////////////////////////////////////////////////////////////////////////
 program f_to_d_e
 	use const_para
@@ -25,6 +25,7 @@ program f_to_d_e
 	complex(kind(0d0)),allocatable ::JZ_w(:) !JZ_w(0:nd-1) !ficticiousのJ'x
 	complex(kind(0d0)),allocatable ::JZ_f(:) !JZ_f(0:nd-1)
 	complex(kind(0d0)),allocatable ::GXe_w(:) !GXe_w(0:nd-1) !diffusive domain Green's function
+    complex(kind(0d0)),allocatable :: J_test(:)
 	character(3) :: name
 	!IDFT, IFFT用
 	complex(kind(0d0)),allocatable :: EX_t(:), JZ_t(:), GXe_t(:)
@@ -54,6 +55,9 @@ include 'fftw3.f'
 !///////////////////////////////////////////////////////////////////////////////
     allocate(t1(0:nd-1),inp1_r(0:nd-1),inp1_i(0:nd-1),t2(0:nd-1),inp2_r(0:nd-1),inp2_i(0:nd-1))
     allocate(w(0:nd-1),EX_w(0:nd-1),EX_f(0:nd-1),JZ_w(0:nd-1),JZ_f(0:nd-1),GXe_w(0:nd-1))
+
+    allocate(J_test(0:nd-1))!　
+
 write(*,*) 'nd : ', nd
 
      !DFTするEXデータの読み込み
@@ -119,7 +123,7 @@ write(*,*) 'nd : ', nd
 !/////////////////////////////////////////////////////////////////////////////////
 ! DFT開始 ficticious to diffusive freq
 !/////////////////////////////////////////////////////////////////////////////////
-    write(*,*) '*********************        DFT start       ********************'
+    write(*,*) '*********************       DFT start       ********************'
 
     om   = 2.d0*pi/dble(nd)/dt
 
@@ -139,22 +143,22 @@ write(*,*) 'nd : ', nd
                 * exp( (I_u-1.0d0) * sqrt(omega0*om*k) * n*dt )
 
         ! (11) from mittet J(x,omega) = J'(x,omega)
-!       JZ_w(k) = JZ_w(k) &
-!               + sqrt( -2.0d0*omega0/I_u/om/k ) * JZ_f(n) *dt &
-!               * exp( sqrt(omega0*om*k) * (I_u-1.0d0) * n *dt)
+        JZ_w(k) = JZ_w(k) &
+                + sqrt( -2.0d0*omega0/I_u/om/k ) * JZ_f(n) *dt &
+                * exp( sqrt(omega0*om*k) * (I_u-1.0d0) * n *dt)
 
         ! (11) from mittet  K(x,omega) = K'(x,omega)　
-        JZ_w(k) = JZ_w(k) &
-                + JZ_f(n) * dt &
-                * exp( (I_u-1.0d0) * sqrt(omega0*om*k) * n*dt )
+!         JZ_w(k) = JZ_w(k) &
+!                 + JZ_f(n) * dt &
+!                 * exp( (I_u-1.0d0) * sqrt(omega0*om*k) * n*dt )
 
         enddo !n loop
 
-!       JZ_w(0) = 2.0d0 * omega0  !!!　
+      JZ_w(0) = 2.0d0 * omega0  !!!　
 
         GXe_w(k) = EX_w(k) / JZ_w(k)  !JZ_w /= 0
 
-    enddo !k loop
+    enddo !k
 
 
 !///////////////////////////////////////////////////////////////////////////////
@@ -211,6 +215,18 @@ write(*,*) 'nd : ', nd
             write(72,*) k*om/2.0d0/pi, abs(GXe_w(K))
         enddo
         close(72)
+
+
+!　　　
+open(3,file='jtest.d')
+open(4,file='jtestabs.d')
+do k=0,nd-1
+J_test(k) = 2.0d0*omega0*exp(-sqrt(om*k*omega0)*pi/fmax)*exp(I_u*sqrt(om*k*omega0)*pi/fmax)*exp(-I_u*om*k*omega0/2.0d0/pi/fmax/fmax)
+write(3,*) om*k/2.0d0/pi, real(J_test(k)), aimag(J_test(k))
+write(4,*) om*k/2.0d0/pi, abs(J_test(k))
+enddo
+close(3)
+close(4)
 
 
 
@@ -369,7 +385,7 @@ write(*,*) '(nd-1)*2', nd
 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JZ_w,JZ_f,GXe_w )
 	deallocate( in1,in2,in3,out1,out2,out3,EX_t,JZ_t,GXe_t )
 
-
+    deallocate( J_test) !　
 
 end program f_to_d_e
 

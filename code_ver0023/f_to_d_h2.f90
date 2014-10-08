@@ -6,8 +6,8 @@
 !
 !JZ_w GXh_w ひとつめNAN  >> JZ(0) =2omega_0 　
 !Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
-!JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
-!としているが、JZ_f = signal(istep) かもしれない
+!JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz☓
+!JZ_f = signal(istep) 　
 !
 !fwi3d_cpm_function 行1430~参照
 !//////////////////////////////////////////////////////////////////////////

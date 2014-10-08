@@ -21,7 +21,7 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
     !入射波形の設定
 
     !1st_derivative gaussian
-     signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
+     signal(istep) = - (2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
 
     !sin波
     !signal(istep) = sin(2.0d0*pi*fmax*istep*dt)

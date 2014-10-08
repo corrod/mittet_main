@@ -1,4 +1,7 @@
 !!!初期値/モデル設定,変数定義!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!  optimization sheme ln=2
+!  from optimization scheme
+!
 !   omega0=2πf0
 !   f0=1,0Hz
 !   sigwa=3.2S/m
@@ -9,7 +12,6 @@
 !   J'(x,omega')=sqrt(-iomega/2omega0)J(x,omega)
 !   K'(x,omega')=K(x,omega)
 !
-!sigmax,sigmmin,cmax,cmin = waterにしている
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 module const_para
@@ -31,15 +33,16 @@ module const_para
     integer, parameter :: x5 = (nx+1)/2, y5 = (ny+1)/2, z5 = (nz+1)/2
     integer, parameter :: ncpml = 10 !CPMLのgrid数
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
+    complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
     real(8), parameter :: f0 = 1.0d0 !f0が小さいとdtがでかくなる
     real(8), parameter :: omega0 = 2.0d0*pi*f0 !2πf0, !ω0
+    !optimized L=2
+    real(8), parameter :: Glim = 6.70d0
+    real(8), parameter :: c1 = 1.14443d0,c2 = - 0.04886d0
+    !taylor L=2
+!     real(8), parameter :: Glim = 10.4d0
+!     real(8), parameter  :: c1 = 1.125d0, c2 = - 0.04167d0
 
-    real(8), parameter :: Glim = 6.70d0 ! optimization sheme ln=2
-    real(8), parameter :: c1 = 1.14443d0,c2 = - 0.04886d0 !from optimization scheme
-!     real(8), parameter :: Glim = 10.4d0 ! Taylor expansion参 ln=2
-!     real(8), parameter  :: c1 = 1.125d0, c2 = - 0.04167d0 ! from taylor Expansion
-
-    complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
             !     real(8), parameter :: tau0     = 0.02d0!1.6d-4 !送信源出力時間
 
 !媒質パラメータ
@@ -76,7 +79,9 @@ module const_para
     real(8), parameter :: cmax = cwa
     real(8), parameter :: cmin = cfe
 
-real(8) :: dt = 0.999d0*(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !タイムステップ長 s 　　　
+! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.16667d0 !タイムステップ長 s  taylor　
+real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0 !タイムステップ長 s  optimized　
+! real(8) :: dt = (2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !タイムステップ長 s fourier 　
 
 !mur 変数
     real(8) :: cxd, cxu, cxx
