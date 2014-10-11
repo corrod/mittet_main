@@ -31,6 +31,7 @@ module const_para
     integer, parameter :: x3 = (nx+1)/2, y3 = (ny+1)/2, z3 = (nz+1)/2
     integer, parameter :: x4 = (nx+1)/2, y4 = (ny+1)/2, z4 = (nz+1)/2
     integer, parameter :: x5 = (nx+1)/2, y5 = (ny+1)/2, z5 = (nz+1)/2
+    integer, parameter :: plate = 20 !鉄板
     integer, parameter :: ncpml = 10 !CPMLのgrid数
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
     complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
@@ -47,11 +48,11 @@ module const_para
 
 !媒質パラメータ
 !conductivity 導電率
-    real(8), parameter :: sigair = 0.0d0  !空気の導電率 S/m
+    real(8), parameter :: sigair = 1.0d-11!from muhammad  !空気の導電率 S/m
     real(8), parameter :: sigfe  = 1.0d3! 　　7.5d6  !1.03d7 !鉄の導電率 S/m
     real(8), parameter :: sigwa  = 3.2d0  !海水の導電率 S/m
-    real(8), parameter :: sigmin = sigwa
-    real(8), parameter :: sigmax = sigfe
+    real(8), parameter :: sigmin = min(sigwa,sigfe)
+    real(8), parameter :: sigmax = max(sigwa,sigfe)
 !permeability 透磁率
     real(8), parameter :: MU0      = 1.2566370614d-6 !真空の透磁率 H/m
     real(8), parameter :: myurair  = 1.0d0        !空気の比透磁率
@@ -73,11 +74,12 @@ module const_para
     real(8) :: myu(nx,ny,nz)
 
 !伝播速度設定 cmax, cmin
-    real(8), parameter :: CC = 2.997924580d0 !光速
+    real(8), parameter :: CC = 2.997924580d8 !光速
+    real(8), parameter :: cair = sqrt(2.0d0*omega0/myuair/sigair)
     real(8), parameter :: cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
     real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe) !myufe >> myuwa 　　
-    real(8), parameter :: cmax = cwa
-    real(8), parameter :: cmin = cfe
+    real(8), parameter :: cmin = min(cwa,cfe)
+    real(8), parameter :: cmax = max(cwa,cfe)
 
 real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.16667d0 !タイムステップ長 s  taylor　
 ! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0 !タイムステップ長 s  optimized　

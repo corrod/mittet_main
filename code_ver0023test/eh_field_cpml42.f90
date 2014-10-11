@@ -5,8 +5,10 @@
 
 !///////////////////////////////////////////////////////////////////
 subroutine media_coeff
+
 	use const_para
 	implicit none
+
 		sigmax2 = 1.0d0!sig(1)
 		gradmax = 1.0d0!grad(1)
 		scaler = 0.01d0 * sigmax2/gradmax
@@ -121,7 +123,7 @@ subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
     !ex_cpml
      do k = 3,nz-1
         do j = 3,ny-1
-            do i = 1,nx-1
+            do i=1,nx!i = 1,nx-1
                 Ex(i,j,k) = ca_x(i,j,k) * Ex(i,j,k) &
                           + cb_x(i,j,k) * (( c1*Hz(i,j,k) - c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k) - c2*Hz(i,j-2,k) ) /kedy(j) &
                                         -  ( c1*Hy(i,j,k) - c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1) - c2*Hy(i,j,k-2) ) /kedz(k))
@@ -131,7 +133,7 @@ subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 
     !ey_cpml
     do k = 3,nz-1
-        do j = 1,ny-1
+        do j = 1,ny!1,ny-1
             do i = 3,nx-1
                 Ey(i,j,k) = ca_y(i,j,k) * Ey(i,j,k) &
                           + cb_y(i,j,k) * (( c1*Hx(i,j,k) - c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1) - c2*Hx(i,j,k-2) ) / kedz(k) &
@@ -141,7 +143,7 @@ subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
     enddo
 
     !ez_cpml
-    do k = 1,nz-1
+    do k = 1,nz!1,nz-1
         do j = 3,ny-1
             do i = 3,nx-1
                 Ez(i,j,k) = ca_z(i,j,k) * Ez(i,j,k) &
@@ -167,7 +169,7 @@ subroutine e_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
     !ex_cpml
      do k = 3,nz-1
         do j = 3,ny-1
-            do i = 1,nx-1
+            do i = 1,nx
                 Ex(i,j,k) = ca_x(i,j,k) * Ex(i,j,k) &
                           - cb_x(i,j,k) * (( c1*Hz(i,j,k) - c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k) - c2*Hz(i,j-2,k) ) /kedy(j) &
                           				-  ( c1*Hy(i,j,k) - c1*Hy(i,j,k-1) + c2*Hy(i,j,k+1) - c2*Hy(i,j,k-2) ) /kedz(k))
@@ -177,7 +179,7 @@ subroutine e_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
 
     !ey_cpml
 	do k = 3,nz-1
-        do j = 1,ny-1
+        do j = 1,ny
             do i = 3,nx-1
                 Ey(i,j,k) = ca_y(i,j,k) * Ey(i,j,k) &
                           - cb_y(i,j,k) * (( c1*Hx(i,j,k) - c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1) - c2*Hx(i,j,k-2) ) / kedz(k) &
@@ -187,7 +189,7 @@ subroutine e_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
     enddo
 
     !ez_cpml
-    do k = 1,nz-1
+    do k = 1,nz
         do j = 3,ny-1
             do i = 3,nx-1
                 Ez(i,j,k) = ca_z(i,j,k) * Ez(i,j,k) &
@@ -214,7 +216,7 @@ subroutine h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
 !hxcpml4
     do k = 2,nz-2
         do j = 2,ny-2
-            do i = 2,nx-1
+            do i = 1,nx!2,nx-1
                 Hx(i,j,k) = da_x(i,j,k) * Hx(i,j,k) &
                           - db_x(i,j,k) * (( c1*Ez(i,j+1,k) - c1*Ez(i,j,k) + c2*Ez(i,j+2,k) - c2*Ez(i,j-1,k) ) / khdy(j) &
                                         -  ( c1*Ey(i,j,k+1) - c1*Ey(i,j,k) + c2*Ey(i,j,k+2) - c2*Ey(i,j,k-1) ) / khdz(k))
@@ -224,7 +226,7 @@ subroutine h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
 
 !hycpml4
     do k = 2,nz-2
-        do j = 2,ny-1
+        do j=1,ny!j = 2,ny-1
             do i = 2,nx-2
                 Hy(i,j,k) = da_y(i,j,k) * Hy(i,j,k) &
                           - db_y(i,j,k) * (( c1*Ex(i,j,k+1) - c1*Ex(i,j,k) + c2*Ex(i,j,k+2) - c2*Ex(i,j,k-1) ) / khdz(k) &
@@ -234,7 +236,7 @@ subroutine h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
     enddo
 
 !hzcpml4
-    do k = 2,nz-1
+    do k = 1,nz!2,nz-1
         do j = 2,ny-2
             do i = 2,nx-2
                 Hz(i,j,k) = da_z(i,j,k) * Hz(i,j,k)&
@@ -260,7 +262,7 @@ subroutine h_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
 !hxcpml4
     do k = 2,nz-2
         do j = 2,ny-2
-            do i = 2,nx-1
+            do i = 1,nx
                 Hx(i,j,k) = da_x(i,j,k) * Hx(i,j,k) &
                           + db_x(i,j,k) * (( c1*Ez(i,j+1,k) - c1*Ez(i,j,k) + c2*Ez(i,j+2,k) - c2*Ez(i,j-1,k) ) / khdy(j) &
                                         -  ( c1*Ey(i,j,k+1) - c1*Ey(i,j,k) + c2*Ey(i,j,k+2) - c2*Ey(i,j,k-1) ) / khdz(k))
@@ -270,7 +272,7 @@ subroutine h_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
 
 !hycpml4
     do k = 2,nz-2
-        do j = 2,ny-1
+        do j = 1,ny
             do i = 2,nx-2
                 Hy(i,j,k) = da_y(i,j,k) * Hy(i,j,k) &
                           + db_y(i,j,k) * (( c1*Ex(i,j,k+1) - c1*Ex(i,j,k) + c2*Ex(i,j,k+2) - c2*Ex(i,j,k-1) ) / khdz(k) &
@@ -280,7 +282,7 @@ subroutine h_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
     enddo
 
 !hzcpml4
-    do k = 2,nz-1
+    do k = 1,nz
         do j = 2,ny-2
             do i = 2,nx-2
                 Hz(i,j,k) = da_z(i,j,k) * Hz(i,j,k)&

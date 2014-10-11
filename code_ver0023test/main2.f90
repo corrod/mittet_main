@@ -81,7 +81,7 @@ do istep = 1, nstep !反復計算開始----------------------
 !     write(*,*) istep
 
     !入力波源の設定
-    call read_source_3d(istep,t,ex,Je,Jh)
+    call read_source_3d(istep,t,Hz,Je,Jh)
 !     call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
                     !     call read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
 !     call read_source_3d(istep,t,sig,myu,EX,Je,Jh)

@@ -2,7 +2,6 @@
 !モデル設定
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 subroutine model
-
     use const_para
     implicit none
 
@@ -26,22 +25,21 @@ subroutine model
 
 
 
-    ! ! model1 海水一様モデル______________________
-    ! ! !海水
-    ! sig(1:nx, 1:ny, 1:nz) = sigwa
-    ! myu(1:nx, 1:ny, 1:nz) = myuwa
+! ! model1 海水一様モデル______________________
+! ! !海水
+sig(1:nx, 1:ny, 1:nz) = sigwa
+myu(1:nx, 1:ny, 1:nz) = myuwa
 
 
 
-    ! model2 欠陥なしモデル_____________________
-    ! !海水
-    ! sig(1:nx, 1:ny, 1:nz) = sigwa
-    ! myu(1:nx, 1:ny, 1:nz) = myuwa
+! model2 欠陥なしモデル_____________________
+! !海水
+! sig(1:nx, 1:ny, 1:nz) = sigwa
+! myu(1:nx, 1:ny, 1:nz) = myuwa
 
-    ! !鉄板
-    ! sig(1:nx, 1:ny, z0+10:nz) = sigfe
-    ! myu(1:nx, 1:ny, z0+10:nz) = myufe
-
+! !鉄板
+! sig(1:nx, 1:ny, z0+10:nz) = sigfe
+! myu(1:nx, 1:ny, z0+10:nz) = myufe
 
 
     ! !model3 立方体形状欠陥モデル（空気層無し）_______________
@@ -159,22 +157,26 @@ subroutine model
 !                 enddo
 !             enddo
 
-    ! ! model5 コーティング層挟む____________________
-    ! !海水
-    ! sig(1:nx, 1:ny, 1:nz) = sigwa
-    ! myu(1:nx, 1:ny, 1:nz) = myuwa
 
-    ! !コーティング
-    ! sig(1:nx, 1:ny, x0+7:x0+9) = sig!　
-    ! myu(1:nx, 1:ny, x0+7:x0+9) = myu!　
 
-    ! !鉄板
-    ! sig(1:nx, 1:ny, x0+10:nz) = sigfe
-    ! myu(1:nx, 1:ny, x0+10:nz) = myufe
 
-    ! !欠陥
-    ! sig(x0-3:x0+3, y0-3:y0+3, x0+10:x0+15) = sigwa
-    ! myu(x0-3:x0+3, y0-3:y0+3, x0+10:x0+15) = myuwa
+
+! ! model5 コーティング層挟む____________________
+! !海水
+! sig(1:nx, 1:ny, 1:nz) = sigwa
+! myu(1:nx, 1:ny, 1:nz) = myuwa
+
+! !コーティング
+! sig(1:nx, 1:ny, x0+7:x0+9) = sig!　
+! myu(1:nx, 1:ny, x0+7:x0+9) = myu!　
+
+! !鉄板
+! sig(1:nx, 1:ny, x0+10:nz) = sigfe
+! myu(1:nx, 1:ny, x0+10:nz) = myufe
+
+! !欠陥
+! sig(x0-3:x0+3, y0-3:y0+3, x0+10:x0+15) = sigwa
+! myu(x0-3:x0+3, y0-3:y0+3, x0+10:x0+15) = myuwa
 
 
 

@@ -140,16 +140,16 @@ endif
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      S=0.6d0  !S =[0.5:1.0]
 
-    Nt1=int( S*nx/sqrt( 1.0d0/dx**2 + 1.0d0/dy**2 + 1.0d0/dz**2 ) )
-!     Nt1= S*dble(nx)/sqrt( 1.0d0/dble(dx)**2.0d0 + 1.0d0/dble(dy)**2.0d0 + 1.0d0/dble(dz)**2.0d0 )
-    Nt2=int( S*nx/sqrt( 1.0d0/dx**2 + 1.0d0/dy**2 + 1.0d0/dz**2 ) )* sqrt(sigmax/sigmin)
-    Nt3=int( S*nx*(3.0d0**0.5)*sqrt(sigmax/sigmin) )
+!     Nt1=int( S*nx/sqrt( 1.0d0/dx**2 + 1.0d0/dy**2 + 1.0d0/dz**2 ) )
+! !     Nt1= S*dble(nx)/sqrt( 1.0d0/dble(dx)**2.0d0 + 1.0d0/dble(dy)**2.0d0 + 1.0d0/dble(dz)**2.0d0 )
+!     Nt2=int( S*nx/sqrt( 1.0d0/dx**2 + 1.0d0/dy**2 + 1.0d0/dz**2 ) )* sqrt(sigmax/sigmin)
+!     Nt3=int( S*nx*(3.0d0**0.5)*sqrt(sigmax/sigmin) )
     Nt4=int( S*nx*(3.0d0**0.5d0)*cmax/cmin )
 
-    write(*,*) '# number of timestep Nt1,Nt2,Nt3,N4',Nt1,Nt2,Nt3,Nt4
+    write(*,*) '# number of timestep nstep:',Nt4
 
-     if(Nt1 >nstep) then
-    write(*,*) "******* time step nstep is violated *******"
+     if(Nt4 >nstep) then
+    write(*,*) "******* time step nstep may be violated *******"
     endif
 
 

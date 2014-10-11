@@ -17,7 +17,7 @@ open(97,file='fxcpml.d')
       write(97,"(13a)")  " # i, esig_x(i), msig_x(i), ekappa_x(i), mkappa_x(i), ae_x(i),   &
        am_x(i),    be_x(i),    bh_x(i),    ce_x(i),    ch_x(i),    kedx(i),    khdx(i)"
   delta = ncpml*dx
-  sig_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) !* optToMax  !!x方向だけoptToMaxかけるの？
+  sig_max = (nn+order+1.0d0)*cmax*log(1.0d0/Rcoef) / (2.0d0*delta) !* optToMax  !x方向だけoptToMaxかけるの？
 
 
 
@@ -274,9 +274,9 @@ subroutine CPML_E4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig)!,cmax)
 !psi-update
 
     !xe-PML4 loop(-)
-    do k = 1,nz-1
-        do j = 1,ny-1
-            do i = 3,ncpml+1
+    do k = 1,nz!1,nz-1
+        do j = 1,ny!1,ny-1
+            do i = 3,ncpml
                 psi_Ezx1(i,j,k) = be_x(i) * psi_Ezx1(i,j,k) &
                                 + ce_x(i) * (c1*Hy(i,j,k)-c1*Hy(i-1,j,k) + c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
                 psi_Eyx1(i,j,k) = be_x(i) * psi_Eyx1(i,j,k) &
@@ -287,9 +287,9 @@ subroutine CPML_E4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig)!,cmax)
         enddo
     enddo
      !xe-PML4 loop(+)
-    do k = 1,nz-1
-        do j = 1,ny-1
-            do i = nx-ncpml+1,nx-1
+    do k = 1,nz!1,nz-1
+        do j = 1,ny!1,ny-1
+            do i = nx-ncpml+2,nx-1!nx-ncpml+1,nx-1
                 psi_Ezx1(i,j,k) = be_x(i) * psi_Ezx1(i,j,k) &
                                 + ce_x(i) * (c1*Hy(i,j,k)-c1*Hy(i-1,j,k) + c2*Hy(i+1,j,k)-c2*Hy(i-2,j,k)) / dx
                 psi_Eyx1(i,j,k) = be_x(i) * psi_Eyx1(i,j,k) &
@@ -301,9 +301,9 @@ subroutine CPML_E4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig)!,cmax)
     enddo
 
     !ye-PML4 loop(-)
-    do k = 1,nz-1
-        do j = 3,ncpml+1
-            do i = 1,nx-1
+    do k = 1,nz!1,nz-1
+        do j = 3,ncpml
+            do i = 1,nx!1,nx-1
                 psi_Exy1(i,j,k) = be_y(j) * psi_Exy1(i,j,k) &
                                 + ce_y(j) * (c1*Hz(i,j,k)-c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k)-c2*Hz(i,j-2,k)) / dy
                 psi_Ezy1(i,j,k) = be_y(j) * psi_Ezy1(i,j,k) &
@@ -314,9 +314,9 @@ subroutine CPML_E4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig)!,cmax)
         enddo
     enddo
    !ye-PML4 loop(+)
-    do k = 1,nz-1
-        do j = ny-ncpml+1,ny-1
-            do i = 1,nx-1
+    do k = 1,nz!1,nz-1
+        do j = ny-ncpml+2,ny-1!ny-ncpml+1,ny-1
+            do i = 1,nx!1,nx-1
                 psi_Exy1(i,j,k) = be_y(j) * psi_Exy1(i,j,k) &
                                 + ce_y(j) * (c1*Hz(i,j,k)-c1*Hz(i,j-1,k) + c2*Hz(i,j+1,k)-c2*Hz(i,j-2,k)) / dy
                 psi_Ezy1(i,j,k) = be_y(j) * psi_Ezy1(i,j,k) &
@@ -328,9 +328,9 @@ subroutine CPML_E4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig)!,cmax)
     enddo
 
     !ze-PML4 loop(-)
-    do k = 3,ncpml+1
-        do j = 1,ny-1
-            do i = 1,nx-1
+    do k = 3,ncpml
+        do j = 1,ny!1,ny-1
+            do i = 1,nx
                 psi_Eyz1(i,j,k) = be_z(k) * psi_Eyz1(i,j,k) &
                                 + ce_z(k) * (c1*Hx(i,j,k)-c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1)-c2*Hx(i,j,k-2)) / dz
                 psi_Exz1(i,j,k) = be_z(k) * psi_Exz1(i,j,k) &
@@ -341,9 +341,9 @@ subroutine CPML_E4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig)!,cmax)
         enddo
     enddo
     !ze-PML4 loop(+)
-    do k = nz-ncpml+1,nz-1
+    do k = nz-ncpml+2,nz-1!nz-ncpml+1,nz-1
         do j = 1,ny-1
-            do i = 1,nx-1
+            do i = 1,nx
                 psi_Eyz1(i,j,k) = be_z(k) * psi_Eyz1(i,j,k) &
                                 + ce_z(k) * (c1*Hx(i,j,k)-c1*Hx(i,j,k-1) + c2*Hx(i,j,k+1)-c2*Hx(i,j,k-2)) / dz
                 psi_Exz1(i,j,k) = be_z(k) * psi_Exz1(i,j,k) &
@@ -387,8 +387,8 @@ subroutine CPML_H4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
 !psi-update
 
 !xh-PML4 loop(-)
-    do k = 1,nz-1
-        do j = 1,ny-1
+    do k = 1,nz!1,nz-1
+        do j = 1,ny!1,ny-1
             do i = 2,ncpml
                 psi_Hzx1(i,j,k) = bh_x(i) * psi_Hzx1(i,j,k)&
                                 + ch_x(i) * ( c1*Ey(i+1,j,k)-c1*Ey(i,j,k) + c2*Ey(i+2,j,k)-c2*Ey(i-1,j,k) ) / dx
@@ -400,8 +400,8 @@ subroutine CPML_H4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
         enddo
     enddo
 !xh-PML4 loop(+)
-    do k = 1,nz-1
-        do j = 1,ny-1
+    do k = 1,nz!1,nz-1
+        do j = 1,ny!1,ny-1
             do i = nx-ncpml,nx-2
                 psi_Hzx1(i,j,k) = bh_x(i) * psi_Hzx1(i,j,k)&
                                 + ch_x(i) * ( c1*Ey(i+1,j,k)-c1*Ey(i,j,k) + c2*Ey(i+2,j,k)-c2*Ey(i-1,j,k) ) / dx
@@ -414,9 +414,9 @@ subroutine CPML_H4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
     enddo
 
 !yh-PML4 loop(-)
-    do k = 1,nz-1
+    do k = 1,nz!1,nz-1
         do j = 2,ncpml
-            do i = 1,nx-1
+            do i = 1,nx!1,nx-1
                 psi_Hxy1(i,j,k) = bh_y(j) * psi_Hxy1(i,j,k)&
                                 + ch_y(j) * ( c1*Ez(i,j+1,k)-c1*Ez(i,j,k) + c2*Ez(i,j+2,k)-c2*Ez(i,j-1,k) ) / dy
                 psi_Hzy1(i,j,k) = bh_y(j) * psi_Hzy1(i,j,k)&
@@ -427,9 +427,9 @@ subroutine CPML_H4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
          enddo
     enddo
 !!yh-PML4 loop(+)
-    do k = 1,nz-1
+    do k = 1,nz!1,nz-1
         do j = ny-ncpml,ny-2
-            do i = 1,nx-1
+            do i = 1,nx!1,nx-1
                 psi_Hxy1(i,j,k) = bh_y(j) * psi_Hxy1(i,j,k)&
                                 + ch_y(j) * ( c1*Ez(i,j+1,k)-c1*Ez(i,j,k) + c2*Ez(i,j+2,k)-c2*Ez(i,j-1,k) ) / dy
                 psi_Hzy1(i,j,k) = bh_y(j) * psi_Hzy1(i,j,k)&
@@ -442,8 +442,8 @@ subroutine CPML_H4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
 
 !zh-PML4 loop(-)
     do k = 2,ncpml
-        do j = 1,ny-1
-            do i = 1,nx-1
+        do j = 1,ny!1,ny-1
+            do i = 1,nx!1,nx-1
                 psi_Hyz1(i,j,k) = bh_z(k) * psi_Hyz1(i,j,k)&
                                 + ch_z(k) * ( c1*Ex(i,j,k+1)-c1*Ex(i,j,k) + c2*Ex(i,j,k+2)-c2*Ex(i,j,k-1) ) / dz
                 psi_Hxz1(i,j,k) = bh_y(k) * psi_Hxz1(i,j,k)&
@@ -455,8 +455,8 @@ subroutine CPML_H4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
     enddo
 !zh-PML4 loop(+)
     do k = nz-ncpml,nz-2
-        do j = 1,ny-1
-            do i = 1,nx-1
+        do j = 1,ny!1,ny-1
+            do i = 1,nx!1,nx-1
                 psi_Hyz1(i,j,k) = bh_z(k) * psi_Hyz1(i,j,k)&
                                 + ch_z(k) * ( c1*Ex(i,j,k+1)-c1*Ex(i,j,k) + c2*Ex(i,j,k+2)-c2*Ex(i,j,k-1) ) / dz
                 psi_Hxz1(i,j,k) = bh_y(k) * psi_Hxz1(i,j,k)&
