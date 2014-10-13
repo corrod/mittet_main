@@ -18,9 +18,9 @@ module const_para
     implicit none
 
     integer :: i, j, k
-    integer, parameter :: nstep = 291 !2500!1000 !2000 総タイムステップ数 　
+    integer, parameter :: nstep = 10529623!291 !2500!1000 !2000 総タイムステップ数 　
     integer, parameter :: nx=101, ny=101, nz=101 !nx = 61, ny = 61, nz = 61!グリッド数 奇数　
-    real(8), parameter :: dx = 13.0d0, dy=dx, dz=dx !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　
+    real(8), parameter :: dx=13.5d0,dy=dx,dz=dx!dx = 13.0d0, dy=dx, dz=dx !　
 !     real(8), parameter :: dt = 1.870d-6!3.00d-7 !タイムステップ長 s 　
 !     real(8), parameter :: dx = 1.480d-2, dy=dx, dz=dx !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　
 !     real(8), parameter :: dt = 3.00d-6!3.00d-7 !タイムステップ長 s 　
@@ -31,7 +31,6 @@ module const_para
     integer, parameter :: x3 = (nx+1)/2, y3 = (ny+1)/2, z3 = (nz+1)/2
     integer, parameter :: x4 = (nx+1)/2, y4 = (ny+1)/2, z4 = (nz+1)/2
     integer, parameter :: x5 = (nx+1)/2, y5 = (ny+1)/2, z5 = (nz+1)/2
-    integer, parameter :: plate = 20
     integer, parameter :: ncpml = 10 !CPMLのgrid数
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
     complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
@@ -78,12 +77,16 @@ module const_para
     real(8), parameter :: cair = sqrt(2.0d0*omega0/myuair/sigair)
     real(8), parameter :: cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
     real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe) !myufe >> myuwa 　　
-    real(8), parameter :: cmin = cwa!min(cwa,cfe)!min(cwa,cfe,cair)
-    real(8), parameter :: cmax = cwa!max(cwa,cfe)!max(cwa,cfe,cair)
+    real(8), parameter :: cmin = min(cwa,cair)!min(cwa,cfe,cair)!cwa
+    real(8), parameter :: cmax = max(cwa,cair)!max(cwa,cfe,cair)!cwa
 
-! real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0 !タイムステップ長 s  taylor　
-! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0 !タイムステップ長 s  optimized　
-    real(8) :: dt = 0.999d0*(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !タイムステップ長 s fourier 　
+! タイムステップ長 dt
+! optimized dt
+! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0
+! taylor dt
+real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0
+! fourier dt
+!     real(8) :: dt = 0.999d0*(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax)
 
 !mur 変数
     real(8) :: cxd, cxu, cxx

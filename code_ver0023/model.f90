@@ -6,6 +6,7 @@ subroutine model
     use const_para
     implicit none
 
+    integer, parameter :: plate = 20 !鉄板
     integer :: airlayer
     integer :: xcenter, xstart, xend
     integer :: ycenter, ystart, yend
@@ -41,6 +42,36 @@ subroutine model
     ! !鉄板
     ! sig(1:nx, 1:ny, z0+10:nz) = sigfe
     ! myu(1:nx, 1:ny, z0+10:nz) = myufe
+
+
+! ! model2-2 欠陥なしモデル（空気層あり）_____________
+! ! 海水
+!     do k=1,plate
+!         do j=1,ny
+!             do i=1,nx
+!                 sig(i,j,k) = sigwa
+!                 myu(i,j,k) = myuwa
+!             enddo
+!         enddo
+!     enddo
+! ! 鉄板
+!     do k=plate+1,airlayer-1
+!         do j=1,ny
+!             do i=1,nx
+!                 sig(i,j,k) = sigfe
+!                 myu(i,j,k) = myufe
+!             enddo
+!         enddo
+!     enddo
+! ! 空気層
+!     do k=airlayer,nz
+!         do j=1,ny
+!             do i=1,nx
+!                 sig(i,j,k) = sigair
+!                 myu(i,j,k) = myuair
+!             enddo
+!         enddo
+!     enddo
 
 
 

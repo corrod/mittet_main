@@ -31,7 +31,6 @@ module const_para
     integer, parameter :: x3 = (nx+1)/2, y3 = (ny+1)/2, z3 = (nz+1)/2
     integer, parameter :: x4 = (nx+1)/2, y4 = (ny+1)/2, z4 = (nz+1)/2
     integer, parameter :: x5 = (nx+1)/2, y5 = (ny+1)/2, z5 = (nz+1)/2
-    integer, parameter :: plate = 20 !鉄板
     integer, parameter :: ncpml = 10 !CPMLのgrid数
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
     complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
@@ -81,9 +80,13 @@ module const_para
     real(8), parameter :: cmin = min(cwa,cfe)
     real(8), parameter :: cmax = max(cwa,cfe)
 
-real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.16667d0 !タイムステップ長 s  taylor　
-! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0 !タイムステップ長 s  optimized　
-! real(8) :: dt = (2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !タイムステップ長 s fourier 　
+! タイムステップ長 dt
+! optimized dt
+! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0
+! taylor dt
+real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0
+! fourier dt
+!     real(8) :: dt = 0.999d0*(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax)
 
 !mur 変数
     real(8) :: cxd, cxu, cxx

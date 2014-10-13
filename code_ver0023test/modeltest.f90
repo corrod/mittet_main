@@ -5,6 +5,7 @@ subroutine model
     use const_para
     implicit none
 
+    integer,parameter :: plate =20 !鉄板
     integer :: airlayer
     integer :: xcenter, xstart, xend
     integer :: ycenter, ystart, yend
@@ -41,26 +42,55 @@ myu(1:nx, 1:ny, 1:nz) = myuwa
 ! sig(1:nx, 1:ny, z0+10:nz) = sigfe
 ! myu(1:nx, 1:ny, z0+10:nz) = myufe
 
-
-    ! !model3 立方体形状欠陥モデル（空気層無し）_______________
-
-    do k=1,nz
+! model2-2 欠陥なしモデル（空気層あり）
+! 海水
+    do k=1,plate
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+! 鉄板
+    do k=plate+1,airlayer-1
         do j=1,ny
             do i=1,nx
                 sig(i,j,k) = sigfe
                 myu(i,j,k) = myufe
-                if(k>plate) then
-                    sig(i,j,k) = sigwa
-                    myu(i,j,k) = myuwa
-                    elseif(i>=xstart .and. i<=xend &
-                     .and. j>=ystart .and. j<=yend &
-                     .and. k>=zstart .and. k<= zend) then
-                    sig(i,j,k) = sigwa
-                    myu(i,j,k) = myuwa
-                endif
             enddo
         enddo
     enddo
+! 空気層
+    do k=airlayer,nz
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigair
+                myu(i,j,k) = myuair
+            enddo
+        enddo
+    enddo
+
+
+    ! !model3 立方体形状欠陥モデル（空気層無し）_______________
+
+!     do k=1,nz
+!         do j=1,ny
+!             do i=1,nx
+!                 sig(i,j,k) = sigfe
+!                 myu(i,j,k) = myufe
+!                 if(k>plate) then
+!                     sig(i,j,k) = sigwa
+!                     myu(i,j,k) = myuwa
+!                     elseif(i>=xstart .and. i<=xend &
+!                      .and. j>=ystart .and. j<=yend &
+!                      .and. k>=zstart .and. k<= zend) then
+!                     sig(i,j,k) = sigwa
+!                     myu(i,j,k) = myuwa
+!                 endif
+!             enddo
+!         enddo
+!     enddo
 
     ! !海水
     ! do k=1,nz
@@ -72,7 +102,7 @@ myu(1:nx, 1:ny, 1:nz) = myuwa
     !     enddo
     ! enddo
     ! !鉄板
-    ! do k=1,zend
+    ! do k=1,plate
     !     do j=1,ny
     !         do i=1,nx
     !             sig(i,j,k) = sigfe
@@ -113,7 +143,7 @@ myu(1:nx, 1:ny, 1:nz) = myuwa
     !     enddo
     ! enddo
     ! !鉄板
-    ! do k=1,zend
+    ! do k=1,plate
     !     do j=1,ny
     !         do i=1,nx
     !             sig(i,j,k) = sigfe

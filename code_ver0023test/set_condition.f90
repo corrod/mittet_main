@@ -146,7 +146,7 @@ endif
 !   Nt2 = ((S * max(nx,ny,nz) * dx ) / cmin + 2.0d0*pi/fmax) /dt
     Nt4=   S*max(nx,ny,nz)*(3.0d0**0.5d0)*cmax/cmin + 2.0d0*pi/fmax/dt
 
-    write(*,*) '# number of timestep nstep(Tmax + 2t0)/dt nt2:',Nt2
+!     write(*,*) '# number of timestep nstep(Tmax + 2t0)/dt nt2:',Nt2
 
     write(*,*) '# number of timestep nstep(Tmax+2t0)/dt:',Nt4
 
