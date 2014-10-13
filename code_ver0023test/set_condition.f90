@@ -6,7 +6,7 @@ subroutine confirm_parameter
     use const_para
     implicit none
 
-    real(8) :: Nt1,Nt2,Nt3,Nt4
+    integer :: Nt1,Nt2,Nt3,Nt4
     real(8) :: S !タイムステップ数を求める際の係数
     real(8) :: courant
     real(8) :: t_cal !計測時間
@@ -143,10 +143,12 @@ endif
 !     Nt1= S*dble(nx)/sqrt( 1.0d0/dble(dx)**2.0d0 + 1.0d0/dble(dy)**2.0d0 + 1.0d0/dble(dz)**2.0d0 )
 !     Nt2=S*dble(max(nx,ny,nz))/sqrt( 1.0d0/dx**2.0d0 + 1.0d0/dy**2.0d0 + 1.0d0/dz**2.0d0 ) * sqrt(sigmax/sigmin)
 !     Nt3=S*dble(max(nx,ny,nz))*(3.0d0**0.5d0)*sqrt(sigmax/sigmin)
-    Nt4=S*dble(max(nx,ny,nz))*(3.0d0**0.5d0)*cmax/cmin
+!   Nt2 = ((S * max(nx,ny,nz) * dx ) / cmin + 2.0d0*pi/fmax) /dt
+    Nt4=   S*max(nx,ny,nz)*(3.0d0**0.5d0)*cmax/cmin + 2.0d0*pi/fmax/dt
 
+    write(*,*) '# number of timestep nstep(Tmax + 2t0)/dt nt2:',Nt2
 
-    write(*,*) '# number of timestep nstep:',Nt4
+    write(*,*) '# number of timestep nstep(Tmax+2t0)/dt:',Nt4
 
 
      if(Nt4 >nstep) then

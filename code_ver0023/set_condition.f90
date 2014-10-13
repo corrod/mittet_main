@@ -144,9 +144,13 @@ endif
 ! !     Nt1= S*dble(nx)/sqrt( 1.0d0/dble(dx)**2.0d0 + 1.0d0/dble(dy)**2.0d0 + 1.0d0/dble(dz)**2.0d0 )
 !     Nt2=int( S*nx/sqrt( 1.0d0/dx**2 + 1.0d0/dy**2 + 1.0d0/dz**2 ) )* sqrt(sigmax/sigmin)
 !     Nt3=int( S*nx*(3.0d0**0.5)*sqrt(sigmax/sigmin) )
-    Nt4=int( S*nx*(3.0d0**0.5d0)*cmax/cmin )
 
-    write(*,*) '# number of timestep nstep:',Nt4
+!   Nt2 = ((S * max(nx,ny,nz) * dx ) / cmin + 2.0d0*pi/fmax) /dt
+
+    Nt4= S*nx*(3.0d0**0.5d0)*cmax/cmin  + 2.0d0*pi/fmax/dt
+
+!     write(*,*) '# number of timestep nstep(Tmax + 2t0)/dt nt2:',Nt2
+    write(*,*) '# number of timestep nstep(Tmax + 2t0)/dt:',Nt4
 
      if(Nt4 >nstep) then
     write(*,*) "******* time step nstep may be violated *******"
