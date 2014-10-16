@@ -18,13 +18,13 @@ module const_para
     implicit none
 
     integer :: i, j, k
-    integer, parameter :: nstep = 1050!291 !2500!1000 !2000 総タイムステップ数 　
-    integer, parameter :: nx=101, ny=101, nz=101 !nx = 61, ny = 61, nz = 61!グリッド数 奇数　
-    real(8), parameter :: dx=13.5d0,dy=dx,dz=dx!dx = 13.0d0, dy=dx, dz=dx !　
+    integer, parameter :: nstep = 4096 !2500!1000 !2000 総タイムステップ数 　
+    integer, parameter :: nx=91, ny=91, nz=91 !nx = 61, ny = 61, nz = 61!グリッド数 奇数　
+    real(8), parameter :: dx = 9.0d-3, dy=dx, dz=dx !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　
 !     real(8), parameter :: dt = 1.870d-6!3.00d-7 !タイムステップ長 s 　
 !     real(8), parameter :: dx = 1.480d-2, dy=dx, dz=dx !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　
 !     real(8), parameter :: dt = 3.00d-6!3.00d-7 !タイムステップ長 s 　
-    real(8), parameter :: fmax = 12.5d0!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数 　
+    real(8), parameter :: fmax = 1.0d3!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数 　
     integer, parameter :: x0 = (nx+1)/2, y0 = (ny+1)/2, z0 = (nz+1)/2 !送信源位置
     integer, parameter :: x1 = (nx+1)/2, y1 = (ny+1)/2, z1 = (nz+1)/2
     integer, parameter :: x2 = (nx+1)/2, y2 = (ny+1)/2, z2 = (nz+1)/2
@@ -47,11 +47,11 @@ module const_para
 
 !媒質パラメータ
 !conductivity 導電率
-    real(8), parameter :: sigair = 1.0d-9 !空気の導電率 S/m
+    real(8), parameter :: sigair = 0.0d0  !空気の導電率 S/m
     real(8), parameter :: sigfe  = 1.0d3! 　　7.5d6  !1.03d7 !鉄の導電率 S/m
     real(8), parameter :: sigwa  = 3.2d0  !海水の導電率 S/m
-    real(8), parameter :: sigmin = sigwa!,min(sigwa,sigfe)!min(sigwa,sigfe,sigair)
-    real(8), parameter :: sigmax = sigwa!max(sigwa,sigfe)!max(sigwa,sigfe,sigair)
+    real(8), parameter :: sigmin = sigwa
+    real(8), parameter :: sigmax = sigfe
 !permeability 透磁率
     real(8), parameter :: MU0      = 1.2566370614d-6 !真空の透磁率 H/m
     real(8), parameter :: myurair  = 1.0d0        !空気の比透磁率
@@ -73,20 +73,15 @@ module const_para
     real(8) :: myu(nx,ny,nz)
 
 !伝播速度設定 cmax, cmin
-    real(8), parameter :: CC = 2.997924580d8 !光速
-    real(8), parameter :: cair = sqrt(2.0d0*omega0/myuair/sigair)
+    real(8), parameter :: CC = 2.997924580d0 !光速
     real(8), parameter :: cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
     real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe) !myufe >> myuwa 　　
-    real(8), parameter :: cmin = cwa!min(cwa,cair) !min(cwa,cfe,cair)!cwa
-    real(8), parameter :: cmax = cwa!max(cwa,cair) !max(cwa,cfe,cair)!cwa
+    real(8), parameter :: cmax = cwa
+    real(8), parameter :: cmin = cfe
 
-! タイムステップ長 dt
-! optimized dt
-! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0
-! taylor dt
-real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0
-! fourier dt
-!     real(8) :: dt = 0.999d0*(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax)
+real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.16667d0 !タイムステップ長 s  taylor　
+! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0 !タイムステップ長 s  optimized　
+! real(8) :: dt = (2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax) !タイムステップ長 s fourier 　
 
 !mur 変数
     real(8) :: cxd, cxu, cxx
@@ -100,13 +95,13 @@ real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0
     complex(kind(0d0)) :: exz1(nx,ny,nz),exz2(nx,ny,nz),eyz1(nx,ny,nz),eyz2(nx,ny,nz)
 
 !CPML
-    real(8), parameter  :: m         = 4, ma = 1 !mの代わりにnn
+    integer, parameter  :: m         = 4, ma = 1 !mの代わりにnn
     real(8), parameter  :: kappa_max = 1.0d0 !!!
     real(8), parameter  :: a_max     = 0.2d0     !!!
     real(8), parameter  :: nn        = 3.0d0 !nn should be [2,6]
     real(8), parameter  :: order     = 0.0d0 !order should be (0,3]
     real(8), parameter  :: optToMax  = 10.0d0
-    real(8), parameter  :: Rcoef     = 0.003d0!0.01d0 !R should be [10^-2, 10^-12]
+    real(8), parameter  :: Rcoef     = 0.01d0 !R should be [10^-2, 10^-12]
     real(8), parameter  :: epsir     = 1.0d0
     real(8) :: sig_max
     real(8) :: delta

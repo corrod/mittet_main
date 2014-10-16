@@ -27,30 +27,30 @@ subroutine model
 
 
 ! ! model1 海水一様モデル______________________
-! ! !海水
-sig(1:nx, 1:ny, 1:nz) = sigwa
-myu(1:nx, 1:ny, 1:nz) = myuwa
+! ! ! !海水
+! sig(1:nx, 1:ny, 1:nz) = sigwa
+! myu(1:nx, 1:ny, 1:nz) = myuwa
 
 
     ! model 海水-空気___________________________________________
-!     ! 海水
-!     do k=1,airlayer-1
-!         do j=1,ny
-!             do i=1,nx
-!                 sig(i,j,k) = sigwa
-!                 myu(i,j,k) = myuwa
-!             enddo
-!         enddo
-!     enddo
-!     ! 空気
-!     do k=airlayer,nz
-!         do j=1,ny
-!             do i=1,nx
-!                 sig(i,j,k) = sigair
-!                 myu(i,j,k) = myuair
-!             enddo
-!         enddo
-!     enddo
+    ! 海水
+    do k=1,airlayer-1
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+    ! 空気
+    do k=airlayer,nz
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigair
+                myu(i,j,k) = myuair
+            enddo
+        enddo
+    enddo
 
 
 ! model2 欠陥なしモデル_____________________

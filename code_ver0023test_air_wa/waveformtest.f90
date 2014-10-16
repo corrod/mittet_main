@@ -49,7 +49,6 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
     Hz(x0,y0,z0+7) = Hz(x0,y0,z0+7) &
                     - signal(istep)*dt / myu(x0,y0,z0+7) /dx/dy/dz!　　　
 
-
     !ソース波形
     write(16,*) t, real(signal(istep)) , aimag(signal(istep))   !signal.d
     write(17,*) t, real(Je(istep))     , aimag(Je(istep))       !je_fic.d
