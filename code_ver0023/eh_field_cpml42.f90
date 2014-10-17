@@ -155,7 +155,6 @@ subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 end subroutine e_field_cpml4
 
 
-
 subroutine e_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
 
 	use const_para
