@@ -446,7 +446,7 @@ subroutine CPML_H4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
             do i = 1,nx!1,nx-1
                 psi_Hyz1(i,j,k) = bh_z(k) * psi_Hyz1(i,j,k)&
                                 + ch_z(k) * ( c1*Ex(i,j,k+1)-c1*Ex(i,j,k) + c2*Ex(i,j,k+2)-c2*Ex(i,j,k-1) ) / dz
-                psi_Hxz1(i,j,k) = bh_y(k) * psi_Hxz1(i,j,k)&
+                psi_Hxz1(i,j,k) = bh_z(k) * psi_Hxz1(i,j,k)&
                                 + ch_z(k) * ( c1*Ey(i,j,k+1)-c1*Ey(i,j,k) + c2*Ey(i,j,k+2)-c2*Ey(i,j,k-1) ) / dz
                 Hy(i,j,k) = Hy(i,j,k) - db_y(i,j,k)*psi_Hyz1(i,j,k)
                 Hx(i,j,k) = Hx(i,j,k) + db_x(i,j,k)*psi_Hxz1(i,j,k)
@@ -459,7 +459,7 @@ subroutine CPML_H4(Ex,Ey,Ez,Hx,Hy,Hz)!,sig,myu)!,cmax)
             do i = 1,nx!1,nx-1
                 psi_Hyz1(i,j,k) = bh_z(k) * psi_Hyz1(i,j,k)&
                                 + ch_z(k) * ( c1*Ex(i,j,k+1)-c1*Ex(i,j,k) + c2*Ex(i,j,k+2)-c2*Ex(i,j,k-1) ) / dz
-                psi_Hxz1(i,j,k) = bh_y(k) * psi_Hxz1(i,j,k)&
+                psi_Hxz1(i,j,k) = bh_z(k) * psi_Hxz1(i,j,k)&
                                 + ch_z(k) * ( c1*Ey(i,j,k+1)-c1*Ey(i,j,k) + c2*Ey(i,j,k+2)-c2*Ey(i,j,k-1) ) / dz
                 Hy(i,j,k) = Hy(i,j,k) - db_y(i,j,k)*psi_Hyz1(i,j,k)
                 Hx(i,j,k) = Hx(i,j,k) + db_x(i,j,k)*psi_Hxz1(i,j,k)

@@ -2,7 +2,7 @@
 ! 送信源の設定
 !/////////////////////////////////////////////////////////////////////////
 
-subroutine read_source_3d(istep,t,Hz,Je,Jh)
+ subroutine read_source_3d(istep,t,Hz,Je,Jh)
 ! subroutine read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
 
     use const_para
@@ -47,8 +47,8 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
 !     Hz(x0-2,y0,z0) = Hz(x0-2,y0,z0) &
 !                     - signal(istep)*dt / myu(x0-2,y0,z0) /dx/dy/dz!　　　
     !ソース３
-    Hz(x0,y0,z0+7) = Hz(x0,y0,z0+7) &
-                    - signal(istep)*dt / myu(x0,y0,z0+7) /dx/dy/dz!　　　
+    Hz(x1,y0,zsource) = Hz(x1,y0,zsource) &
+                    - signal(istep)*dt / myu(x1,y0,zsource) /dx/dy/dz!　　　
 
     !ソース波形
     write(16,*) t, real(signal(istep)) , aimag(signal(istep))   !signal.d

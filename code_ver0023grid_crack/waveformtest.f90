@@ -22,8 +22,8 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
     !入射波形の設定
 
     !1st_derivative gaussian
-     signal(istep) = - (2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
-
+     signal(istep) = -(2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
+!     write(*,*) signal(istep) !　　　
     !sin波
     !signal(istep) = sin(2.0d0*pi*fmax*istep*dt)
 
@@ -37,7 +37,7 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
 
     !磁場ソースの設定
     Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz!　　　
-
+!     write(*,*) Jh(istep) !　　　
 
     !送信源位置の設定
 !     !ソース1
@@ -49,6 +49,7 @@ subroutine read_source_3d(istep,t,Hz,Je,Jh)
     !ソース３
     Hz(x0,y0,z0+7) = Hz(x0,y0,z0+7) &
                     - signal(istep)*dt / myu(x0,y0,z0+7) /dx/dy/dz!　　　
+
 
     !ソース波形
     write(16,*) t, real(signal(istep)) , aimag(signal(istep))   !signal.d
