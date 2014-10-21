@@ -286,9 +286,9 @@ include 'fftw3.f'
 !///////////////////////////////////////////////////////////
 ! carry out fourier transformation
 !///////////////////////////////////////////////////////////
-	call dfftw_execute(plan1,in1,out1)
-	call dfftw_execute(plan2,in2,out2)
-    call dfftw_execute(plan3,in3,out3)
+	call dfftw_execute_dft(plan1,in1,out1)
+	call dfftw_execute_dft(plan2,in2,out2)
+    call dfftw_execute_dft(plan3,in3,out3)
 
 
 !///////////////////////////////////////////////////////////
