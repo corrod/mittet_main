@@ -12,27 +12,27 @@
 !fwi3d_cpm_function 行1430~参照
 !//////////////////////////////////////////////////////////////////////////
 program f_to_d_h
-	use const_para
-	implicit none
+    use const_para
+    implicit none
 
-	integer :: nd,ios
-	real(8), allocatable :: inp1_r(:),inp1_i(:),inp2_r(:),inp2_i(:),t1(:),t2(:)
-	real(8), allocatable :: w(:) !窓関数
-	real(8) :: om
+    integer :: nd,ios
+    real(8), allocatable :: inp1_r(:),inp1_i(:),inp2_r(:),inp2_i(:),t1(:),t2(:)
+    real(8), allocatable :: w(:) !窓関数
+    real(8) :: om
 
-	integer :: n !, l
-	complex(kind(0d0)),allocatable ::Hz_w(:) !Hz_w(0:nd-1) !周波数領域のHz
-	complex(kind(0d0)),allocatable ::Hz_f(:) !Hz_f(0:nd-1) !ficticiousのH'z
-	complex(kind(0d0)),allocatable ::JZ_w(:) !JZ_w(0:nd-1) !diffusiveのJ'x
-	complex(kind(0d0)),allocatable ::JZ_f(:) !JZ_f(0:nd-1)
-	complex(kind(0d0)),allocatable ::GXh_w(:) !GXh_w(0:nd-1) !diffusive domain Green's function
+    integer :: n !, l
+    complex(kind(0d0)),allocatable ::Hz_w(:) !Hz_w(0:nd-1) !周波数領域のHz
+    complex(kind(0d0)),allocatable ::Hz_f(:) !Hz_f(0:nd-1) !ficticiousのH'z
+    complex(kind(0d0)),allocatable ::JZ_w(:) !JZ_w(0:nd-1) !diffusiveのJ'x
+    complex(kind(0d0)),allocatable ::JZ_f(:) !JZ_f(0:nd-1)
+    complex(kind(0d0)),allocatable ::GXh_w(:) !GXh_w(0:nd-1) !diffusive domain Green's function
     complex(kind(0d0)),allocatable :: inv_JZ_w(:)
-	character(3) :: name
-	!IDFT, IFFT用
-	complex(kind(0d0)),allocatable :: Hz_t(:), JZ_t(:),GXh_t(:)
-	complex(kind(0d0)),allocatable :: in1(:), in2(:), in3(:) !IFFT用
-	complex(kind(0d0)),allocatable :: out1(:), out2(:), out3(:) !IFFT用
-	integer(8) :: plan1, plan2, plan3
+    character(3) :: name
+    !IDFT, IFFT用
+    complex(kind(0d0)),allocatable :: Hz_t(:), JZ_t(:),GXh_t(:)
+    complex(kind(0d0)),allocatable :: in1(:), in2(:), in3(:) !IFFT用
+    complex(kind(0d0)),allocatable :: out1(:), out2(:), out3(:) !IFFT用
+    integer(8) :: plan1, plan2, plan3
 
 include 'fftw3.f'
 
@@ -44,11 +44,11 @@ include 'fftw3.f'
     !Hzファイル（データ）の長さNDを調べる-------------------------------------
     open(51,file='inp1.dat',action='read')
       nd=0
-	    do
-	        read(51,'(f12.0)',iostat=ios)
-	        if (ios<0) exit !ファイルの末尾にきたらループを抜ける
-	         nd=nd+1
-	    enddo
+        do
+            read(51,'(f12.0)',iostat=ios)
+            if (ios<0) exit !ファイルの末尾にきたらループを抜ける
+             nd=nd+1
+        enddo
     close(51)
 
 
@@ -231,9 +231,9 @@ close(51)
 !/////////////////////////////////////////////////////////////////////////////////
     write(*,*) '********************        IFFT start       ********************'
 
-	allocate( Hz_t(0:nd-1),JZ_t(0:nd-1),GXh_t(0:nd-1) )
-	allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
-	allocate( out1(0:nd-1), out2(0:nd-1), out3(0:nd-1) )
+    allocate( Hz_t(0:nd-1),JZ_t(0:nd-1),GXh_t(0:nd-1) )
+    allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
+    allocate( out1(0:nd-1), out2(0:nd-1), out3(0:nd-1) )
 
     Hz_t(0:nd-1) = 0.0d0
     JZ_t(0:nd-1) = 0.0d0
@@ -245,8 +245,8 @@ close(51)
     do j=0,nd-1
         in1(j) = Hz_w(j)
         in2(j) = JZ_w(j)
-		in3(j) = GXh_w(j)
-	enddo
+        in3(j) = GXh_w(j)
+    enddo
 
 !////////////////////////////////////////////////////////////////////////////
 ! in1,in2,in3 に窓関数をかける hamming window
@@ -268,9 +268,9 @@ close(51)
 ! make pland
 !       FFTW_FORWARD (-1) or FFTW_BACKWARD (+1)
 !////////////////////////////////////////////////////////////
-	call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,FFTW_ESTIMATE) !complex array入力
-	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,FFTW_ESTIMATE)
-	call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,FFTW_ESTIMATE)
+    call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,FFTW_ESTIMATE) !complex array入力
+    call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,FFTW_ESTIMATE)
+    call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_BACKWARD,FFTW_ESTIMATE)
 
 !     call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_FORWARD,FFTW_ESTIMATE) !complex array入力
 !     call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_FORWARD,FFTW_ESTIMATE)
@@ -279,46 +279,59 @@ close(51)
 !///////////////////////////////////////////////////////////
 ! carry out fourier trandformation
 !///////////////////////////////////////////////////////////
-	call dfftw_execute(plan1,in1,out1)
-	call dfftw_execute(plan2,in2,out2)
-	call dfftw_execute(plan3,in3,out3)
+    call dfftw_execute_dft(plan1,in1,out1)
+    call dfftw_execute_dft(plan2,in2,out2)
+    call dfftw_execute_dft(plan3,in3,out3)
 
 
 !///////////////////////////////////////////////////////////
 ! destroy plan
 !///////////////////////////////////////////////////////////
-	call dfftw_destroy_plan(plan1)
-	call dfftw_destroy_plan(plan2)
-	call dfftw_destroy_plan(plan3)
+    call dfftw_destroy_plan(plan1)
+    call dfftw_destroy_plan(plan2)
+    call dfftw_destroy_plan(plan3)
 
 
 !////////////////////////////////////////////////////////////
 ! output
 !////////////////////////////////////////////////////////////
-	open(81,file='invGH.dat')
-	open(82,file='invGJ.dat')
-	open(83,file='invGG.dat')
-	do n=0,nd-1
+    open(81,file='invGH.dat')
+    open(82,file='invGJ.dat')
+    open(83,file='invGG.dat')
+    open(84,file='absHZ_t.dat')
+    open(85,file='absJZ_t.dat')
+    open(86,file='absGXh_t.dat')
+
+    do n=0,nd-1
         !スケール
-		out1(n) = out1(n)/nd/dt*2.0d0 !H
-		out2(n) = out2(n)/nd/dt*2.0d0 !J
-		out3(n) = out3(n)/nd/dt*2.0d0 !G
+        out1(n) = out1(n)/nd/dt*2.0d0 !H
+        out2(n) = out2(n)/nd/dt*2.0d0 !J
+        out3(n) = out3(n)/nd/dt*2.0d0 !G
         !スケール /nd 　　　
 !         out1(n) = out1(n)/nd
 !         out2(n) = out2(n)/nd
 !         out3(n) = out3(n)/nd
 
-		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
-		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
-		write(83,*) n*dt, real(out3(n)), aimag(out3(n))
-    GXh_t(n) = out3(n)
-	enddo
-	close(81)
-	close(82)
-	close(83)
+        write(81,*) n*dt, real(out1(n)), aimag(out1(n))
+        write(82,*) n*dt, real(out2(n)), aimag(out2(n))
+        write(83,*) n*dt, real(out3(n)), aimag(out3(n))
+        write(84,*) n*dt, abs(out1(n))
+        write(85,*) n*dt, abs(out2(n))
+        write(86,*) n*dt, abs(out3(n))
 
-	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JZ_w,JZ_f,GXh_w,inv_JZ_w )
-	deallocate( in1,in2,in3,out1,out2,out3,Hz_t,JZ_t,GXh_t )
+    GXh_t(n) = out3(n)
+
+    enddo
+
+    close(81)
+    close(82)
+    close(83)
+    close(84)
+    close(85)
+    close(86)
+
+    deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JZ_w,JZ_f,GXh_w,inv_JZ_w )
+    deallocate( in1,in2,in3,out1,out2,out3,Hz_t,JZ_t,GXh_t )
 
 end program f_to_d_h
 
@@ -386,14 +399,14 @@ end program f_to_d_h
 
 
 ! subroutine convolution_GJ_to_E
-! 	use condt_para
-! 	implicit none
-! 		complex(kind(0d0)) :: in_G
-! 		complex(kind(0d0)) :: in_J
-! 		complex(kind(0d0)) :: in_EF
-! 		complex(kind(0d0)) :: out_G
-! 		complex(kind(0d0)) :: out_J
-! 		complex(kind(0d0)) :: out_ET
+!   use condt_para
+!   implicit none
+!       complex(kind(0d0)) :: in_G
+!       complex(kind(0d0)) :: in_J
+!       complex(kind(0d0)) :: in_EF
+!       complex(kind(0d0)) :: out_G
+!       complex(kind(0d0)) :: out_J
+!       complex(kind(0d0)) :: out_ET
 
 ! end subroutine convolution_GJ_to_E
 
@@ -402,49 +415,49 @@ end program f_to_d_h
 
 ! !!by k
 ! subroutine f_to_d_matrix
-! 	use condt_para
-! 	implicit none
-! 		integer :: s !sampling number 2**○
-! 		do j=1,s
-! 			do k=1,s
-! 				A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ) )   *exp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ))
-! 			enddo
-! 		enddo
+!   use condt_para
+!   implicit none
+!       integer :: s !sampling number 2**○
+!       do j=1,s
+!           do k=1,s
+!               A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ) )   *exp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ))
+!           enddo
+!       enddo
 ! end subroutine f_to_d_matrix
 
 ! !by i
 ! subroutine laplace_fft
-! 	use condt_para
-! 	implicit none
-! 		integer :: n
-! 		integer :: it
-! ! 		integer :: istep!!
-! 		real(8) :: om
-! 		complex(kind(0d0)) :: Hz_w(ndtep)
-! 		complex(kind(0d0)) :: JZ_w(ndtep)
-! 		complex(kind(0d0)) :: GXh_w(ndtep)
+!   use condt_para
+!   implicit none
+!       integer :: n
+!       integer :: it
+! !         integer :: istep!!
+!       real(8) :: om
+!       complex(kind(0d0)) :: Hz_w(ndtep)
+!       complex(kind(0d0)) :: JZ_w(ndtep)
+!       complex(kind(0d0)) :: GXh_w(ndtep)
 
-! 		om =2.0d0*pi/it/dt
-! ! 		om =2.0d0*pi/ndtep/dt
-! ! 		om =2.0d0*pi/istep/dt
-! 		t0=pi/fmax_w
-! 		beta=pi*fmax**2.0d0
+!       om =2.0d0*pi/it/dt
+! !         om =2.0d0*pi/ndtep/dt
+! !         om =2.0d0*pi/istep/dt
+!       t0=pi/fmax_w
+!       beta=pi*fmax**2.0d0
 
 
-! 	do n=1,it  !what's it? !0~? 1~?
+!   do n=1,it  !what's it? !0~? 1~?
 
-! 		do k=1,it
-! 			EX_w(n) = EX_w(n) &
-! 					 + EX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
+!       do k=1,it
+!           EX_w(n) = EX_w(n) &
+!                    + EX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
 
-! 			JZ_w(n) = JZ_w(n) &
-! 					+ sqrt(-2.0d0*omega0/I_u/om/dble(n)) * JZ_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
-! 		enddo
-! 			JZ_w(0) = 2.0d0 * omega0  !!!要確認
+!           JZ_w(n) = JZ_w(n) &
+!                   + sqrt(-2.0d0*omega0/I_u/om/dble(n)) * JZ_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
+!       enddo
+!           JZ_w(0) = 2.0d0 * omega0  !!!要確認
 
-! 			GXh_w(n) = EX_w(n) / JZ_w(n)
+!           GXh_w(n) = EX_w(n) / JZ_w(n)
 
-! 	enddo
+!   enddo
 ! end subroutine laplace_fft
 
 
@@ -460,15 +473,15 @@ end program f_to_d_h
 !///////////////////////////////////////////////////////////////////////////////////
 
 ! program f_to_d
-! 	use condt_para
-! 		implicit none
+!   use condt_para
+!       implicit none
 
-!     		integer                         :: n,nd,ios
-!     		!real(8)                        :: omega
+!           integer                         :: n,nd,ios
+!           !real(8)                        :: omega
 !         real(8), allocatable            :: inp(:), t(:), f(:), p(:)
 !         complex(kind(0d0)), allocatable :: c(:)
-!     	!	complex(kind(0d0)), allocatable :: Gxn(:,:,:),Gyn(:,:,:),Gzn(:,:,:)
-!     	!	real(8), allocatable :: jh(:)
+!       !   complex(kind(0d0)), allocatable :: Gxn(:,:,:),Gyn(:,:,:),Gzn(:,:,:)
+!       !   real(8), allocatable :: jh(:)
 !        ! character(8) :: inp1
 !        ! character(8) :: out1,out2,out3
 !        ! character(5), parameter :: inp2='jh.d'
@@ -476,7 +489,7 @@ end program f_to_d_h
 !         integer :: plan(8)
 
 
-! 	! FFTW3を呼び出すのに必要なヘッダーファイルを include する
+!   ! FFTW3を呼び出すのに必要なヘッダーファイルを include する
 !     include 'fftw3.f'
 
 !     !!! 開始------------------------------------------------------------
@@ -491,7 +504,7 @@ end program f_to_d_h
 !     close(51)
 
 
-!   	!データの長さをnの２乗になるように決めて
+!       !データの長さをnの２乗になるように決めて
 !     !電場exデータ、複素フーリエ係数、フーリエ振幅、フーリエ位相の配列を確保
 !     n = 2**int(log(dble(nd))/ log(2.0d0)+0.5d0)
 
@@ -507,7 +520,7 @@ end program f_to_d_h
 !     close(51)
 
 
-!    	!不足分は0パッディング
+!       !不足分は0パッディング
 !     inp(nd+1:n) = 0.0d0
 
 
@@ -522,7 +535,7 @@ end program f_to_d_h
 !     p= atan2(aimag(c),dble(c))
 
 
-! 	! フーリエ振幅スペクトル，フーリエ位相スペクトルの書き出し
+!   ! フーリエ振幅スペクトル，フーリエ位相スペクトルの書き出し
 !     open(61,file='out1.dat')!,status='replace',action='write')
 !       do i=1,n/2
 !       write(61,*) dble(i-1)/(dble(n)*dt), f(i)
@@ -546,8 +559,8 @@ end program f_to_d_h
 
 !     end program f_to_d
 
-! 	!!!jh-------------------------------------------------------------------
-! 	!ファイル（データ）の長さNDを調べる
+!   !!!jh-------------------------------------------------------------------
+!   !ファイル（データ）の長さNDを調べる
 ! !    open(52,file=inp2,action='read')
 ! !    nd=0
 ! !    do
@@ -557,7 +570,7 @@ end program f_to_d_h
 ! !!    enddo
 !  !   close(52)
 
-!  	!データの長さをnの２乗になるように決めて
+!   !データの長さをnの２乗になるように決めて
 !     !電場exデータ、複素フーリエ係数、フーリエ振幅、フーリエ位相の配列を確保
 ! !     n=2**int(log(dble(nd))/ log(2.0d0)+0.5d0)
 
@@ -571,12 +584,12 @@ end program f_to_d_h
   !  allocate(jh(1:n))
 
     !fftするデータの読み込み
-!	open(52,file=inp2,action='read')          !!!!!!!!!!!!!!  n>ndが崩れるときがある
+!   open(52,file=inp2,action='read')          !!!!!!!!!!!!!!  n>ndが崩れるときがある
  !   read(52,*) jh(1:nd)
   !  close(52)
 
 
- 	!不足分は0パッディング
+    !不足分は0パッディング
   !  jh(nd+1:n)=0.0d0
 
     !fftwの実行
@@ -588,7 +601,7 @@ end program f_to_d_h
     !f= abs(c)
     !p= atan2(aimag(c),dble(c))
 
-	! フーリエ振幅スペクトル，フーリエ位相スペクトルの書き出し
+    ! フーリエ振幅スペクトル，フーリエ位相スペクトルの書き出し
  !   open(61,file=out4,status='replace',action='write')
   !  do i=1,n/2
    ! write(61,*) f(i)
@@ -612,9 +625,9 @@ end program f_to_d_h
 
 
 !!!グリーン関数を求める-------------------------------------------------
-!	Gxn(:,:,:) = Ex / jh
-!	Gyn(:,:,:) = Ey / jh
-!	Gzn(:,:,:) = Ez / jh
+!   Gxn(:,:,:) = Ex / jh
+!   Gyn(:,:,:) = Ey / jh
+!   Gzn(:,:,:) = Ez / jh
 
 
 

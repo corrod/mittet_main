@@ -305,6 +305,10 @@ include 'fftw3.f'
 	open(81,file='invGE.dat')
 	open(82,file='invGJ.dat')
 	open(83,file='invGG.dat')
+    open(84,file='absEX_t.dat')
+    open(85,file='absJZ_t.dat')
+    open(86,file='absGXe_t.dat')
+
 	do n=0,nd-1
 !     do n=1,nd-1　　　
         !スケール
@@ -316,14 +320,23 @@ include 'fftw3.f'
 !         out2(n) = out2(n)/nd !J
 !         out3(n) = out3(n)/nd !GX_t
 
-		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
-		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
-		write(83,*) n*dt, real(out3(n)), aimag(out3(n))
         GXe_t(n) = out3(n)
+
+        write(81,*) n*dt, real(out1(n)), aimag(out1(n))
+        write(82,*) n*dt, real(out2(n)), aimag(out2(n))
+        write(83,*) n*dt, real(out3(n)), aimag(out3(n))
+        write(84,*) n*dt, abs(out1(n))
+        write(85,*) n*dt, abs(out2(n))
+        write(86,*) n*dt, abs(out3(n))
+
 	enddo
+
 	close(81)
 	close(82)
 	close(83)
+    close(84)
+    close(85)
+    close(86)
 
 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JZ_w,JZ_f,GXe_w )
 	deallocate( in1,in2,in3,out1,out2,out3,EX_t,JZ_t,GXe_t )
