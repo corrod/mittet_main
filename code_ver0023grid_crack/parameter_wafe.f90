@@ -18,24 +18,16 @@ module const_para
     implicit none
 
     integer :: i, j, k
-    integer, parameter :: nstep = 3433!12152 !2500!1000 !2000 総タイムステップ数 　
-    integer, parameter :: nx=51, ny=51, nz=165 !nx = 61, ny = 61, nz = 61!グリッド数 奇数　
-    real(8), parameter :: dx = 4.5d-3, dy=dx, dz=dx !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　
-!     real(8), parameter :: dt = 1.870d-6!3.00d-7 !タイムステップ長 s 　
-!     real(8), parameter :: dx = 1.480d-2, dy=dx, dz=dx !1.100d-4, dy = 1.100d-4, dz = 1.100d-4 !　
-!     real(8), parameter :: dt = 3.00d-6!3.00d-7 !タイムステップ長 s 　
+    integer, parameter :: nstep = 4351 ! 総タイムステップ数 　
+    integer, parameter :: nx=101, ny=101, nz=101  !グリッド数 奇数　
+    real(8), parameter :: dx = 4.5d-3, dy=dx, dz=dx !　
     real(8), parameter :: fmax = 2.0d3!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数 　
-    integer, parameter :: x0 = (nx+1)/2, y0 = (ny+1)/2, z0 = (nz+1)/2 !送信源位置
-    integer, parameter :: x1 = x0, y1 = (ny+1)/2, z1 = (nz+1)/2
-    integer, parameter :: x2 = x0-8, y2 = (ny+1)/2, z2 = (nz+1)/2
-    integer, parameter :: x3 = x0-6, y3 = (ny+1)/2, z3 = (nz+1)/2
-    integer, parameter :: x4 = x0-4, y4 = (ny+1)/2, z4 = (nz+1)/2
-    integer, parameter :: x5 = x0-2, y5 = (ny+1)/2, z5 = (nz+1)/2
     integer, parameter :: ncpml = 10 !CPMLのgrid数
+
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
-    complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
     real(8), parameter :: f0 = 1.0d0 !f0が小さいとdtがでかくなる
     real(8), parameter :: omega0 = 2.0d0*pi*f0 !2πf0, !ω0
+    complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
     !optimized L=2
 !     real(8), parameter :: Glim = 6.70d0
 !     real(8), parameter :: c1 = 1.14443d0,c2 = - 0.04886d0
@@ -46,9 +38,27 @@ module const_para
             !     real(8), parameter :: tau0     = 0.02d0!1.6d-4 !送信源出力時間
 
 !model
-    integer, parameter :: plate = ncpml + 16 !鉄板厚さ
-    integer, parameter :: zsource = plate + 30 !ソース位置
+    integer, parameter :: plate = ncpml + 3 !16(15)mm   鉄板厚さ
+    integer, parameter :: offset = 9      !30mm + 15mm = 45mm       送信源ープレート間の距離
+    integer, parameter :: L_ver = 6         !31.1(30)mm パターン１(２)の受信間距離(縦)
+    integer, parameter :: L_hori = 8        !40mm       パターン１(２)の受信間距離(横)
+    integer, parameter :: L_sr = 3           !16.3(15)mm パターン２の送受信距離(縦)
+    integer, parameter :: x0 = (nx+1)/2, y0 = (ny+1)/2, z0 = (nz+1)/2 !中心位置
 
+    integer, parameter :: x_source = x0, y_source = y0, z_source = plate + offset !送信源位置1
+    integer, parameter :: x_source2 = x0+L_hori, y_source2 = y0, z_source2 = plate + offset !送信源位置1
+    !パターン1　ソース位置＝レシーバ①_a
+    integer, parameter :: x1 = x_source,    y1 = y_source, z1 = z_source  !レシーバ位置①
+    integer, parameter :: x2 = x1,          y2 = y1,       z2 = z1 - L_ver      !レシーバ位置②
+    integer, parameter :: x3 = x1 + L_hori, y3 = y1,       z3 = z1 - L_ver      !レシーバ位置③
+
+    !パターン2　ソース位置＝レシーバ①②間
+    integer, parameter :: xx1 = x_source,     yy1 = y_source, zz1 = z_source + L_sr  !レシーバ位置①
+    integer, parameter :: xx2 = xx1,          yy2 = yy1,      zz2 = z_source - L_sr  !レシーバ位置②
+    integer, parameter :: xx3 = xx1 + L_hori, yy3 = yy1,      zz3 = z_source - L_sr  !レシーバ位置③
+
+    !①
+    !② ③
 
 !媒質パラメータ
 !conductivity 導電率

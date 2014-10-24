@@ -40,16 +40,18 @@
 
 
     !送信源位置の設定
-!     !ソース1
+!     !ソース
 !     Hz(x0,y0,z0) = Hz(x0,y0,z0) &
 !                     - signal(istep) * dt / myu(x0,y0,z0) /dx/dy/dz!　　　
-!     !ソース２
+!     !ソース
 !     Hz(x0-2,y0,z0) = Hz(x0-2,y0,z0) &
 !                     - signal(istep)*dt / myu(x0-2,y0,z0) /dx/dy/dz!　　　
-    !ソース３
-    Hz(x1,y0,zsource) = Hz(x1,y0,zsource) &
-                    - signal(istep)*dt / myu(x1,y0,zsource) /dx/dy/dz!　　　
-
+    !ソース1
+    Hz(x_source, y_source, z_source) = Hz(x_source, y_source, z_source) &
+                    - signal(istep)*dt / myu(x_source, y_source, z_source) /dx/dy/dz!　　　
+!    !ソース2
+!     Hz(x_source2, y_source2, z_source2) = Hz(x_source2, y_source2, z_source2) &
+!                     - signal(istep)*dt / myu(x_source2, y_source2, z_source2) /dx/dy/dz!　　　
     !ソース波形
     write(16,*) t, real(signal(istep)) , aimag(signal(istep))   !signal.d
     write(17,*) t, real(Je(istep))     , aimag(Je(istep))       !je_fic.d

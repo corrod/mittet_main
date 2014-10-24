@@ -38,6 +38,10 @@ program main
 !     complex(kind(0d0)) :: Hy(-1:nx+2,-1:ny+2,-1:nz+2)
 !     complex(kind(0d0)) :: Hz(-1:nx+2,-1:ny+2,-1:nz+2)
 
+    open(16,file='signal.d')
+    open(17,file='je_fic.d')
+    open(18,file='jh_fic.d')
+
     open(31,file='hz1000.d')
     open(32,file='hz1010.d')
     open(33,file='hz1020.d')
@@ -45,9 +49,6 @@ program main
     open(35,file='hz1040.d')
     open(36,file='hz1050.d')
 
-    open(16,file='signal.d')
-    open(17,file='je_fic.d')
-    open(18,file='jh_fic.d')
 
     open(20,file='ex1000.d')
     open(21,file='ex1010.d')
@@ -55,12 +56,21 @@ program main
     open(23,file='ex1030.d')
 
 
-open(24,file='hzleft1.d')   !!!反射波の確認
-open(25,file='hzright1.d')  !!!反射波の確認
-open(26,file='hzleft2.d')
-open(27,file='hzright2.d')
-open(28,file='hzleft3.d')
-open(29,file='hzright3.d')
+    open(24,file='hzleft1.d')   !!!反射波の確認
+    open(25,file='hzright1.d')  !!!反射波の確認
+    open(26,file='hzleft2.d')
+    open(27,file='hzright2.d')
+    open(28,file='hzleft3.d')
+    open(29,file='hzright3.d')
+
+    open(51,file = 'pattern1_1.d')   !パターン１
+    open(52,file = 'pattern1_2.d')   !①
+    open(53,file = 'pattern1_3.d')   !② ③
+
+    open(55,file = 'pattern2_1.d')   !パターン２
+    open(56,file = 'pattern2_2.d')   !①
+    open(57,file = 'pattern2_3.d')   !② ③
+
 
 
     !set eh-field to 0
@@ -144,10 +154,20 @@ enddo !*反復計算終了
     close(22)
     close(23)
 
-close(24)
-close(25)
-close(26)
-close(27)
-close(28)
-close(29)
+    close(24)
+    close(25)
+    close(26)
+    close(27)
+    close(28)
+    close(29)
+
+
+    close(51)
+    close(52)
+    close(53)
+
+    close(55)
+    close(56)
+    close(57)
+
             end program main

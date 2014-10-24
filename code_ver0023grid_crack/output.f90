@@ -15,28 +15,50 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     complex(kind(0d0)), intent(in) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     character(5) :: name
-
-
+write(*,*) 'plate_z', plate
+write(*,*) 'x,y,z source',x_source,y_source,z_source
+write(*,*) 'x1,y1,z1',x1,y1,z1
+write(*,*) 'x2,y2,z2',x2,y2,z2
+write(*,*) 'x3,y3,z3',x3,y3,z3
+write(*,*) 'xx1,yy1,zz1',xx1,yy1,zz1
+write(*,*) 'xx2,yy2,zz2',xx2,yy2,zz2
+write(*,*) 'xx3,yy3,zz3',xx3,yy3,zz3
     !hzレシーバー
-    write(31,*) t, real(hz(x1,y0,zsource)),   aimag(hz(x1,y0,zsource))    !hz1000.d
-    write(32,*) t, real(hz(x1+5,y0,zsource)), aimag(hz(x1+5,y0,zsource))  !hz1010.d 　
-    write(33,*) t, real(hz(x1+10,y0,zsource)), aimag(hz(x1+10,y0,zsource))  !hz1020.d 　
-    write(34,*) t, real(hz(x1+15,y0,zsource)), aimag(hz(x1+15,y0,zsource))  !hz1030.d 　
-    write(35,*) t, real(hz(x1+20,y0,zsource)), aimag(hz(x1+20,y0,zsource))  !hz1040.d
-    write(36,*) t, real(hz(x1+25,y0,zsource)), aimag(hz(x1+25,y0,zsource))  !hz1050.d
+    write(31,*) t, real(hz(x1,y0,z_source)),   aimag(hz(x1,y0,z_source))    !hz1000.d
+    write(32,*) t, real(hz(x1+5,y0,z_source)), aimag(hz(x1+5,y0,z_source))  !hz1010.d 　
+    write(33,*) t, real(hz(x1+10,y0,z_source)), aimag(hz(x1+10,y0,z_source))  !hz1020.d 　
+    write(34,*) t, real(hz(x1+15,y0,z_source)), aimag(hz(x1+15,y0,z_source))  !hz1030.d 　
+    write(35,*) t, real(hz(x1+20,y0,z_source)), aimag(hz(x1+20,y0,z_source))  !hz1040.d
+    write(36,*) t, real(hz(x1+20,y0,z_source)), aimag(hz(x1+20,y0,z_source))  !hz1050.d
     !exレシーバー
-    write(20,*) t, real(ex(x1,y0,zsource)),   aimag(ex(x1,y0,zsource))     !ex1000.d
-    write(21,*) t, real(ex(x1+5,y0,zsource)), aimag(ex(x1+5,y0,zsource)) !ex1010.d 　
-    write(22,*) t, real(ex(x1+10,y0,zsource)), aimag(ex(x1+10,y0,zsource)) !ex1020.d 　
-    write(23,*) t, real(ex(x1+15,y0,zsource)), aimag(ex(x1+15,y0,zsource)) !ex1030.d　
+    write(20,*) t, real(ex(x1,y0,z_source)),   aimag(ex(x1,y0,z_source))     !ex1000.d
+    write(21,*) t, real(ex(x1+5,y0,z_source)), aimag(ex(x1+5,y0,z_source)) !ex1010.d 　
+    write(22,*) t, real(ex(x1+10,y0,z_source)), aimag(ex(x1+10,y0,z_source)) !ex1020.d 　
+    write(23,*) t, real(ex(x1+15,y0,z_source)), aimag(ex(x1+15,y0,z_source)) !ex1030.d　
 
     !対称性確認
-    write(24,*) t, real(hz(x1-2,y0,zsource)),  aimag(hz(x1+2,y0,zsource))  !hzleft1.d
-    write(25,*) t, real(hz(nx-11,y0,zsource)), aimag(hz(nx-11,y0,zsource))  !hzright1.d
-    write(26,*) t, real(hz(x1,y0,zsource)), aimag(hz(x1-5,y0,zsource))    !hzleft2.d
-    write(27,*) t, real(hz(x1,y0,zsource)), aimag(hz(x1+5,y0,zsource))    !hzright2.d
-    write(28,*) t, real(hz(x1,y0,zsource)), aimag(hz(x1-10,y0,zsource))   !hzleft3.d
-    write(29,*) t, real(hz(x1,y0,zsource)), aimag(hz(x1+10,y0,zsource))   !hzright3.d
+    write(24,*) t, real(hz(x1-2,y0,z_source)),  aimag(hz(x1+2,y0,z_source))  !hzleft1.d
+    write(25,*) t, real(hz(nx-11,y0,z_source)), aimag(hz(nx-11,y0,z_source))  !hzright1.d
+    write(26,*) t, real(hz(x1,y0,z_source)), aimag(hz(x1-5,y0,z_source))    !hzleft2.d
+    write(27,*) t, real(hz(x1,y0,z_source)), aimag(hz(x1+5,y0,z_source))    !hzright2.d
+    write(28,*) t, real(hz(x1,y0,z_source)), aimag(hz(x1-10,y0,z_source))   !hzleft3.d
+    write(29,*) t, real(hz(x1,y0,z_source)), aimag(hz(x1+10,y0,z_source))   !hzright3.d
+
+
+    !自己比較、相互比較用のアウトプット パターン１
+    !①
+    !② ③
+    write(51,*) t, real(hz(x1,y1,z1)), aimag(hz(x1,y1,z1)) !① patern1_1.d
+    write(52,*) t, real(hz(x2,y2,z2)), aimag(hz(x2,y2,z2)) !② patern1_2.d
+    write(53,*) t, real(hz(x3,y3,z3)), aimag(hz(x3,y3,z3)) !③ patern1_3.d
+
+    !自己比較、相互比較用のアウトプット パターン２
+    !①
+    !② ③
+    write(55,*) t, real(hz(xx1,yy1,zz1)), aimag(hz(xx1,yy1,zz1)) !① patern2_1.d
+    write(56,*) t, real(hz(xx2,yy2,zz2)), aimag(hz(xx2,yy2,zz2)) !② patern2_2.d
+    write(57,*) t, real(hz(xx3,yy3,zz3)), aimag(hz(xx3,yy3,zz3)) !③ patern2_3.d
+
 
 
 !-----------------シェル用出力 MOVIE-------------------------------

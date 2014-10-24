@@ -298,6 +298,10 @@ close(51)
 	open(81,file='invGH.dat')
 	open(82,file='invGJ.dat')
 	open(83,file='invGG.dat')
+    open(84,file='absHZ_t.dat')
+    open(85,file='absJZ_t.dat')
+    open(86,file='absGXh_t.dat')
+
 	do n=0,nd-1
         !スケール
 		out1(n) = out1(n)/nd/dt*2.0d0 !H
@@ -311,11 +315,18 @@ close(51)
 		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
 		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
 		write(83,*) n*dt, real(out3(n)), aimag(out3(n))
+        write(84,*) n*dt, abs(out1(n))
+        write(85,*) n*dt, abs(out2(n))
+        write(86,*) n*dt, abs(out3(n))
     GXh_t(n) = out3(n)
 	enddo
+
 	close(81)
 	close(82)
 	close(83)
+    close(84)
+    close(85)
+    close(86)
 
 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JZ_w,JZ_f,GXh_w,inv_JZ_w )
 	deallocate( in1,in2,in3,out1,out2,out3,Hz_t,JZ_t,GXh_t )

@@ -1,2 +1,26 @@
 set key autotitle columnhead
 １行目を飛ばす
+
+da.dat, db.dat
+  da.dat      db.dat
+  -------     -------
+  x1  ya1     x1  yb1
+  x2  ya2     x2  yb2
+  x3  ya3     x3  yb3
+  ....
+
+  dd.dat
+  -----------------      
+  x1  ya1   x1  yb1
+  x2  ya2   x2  yb2
+  x3  ya3   x3  yb3
+  ....
+dd.datをつくってから
+gnuplot> plot "dd.dat" using 1:($2-$4)
+
+dd.datを作らずに
+gnuplot> plot "< paste da.dat db.dat" using 1:($2-$4) 
+
+元データも表示するには
+gnuplot> plot "< paste da.dat db.dat" using 1:($2-$4), \
+             "" using 1:2, "" using 1:4

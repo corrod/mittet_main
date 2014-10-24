@@ -172,8 +172,8 @@ set palette rgbformulae 33,11,10
 set xlabel "x"
 set ylabel "z"
 set cblabel "[S/m]"
-set xrange[1:50]
-set yrange[1:166]
+set xrange[1:101]
+set yrange[1:101]
 splot 'model_sig_xz.dat' u 1:3:4 with pm3d
 EOF
 

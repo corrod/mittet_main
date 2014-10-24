@@ -5,7 +5,7 @@ date
  export OMP_NUM_THREADS=5
 
 #構造改革
-ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 main2.f90  #-check all -CB -traceback -g -r8
+ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 main2.f90 #-check all -CB -traceback -g -r8
 
 
 
@@ -67,7 +67,7 @@ i=`expr $i + 10`
 j=`expr $j + 10`
 done
 
-rm out*.dat invG*.dat conjg*.dat abs*.dat
+rm out*.dat invG*.dat abs*.dat
 
 
 
@@ -104,7 +104,7 @@ i=`expr $i + 10`
 j=`expr $j + 10`
 done
 
-rm out*.dat invG*.dat conjg*.dat abs*.dat
+rm out*.dat invG*.dat abs*.dat
 
 
 
