@@ -15,16 +15,15 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     complex(kind(0d0)), intent(in) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
     character(5) :: name
-
-    write(*,*) 'plate_z', plate
-    write(*,*) 'x,y,z source',x_source,y_source,z_source
-    write(*,*) 'x,y,z source2',x_source2,y_source2,z_source2
-    write(*,*) 'x1,y1,z1',x1,y1,z1
-    write(*,*) 'x2,y2,z2',x2,y2,z2
-    write(*,*) 'x3,y3,z3',x3,y3,z3
-    write(*,*) 'xx1,yy1,zz1',xx1,yy1,zz1
-    write(*,*) 'xx2,yy2,zz2',xx2,yy2,zz2
-    write(*,*) 'xx3,yy3,zz3',xx3,yy3,zz3
+write(*,*) 'plate_z', plate
+write(*,*) 'x,y,z source',x_source,y_source,z_source
+write(*,*) 'x,y,z source2',x_source2,y_source2,z_source2
+write(*,*) 'x1,y1,z1',x1,y1,z1
+write(*,*) 'x2,y2,z2',x2,y2,z2
+write(*,*) 'x3,y3,z3',x3,y3,z3
+write(*,*) 'xx1,yy1,zz1',xx1,yy1,zz1
+write(*,*) 'xx2,yy2,zz2',xx2,yy2,zz2
+write(*,*) 'xx3,yy3,zz3',xx3,yy3,zz3
     !hzレシーバー
     write(31,*) t, real(hz(x1,y0,z_source)),   aimag(hz(x1,y0,z_source))    !hz1000.d
     write(32,*) t, real(hz(x1+5,y0,z_source)), aimag(hz(x1+5,y0,z_source))  !hz1010.d 　

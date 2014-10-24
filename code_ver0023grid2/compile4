@@ -259,6 +259,8 @@ rm out*.dat invG*.dat abs*.dat
 
 
 # #画像出力::::::::::::::::::::::::::::::::::::
+# 差分出力
+	sh differential.sh
 # #ある点でのH'zの時間分布、計算モデルの出力
   sh gnu.sh
 # #H'zの伝播movie

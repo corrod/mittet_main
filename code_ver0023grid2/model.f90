@@ -149,7 +149,7 @@ subroutine model
 !                 enddo
 !             enddo
 
-    !欠陥
+!     !欠陥
 !     do k=zstart,zend
 !         do j=ystart,yend
 !             do i=xstart,xend
