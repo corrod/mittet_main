@@ -47,7 +47,7 @@ module const_para
 
     integer, parameter :: x_source = x0, y_source = y0, z_source = plate + offset !送信源位置1
     integer, parameter :: x_source2 = x0+L_hori, y_source2 = y0, z_source2 = plate + offset !送信源位置1
-    !パターン1　ソース位置＝レシーバ①_a
+    !パターン1　ソース位置＝レシーバ①
     integer, parameter :: x1 = x_source,    y1 = y_source, z1 = z_source  !レシーバ位置①
     integer, parameter :: x2 = x1,          y2 = y1,       z2 = z1 - L_ver      !レシーバ位置②
     integer, parameter :: x3 = x1 + L_hori, y3 = y1,       z3 = z1 - L_ver      !レシーバ位置③

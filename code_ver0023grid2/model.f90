@@ -27,6 +27,7 @@ subroutine model
     zstart = plate - 2
     zend   = plate
 
+
     write(*,*) 'plate_z', plate
     write(*,*) 'xstart,xend', xstart,xend
     write(*,*) 'ystart,yend', ystart,yend
@@ -87,15 +88,18 @@ subroutine model
 !                 enddo
 !             enddo
 
-!     !欠陥
-!     do k=zstart,zend
-!         do j=ystart,yend
-!             do i=xstart,xend
-!                 sig(i,j,k) = sigwa
-!                 myu(i,j,k) = myuwa
-!             enddo
-!         enddo
-!     enddo
+    !欠陥
+    do k=zstart,zend
+        do j=ystart,yend
+            do i=xstart,xend
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+
+
+
 
 
 

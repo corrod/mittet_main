@@ -27,8 +27,9 @@ ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 wave
 
 time ./ficticious_fwi_cpml > jyouken.txt
 
-
-
+#差分プローブ
+ifort diff_probe.f90
+./a.out
 
 
 
@@ -105,6 +106,25 @@ j=`expr $j + 10`
 done
 
 rm out*.dat invG*.dat abs*.dat
+
+
+
+
+# #画像出力::::::::::::::::::::::::::::::::::::
+# # 差分出力
+#   sh differential.sh
+# #ある点でのH'zの時間分布、計算モデルの出力
+  sh gnu.sh
+# #H'zの伝播movie
+  # sh movie.sh
+
+# python subplot.py
+
+
+
+
+
+
 
 
 
@@ -258,12 +278,3 @@ rm out*.dat invG*.dat abs*.dat
 
 
 
-# #画像出力::::::::::::::::::::::::::::::::::::
-# 差分出力
-	sh differential.sh
-# #ある点でのH'zの時間分布、計算モデルの出力
-  sh gnu.sh
-# #H'zの伝播movie
-  # sh movie.sh
-
-# python subplot.py

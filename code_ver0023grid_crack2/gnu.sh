@@ -236,3 +236,55 @@ set palette rgbformulae 33, 13, 10
 splot "model_myu_xy.dat" u 1:2:4
 EOF
 
+
+# 差分プローブ用出力
+# パターン2 1-2
+gnuplot<<EOF
+set xlabel 't[s]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'pattern2_12diff.eps'
+p 'pattern2_12diff.d' w l lw 2
+EOF
+# パターン2 2-3
+gnuplot<<EOF
+set xlabel 't[s]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'pattern2_23diff.eps'
+p 'pattern2_23diff.d' w l lw 2
+EOF
+
+# # パターン1 ①−②
+# gnuplot<<EOF
+# set xlabel 't[s]'
+# set ylabel 'amp'
+# set term postscript enhanced color
+# set out 'pattern1_12differential.eps'
+# p "< paste pattern1_1.d pattern1_2.d" using 1:(\$2-\$5) w l
+# EOF
+
+# gnuplot<<EOF
+# set xlabel 't[s]'
+# set ylabel 'amp'
+# set term postscript enhanced color
+# set out 'pattern1_12differential_all.eps'
+# p "< paste pattern1_1.d pattern1_2.d" using 1:(\$2-\$5) w l, "" using 1:2 w l, "" using 1:5 w l
+# EOF
+
+# # パターン1 ②−③
+# gnuplot<<EOF
+# set xlabel 't[s]'
+# set ylabel 'amp'
+# set term postscript enhanced color
+# set out 'pattern1_23differential.eps'
+# p "< paste pattern1_2.d pattern1_3.d" using 1:(\$2-\$5) w l
+# EOF
+
+# gnuplot<<EOF
+# set xlabel 't[s]'
+# set ylabel 'amp'
+# set term postscript enhanced color
+# set out 'pattern1_23differential_all.eps'
+# p "< paste pattern1_2.d pattern1_3.d" using 1:(\$2-\$5) w l, "" using 1:2 w l, "" using 1:5 w l
+# EOF

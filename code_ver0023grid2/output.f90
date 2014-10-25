@@ -32,10 +32,10 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     !対称性確認
     write(24,*) t, real(hz(x1-2,y0,z_source)),  aimag(hz(x1+2,y0,z_source))  !hzleft1.d
     write(25,*) t, real(hz(nx-11,y0,z_source)), aimag(hz(nx-11,y0,z_source))  !hzright1.d
-    write(26,*) t, real(hz(x1,y0,z_source)), aimag(hz(x1-5,y0,z_source))    !hzleft2.d
-    write(27,*) t, real(hz(x1,y0,z_source)), aimag(hz(x1+5,y0,z_source))    !hzright2.d
-    write(28,*) t, real(hz(x1,y0,z_source)), aimag(hz(x1-10,y0,z_source))   !hzleft3.d
-    write(29,*) t, real(hz(x1,y0,z_source)), aimag(hz(x1+10,y0,z_source))   !hzright3.d
+    write(26,*) t, real(hz(x1-5,y0,z_source)), aimag(hz(x1-5,y0,z_source))    !hzleft2.d
+    write(27,*) t, real(hz(x1+5,y0,z_source)), aimag(hz(x1+5,y0,z_source))    !hzright2.d
+    write(28,*) t, real(hz(x1-10,y0,z_source)), aimag(hz(x1-10,y0,z_source))   !hzleft3.d
+    write(29,*) t, real(hz(x1+10,y0,z_source)), aimag(hz(x1+10,y0,z_source))   !hzright3.d
 
 
     !自己比較、相互比較用のアウトプット パターン１
