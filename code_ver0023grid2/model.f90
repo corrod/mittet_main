@@ -35,6 +35,65 @@ subroutine model
 
 
 
+    ! !model3 立方体形状欠陥モデル（空気層無し）_______________
+
+!     do k=1,nz
+!         do j=1,ny
+!             do i=1,nx
+!                 sig(i,j,k) = sigfe
+!                 myu(i,j,k) = myufe
+!                 if(k>plate) then
+!                     sig(i,j,k) = sigwa
+!                     myu(i,j,k) = myuwa
+!                     elseif(i>=xstart .and. i<=xend &
+!                      .and. j>=ystart .and. j<=yend &
+!                      .and. k>=zstart .and. k<= zend) then
+!                     sig(i,j,k) = sigwa
+!                     myu(i,j,k) = myuwa
+!                 endif
+!             enddo
+!         enddo
+!     enddo
+
+    !海水
+    do k=1,nz
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+    !鉄板
+    do k=1,zend
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigfe
+                myu(i,j,k) = myufe
+            enddo
+        enddo
+    enddo
+!             !海水ー鉄板境界
+!             k = zend +1
+!             do j = 1,ny
+!                 do i = 1,nx
+!                     sig(i,j,k) = (sigwa + sigfe) * 0.5d0
+!                     myu(i,j,k) = (myuwa + myufe) * 0.5d0
+!                 enddo
+!             enddo
+
+!     !欠陥
+!     do k=zstart,zend
+!         do j=ystart,yend
+!             do i=xstart,xend
+!                 sig(i,j,k) = sigwa
+!                 myu(i,j,k) = myuwa
+!             enddo
+!         enddo
+!     enddo
+
+
+
     ! ! model1 海水一様モデル______________________
     ! ! !海水
     ! sig(1:nx, 1:ny, 1:nz) = sigwa
@@ -102,62 +161,6 @@ subroutine model
 
 
 
-    ! !model3 立方体形状欠陥モデル（空気層無し）_______________
-
-!     do k=1,nz
-!         do j=1,ny
-!             do i=1,nx
-!                 sig(i,j,k) = sigfe
-!                 myu(i,j,k) = myufe
-!                 if(k>plate) then
-!                     sig(i,j,k) = sigwa
-!                     myu(i,j,k) = myuwa
-!                     elseif(i>=xstart .and. i<=xend &
-!                      .and. j>=ystart .and. j<=yend &
-!                      .and. k>=zstart .and. k<= zend) then
-!                     sig(i,j,k) = sigwa
-!                     myu(i,j,k) = myuwa
-!                 endif
-!             enddo
-!         enddo
-!     enddo
-
-    !海水
-    do k=1,nz
-        do j=1,ny
-            do i=1,nx
-                sig(i,j,k) = sigwa
-                myu(i,j,k) = myuwa
-            enddo
-        enddo
-    enddo
-    !鉄板
-    do k=1,zend
-        do j=1,ny
-            do i=1,nx
-                sig(i,j,k) = sigfe
-                myu(i,j,k) = myufe
-            enddo
-        enddo
-    enddo
-!             !海水ー鉄板境界
-!             k = zend +1
-!             do j = 1,ny
-!                 do i = 1,nx
-!                     sig(i,j,k) = (sigwa + sigfe) * 0.5d0
-!                     myu(i,j,k) = (myuwa + myufe) * 0.5d0
-!                 enddo
-!             enddo
-
-!     !欠陥
-!     do k=zstart,zend
-!         do j=ystart,yend
-!             do i=xstart,xend
-!                 sig(i,j,k) = sigwa
-!                 myu(i,j,k) = myuwa
-!             enddo
-!         enddo
-!     enddo
 
 
 
