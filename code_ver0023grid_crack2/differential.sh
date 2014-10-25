@@ -1,4 +1,21 @@
 #!/bin/sh
+
+gnuplot<<EOF
+set xlabel 't[s]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'pattern2_12diff.eps'
+p 'pattern2_12diff.d' w l lw 2
+EOF
+
+gnuplot<<EOF
+set xlabel 't[s]'
+set ylabel 'amp'
+set term postscript enhanced color
+set out 'pattern2_23diff.eps'
+p 'pattern2_23diff.d' w l lw 2
+EOF
+
 # パターン1 ①−②
 gnuplot<<EOF
 set xlabel 't[s]'
