@@ -33,6 +33,18 @@ subroutine model
 !     zstart = plate - 8
 !     zend   = plate
 
+write(*,*) 'plate_z', plate
+write(*,*) 'xstart,xend', xstart,xend
+write(*,*) 'ystart,yend', ystart,yend
+write(*,*) 'zstart,zend', zstart,zend
+write(*,*) 'x,y,z source',x_source,y_source,z_source
+write(*,*) 'x,y,z source2',x_source2,y_source2,z_source2
+write(*,*) 'x1,y1,z1',x1,y1,z1
+write(*,*) 'x2,y2,z2',x2,y2,z2
+write(*,*) 'x3,y3,z3',x3,y3,z3
+write(*,*) 'xx1,yy1,zz1',xx1,yy1,zz1
+write(*,*) 'xx2,yy2,zz2',xx2,yy2,zz2
+write(*,*) 'xx3,yy3,zz3',xx3,yy3,zz3
 
     ! !model3 立方体形状欠陥モデル（空気層無し）_______________
 
