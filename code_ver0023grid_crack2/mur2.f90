@@ -286,8 +286,9 @@ subroutine mur_yz(ex,ey,ez)
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!(z軸方向に伝播) 486 未 引数をあわせていない  do範囲 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!(z軸方向に伝播) 486 未 引数をあわせていない  do範囲 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 subroutine mur_xy(ex,ey,ez)
 	use const_para
 	implicit none
@@ -347,7 +348,7 @@ subroutine mur_xy(ex,ey,ez)
 	enddo
 
 !過去の値の更
-do j=2,ny-1
+ do j=2,ny-1
 	do i=1,nx-1
 			exz2(i,j,1)=exz1(i,j,1)
 			exz2(i,j,2)=exz1(i,j,2)
@@ -417,4 +418,4 @@ do j=2,ny-1
 		enddo
 	enddo
 
-	end subroutine mur_xy
+	   	end subroutine mur_xy

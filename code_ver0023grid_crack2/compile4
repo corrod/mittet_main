@@ -5,8 +5,9 @@ date
  export OMP_NUM_THREADS=5
 
 #構造改革
-ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 main2.f90 #-check all -CB -traceback -g -r8　
+ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 main2.f90 -check all -CB -traceback -g -r8
 
+# window_function抜き
 
 
 
@@ -48,7 +49,7 @@ max=30
 while [ $j -le $max ]; do
 cp hz$i.d inp1.dat #H'
 
-ifort -parallel -o f_to_d parameter_wafe.f90 window_function.f90 f_to_d_h2_noconjg.f90 -lfftw3 #-check all -CB -traceback -g -r8
+ifort -parallel -o f_to_d parameter_wafe.f90 window_function.f90 f_to_d_h2_noconjg.f90 -lfftw3 -check all -CB -traceback -g -r8
 ./f_to_d
 
 cp out1.dat HZ_w$i.d
@@ -83,7 +84,7 @@ max=30
 while [ $j -le $max ]; do
 cp ex$i.d inp1.dat #E'
 
-ifort -parallel -o f_to_d parameter_wafe.f90 window_function.f90 f_to_d_e2_noconjg.f90 -lfftw3 #-check all -CB -traceback -g -r8  #-I/usr/local/include -lfftw3 -check all -CB -traceback -g -r8
+ifort -parallel -o f_to_d parameter_wafe.f90 window_function.f90 f_to_d_e2_noconjg.f90 -lfftw3 -check all -CB -traceback -g -r8  #-I/usr/local/include -lfftw3 -check all -CB -traceback -g -r8
 ./f_to_d
 # freq
 cp out1.dat EX_w$i.d

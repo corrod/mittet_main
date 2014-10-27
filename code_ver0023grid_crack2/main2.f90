@@ -28,15 +28,8 @@ program main
     real(8)            :: t !経過時間
     complex(kind(0d0)) :: Je(nstep) !電流源
     complex(kind(0d0)) :: Jh(nstep) !磁流源
-!     real(8)            :: sig(nx,ny,nz),myu(nx,ny,nz)
     complex(kind(0d0)) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
-!     complex(kind(0d0)) :: Ex(-1:nx+2,-1:ny+2,-1:nz+2)
-!     complex(kind(0d0)) :: Ey(-1:nx+2,-1:ny+2,-1:nz+2)
-!     complex(kind(0d0)) :: Ez(-1:nx+2,-1:ny+2,-1:nz+2)
-!     complex(kind(0d0)) :: Hx(-1:nx+2,-1:ny+2,-1:nz+2)
-!     complex(kind(0d0)) :: Hy(-1:nx+2,-1:ny+2,-1:nz+2)
-!     complex(kind(0d0)) :: Hz(-1:nx+2,-1:ny+2,-1:nz+2)
 
     open(16,file='signal.d')
     open(17,file='je_fic.d')
@@ -73,7 +66,7 @@ program main
 
 
 
-    !set eh-field to 0
+    !set EM-field to 0
     call set_zero_eh(EX,EY,EZ,HX,HY,HZ)
 
     write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
@@ -89,7 +82,6 @@ t=0.0d0!開始時間-----------------------------------
     call confirm_parameter
 
 do istep = 1, nstep !反復計算開始----------------------
-!     write(*,*) istep
 
     !入力波源の設定
     call read_source_3d(istep,t,Hz,Je,Jh)
@@ -131,10 +123,7 @@ t = t + dt*0.5d0 !時間の更新---------------------------
     !アウトプットE-field、H-field
     call output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
-
 enddo !*反復計算終了
-
-
 
 
     close(31)

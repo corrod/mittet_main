@@ -92,7 +92,7 @@ subroutine inv_fourier
 	open()
 	write() dt*k,real(JX_t(k)),real(I*JX_t(k))
 	close()
-
+end subroutine inv_fourier
 
 
 
