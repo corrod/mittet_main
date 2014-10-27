@@ -134,8 +134,7 @@ t = t + dt*0.5d0 !時間の更新---------------------------
 
 enddo !*反復計算終了
 
-    !グリーン関数の導出
-    !call green()
+
 
 
     close(31)
@@ -170,4 +169,4 @@ enddo !*反復計算終了
     close(56)
     close(57)
 
-            end program main
+        end program main

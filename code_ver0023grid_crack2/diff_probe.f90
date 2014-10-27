@@ -51,4 +51,4 @@ program diff_probe
 
     deallocate(in1_1,in1_2,in1_3,in2_1,in2_2,in2_3,in3_1,in3_2,in3_3)
 
-end program diff_probe
+        end program diff_probe

@@ -10,6 +10,7 @@
 !JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
 !としているが、JZ_f = signal(istep) かもしれない
 !//////////////////////////////////////////////////////////////////////////
+
 program f_to_d_e
 	use const_para
 	implicit none
@@ -341,9 +342,7 @@ include 'fftw3.f'
 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JZ_w,JZ_f,GXe_w )
 	deallocate( in1,in2,in3,out1,out2,out3,EX_t,JZ_t,GXe_t )
 
-
-
-end program f_to_d_e
+        end program f_to_d_e
 
 
 

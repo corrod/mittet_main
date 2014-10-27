@@ -85,7 +85,8 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 !             enddo
 !     close(9)
 !     endif
-            end subroutine output_EH_J
+
+        end subroutine output_EH_J
 
 
 

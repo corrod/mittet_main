@@ -28,6 +28,7 @@ module const_para
     real(8), parameter :: f0 = 1.0d0 !f0が小さいとdtがでかくなる
     real(8), parameter :: omega0 = 2.0d0*pi*f0 !2πf0, !ω0
     complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
+
     !optimized L=2
 !     real(8), parameter :: Glim = 6.70d0
 !     real(8), parameter :: c1 = 1.14443d0,c2 = - 0.04886d0
@@ -35,7 +36,6 @@ module const_para
     real(8), parameter :: Glim = 10.4d0
     real(8), parameter  :: c1 = 1.125d0, c2 = - 0.04167d0
 
-            !     real(8), parameter :: tau0     = 0.02d0!1.6d-4 !送信源出力時間
 
 !model
     integer, parameter :: plate = ncpml + 3 !16(15)mm   鉄板厚さ
@@ -59,6 +59,7 @@ module const_para
 
     !①
     !② ③
+
 
 !媒質パラメータ
 !conductivity 導電率
@@ -87,6 +88,7 @@ module const_para
     real(8) :: sig(nx,ny,nz)
     real(8) :: myu(nx,ny,nz)
 
+
 !伝播速度設定 cmax, cmin
     real(8), parameter :: CC = 2.997924580d8 !光速
     real(8), parameter :: cair = sqrt(2.0d0*omega0/myuair/sigair)
@@ -95,24 +97,15 @@ module const_para
     real(8), parameter :: cmin = min(cwa,cfe)
     real(8), parameter :: cmax = max(cwa,cfe)
 
-! タイムステップ長 dt
-! optimized dt
-! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0
-! taylor dt
-real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0
-! fourier dt
-! real(8) :: dt = 0.999d0*(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax)
 
-!mur 変数
-    real(8) :: cxd, cxu, cxx
-    real(8) :: cxfyd, cxfzd
-    real(8) :: cyd, cyu, cyy
-    real(8) :: cyfxd, cyfzd
-    real(8) :: czd, czu, czz
-    real(8) :: czfxd, czfyd
-    complex(kind(0d0)) :: eyx1(nx,ny,nz),eyx2(nx,ny,nz),ezx1(nx,ny,nz),ezx2(nx,ny,nz)
-    complex(kind(0d0)) :: exy1(nx,ny,nz),exy2(nx,ny,nz),ezy1(nx,ny,nz),ezy2(nx,ny,nz)
-    complex(kind(0d0)) :: exz1(nx,ny,nz),exz2(nx,ny,nz),eyz1(nx,ny,nz),eyz2(nx,ny,nz)
+! タイムステップ長 dt
+    ! optimized dt
+    ! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0
+    ! taylor dt
+    real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0
+    ! fourier dt
+    ! real(8) :: dt = 0.999d0*(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax)
+
 
 !CPML
     integer, parameter  :: m         = 4, ma = 1 !mの代わりにnn
@@ -131,7 +124,7 @@ real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0
     real(8) :: scaler
     real(8) :: grad(nx,ny,nz)
     real(8) :: sig2(nx,ny,nz)
-    real(8) :: eps2 !eps2(nx,ny,nz)
+    real(8) :: eps2
 
     real(8) :: ca_x(nx,ny,nz)
     real(8) :: ca_y(nx,ny,nz)
@@ -198,10 +191,22 @@ real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0
     real(8) :: khdy(ny)
     real(8) :: khdz(nz)
 
+
+!mur 変数
+    real(8) :: cxd, cxu, cxx
+    real(8) :: cxfyd, cxfzd
+    real(8) :: cyd, cyu, cyy
+    real(8) :: cyfxd, cyfzd
+    real(8) :: czd, czu, czz
+    real(8) :: czfxd, czfyd
+    complex(kind(0d0)) :: eyx1(nx,ny,nz),eyx2(nx,ny,nz),ezx1(nx,ny,nz),ezx2(nx,ny,nz)
+    complex(kind(0d0)) :: exy1(nx,ny,nz),exy2(nx,ny,nz),ezy1(nx,ny,nz),ezy2(nx,ny,nz)
+    complex(kind(0d0)) :: exz1(nx,ny,nz),exz2(nx,ny,nz),eyz1(nx,ny,nz),eyz2(nx,ny,nz)
+
+!不明な変数
     real(8) :: epsi(nx,ny,nz)
-
-
 !     real(8)            :: sigxx(nx,ny,nz) !diagonal sig x
 !     real(8)            :: sigyy(nx,ny,nz) !diagonal sig y
 !     real(8)            :: sigzz(nx,ny,nz) !diagonal sig z
-            end module const_para
+
+        end module const_para

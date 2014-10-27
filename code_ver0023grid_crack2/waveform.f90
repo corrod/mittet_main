@@ -1,9 +1,9 @@
 !//////////////////////////////////////////////////////////////////////////
 ! 送信源の設定
+! ソース2点 x_source, x_source2
 !/////////////////////////////////////////////////////////////////////////
 
  subroutine read_source_3d(istep,t,Hz,Je,Jh)
-! subroutine read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
 
     use const_para
     implicit none
@@ -22,7 +22,7 @@
     !入射波形の設定
 
     !1st_derivative gaussian
-     signal(istep) = - (2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
+    signal(istep) = - (2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
 
     !sin波
     !signal(istep) = sin(2.0d0*pi*fmax*istep*dt)
@@ -40,22 +40,19 @@
 
 
     !送信源位置の設定
-!     !ソース
-!     Hz(x0,y0,z0) = Hz(x0,y0,z0) &
-!                     - signal(istep) * dt / myu(x0,y0,z0) /dx/dy/dz!　　　
-!     !ソース
-!     Hz(x0-2,y0,z0) = Hz(x0-2,y0,z0) &
-!                     - signal(istep)*dt / myu(x0-2,y0,z0) /dx/dy/dz!　　　
-    !ソース1
+
+    !ソース1(left)
     Hz(x_source, y_source, z_source) = Hz(x_source, y_source, z_source) &
                     - signal(istep)*dt / myu(x_source, y_source, z_source) /dx/dy/dz!　　　
-!    !ソース2
+!    !ソース2(right)
     Hz(x_source2, y_source2, z_source2) = Hz(x_source2, y_source2, z_source2) &
                     - signal(istep)*dt / myu(x_source2, y_source2, z_source2) /dx/dy/dz!　　　
+
     !ソース波形
     write(16,*) t, real(signal(istep)) , aimag(signal(istep))   !signal.d
     write(17,*) t, real(Je(istep))     , aimag(Je(istep))       !je_fic.d
     write(18,*) t, real(Jh(istep))     , aimag(Jh(istep))       !jh_fic.d
+
         end subroutine read_source_3d
 
 
