@@ -17,25 +17,25 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
     character(5) :: name
 
     !hzレシーバー
-    write(31,*) t, real(hz(x1,y0,z_source)),   aimag(hz(x1,y0,z_source))    !hz1000.d
-    write(32,*) t, real(hz(x1+5,y0,z_source)), aimag(hz(x1+5,y0,z_source))  !hz1010.d 　
+    write(31,*) t, real(hz(x1,y0,z_source)),    aimag(hz(x1,y0,z_source))    !hz1000.d
+    write(32,*) t, real(hz(x1+5,y0,z_source)),  aimag(hz(x1+5,y0,z_source))  !hz1010.d 　
     write(33,*) t, real(hz(x1+10,y0,z_source)), aimag(hz(x1+10,y0,z_source))  !hz1020.d 　
     write(34,*) t, real(hz(x1+15,y0,z_source)), aimag(hz(x1+15,y0,z_source))  !hz1030.d 　
     write(35,*) t, real(hz(x1+20,y0,z_source)), aimag(hz(x1+20,y0,z_source))  !hz1040.d
     write(36,*) t, real(hz(x1+20,y0,z_source)), aimag(hz(x1+20,y0,z_source))  !hz1050.d
     !exレシーバー
-    write(20,*) t, real(ex(x1,y0,z_source)),   aimag(ex(x1,y0,z_source))     !ex1000.d
-    write(21,*) t, real(ex(x1+5,y0,z_source)), aimag(ex(x1+5,y0,z_source)) !ex1010.d 　
+    write(20,*) t, real(ex(x1,y0,z_source)),    aimag(ex(x1,y0,z_source))    !ex1000.d
+    write(21,*) t, real(ex(x1+5,y0,z_source)),  aimag(ex(x1+5,y0,z_source))  !ex1010.d 　
     write(22,*) t, real(ex(x1+10,y0,z_source)), aimag(ex(x1+10,y0,z_source)) !ex1020.d 　
     write(23,*) t, real(ex(x1+15,y0,z_source)), aimag(ex(x1+15,y0,z_source)) !ex1030.d　
 
     !対称性確認
     write(24,*) t, real(hz(x1-2,y0,z_source)),  aimag(hz(x1+2,y0,z_source))  !hzleft1.d
-    write(25,*) t, real(hz(nx-11,y0,z_source)), aimag(hz(nx-11,y0,z_source))  !hzright1.d
-    write(26,*) t, real(hz(x1-5,y0,z_source)), aimag(hz(x1-5,y0,z_source))    !hzleft2.d
-    write(27,*) t, real(hz(x1+5,y0,z_source)), aimag(hz(x1+5,y0,z_source))    !hzright2.d
-    write(28,*) t, real(hz(x1-10,y0,z_source)), aimag(hz(x1-10,y0,z_source))   !hzleft3.d
-    write(29,*) t, real(hz(x1+10,y0,z_source)), aimag(hz(x1+10,y0,z_source))   !hzright3.d
+    write(25,*) t, real(hz(nx-11,y0,z_source)), aimag(hz(nx-11,y0,z_source)) !hzright1.d
+    write(26,*) t, real(hz(x1-5,y0,z_source)),  aimag(hz(x1-5,y0,z_source))  !hzleft2.d
+    write(27,*) t, real(hz(x1+5,y0,z_source)),  aimag(hz(x1+5,y0,z_source))  !hzright2.d
+    write(28,*) t, real(hz(x1-10,y0,z_source)), aimag(hz(x1-10,y0,z_source)) !hzleft3.d
+    write(29,*) t, real(hz(x1+10,y0,z_source)), aimag(hz(x1+10,y0,z_source)) !hzright3.d
 
 
     !自己比較、相互比較用のアウトプット パターン１
