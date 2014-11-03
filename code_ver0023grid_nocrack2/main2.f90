@@ -64,7 +64,7 @@ program main
     open(56,file = 'pattern2_2.d')   !①
     open(57,file = 'pattern2_3.d')   !② ③
 
-write(*,*) 'crack_ver'
+
 
     !set EM-field to 0
     call set_zero_eh(EX,EY,EZ,HX,HY,HZ)
