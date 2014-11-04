@@ -11,6 +11,7 @@
     integer, intent(in)  :: istep
     real(8), intent(in)  :: t
     complex(kind(0d0))   :: signal(nstep)!1st derivatice gaussian
+    complex(kind(0d0))   :: signal_sin(nstep) !sin波
     complex(kind(0d0)), intent(out) :: Je(nstep)!電場ソース
     complex(kind(0d0)), intent(out) :: Jh(nstep)!磁場ソース
 !     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz)!電場ソース
@@ -19,27 +20,27 @@
     real(8), parameter   :: t0 = pi/fmax
     real(8), parameter   :: beta = pi*(fmax**2)
 
-    !入射波形の設定
+    !入射波形の設定!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !1st_derivative gaussian
     signal(istep) = - (2.0d0*beta*(istep*dt-t0)*sqrt(beta/pi))*exp(-beta*(istep*dt-t0)**2.0d0)
 
     !sin波
-    !signal(istep) = sin(2.0d0*pi*fmax*istep*dt)
+    signal_sin(istep) = sin(2.0d0*pi*fmax*istep*dt)
 
 
-    !電場ソースの設定
+    !電場ソースの設定!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     etaxx(x0,y0,z0) = (2.0d0*omega0) / sig(x0,y0,z0)
     Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 
 !     Ex(x0,y0,z0) = Ex(x0,y0,z0) &
 !                     - dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
 
-    !磁場ソースの設定
+    !磁場ソースの設定!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz!　　　
 
 
-    !送信源位置の設定
+    !送信源位置の設定!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     !ソース1(left)
     Hz(x_source, y_source, z_source) = Hz(x_source, y_source, z_source) &
@@ -49,6 +50,7 @@
                     - signal(istep)*dt / myu(x_source2, y_source2, z_source2) /dx/dy/dz!　　　
 
     !ソース波形
+    write(15,*) t, real(signal_sin(istep)) , aimag(signal_sin(istep)) !signal_sin.d
     write(16,*) t, real(signal(istep)) , aimag(signal(istep))   !signal.d
     write(17,*) t, real(Je(istep))     , aimag(Je(istep))       !je_fic.d
     write(18,*) t, real(Jh(istep))     , aimag(Jh(istep))       !jh_fic.d

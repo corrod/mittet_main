@@ -32,7 +32,7 @@ time ./ficticious_fwi_cpml > jyouken.txt
 ifort diff_probe.f90
 ./a.out
 
-
+#リサジュー曲線 lissajous.sh
 
 # -----------------------------------------------------------------------------------
 # no conjg

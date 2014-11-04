@@ -1,6 +1,6 @@
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !ファイル出力用サブルーチン
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
@@ -40,13 +40,15 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
     !自己比較、相互比較用のアウトプット パターン１
     !①
+    !●
     !② ③
-    write(51,*) t, real(hz(x1,y1,z1)), aimag(hz(x1,y1,z1)) !① patern1_1.d
-    write(52,*) t, real(hz(x2,y2,z2)), aimag(hz(x2,y2,z2)) !② patern1_2.d
-    write(53,*) t, real(hz(x3,y3,z3)), aimag(hz(x3,y3,z3)) !③ patern1_3.d
+!     write(51,*) t, real(hz(x1,y1,z1)), aimag(hz(x1,y1,z1)) !① patern1_1.d
+!     write(52,*) t, real(hz(x2,y2,z2)), aimag(hz(x2,y2,z2)) !② patern1_2.d
+!     write(53,*) t, real(hz(x3,y3,z3)), aimag(hz(x3,y3,z3)) !③ patern1_3.d
 
     !自己比較、相互比較用のアウトプット パターン２
     !①
+    !● ●
     !② ③
     write(55,*) t, real(hz(xx1,yy1,zz1)), aimag(hz(xx1,yy1,zz1)) !① patern2_1.d
     write(56,*) t, real(hz(xx2,yy2,zz2)), aimag(hz(xx2,yy2,zz2)) !② patern2_2.d
@@ -54,7 +56,7 @@ subroutine output_EH_J(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
 
 
-!-----------------シェル用出力 MOVIE-------------------------------
+!-----------------シェル用出力 MOVIE-------------------------------------------
     if (mod(istep,50)==0) then
    l=10000+istep/50
     write(name,"(I5)") l
