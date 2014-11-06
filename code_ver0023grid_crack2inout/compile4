@@ -1,0 +1,281 @@
+#!/bin/sh
+date
+
+#メインスクリプト:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ export OMP_NUM_THREADS=5
+
+#構造改革
+ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 source_posi.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 main2.f90 #-check all -CB -traceback -g -r8
+
+# window_function抜き
+
+
+
+# # all in
+# ifort -o ficticious_fwd parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field_cpml4.f90 e_field4.f90 h_field_cpml4.f90 h_field4.f90 cpml.f90 mur2.f90 cerjan.f90 pml.f90 main2.f90 # -check all -CB -traceback -g -r8
+
+# CPML
+# ifort -o ficticious_cpml parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field4.f90 h_field4.f90 cpml.f90 main2.f90 # -check all -CB -traceback -g -r8
+
+# Mur
+ # ifort -o ficticious parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field4.f90 mur2.f90 h_field4.f90 main2.f90 # -check all -CB -traceback -g -r8
+
+# cerjan
+# ifort -o ficticious parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field4.f90 cerjan.f90 h_field4.f90 main2.f90 #-check all -CB -traceback -g -r8
+
+# PML
+# ifort -o ficticious parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field4.f90 e_pml.f90 h_field4.f90 h_pml.f90 main2.f90 #-check all -CB -traceback -g -r8
+
+time ./ficticious_fwi_cpml > jyouken.txt
+
+#差分プローブ
+ifort diff_probe.f90
+./a.out
+
+#リサジュー曲線 lissajous.sh
+
+# -----------------------------------------------------------------------------------
+# no conjg
+# -----------------------------------------------------------------------------------
+
+#DFT,IDFT,IFFTスクリプト(H)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# cp jh_fic.d inp2.dat #source J'
+cp signal.d inp2.dat
+
+i=1010
+j=`expr $i - 1000`
+max=30
+
+while [ $j -le $max ]; do
+cp hz$i.d inp1.dat #H'
+
+ifort -parallel -o f_to_d parameter_wafe.f90 window_function.f90 f_to_d_h2_noconjg.f90 -lfftw3 #-check all -CB -traceback -g -r8
+./f_to_d
+
+cp out1.dat HZ_w$i.d
+cp out2.dat JZ_w$i.d
+cp out3.dat GXh_w$i.d
+cp out4.dat absHZ_w$i.d
+cp out5.dat absJZ_w$i.d
+cp out6.dat absGXh_w$i.d
+
+cp invGH.dat HZ_t$i.d
+cp invGJ.dat JZ_t$i.d
+cp invGG.dat GXh_t$i.d
+cp absHZ_t.dat absHZ_t$i.d
+cp absJZ_t.dat absJZ_t$i.d
+cp absGXh_t.dat absGXh_t$i.d
+i=`expr $i + 10`
+j=`expr $j + 10`
+done
+
+rm out*.dat invG*.dat abs*.dat
+
+
+
+#DFT,IDFT,IFFTスクリプト(E)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# cp jh_fic.d inp2.dat #source J'
+cp signal.d inp2.dat
+
+i=1010
+j=`expr $i - 1000`
+max=30
+
+while [ $j -le $max ]; do
+cp ex$i.d inp1.dat #E'
+
+ifort -parallel -o f_to_d parameter_wafe.f90 window_function.f90 f_to_d_e2_noconjg.f90 -lfftw3 #-check all -CB -traceback -g -r8  #-I/usr/local/include -lfftw3 -check all -CB -traceback -g -r8
+./f_to_d
+# freq
+cp out1.dat EX_w$i.d
+cp out2.dat JZ_w$i.d
+cp out3.dat GXe_w$i.d
+cp out4.dat absEX_w$i.d
+cp out5.dat absJZ_w$i.d
+cp out6.dat absGXe_w$i.d
+
+# # time
+cp invGE.dat EX_t$i.d
+cp invGJ.dat JZ_t$i.d
+cp invGG.dat GXe_t$i.d
+
+cp absEX_t.dat absEX_t$i.d
+cp absJZ_t.dat absJZ_t$i.d
+cp absGXe_t.dat absGXe_t$i.d
+i=`expr $i + 10`
+j=`expr $j + 10`
+done
+
+rm out*.dat invG*.dat abs*.dat
+
+
+
+
+# #画像出力::::::::::::::::::::::::::::::::::::
+# # 差分出力
+#   sh differential.sh
+# #ある点でのH'zの時間分布、計算モデルの出力
+  sh gnu.sh
+# #H'zの伝播movie
+  # sh movie.sh
+
+# python subplot.py
+
+
+
+
+
+
+
+
+
+
+#------------------------------------------------------------------------------------
+# conjg
+# -----------------------------------------------------------------------------------
+
+# #DFT,IDFT,IFFTスクリプト(H)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# # cp jh_fic.d inp2.dat #source J'
+# cp signal.d inp2.dat
+
+# i=1010
+# j=`expr $i - 1000`
+# max=30
+
+# while [ $j -le $max ]; do
+# cp hz$i.d inp1.dat #H'
+
+# ifort -parallel -o f_to_d parameter_wafe.f90 window_function.f90 f_to_d_h2.f90 -lfftw3 #-check all -CB -traceback -g -r8
+# ./f_to_d
+
+# cp out1.dat HZ_w$i.d
+# cp out2.dat JZ_w$i.d
+# cp out3.dat GXh_w$i.d
+# cp out4.dat absHZ_w$i.d
+# cp out5.dat absJZ_w$i.d
+# cp out6.dat absGXh_w$i.d
+
+# cp conjg_hzw.dat conjg_hzw$i.d
+# cp conjg_jzw.dat conjg_jzw$i.d
+# cp conjg_gxhw.dat conjg_gxhw$i.d
+
+# cp invGH.dat HZ_t$i.d
+# cp invGJ.dat JZ_t$i.d
+# cp invGG.dat GXh_t$i.d
+# cp absHZ_t.dat absHZ_t$i.d
+# cp absJZ_t.dat absJZ_t$i.d
+# cp absGXh_t.dat absGXh_t$i.d
+# i=`expr $i + 10`
+# j=`expr $j + 10`
+# done
+
+# rm out*.dat invG*.dat conjg*.dat abs*.dat
+
+
+
+# #DFT,IDFT,IFFTスクリプト(E)::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# # cp jh_fic.d inp2.dat #source J'
+# cp signal.d inp2.dat
+
+# i=1010
+# j=`expr $i - 1000`
+# max=30
+
+# while [ $j -le $max ]; do
+# cp ex$i.d inp1.dat #E'
+
+# ifort -parallel -o f_to_d parameter_wafe.f90 window_function.f90 f_to_d_e2.f90 -lfftw3 #-check all -CB -traceback -g -r8  #-I/usr/local/include -lfftw3 -check all -CB -traceback -g -r8
+# ./f_to_d
+# # freq
+# cp out1.dat EX_w$i.d
+# cp out2.dat JZ_w$i.d
+# cp out3.dat GXe_w$i.d
+# cp out4.dat absEX_w$i.d
+# cp out5.dat absJZ_w$i.d
+# cp out6.dat absGXe_w$i.d
+# # # conjg_ver
+# cp conjg_exw.dat conjg_exw$i.d
+# cp conjg_jzw.dat conjg_jzw$i.d
+# cp conjg_gxew.dat conjg_gxew$i.d
+# # # time
+# cp invGE.dat EX_t$i.d
+# cp invGJ.dat JZ_t$i.d
+# cp invGG.dat GXe_t$i.d
+
+# cp absEX_t.dat absEX_t$i.d
+# cp absJZ_t.dat absJZ_t$i.d
+# cp absGXe_t.dat absGXe_t$i.d
+# i=`expr $i + 10`
+# j=`expr $j + 10`
+# done
+
+# rm out*.dat invG*.dat conjg*.dat abs*.dat
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                # # #DFTスクリプト(Jh)::::::::::::::::::::::::::::
+                # cp jh_fic.d inp1.dat
+                # ifort -o fftw_jh ../code/parameter_wafe.f90 f_to_d.f90 -I/usr/local/include -lfftw3 #-check all -CB -traceback -g
+                # ./fftw_jh
+                # cp out1.dat asjh.out
+                # cp out2.dat psjh.out
+                # cp out3.dat jh_dif.out
+
+
+#FFTスクリプト(H)::::::::::::::::::::::::::::::
+# i=1010
+# j=`expr $i - 1000`
+# max=30
+
+# while [ $j -le $max ]; do
+# cp hz$i.d inp1.dat
+# ifort -o parameter_wafe.f90 taper.f90 f_to_d2.f90 -lfftw3   #-I/usr/local/include -lfftw3
+# ./fftw_hz
+# cp out1.dat ashz$i.out
+# cp out2.dat pshz$i.out
+# cp out3.dat ffthz$i.out
+# i=`expr $i + 10`
+# j=`expr $j + 10`
+# done
+# rm out*.dat
+
+
+# #FFTスクリプト(Jh)::::::::::::::::::::::::::::
+# cp jh_fic.d inp1.dat
+# ifort -o fftw_jh ../code/parameter_wafe.f90 f_to_d.f90 -I/usr/local/include -lfftw3 #-check all -CB -traceback -g
+# ./fftw_jh
+# cp out1.dat asjh.out
+# cp out2.dat psjh.out
+# cp out3.dat jh_dif.out
+
+
+# #グリーン関数スクリプト(GEJ_in):::::::::::::::::::
+# i=1010
+# j=`expr $i - 1000`
+# max=30
+
+# cp jh_dif.out inp2.dat
+
+# while [ $j -le $max ]; do
+# cp ffthz$i.out inp1.dat
+# ifort -o green ../code/parameter_wafe.f90 ../code/green.f90 -check all -CB -traceback -g
+# ./green
+# cp out1.dat Gej_x$i.out
+# i=`expr $i + 10`
+# j=`expr $j + 10`
+# done
+
+
+
+

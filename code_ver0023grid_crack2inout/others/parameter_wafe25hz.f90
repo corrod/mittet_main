@@ -1,7 +1,4 @@
-!!!初期値/モデル設定,変数定義!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!  optimization sheme ln=2
-!  from optimization scheme
-!
+!!!初期値/モデル設定,変数定義!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !   omega0=2πf0
 !   f0=1,0Hz
 !   sigwa=3.2S/m
@@ -12,75 +9,46 @@
 !   J'(x,omega')=sqrt(-iomega/2omega0)J(x,omega)
 !   K'(x,omega')=K(x,omega)
 !
+!sigmax,sigmmin,cmax,cmin = waterにしている
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 module const_para
     implicit none
 
     integer :: i, j, k
-    integer, parameter :: nstep = 4351 ! 総タイムステップ数 　
-    integer, parameter :: nx=101, ny=101, nz=101  !グリッド数 奇数　
-    real(8), parameter :: dx = 4.5d-3, dy=dx, dz=dx !　
-    real(8), parameter :: fmax = 2.0d3!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数 　
-    integer, parameter :: ncpml = 10 !CPMLのgrid数
-
+    integer, parameter :: nstep = 1000 !2000 総タイムステップ数　　　
+    integer, parameter :: nx = 101, ny = 101, nz = 101  !グリッド数　　　
+    real(8), parameter :: dx = 4.40d-3, dy = 4.40d-3, dz = 4.40d-3 !　　　
+    real(8), parameter :: dt = 9.10d-7 !3.00d-7 !タイムステップ長 s　　　
+    real(8), parameter :: fmax = 25.0d0!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数　　　
+    integer, parameter :: x0 = (nx+1)/2, y0 = (ny+1)/2, z0 = (nz+1)/2 !送信源位置
+    integer, parameter :: ncpml = 6 !CPMLのgrid数
+        !     integer, parameter :: ln = 1 !operator half rength
     real(8), parameter :: pi = 3.14159265358979d0 !πの値
     real(8), parameter :: f0 = 1.0d0 !f0が小さいとdtがでかくなる
     real(8), parameter :: omega0 = 2.0d0*pi*f0 !2πf0, !ω0
+    real(8), parameter :: Glim = 10.4d0 ! Taylor expansion参 ln=2
+!     real(8), parameter :: Glim = 6.70d0 ! optimization sheme ln=2
+    real(8), parameter  :: c1 = 1.125d0, c2 = -0.04167d0 !pml4の係数 from taylor Expansion
+!     real(8), parameter  :: c1=1.14443d0,c2=-0.04886d0 !from optimization scheme
     complex(kind(0d0)),parameter :: I_u =(0.0d0,1.0d0)  !imaginary unit
-
-    !optimized L=2
-!     real(8), parameter :: Glim = 6.70d0
-!     real(8), parameter :: c1 = 1.14443d0,c2 = - 0.04886d0
-    !taylor L=2
-    real(8), parameter :: Glim = 10.4d0
-    real(8), parameter  :: c1 = 1.125d0, c2 = - 0.04167d0
-
-
-!model
-    integer, parameter :: plate = ncpml + 3 !16(15)mm   鉄板厚さ
-    integer, parameter :: offset = 9      !30mm + 15mm = 45mm       送信源ープレート間の距離
-    integer, parameter :: L_ver = 6         !31.1(30)mm パターン１(２)の受信間距離(縦)
-    integer, parameter :: L_hori = 8        !40mm       パターン１(２)の受信間距離(横)
-    integer, parameter :: L_sr = 3           !16.3(15)mm パターン２の送受信距離(縦)
-    integer, parameter :: x0 = (nx+1)/2, y0 = (ny+1)/2, z0 = (nz+1)/2 !中心位置
-
-    integer, parameter :: x_source = x0, y_source = y0, z_source = plate + offset !送信源位置1
-    integer, parameter :: x_source2 = x0 + L_hori, y_source2 = y0, z_source2 = plate + offset !送信源位置2
-
-    !パターン1　ソース位置＝レシーバ①
-!     integer, parameter :: x1 = x_source,    y1 = y_source, z1 = z_source  !レシーバ位置①
-!     integer, parameter :: x2 = x1,          y2 = y1,       z2 = z1 - L_ver      !レシーバ位置②
-!     integer, parameter :: x3 = x1 + L_hori, y3 = y1,       z3 = z1 - L_ver      !レシーバ位置③
-    !①
-    !●
-    !② ③
-
-    !パターン2　ソース位置＝レシーバ①②間
-    integer, parameter :: xx1 = x_source,     yy1 = y_source, zz1 = z_source + L_sr  !レシーバ位置①
-    integer, parameter :: xx2 = xx1,          yy2 = yy1,      zz2 = z_source - L_sr  !レシーバ位置②
-    integer, parameter :: xx3 = xx1 + L_hori, yy3 = yy1,      zz3 = z_source - L_sr  !レシーバ位置③
-    !①
-    !● ●
-    !② ③
-
+            !     real(8), parameter :: tau0     = 0.02d0!1.6d-4 !送信源出力時間
 
 !媒質パラメータ
-!conductivity 導電率
-    real(8), parameter :: sigair = 1.0d-11!from muhammad  !空気の導電率 S/m
-    real(8), parameter :: sigfe  = 1.0d3! 　　7.5d6  !1.03d7 !鉄の導電率 S/m
+    real(8), parameter :: sigair = 0.0d0  !空気の導電率 S/m
+    real(8), parameter :: sigfe  = 7.5d6  !1.03d7 !鉄の導電率 S/m
     real(8), parameter :: sigwa  = 3.2d0  !海水の導電率 S/m
-    real(8), parameter :: sigmin = min(sigwa,sigfe)
-    real(8), parameter :: sigmax = max(sigwa,sigfe)
-!permeability 透磁率
+    real(8), parameter :: sigmin = sigwa
+    real(8), parameter :: sigmax = sigfe
+
     real(8), parameter :: MU0      = 1.2566370614d-6 !真空の透磁率 H/m
     real(8), parameter :: myurair  = 1.0d0        !空気の比透磁率
-    real(8), parameter :: myurfe   = 1.0d0!　　         !鉄の比透磁率
+    real(8), parameter :: myurfe   = 4.0d3         !鉄の比透磁率
     real(8), parameter :: myurwa   = 0.999991d0     !海水の比透磁率
     real(8), parameter :: myuair   = myurair * MU0 !空気の透磁率 H/m
     real(8), parameter :: myufe    = myurfe * MU0   !鉄の透磁率 H/m
     real(8), parameter :: myuwa    = myurwa * MU0   !鉄の透磁率 H/m
-!permittivity 誘電率
+
     real(8), parameter :: epsi0    = 8.854d-12   !真空の誘電率F/m
     real(8), parameter :: epsirair = 1.0006d0  !空気の比誘電率
     real(8), parameter :: epsirfe  = 1.0d0     !鉄の比誘電率
@@ -91,25 +59,25 @@ module const_para
 
     real(8) :: sig(nx,ny,nz)
     real(8) :: myu(nx,ny,nz)
+!     real(8) :: epsi(nx,ny,nz)
 
-
-!伝播速度設定 cmax, cmin
-    real(8), parameter :: CC = 2.997924580d8 !光速
-    real(8), parameter :: cair = sqrt(2.0d0*omega0/myuair/sigair)
+!伝播速度設定
+    real(8), parameter :: CC = 2.997924580d0 !光速
     real(8), parameter :: cwa = sqrt(2.0d0*omega0/myuwa/sigwa)
-    real(8), parameter :: cfe = sqrt(2.0d0*omega0/myufe/sigfe) !myufe >> myuwa 　　
-    real(8), parameter :: cmin = min(cwa,cfe)
-    real(8), parameter :: cmax = max(cwa,cfe)
+    real(8), parameter :: cfe = sqrt(2.0d0*omega0/myuwa/sigfe) !myufe >> myuwa　　　
+    real(8), parameter :: cmax = cwa
+    real(8), parameter :: cmin = cfe
 
-
-! タイムステップ長 dt
-    ! optimized dt
-    ! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0
-    ! taylor dt
-    real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0
-    ! fourier dt
-    ! real(8) :: dt = 0.999d0*(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax)
-
+!mur 変数
+    real(8) :: cxd, cxu, cxx
+    real(8) :: cxfyd, cxfzd
+    real(8) :: cyd, cyu, cyy
+    real(8) :: cyfxd, cyfzd
+    real(8) :: czd, czu, czz
+    real(8) :: czfxd, czfyd
+    complex(kind(0d0)) :: eyx1(nx,ny,nz),eyx2(nx,ny,nz),ezx1(nx,ny,nz),ezx2(nx,ny,nz)
+    complex(kind(0d0)) :: exy1(nx,ny,nz),exy2(nx,ny,nz),ezy1(nx,ny,nz),ezy2(nx,ny,nz)
+    complex(kind(0d0)) :: exz1(nx,ny,nz),exz2(nx,ny,nz),eyz1(nx,ny,nz),eyz2(nx,ny,nz)
 
 !CPML
     integer, parameter  :: m         = 4, ma = 1 !mの代わりにnn
@@ -128,7 +96,7 @@ module const_para
     real(8) :: scaler
     real(8) :: grad(nx,ny,nz)
     real(8) :: sig2(nx,ny,nz)
-    real(8) :: eps2
+    real(8) :: eps2 !eps2(nx,ny,nz)
 
     real(8) :: ca_x(nx,ny,nz)
     real(8) :: ca_y(nx,ny,nz)
@@ -195,22 +163,11 @@ module const_para
     real(8) :: khdy(ny)
     real(8) :: khdz(nz)
 
-
-!mur 変数
-    real(8) :: cxd, cxu, cxx
-    real(8) :: cxfyd, cxfzd
-    real(8) :: cyd, cyu, cyy
-    real(8) :: cyfxd, cyfzd
-    real(8) :: czd, czu, czz
-    real(8) :: czfxd, czfyd
-    complex(kind(0d0)) :: eyx1(nx,ny,nz),eyx2(nx,ny,nz),ezx1(nx,ny,nz),ezx2(nx,ny,nz)
-    complex(kind(0d0)) :: exy1(nx,ny,nz),exy2(nx,ny,nz),ezy1(nx,ny,nz),ezy2(nx,ny,nz)
-    complex(kind(0d0)) :: exz1(nx,ny,nz),exz2(nx,ny,nz),eyz1(nx,ny,nz),eyz2(nx,ny,nz)
-
-!不明な変数
     real(8) :: epsi(nx,ny,nz)
+
+
+
 !     real(8)            :: sigxx(nx,ny,nz) !diagonal sig x
 !     real(8)            :: sigyy(nx,ny,nz) !diagonal sig y
 !     real(8)            :: sigzz(nx,ny,nz) !diagonal sig z
-
-        end module const_para
+            end module const_para

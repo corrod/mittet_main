@@ -39,14 +39,16 @@ module const_para
 
 !model
     integer, parameter :: plate = ncpml + 3 !16(15)mm   鉄板厚さ
-    integer, parameter :: offset = 9      !30mm + 15mm = 45mm       送信源ープレート間の距離
+    integer, parameter :: offset = 9        !30mm + 15mm = 45mm  送信源ープレート間の距離
     integer, parameter :: L_ver = 6         !31.1(30)mm パターン１(２)の受信間距離(縦)
     integer, parameter :: L_hori = 8        !40mm       パターン１(２)の受信間距離(横)
-    integer, parameter :: L_sr = 3           !16.3(15)mm パターン２の送受信距離(縦)
+    integer, parameter :: L_sr = 3          !16.3(15)mm パターン２の送受信距離(縦)
     integer, parameter :: x0 = (nx+1)/2, y0 = (ny+1)/2, z0 = (nz+1)/2 !中心位置
 
-    integer, parameter :: x_source = x0, y_source = y0, z_source = plate + offset !送信源位置1
-    integer, parameter :: x_source2 = x0 + L_hori, y_source2 = y0, z_source2 = plate + offset !送信源位置2
+    integer :: x_source, y_source, z_source !送信源1
+    integer :: x_source2, y_source2, z_source2!送信源2
+!     integer, parameter :: x_source = x0, y_source = y0, z_source = plate + offset !送信源位置1
+!     integer, parameter :: x_source2 = x0 + L_hori, y_source2 = y0, z_source2 = plate + offset !送信源位置2
 
     !パターン1　ソース位置＝レシーバ①
 !     integer, parameter :: x1 = x_source,    y1 = y_source, z1 = z_source  !レシーバ位置①
@@ -57,9 +59,12 @@ module const_para
     !② ③
 
     !パターン2　ソース位置＝レシーバ①②間
-    integer, parameter :: xx1 = x_source,     yy1 = y_source, zz1 = z_source + L_sr  !レシーバ位置①
-    integer, parameter :: xx2 = xx1,          yy2 = yy1,      zz2 = z_source - L_sr  !レシーバ位置②
-    integer, parameter :: xx3 = xx1 + L_hori, yy3 = yy1,      zz3 = z_source - L_sr  !レシーバ位置③
+    integer :: xx1, yy1, zz1 !レシーバ位置①
+    integer :: xx2, yy2, zz2 !レシーバ位置②
+    integer :: xx3, yy3, zz3 !レシーバ位置③
+!     integer, parameter :: xx1 = x_source,     yy1 = y_source, zz1 = z_source + L_sr  !レシーバ位置①
+!     integer, parameter :: xx2 = xx1,          yy2 = yy1,      zz2 = z_source - L_sr  !レシーバ位置②
+!     integer, parameter :: xx3 = xx1 + L_hori, yy3 = yy1,      zz3 = z_source - L_sr  !レシーバ位置③
     !①
     !● ●
     !② ③
