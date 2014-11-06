@@ -26,7 +26,7 @@ ifort -parallel -o ficticious_fwi_cpml parameter_wafe.f90 source_posi.f90 set_co
 # PML
 # ifort -o ficticious parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field4.f90 e_pml.f90 h_field4.f90 h_pml.f90 main2.f90 #-check all -CB -traceback -g -r8
 
-time ./ficticious_fwi_cpml > jyouken.txt
+time ./ficticious_fwi_cpml #> jyouken.txt
 
 #差分プローブ
 ifort diff_probe.f90

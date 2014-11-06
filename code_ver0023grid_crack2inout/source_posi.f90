@@ -1,11 +1,13 @@
 subroutine source_posi
-
 	use const_para
 	implicit none
-! 	read(*,*) x_source, y_source
+
+	write(*,*) "x_source位置 :"
+	read(*,*) x_source
 	!送信位置 左
-	x_source  = 30!x0
-	y_source  = 30!y0
+! 	x_source  = 30
+! 	y_source  = 30
+	y_source = y0
     z_source  = plate + offset
 	!送信位置 右
     x_source2 = x_source + L_hori
