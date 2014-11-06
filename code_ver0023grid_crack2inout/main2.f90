@@ -73,7 +73,8 @@ write(*,*) 'crack_ver'
     write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
 
 t=0.0d0!開始時間-----------------------------------
-    call source_posi ! 送受信位置設定
+    !送受信位置設定
+    call source_posi
     !モデルの読み込み
     call model
     call init_cpml !cpmlの係数,fdtd部分の係数
