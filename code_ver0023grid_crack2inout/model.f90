@@ -28,6 +28,7 @@ subroutine model
 
 
     write(*,*) 'plate_z', plate
+    write(*,*) 'offset', offset
     write(*,*) 'xstart,xend', xstart,xend
     write(*,*) 'ystart,yend', ystart,yend
     write(*,*) 'zstart,zend', zstart,zend

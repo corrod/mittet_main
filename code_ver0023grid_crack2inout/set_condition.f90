@@ -16,24 +16,24 @@ subroutine set_zero_eh(EX,EY,EZ,HX,HY,HZ)
 !         complex(kind(0d0)), intent(out)  :: psi_Hyz1(nx,ny,nz),psi_Hxz1(nx,ny,nz)
 
         EX(1:nx,1:ny,1:nz) = 0.0d0
-        EZ(1:nx,1:ny,1:nz) = 0.0d0
         EY(1:nx,1:ny,1:nz) = 0.0d0
+        EZ(1:nx,1:ny,1:nz) = 0.0d0
         HX(1:nx,1:ny,1:nz) = 0.0d0
-        HZ(1:nx,1:ny,1:nz) = 0.0d0
         HY(1:nx,1:ny,1:nz) = 0.0d0
+        HZ(1:nx,1:ny,1:nz) = 0.0d0
 
-!         psi_ezx1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_eyx1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_exy1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_ezy1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_eyz1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_exz1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_hzx1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_hyx1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_hxy1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_hzy1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_hyz1(1:nx,1:ny,1:nz) = 0.0d0
-!         psi_hxz1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_ezx1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_eyx1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_exy1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_ezy1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_eyz1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_exz1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_hzx1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_hyx1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_hxy1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_hzy1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_hyz1(1:nx,1:ny,1:nz) = 0.0d0
+        psi_hxz1(1:nx,1:ny,1:nz) = 0.0d0
 
 end subroutine set_zero_eh
 

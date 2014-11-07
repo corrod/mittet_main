@@ -33,11 +33,12 @@ program main
     character*16 :: file_sp
 
 
-do sp= 41,61,2  !ソース位置
+do sp= 45,61,2  !ソース位置
+
     write(file_sp,*) sp
 
     open(15,file="signal_sin.d")
-    open(16,file=trim(adjustl(file_sp))//'signal.d')
+    open(16,file='signal.d')
     open(17,file='je_fic.d')
     open(18,file='jh_fic.d')
 
@@ -83,6 +84,7 @@ t=0.0d0!開始時間-----------------------------------
 
     !送受信位置設定
     call source_posi
+
     !モデルの読み込み
     call model
     call init_cpml !cpmlの係数,fdtd部分の係数
@@ -169,4 +171,5 @@ enddo !*反復計算終了
     close(57)
 
 enddo !ソース位置
+
         end program main
