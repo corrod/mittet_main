@@ -24,14 +24,21 @@ program main
     use const_para
     implicit none
 
+
+    integer :: sp_dash
     integer            :: istep !タイムステップ
     real(8)            :: t !経過時間
     complex(kind(0d0)) :: Je(nstep) !電流源
     complex(kind(0d0)) :: Jh(nstep) !磁流源
     complex(kind(0d0)) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
+    character*16 ::file_sp
 
-    open(15,file='signal_sin.d')
+
+do sp= 41,61,2  !ソース位置
+    write(file_sp,*) sp
+
+    open(15,file="signal_sin.d")
     open(16,file='signal.d')
     open(17,file='je_fic.d')
     open(18,file='jh_fic.d')
@@ -57,15 +64,17 @@ program main
     open(28,file='hzleft3.d')
     open(29,file='hzright3.d')
 
-    open(51,file = 'pattern1_1.d')   !パターン１
-    open(52,file = 'pattern1_2.d')   !①
-    open(53,file = 'pattern1_3.d')   !② ③
+!     open(51,file = trim(adjustl(file_sp))//'pattern1_1.d')   !パターン１
+!     open(52,file = trim(adjustl(file_sp))//'pattern1_2.d')   !①
+!     open(53,file = trim(adjustl(file_sp))//'pattern1_3.d')   !② ③
 
-    open(55,file = 'pattern2_1.d')   !パターン２
-    open(56,file = 'pattern2_2.d')   !①
-    open(57,file = 'pattern2_3.d')   !② ③
+    open(55,file = trim(adjustl(file_sp))//'pattern2_1.d')   !パターン２
+    open(56,file = trim(adjustl(file_sp))//'pattern2_2.d')   !①
+    open(57,file = trim(adjustl(file_sp))//'pattern2_3.d')   !② ③
 
 write(*,*) 'crack_ver'
+
+    write(*,*) 'x_source position :', sp
 
     !set EM-field to 0
     call set_zero_eh(EX,EY,EZ,HX,HY,HZ)
@@ -73,6 +82,7 @@ write(*,*) 'crack_ver'
     write(*,*) '!!!!!!!!!!!!!  start calculation  !!!!!!!!!!!!!!!!'
 
 t=0.0d0!開始時間-----------------------------------
+
     !送受信位置設定
     call source_posi
     !モデルの読み込み
@@ -152,13 +162,13 @@ enddo !*反復計算終了
     close(28)
     close(29)
 
-
-    close(51)
-    close(52)
-    close(53)
+!     close(51)
+!     close(52)
+!     close(53)
 
     close(55)
     close(56)
     close(57)
 
+enddo !ソース位置
         end program main

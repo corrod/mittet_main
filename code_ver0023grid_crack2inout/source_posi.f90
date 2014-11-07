@@ -10,9 +10,10 @@ subroutine source_posi
 	implicit none
 
 	!送信位置 左
-	write(*,*) "x_source位置 :"
-	read(*,*) x_source
-! 	x_source  = 51
+! 	write(*,*) "x_source位置 :"
+! 	read(*,*) x_source
+
+ 	x_source  = sp
 	y_source = y0
     z_source  = plate + offset
 	!送信位置 右

@@ -18,6 +18,7 @@ module const_para
     implicit none
 
     integer :: i, j, k
+    integer :: sp !source position
     integer, parameter :: nstep = 4351 ! 総タイムステップ数 　
     integer, parameter :: nx=101, ny=101, nz=101  !グリッド数 奇数　
     real(8), parameter :: dx = 4.5d-3, dy=dx, dz=dx !　
