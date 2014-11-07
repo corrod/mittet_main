@@ -24,22 +24,20 @@ program main
     use const_para
     implicit none
 
-
-    integer :: sp_dash
     integer            :: istep !タイムステップ
     real(8)            :: t !経過時間
     complex(kind(0d0)) :: Je(nstep) !電流源
     complex(kind(0d0)) :: Jh(nstep) !磁流源
     complex(kind(0d0)) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
-    character*16 ::file_sp
+    character*16 :: file_sp
 
 
 do sp= 41,61,2  !ソース位置
     write(file_sp,*) sp
 
     open(15,file="signal_sin.d")
-    open(16,file='signal.d')
+    open(16,file=trim(adjustl(file_sp))//'signal.d')
     open(17,file='je_fic.d')
     open(18,file='jh_fic.d')
 
