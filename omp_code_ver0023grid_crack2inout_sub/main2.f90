@@ -21,7 +21,7 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 program main
-    use omp_lib
+!$use omp_lib
     use const_para
     implicit none
 
@@ -32,7 +32,7 @@ program main
     complex(kind(0d0)) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
-do sp= 41,61,2  !ソース位置
+do sp= 41,51,3!61,2  !ソース位置
 
     write(file_sp,*) sp !
 
@@ -169,9 +169,9 @@ enddo !*反復計算終了
     close(56)
     close(57)
 
+    !差分プローブ
     call diff_probe !55,56,57の後に置く
 
 enddo !ソース位置
-
 
         end program main
