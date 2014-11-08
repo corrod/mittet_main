@@ -2,7 +2,7 @@
 date
 
 #メインスクリプト:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-export OMP_NUM_THREADS=5 #11threads で28分
+export OMP_NUM_THREADS=6 #11threads で28分
 # export OMP_NUM_THREADS=5 #5threads で25分
 
 #構造改革
