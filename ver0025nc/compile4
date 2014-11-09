@@ -124,6 +124,8 @@ done
 
 rm out*.dat invG*.dat abs*.dat
 
+mv *_w*.d out_freq
+mv *_t*.d out_time
 
 
 # #画像出力::::::::::::::::::::::::::::::::::::
@@ -139,8 +141,6 @@ rm out*.dat invG*.dat abs*.dat
 mv *.eps out_eps
 
 
-mv *_w*.d out_freq
-mv *_t*.d out_time
 
 
 
