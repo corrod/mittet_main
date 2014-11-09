@@ -1,13 +1,27 @@
 #!/bin/sh
+#compile仕方
+#nohup ./compile4 > out.log 2> err.log < /dev/null &
+#標準出力 > out.log
+#err > err.log
 date
 
 #メインスクリプト:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-export OMP_NUM_THREADS=6 #11threads で28分
+export OMP_NUM_THREADS=5 #11threads で28分
 # export OMP_NUM_THREADS=5 #5threads で25分
 
 #構造改革
 ifort -parallel -par_report1 -o ficticious_fwi_cpml parameter_wafe.f90 source_posi.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 diff_probe_sub.f90 main2.f90 #-check all -CB -traceback -g -r8
-# ifort -openmp -o ficticious_fwi_cpml parameter_wafe.f90 source_posi.f90 set_condition.f90 waveform.f90 model.f90 output.f90 eh_field_cpml42.f90 cpml4.f90 diff_probe_sub.f90 main2.f90 #-check all -CB -traceback -g -r8
+# parameter_wafe.f90 : パラメータ設定モジュール
+# source_posi.f90 : ソース位置設定
+# set_condition.f90 : 計算条件確認
+# waveform.f90 : 入力波形作成
+# model.f90 : 計算モデル設定
+# output.f90 : 出力ファイル設定、受信位置
+# eh_field_cpml42.f90 : ficticious領域でのfdtd計算
+# cpml4.f90 : convolutional pml の係数設定
+# diff_probe_sub.f90 : 自己比較、相互比較用
+# main.f90 : main program
+
 
 
 # # all in
@@ -30,6 +44,9 @@ time ./ficticious_fwi_cpml #> jyouken.txt
 #差分プローブ
 # ifort diff_probe.f90
 # ./a.out
+mv *pattern2_1.d out3
+mv *pattern2_2.d out3
+mv *pattern2_2.d out3
 
 #リサジュー曲線 lissajous.sh
 
