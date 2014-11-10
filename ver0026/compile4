@@ -1,16 +1,18 @@
 #!/bin/sh
 #compile仕方
-#nohup ./compile4 > out.log 2> err.log < /dev/null &
-#標準出力 > out.log
-#err > err.log
+# -check all -warn all -std -gen_interfaces -fpe0 -ftrapuv -traceback
+#nohup ./compile4>out.log 2>err.log < /dev/null &
+#標準出力、計算条件 > out.log
+#並列状況、エラー出力 > err.log
+
 date
 
 #メインスクリプト:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-export OMP_NUM_THREADS=5 #11threads で28分
-# export OMP_NUM_THREADS=5 #5threads で25分
+export OMP_NUM_THREADS=5
+#5threads で25分
 
 #構造改革
-ifort -parallel -par_report1 -o ficticious_fwi_cpml cpu_parameter_wafe.f90 cpu_source_posi.f90 cpu_set_condition.f90 cpu_waveform.f90 cpu_model.f90 cpu_output.f90 cpu_eh_field_cpml42.f90 cpu_cpml4.f90 cpu_diff_probe.f90 cpu_window_function.f90 cpu_f_to_d_e.f90 cpu_f_to_d_h.f90 cpu_main.f90 -lfftw3 #-check all -CB -traceback -g -r8
+ifort -parallel -par_report1 -o ficticious_fwi_cpml cpu_parameter_wafe.f90 cpu_source_posi.f90 cpu_set_condition.f90 cpu_waveform.f90 cpu_model.f90 cpu_output.f90 cpu_eh_field_cpml42.f90 cpu_cpml4.f90 cpu_diff_probe.f90 cpu_window_function.f90 cpu_f_to_d_e.f90 cpu_f_to_d_h.f90 cpu_main.f90 -lfftw3 #-pg -check all -warn all -std -gen_interfaces -fpe0 -ftrapuv -CB -traceback -g -r8
 # cpu_parameter_wafe.f90 : パラメータ設定モジュール
 # cpu_source_posi.f90 : ソース位置設定
 # cpu_set_condition.f90 : 計算条件確認
@@ -20,6 +22,9 @@ ifort -parallel -par_report1 -o ficticious_fwi_cpml cpu_parameter_wafe.f90 cpu_s
 # cpu_eh_field_cpml42.f90 : ficticious領域でのfdtd計算
 # cpu_cpml4.f90 : convolutional pml の係数設定
 # cpu_diff_probe.f90 : 自己比較、相互比較用
+# cpu_window_function.f90 : ficticious to diffusiveのdft,FFTの際の窓
+# cpu_f_to_d_e.f90 : ficticious から diffusiveへ E (no conjugate ver)
+# cpu_f_to_d_h.f90 : ficticious から diffusiveへ E (no conjugate ver)
 # cpu_main.f90 : main program
 
 

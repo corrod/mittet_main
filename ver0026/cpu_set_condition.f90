@@ -50,16 +50,17 @@ end subroutine set_zero_eh
 subroutine confirm_parameter
     use const_para
     implicit none
-
-    integer :: Nt1,Nt2,Nt3,Nt4
+    integer :: Nt4
+!     integer :: Nt1,Nt2,Nt3,Nt4
     real(8) :: S !タイムステップ数を求める際の係数
-    real(8) :: courant
-    real(8) :: t_cal !計測時間
-    real(8) :: fourier_dt,dt_wh,taylor_dt,optimized_dt
+!     real(8) :: courant
+!     real(8) :: t_cal !計測時間
+    real(8) :: fourier_dt,taylor_dt,optimized_dt
+!     real(8) :: fourier_dt,dt_wh,taylor_dt,optimized_dt
     real(8) :: fmax_w !最大周波数（上限）
-    real(8) :: dt_ideal !クーラン条件を満たすdt
-    real(8) :: cfl_limit
-    real(8) :: fourier_limit
+!     real(8) :: dt_ideal !クーラン条件を満たすdt
+!     real(8) :: cfl_limit
+!     real(8) :: fourier_limit
     real(8) :: skinwa, skinfe
 
 
@@ -213,7 +214,7 @@ endif
 !     write(*,*) "# fmax_w",fmax_w, fmax
 
      if(fmax_w <fmax) then
-    write(*,*), "******* fmax is violated ****fmax > cmin /Glim /max(dx,dy,dz)"
+    write(*,*) "******* fmax is violated ****fmax > cmin /Glim /max(dx,dy,dz)"
     endif
 end subroutine confirm_parameter
 

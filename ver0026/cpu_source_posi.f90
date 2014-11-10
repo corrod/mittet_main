@@ -6,17 +6,17 @@
 !/////////////////////////////////////////////////////
 
 subroutine source_posi
-	use const_para
-	implicit none
+    use const_para
+    implicit none
 
-	!送信位置 左
+    !送信位置 左
 ! 	write(*,*) "x_source位置 :"
 ! 	read(*,*) x_source
 
- 	x_source  = sp
-	y_source  = y0
+    x_source  = sp
+    y_source  = y0
     z_source  = plate + offset
-	!送信位置 右
+    !送信位置 右
     x_source2 = x_source + L_hori
     y_source2 = y_source
     z_source2 = z_source
@@ -36,4 +36,4 @@ subroutine source_posi
     !①
     !● ●
     !② ③
-	end subroutine source_posi
+    end subroutine source_posi

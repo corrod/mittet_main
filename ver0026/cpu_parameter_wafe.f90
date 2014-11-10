@@ -19,7 +19,7 @@ module const_para
 
     integer :: i, j, k
     integer :: sp !source position
-    character*16 :: file_sp ! = sp
+    character(16) :: file_sp ! = sp
 
     integer, parameter :: nstep = 4351 ! 総タイムステップ数 　
     integer, parameter :: nx=101, ny=101, nz=101  !グリッド数 奇数　
@@ -50,24 +50,24 @@ module const_para
 
     integer :: x_source, y_source, z_source !送信源1
     integer :: x_source2, y_source2, z_source2!送信源2
-!     integer, parameter :: x_source = x0, y_source = y0, z_source = plate + offset !送信源位置1
-!     integer, parameter :: x_source2 = x0 + L_hori, y_source2 = y0, z_source2 = plate + offset !送信源位置2
+    !     integer, parameter :: x_source = x0, y_source = y0, z_source = plate + offset !送信源位置1
+    !     integer, parameter :: x_source2 = x0 + L_hori, y_source2 = y0, z_source2 = plate + offset !送信源位置2
 
-    !パターン1　ソース位置＝レシーバ①
-!     integer, parameter :: x1 = x_source,    y1 = y_source, z1 = z_source  !レシーバ位置①
-!     integer, parameter :: x2 = x1,          y2 = y1,       z2 = z1 - L_ver      !レシーバ位置②
-!     integer, parameter :: x3 = x1 + L_hori, y3 = y1,       z3 = z1 - L_ver      !レシーバ位置③
-    !①
-    !●
-    !② ③
+        !パターン1　ソース位置＝レシーバ①
+    !     integer, parameter :: x1 = x_source,    y1 = y_source, z1 = z_source  !レシーバ位置①
+    !     integer, parameter :: x2 = x1,          y2 = y1,       z2 = z1 - L_ver      !レシーバ位置②
+    !     integer, parameter :: x3 = x1 + L_hori, y3 = y1,       z3 = z1 - L_ver      !レシーバ位置③
+        !①
+        !●
+        !② ③
 
     !パターン2　ソース位置＝レシーバ①②間 source_posi.f90
     integer :: xx1, yy1, zz1 !レシーバ位置①
     integer :: xx2, yy2, zz2 !レシーバ位置②
     integer :: xx3, yy3, zz3 !レシーバ位置③
-!     integer, parameter :: xx1 = x_source,     yy1 = y_source, zz1 = z_source + L_sr  !レシーバ位置①
-!     integer, parameter :: xx2 = xx1,          yy2 = yy1,      zz2 = z_source - L_sr  !レシーバ位置②
-!     integer, parameter :: xx3 = xx1 + L_hori, yy3 = yy1,      zz3 = z_source - L_sr  !レシーバ位置③
+    !     integer, parameter :: xx1 = x_source,     yy1 = y_source, zz1 = z_source + L_sr  !レシーバ位置①
+    !     integer, parameter :: xx2 = xx1,          yy2 = yy1,      zz2 = z_source - L_sr  !レシーバ位置②
+    !     integer, parameter :: xx3 = xx1 + L_hori, yy3 = yy1,      zz3 = z_source - L_sr  !レシーバ位置③
     !①
     !● ●
     !② ③
@@ -114,7 +114,7 @@ module const_para
     ! optimized dt
     ! real(8) :: dt = dx/cmax/sqrt(3.0d0)/1.19329d0
     ! taylor dt
-    real(8) :: dt = 0.999d0*dx/cmax/sqrt(3.0d0)/1.16667d0
+    real(8) :: dt = 0.999d0*dx/cmax/ sqrt(3.0d0) /1.16667d0
     ! fourier dt
     ! real(8) :: dt = 0.999d0*(2.0d0*dx)/((3.0d0**0.5d0)*pi*cmax)
 

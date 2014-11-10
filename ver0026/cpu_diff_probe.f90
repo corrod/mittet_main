@@ -1,19 +1,19 @@
 subroutine diff_probe
     use const_para
-	implicit none
+    implicit none
 
-	integer :: nd,ios
-	real(8), allocatable :: in1_1(:),in1_2(:),in1_3(:)
-	real(8), allocatable :: in2_1(:),in2_2(:),in2_3(:)
-	real(8), allocatable :: in3_1(:),in3_2(:),in3_3(:)
+    integer :: nd,ios
+    real(8), allocatable :: in1_1(:),in1_2(:),in1_3(:)
+    real(8), allocatable :: in2_1(:),in2_2(:),in2_3(:)
+    real(8), allocatable :: in3_1(:),in3_2(:),in3_3(:)
 
     open(51,file=trim(adjustl(file_sp))//'pattern2_1.d',action='read')
       nd=0
-	    do
-	        read(51,'(f12.0)',iostat=ios)
-	        if (ios<0) exit !ファイルの末尾にきたらループを抜ける
-	         nd=nd+1
-	    enddo
+        do
+            read(51,'(f12.0)',iostat=ios)
+            if (ios<0) exit !ファイルの末尾にきたらループを抜ける
+            nd=nd+1
+        enddo
     close(51)
 
     allocate(in1_1(nd), in1_2(nd), in1_3(nd))

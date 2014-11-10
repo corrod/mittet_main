@@ -17,11 +17,10 @@
 !
 !***************************************************************
 
-!ficticious wave domain
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 program main
-!$use omp_lib
+
     use const_para
     implicit none
 
@@ -32,7 +31,7 @@ program main
     complex(kind(0d0)) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
-do sp= 41,61,2  !ソース位置
+do sp= 41,43,2  !ソース位置
 
     write(file_sp,*) sp !
 
@@ -86,8 +85,12 @@ t=0.0d0!開始時間-----------------------------------
 
     !モデルの読み込み
     call model
-    call init_cpml !cpmlの係数,fdtd部分の係数
-    call media_coeff !伝播の係数  　　??cpml以外の媒質のパラメータはどこで設定？
+
+    !cpmlの係数,fdtd部分の係数
+    call init_cpml
+
+    !伝播fdtdの係数
+    call media_coeff !　??cpml以外の媒質のパラメータはどこで設定？
 
     !cmax,cminの計算 dt,dx,dy,dzの設定
     call confirm_parameter
@@ -101,7 +104,8 @@ do istep = 1, nstep !反復計算開始----------------------
 !     call read_source_3d(istep,t,sig,myu,EX,Je,Jh)
 
     !電場計算 E
-    call e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
+    call e_field_cpml4(Ex,Ey,EZ,Hx,Hy,Hz)
+!     call e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 !     call Efield4(istep,t,Je,Ex,Ey,Ez,Hx,Hy,Hz,sig)
 !     call Efield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,sig)
 
@@ -118,7 +122,8 @@ do istep = 1, nstep !反復計算開始----------------------
 t = t + dt*0.5d0  !時間の更新--------------------------
 
     !磁場計算 H
-    call h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
+    call h_field_cpml4(Ex,Ey,EZ,Hx,Hy,Hz)
+!     call h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
 !     call Hfield4(istep,t,Jh,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 !     call Hfield4(istep,t,Ex,Ey,Ez,Hx,Hy,Hz,myu)
 
@@ -169,11 +174,15 @@ enddo !*反復計算終了
     close(56)
     close(57)
 
-    !差分プローブ
-    call diff_probe !55,56,57の後に置く
+    !差分プローブ 自己比較、相互比較
+    call diff_probe
+
+    !ficticious から diffusiveへ E
     call f_to_d_e
+
+    !ficticious から diffusiveへ H
     call f_to_d_h
 
-enddo !ソース位置
+enddo !ソース位置 loop
 
         end program main
