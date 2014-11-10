@@ -1,18 +1,17 @@
-!///////////////////////////////////////////////////////////////////////////////
-!conjugate なしversion     H
-!////////////////////////////////////////////////////////////////////////////
-! ficticious H'(t') to diffusive frequency domain H(ω), using DFT, FFT
-! frequency green function GXh_w(ω)
+!///////////////////////////////////////////////////////////////////////////
+!conjugate version     E
+!///////////////////////////////////////////////////////////////////////////
+! ficticious E'(t') to diffusive frequency domain E(ω), using DFT, FFT
+! frequency green function GXe_w(ω)
 !
-!JZ_w GXh_w ひとつめNAN  >> JZ(0) =2omega_0 　
+!JZ_w GXe_w ひとつめNAN  >> JZ(0) =2omega_0 　
+!
 !Je(istep) = dt*etaxx(x0,y0,z0)*signal(istep) /dx/dy/dz
-!JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz
-!としているが、JZ_f = signal(istep) かもしれない
-!
-!fwi3d_cpm_function 行1430~参照
+!JZ_f = Jh(istep) = signal(istep)*dt / myu(x0,y0,z0) /dx/dy/dz ☓
+!JZ_f = signal(istep) ◎
 !//////////////////////////////////////////////////////////////////////////
 
-subroutine f_to_d_h
+program f_to_d_e
 	use const_para
 	implicit none
 
@@ -22,30 +21,28 @@ subroutine f_to_d_h
 	real(8) :: om
 
 	integer :: n !, l
-	complex(kind(0d0)),allocatable ::Hz_w(:) !Hz_w(0:nd-1) !周波数領域のHz
-	complex(kind(0d0)),allocatable ::Hz_f(:) !Hz_f(0:nd-1) !ficticiousのH'z
-	complex(kind(0d0)),allocatable ::JZ_w(:) !JZ_w(0:nd-1) !diffusiveのJ'x
+	complex(kind(0d0)),allocatable ::EX_w(:) !EX_w(0:nd-1) !周波数領域のEx
+	complex(kind(0d0)),allocatable ::EX_f(:) !EX_f(0:nd-1) !ficticiousのE'x
+	complex(kind(0d0)),allocatable ::JZ_w(:) !JZ_w(0:nd-1) !ficticiousのJ'x
 	complex(kind(0d0)),allocatable ::JZ_f(:) !JZ_f(0:nd-1)
-	complex(kind(0d0)),allocatable ::GXh_w(:) !GXh_w(0:nd-1) !diffusive domain Green's function
-    complex(kind(0d0)),allocatable :: inv_JZ_w(:)
-	character*16 :: file_name
-    integer :: file_num
+	complex(kind(0d0)),allocatable ::GXe_w(:) !GXe_w(0:nd-1) !diffusive domain Green's function
+    complex(kind(0d0)),allocatable :: J_test(:)
+	character(3) :: name
 	!IDFT, IFFT用
-	complex(kind(0d0)),allocatable :: Hz_t(:), JZ_t(:),GXh_t(:)
+	complex(kind(0d0)),allocatable :: EX_t(:), JZ_t(:), GXe_t(:)
 	complex(kind(0d0)),allocatable :: in1(:), in2(:), in3(:) !IFFT用
-	complex(kind(0d0)),allocatable :: out1(:), out2(:), out3(:) !IFFT用
+	complex(kind(0d0)),allocatable :: out1(:), out2(:), out3(:)!IFFT用
 	integer(8) :: plan1, plan2, plan3
 
 include 'fftw3.f'
 
-do file_num = 1010,1030,10 !file number loop
-    write(file_name,*) file_num
+
 
 !/////////////////////////////////////////////////////////////////////////////
-! データの読み込み Hz_f
+! データの読み込み EX_f
 !/////////////////////////////////////////////////////////////////////////////
-    !Hzファイル（データ）の長さNDを調べる-------------------------------------
-    open(51,file='hz'//trim(adjustl(file_name))//'.d',action='read')
+    !EXファイル（データ）の長さNDを調べる-------------------------------------
+    open(51,file='inp1.dat',action='read')
       nd=0
 	    do
 	        read(51,'(f12.0)',iostat=ios)
@@ -54,135 +51,132 @@ do file_num = 1010,1030,10 !file number loop
 	    enddo
     close(51)
 
-
 !///////////////////////////////////////////////////////////////////////////////
 ! 配列確保
 !///////////////////////////////////////////////////////////////////////////////
     allocate(t1(0:nd-1),inp1_r(0:nd-1),inp1_i(0:nd-1),t2(0:nd-1),inp2_r(0:nd-1),inp2_i(0:nd-1))
-    allocate(w(0:nd-1),Hz_w(0:nd-1),Hz_f(0:nd-1),JZ_w(0:nd-1),JZ_f(0:nd-1),GXh_w(0:nd-1),inv_JZ_w(0:nd-1))
+    allocate(w(0:nd-1),EX_w(0:nd-1),EX_f(0:nd-1),JZ_w(0:nd-1),JZ_f(0:nd-1),GXe_w(0:nd-1))
 
+    allocate(J_test(0:nd-1))!　
 
+write(*,*) 'nd : ', nd
 
-!DFTするHzデータの読み込み
- open(51,file='hz'//trim(adjustl(file_name))//'.d',action='read')
-  do i=0,nd-1
-    read(51,*) t1(i), inp1_r(i), inp1_i(i)
-  Hz_f(i) = inp1_r(i) + (0.0d0,1.0d0)*inp1_i(i)
-  enddo
-close(51)
+     !DFTするEXデータの読み込み
+    open(51,file='inp1.dat',action='read')
+      do i=0,nd-1
+        read(51,*) t1(i), inp1_r(i), inp1_i(i)
+      EX_f(i) = inp1_r(i) + (0.0d0,1.0d0)*inp1_i(i)
+      enddo
+    close(51)
+
 
 
 !////////////////////////////////////////////////////////////////////////////
-!Hz_fに窓関数をかける hamming window
+! EX_fに窓関数をかける hamming window
 !///////////////////////////////////////////////////////////////////////////
 !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
 ! !     call window_hanning(nd,w) !hanning 両端が0になる窓
 !       !taper かけて
 !       do i=0,nd-1
-!           write(8,*) i*dt,real(Hz_f(i)),aimag(Hz_f(i))!かける前
-!           Hz_f(i) = Hz_f(i) * w(i)
-!           write(9,*) i*dt,real(Hz_f(i)),aimag(Hz_f(i))!かけた後
+!           write(8,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かける前
+!       Ex_f(i) = Ex_f(i) * w(i)
+!           write(9,*) i*dt,real(Ex_f(i)),aimag(Ex_f(i))!かけた後
 !       enddo
-
 
 !/////////////////////////////////////////////////////////////////////////////
 ! データの読み込み JZ_f
 !/////////////////////////////////////////////////////////////////////////////
     !JZファイル（データ）の長さNDを調べる------------------------------------
-    open(52,file='signal.d',action='read')
+    open(51,file='inp2.dat',action='read')
       nd=0
         do
-            read(52,'(f12.0)',iostat=ios)
+            read(51,'(f12.0)',iostat=ios)
             if (ios<0) exit !ファイルの末尾にきたらループを抜ける
              nd=nd+1
         enddo
-    close(52)
+    close(51)
 
      !DFTするJZデータの読み込み
-    open(52,file='signal.d',action='read')
+    open(51,file='inp2.dat',action='read')
       do i=0,nd-1
-          read(52,*) t2(i), inp2_r(i), inp2_i(i)
+          read(51,*) t2(i), inp2_r(i), inp2_i(i)
       JZ_f(i) = inp2_r(i) + (0.0d0,1.0d0)*inp2_i(i)
       enddo
-    close(52)
-
+    close(51)
 
 !////////////////////////////////////////////////////////////////////////////
-!JZ_fに窓関数をかける hamming window
-! !///////////////////////////////////////////////////////////////////////////
+! JZ_fに窓関数をかける hamming window
+!///////////////////////////////////////////////////////////////////////////
 !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
-! !     call window_hanning(nd,w) !hanning 両端が0になる窓
+! !     call window_hamning(nd,w) !hanning 両端が0になる窓
 !       do i=0,nd-1
 !       write(7,*) w(i)
 !       enddo
 !   !taper かけて
 !       do i=0,nd-1
 !           write(10,*) i*dt,real(JZ_f(i)),aimag(JZ_f(i))!かける前出力
-!           JZ_f(i) = JZ_f(i) * w(i)
+!       JZ_f(i) = JZ_f(i) * w(i)
 !           write(11,*) i*dt,real(JZ_f(i)),aimag(JZ_f(i))!かけた後出力
 !       enddo
-
 
 
 
 !/////////////////////////////////////////////////////////////////////////////////
 ! DFT開始 ficticious to diffusive freq
 !/////////////////////////////////////////////////////////////////////////////////
-    write(*,*) '*********************        DFT start       ********************'
-
+    write(*,*) '*********************       DFT start       ********************'
 
     om   = 2.d0*pi/dble(nd)/dt
 
-    Hz_w(0:nd-1) = 0.0d0
+    EX_w(0:nd-1) = 0.0d0
     JZ_w(0:nd-1) = 0.0d0
-    GXh_w(0:nd-1) = 0.0d0
+    GXe_w(0:nd-1) = 0.0d0
 
-    do k=0,nd-1  !周波数用ループ
-    Hz_w(k) = 0.0d0
+
+    do k=0,nd-1  !周波数用ループ   　0から
+    EX_w(k) = 0.0d0
     JZ_w(k) = 0.0d0
-        do n=0,nd-1 !時間用ループ
+        do n=0,nd-1 !時間用ループ  　０から
 
-        ! mittet(11)の係数参照
-        Hz_w(k) = Hz_w(k) &
-                + sqrt( - 2.0d0*omega0/I_u/om/k ) * Hz_f(n) * dt &
-                * exp( (I_u - 1.0d0) * sqrt(omega0*om*k) *  n*dt )
+        ! (I_u-1.0d0)*n*dt ◎
+        EX_w(k) = EX_w(k) &
+                + EX_f(n) *dt &
+                * exp( (I_u-1.0d0) * sqrt(omega0*om*k) * n*dt )
 
-        ! (11) from mittet J(x,omega) = sqrt(-2*omega0/i*omega)*J'(x,omega)
-!         JZ_w(k) = JZ_w(k) &
-!               + sqrt( -2.0d0*omega0/I_u/om/k ) * JZ_f(n) *dt &
-!               * exp( sqrt(omega0*om*k) * (I_u-1.0d0) * n*dt)
-
-        ! (11) from mittet  K(x,omega) = K'(x,omega)　　　
+        ! (11) from mittet J(x,omega) = J'(x,omega)
         JZ_w(k) = JZ_w(k) &
-                + JZ_f(n) * dt &
-                * exp( (I_u - 1.0d0) * sqrt(omega0*om*k) *  n*dt )
+                + sqrt( -2.0d0*omega0/I_u/om/k ) * JZ_f(n) *dt &
+                * exp( sqrt(omega0*om*k) * (I_u-1.0d0) * n *dt)
+
+        ! (11) from mittet  K(x,omega) = K'(x,omega)　
+!         JZ_w(k) = JZ_w(k) &
+!                 + JZ_f(n) * dt &
+!                 * exp( (I_u-1.0d0) * sqrt(omega0*om*k) * n*dt )
 
         enddo !n loop
 
-!         Hz_w(0) = 2.0d0 * omega0  !!! 　　　
+    JZ_w(0) = 2.0d0 * omega0  !!!　
 
-        !(C-11)
-!       JZ_w(0) = 2.0d0 * omega0  !!! 　　　
+    GXe_w(k) = EX_w(k) / JZ_w(k)  !JZ_w /= 0
 
-        GXh_w(k) = Hz_w(k) / JZ_w(k)  !JZ_w /= 0
+    enddo !k
 
-    enddo !k loop
 
 !///////////////////////////////////////////////////////////////////////////////
 ! output
 !//////////////////////////////////////////////////////////////////////////////
 !       write(name,'(I3)') l  受信点位置とかがいいかも
-        !ある点での周波数領域Hz_w
-       open(60,file='HZ_w'//trim(adjustl(file_name))//'.d')
-!        open(60,file='out1.dat')
+        !ある点での周波数領域EX_w
+!       open(50,file='EX_w'//name/'.d')
+        open(60,file='out1.dat')
         do k=0,nd-1
-            write(60,*) k*om/2.0d0/pi, real(Hz_w(k)),aimag(Hz_w(k))   !!!横軸周波数の書き方違うかも
+            write(60,*) k*om/2.0d0/pi, real(EX_w(k)),aimag(EX_w(k))   !!!横軸周波数の書き方違うかも
         enddo
         close(60)
 
         !ある点での周波数領域JZ_w
-       open(61,file='JZ_w'//trim(adjustl(file_name))//'.d')
-!        open(61,file='out2.dat')
+!       open(61,file='JZ_w'//name/'.d')
+        open(61,file='out2.dat')
         do k=0,nd-1
             write(61,*) k*om/2.0d0/pi, real(JZ_w(k)),aimag(JZ_w(k))
         enddo
@@ -190,24 +184,25 @@ close(51)
 
 
         !ある点での周波数領域グリーン関数
-       open(62,file='GXh_w'//trim(adjustl(file_name))//'.d')
-!        open(62,file='out3.dat')
+!       open(62,file='GXe_w'//name/'.d')
+        open(62,file='out3.dat')
         do k=0,nd-1
-            write(62,*) k*om/2.0d0/pi, real(GXh_w(k)),aimag(GXh_w(k))
+            write(62,*) k*om/2.0d0/pi, real(GXe_w(k)),aimag(GXe_w(k))
         enddo
         close(62)
 
 
+
         !絶対値__________________________
-        open(70,file='absHZ_w'//trim(adjustl(file_name))//'.d')
+        open(70,file='out4.dat')
         do k=0,nd-1
-            write(70,*) k*om/2.0d0/pi, abs(HZ_w(k))  !!!横軸周波数の書き方違うかも
+            write(70,*) k*om/2.0d0/pi, abs(EX_w(k))  !!!横軸周波数の書き方違うかも
         enddo
         close(70)
 
         !ある点での周波数領域JZ_w
-       open(71,file='JZ_w'//trim(adjustl(file_name))//'.d')
-!        open(71,file='out5.dat')
+!       open(61,file='JZ_w'//name/'.d')
+        open(71,file='out5.dat')
         do k=0,nd-1
             write(71,*) k*om/2.0d0/pi, abs(JZ_w(k))
         enddo
@@ -215,36 +210,98 @@ close(51)
 
 
         !ある点での周波数領域グリーン関数
-       open(72,file='GXh_w'//trim(adjustl(file_name))//'.d')
+!       open(62,file='GXh_w'//name/'.d')
         open(72,file='out6.dat')
         do k=0,nd-1
-            write(72,*) k*om/2.0d0/pi, abs(GXh_w(K))
+            write(72,*) k*om/2.0d0/pi, abs(GXe_w(K))
         enddo
         close(72)
 
+
+! !理論式J　
+! open(3,file='jtest.d')
+! open(4,file='jtestabs.d')
+! do k=0,nd-1
+! J_test(k) = 2.0d0*omega0*exp(-sqrt(om*k*omega0)*pi/fmax)*exp(I_u*sqrt(om*k*omega0)*pi/fmax)*exp(-I_u*om*k*omega0/2.0d0/pi/fmax/fmax)
+! write(3,*) om*k/2.0d0/pi, real(J_test(k)), aimag(J_test(k))
+! write(4,*) om*k/2.0d0/pi, abs(J_test(k))
+! enddo
+! close(3)
+! close(4)
+
+
+
 !//////////////////////////////////////////////////////////////////////////////////
 !
-! IFFT    Frequency to time trandformation   JZ_w,Hz_w,GXh_w to JZ_t,Hz_t,GXh_w
+! IFFT    Frequency to time transformation   JZ_w,EX_w,GXe_w to JZ_t,EX_t,GXe_t
 !
 !/////////////////////////////////////////////////////////////////////////////////
     write(*,*) '********************        IFFT start       ********************'
 
-	allocate( Hz_t(0:nd-1),JZ_t(0:nd-1),GXh_t(0:nd-1) )
-	allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
-	allocate( out1(0:nd-1), out2(0:nd-1), out3(0:nd-1) )
+nd = (nd-1) * 2
 
-    Hz_t(0:nd-1) = 0.0d0
-    JZ_t(0:nd-1) = 0.0d0
-    GXh_t(0:nd-1) = 0.0d0
-    out1(0:nd-1) = 0.0d0
-    out2(0:nd-1) = 0.0d0
-    out3(0:nd-1) = 0.0d0
+! nd = nd * 2
 
-    do j=0,nd-1
-        in1(j) = Hz_w(j)
-        in2(j) = JZ_w(j)
-		in3(j) = GXh_w(j)
-	enddo
+write(*,*) '(nd-1)*2', nd
+
+    allocate( in1(0:nd-1), in2(0:nd-1), in3(0:nd-1) )
+    allocate( EX_t(1:nd), JZ_t(1:nd), GXe_t(1:nd) )
+    allocate( out1(1:nd), out2(1:nd), out3(1:nd) )
+
+
+    in1(0:nd-1) = 0.0d0
+    in2(0:nd-1) = 0.0d0
+    in3(0:nd-1) = 0.0d0
+    EX_t(1:nd) = 0.0d0
+    JZ_t(1:nd) = 0.0d0
+    GXe_t(1:nd) = 0.0d0
+    out1(1:nd-1) = 0.0d0
+    out2(1:nd-1) = 0.0d0
+    out3(1:nd-1) = 0.0d0
+
+!////////////////////////////////////////////////////////////////////////////
+! EX_w,Jz_w,GXe_w に窓関数をかける hamming window
+!///////////////////////////////////////////////////////////////////////////
+! !     call window_hamming(nd,w) !hamming 両端が0にはならない窓
+!     call window_hanning(nd,w) !hanning 両端が0になる窓
+!       do i=0,nd-1
+!       write(7,*) w(i)
+!       enddo
+!   !taper かけて
+!       do k=0,nd-1
+!           write(10,*) k*om/2.0d0/pi,real(EX_w(k)),aimag(EX_w(k))!かける前出力
+!              EX_w(k) = EX_w(k) * w(k)
+!              JZ_w(k) = JZ_w(k) * w(k)
+!              GXe_w(k) = GXe_w(k) * w(k)
+!           write(11,*) k*om/2.0d0/pi,real(EX_w(k)),aimag(EX_w(k))!かけた後出力
+!       enddo
+
+    do k=0,nd/2
+        in1(k) = Ex_w(k)
+        in2(k) = JZ_w(k)
+        in3(k) = GXe_w(k)
+    enddo
+
+
+    in1(nd/2+1:nd-1) = conjg(EX_w(nd/2-1:1:-1))
+    in2(nd/2+1:nd-1) = conjg(JZ_w(nd/2-1:1:-1))
+    in3(nd/2+1:nd-1) = conjg(GXe_w(nd/2-1:1:-1))
+
+    open(101,file='conjg_exw.dat')
+    do i=0,nd-1
+    write(101,*) i, real(in1(i)), aimag(in1(i))
+    enddo
+    close(101)
+
+    open(102,file='conjg_jzw.dat')
+    do i=0,nd-1
+    write(102,*) i, real(in2(i)), aimag(in2(i))
+    enddo
+
+    open(103,file='conjg_gxew.dat')
+    do i=0,nd-1
+    write(103,*) i, real(in3(i)), aimag(in3(i))
+    enddo
 
 !////////////////////////////////////////////////////////////////////////////
 ! in1,in2,in3 に窓関数をかける hamming window
@@ -263,8 +320,8 @@ close(51)
 
 
 !////////////////////////////////////////////////////////////
-! make pland
-!       FFTW_FORWARD (-1) or FFTW_BACKWARD (+1)
+! make plans
+!      FFTW_FORWARD (-1) or FFTW_BACKWARD (+1)
 !////////////////////////////////////////////////////////////
 	call dfftw_plan_dft_1d(plan1,nd,in1,out1,FFTW_BACKWARD,FFTW_ESTIMATE) !complex array入力
 	call dfftw_plan_dft_1d(plan2,nd,in2,out2,FFTW_BACKWARD,FFTW_ESTIMATE)
@@ -275,11 +332,11 @@ close(51)
 !     call dfftw_plan_dft_1d(plan3,nd,in3,out3,FFTW_FORWARD,FFTW_ESTIMATE)
 
 !///////////////////////////////////////////////////////////
-! carry out fourier trandformation
+! carry out fourier transformation
 !///////////////////////////////////////////////////////////
 	call dfftw_execute_dft(plan1,in1,out1)
 	call dfftw_execute_dft(plan2,in2,out2)
-	call dfftw_execute_dft(plan3,in3,out3)
+    call dfftw_execute_dft(plan3,in3,out3)
 
 
 !///////////////////////////////////////////////////////////
@@ -287,40 +344,38 @@ close(51)
 !///////////////////////////////////////////////////////////
 	call dfftw_destroy_plan(plan1)
 	call dfftw_destroy_plan(plan2)
-	call dfftw_destroy_plan(plan3)
+    call dfftw_destroy_plan(plan3)
 
 
-!////////////////////////////////////////////////////////////
+!///////////////////////////////////////////////////////////
 ! output
 !////////////////////////////////////////////////////////////
-	open(81,file='HZ_t'//trim(adjustl(file_name))//'.d')!	open(81,file='invGH.dat')
-	open(82,file='JZ_t'//trim(adjustl(file_name))//'.d')!	open(82,file='invGJ.dat')
-	open(83,file='GXh_t'//trim(adjustl(file_name))//'.d')!	open(83,file='invGG.dat')
-    open(84,file='absHZ_t'//trim(adjustl(file_name))//'.d')
-    open(85,file='absJZ_t'//trim(adjustl(file_name))//'.d')
-    open(86,file='absGXh_t'//trim(adjustl(file_name))//'.d')
+	open(81,file='invGE.dat')
+	open(82,file='invGJ.dat')
+	open(83,file='invGG.dat')
+    open(84,file='absEX_t.dat')
+    open(85,file='absJZ_t.dat')
+    open(86,file='absGXe_t.dat')
 
-	do n=0,nd-1
-        !スケール
-		out1(n) = out1(n)/nd/dt*2.0d0 !H
-		out2(n) = out2(n)/nd/dt*2.0d0 !J
-		out3(n) = out3(n)/nd/dt*2.0d0 !G
-        !スケール /nd 　　　
-!         out1(n) = out1(n)/nd
-!         out2(n) = out2(n)/nd
-!         out3(n) = out3(n)/nd
+	do n=1,nd
+        !スケール / nd/dt *2.0d0 　
+        out1(n) = out1(n)/nd/dt *2.0d0!E
+        out2(n) = out2(n)/nd/dt *2.0d0!J
+        out3(n) = out3(n)/nd/dt *2.0d0!GX_t
+        !スケール / nd 　
+!         out1(n) = out1(n)/nd !E
+!         out2(n) = out2(n)/nd !J
+!         out3(n) = out3(n)/nd !GX_t
 
-		write(81,*) n*dt, real(out1(n)), aimag(out1(n))
-		write(82,*) n*dt, real(out2(n)), aimag(out2(n))
-		write(83,*) n*dt, real(out3(n)), aimag(out3(n))
+        GXe_t(n) = out3(n)
+
+        write(81,*) n*dt, real(out1(n)), aimag(out1(n))
+        write(82,*) n*dt, real(out2(n)), aimag(out2(n))
+        write(83,*) n*dt, real(out3(n)), aimag(out3(n))
         write(84,*) n*dt, abs(out1(n))
         write(85,*) n*dt, abs(out2(n))
         write(86,*) n*dt, abs(out3(n))
-
-    GXh_t(n) = out3(n)
-
 	enddo
-
 	close(81)
 	close(82)
 	close(83)
@@ -328,57 +383,53 @@ close(51)
     close(85)
     close(86)
 
-	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JZ_w,JZ_f,GXh_w,inv_JZ_w )
-	deallocate( in1,in2,in3,out1,out2,out3,Hz_t,JZ_t,GXh_t )
 
-enddo !file number loop
-        end subroutine f_to_d_h
+	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JZ_w,JZ_f,GXe_w )
+	deallocate( in1,in2,in3,out1,out2,out3,EX_t,JZ_t,GXe_t )
 
+    deallocate( J_test) !　
 
-
-
-
-
+end program f_to_d_e
 
 
 
 
 !///////////////////////////////////////////////////////////////////////////////////////
 !
-! IDFT     Frequency to time trandformation JZ_w,Hz_w,GXh_w to JZ_t,Hz_t,GXh_w
+! IDFT     Frequency to time transformation JZ_w,EX_w,GXe_w to JZ_t,EX_t,GXe_t
 !
 !///////////////////////////////////////////////////////////////////////////////////////
-!   write(*,*) '*********************        IDFT start       ************t********'
+! 	write(*,*) '*********************        IDFT start       ************t********'
 
-!   Hz_t(0:nd-1) = 0.0d0
-!   JZ_t(0:nd-1) = 0.0d0
-!   GXh_w(0:nd-1) = 0.0d0
+! 	EX_t(0:nd-1) = 0.0d0
+! 	JZ_t(0:nd-1) = 0.0d0
+! 	GXe_t(0:nd-1) = 0.0d0
 
-!   do k=0,nd-1
-!       do n=0,nd-1
-!       Hz_t(k) = Hz_t(k) &
-!               + Hz_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
-!       JZ_t(k) = JZ_t(k) &
-!               + JZ_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
-!       GXh_w(k) = GXh_w(k) &
-!               + GXh_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
-!       enddo
-!   enddo
+!  	do k=0,nd-1
+! 		do n=0,nd-1
+! 		EX_t(k) = EX_t(k) &
+! 				+ EX_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
+! 		JZ_t(k) = JZ_t(k) &
+! 				+ JZ_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
+! 		GXe_t(k) = GXe_t(k) &
+! 				+ GXe_w(n) * exp(-I_u*2.0d0*pi*k*n/nd) /nd/dt *2.0d0
+! 		enddo
+! 	enddo
 
-!       open(71,file='invGH.dat')
-!       open(72,file='invGJ.dat')
-!       open(73,file='invGG.dat')
-!   do k=0,nd-1
-!       write(71,*) k*dt, real(Hz_t(k)), aimag(Hz_t(k))
-!       write(72,*) k*dt, real(JZ_t(k)), aimag(JZ_t(k))
-!       write(73,*) k*dt, real(GXh_w(k)), aimag(GXh_w(k))
-!   enddo
-!       close(71)
-!       close(72)
-!       close(73)
+! 		open(71,file='invGE.dat')
+! 		open(72,file='invGJ.dat')
+! 		open(73,file='invGG.dat')
+! 	do k=0,nd-1
+! 		write(71,*) k*dt, real(EX_t(k)), aimag(EX_t(k))
+! 		write(72,*) k*dt, real(JZ_t(k)), aimag(JZ_t(k))
+! 		write(73,*) k*dt, real(GXe_t(k)), aimag(GXe_t(k))
+! 	enddo
+! 		close(71)
+! 		close(72)
+! 		close(73)
 
-!   deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,Hz_w,Hz_f,JZ_w,JZ_f,GXh_w )
-!   deallocate( Hz_t, JZ_t, GXh_w )
+! 	deallocate( w,t1,t2,inp1_r,inp1_i,inp2_r,inp2_i,EX_w,EX_f,JZ_w,JZ_f,GXe_w )
+! 	deallocate( EX_t, JZ_t, GXe_t )
 
 ! end program f_to_d
 
@@ -397,68 +448,6 @@ enddo !file number loop
 
 
 
-! subroutine convolution_GJ_to_E
-! 	use condt_para
-! 	implicit none
-! 		complex(kind(0d0)) :: in_G
-! 		complex(kind(0d0)) :: in_J
-! 		complex(kind(0d0)) :: in_EF
-! 		complex(kind(0d0)) :: out_G
-! 		complex(kind(0d0)) :: out_J
-! 		complex(kind(0d0)) :: out_ET
-
-! end subroutine convolution_GJ_to_E
-
-
-
-
-! !!by k
-! subroutine f_to_d_matrix
-! 	use condt_para
-! 	implicit none
-! 		integer :: s !sampling number 2**○
-! 		do j=1,s
-! 			do k=1,s
-! 				A(j,k) = exp(-(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ) )   *exp(I_u*(2.0d0*pi*sqrt((j-1)*s*t)*(k-1)/dble(s) ))
-! 			enddo
-! 		enddo
-! end subroutine f_to_d_matrix
-
-! !by i
-! subroutine laplace_fft
-! 	use condt_para
-! 	implicit none
-! 		integer :: n
-! 		integer :: it
-! ! 		integer :: istep!!
-! 		real(8) :: om
-! 		complex(kind(0d0)) :: Hz_w(ndtep)
-! 		complex(kind(0d0)) :: JZ_w(ndtep)
-! 		complex(kind(0d0)) :: GXh_w(ndtep)
-
-! 		om =2.0d0*pi/it/dt
-! ! 		om =2.0d0*pi/ndtep/dt
-! ! 		om =2.0d0*pi/istep/dt
-! 		t0=pi/fmax_w
-! 		beta=pi*fmax**2.0d0
-
-
-! 	do n=1,it  !what's it? !0~? 1~?
-
-! 		do k=1,it
-! 			EX_w(n) = EX_w(n) &
-! 					 + EX_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
-
-! 			JZ_w(n) = JZ_w(n) &
-! 					+ sqrt(-2.0d0*omega0/I_u/om/dble(n)) * JZ_f(k)*dt *exp(-sqrt(omega0*om*n)*k*dt) *exp(I_u*sqrt(omega0*om*n)*k*dt)
-! 		enddo
-! 			JZ_w(0) = 2.0d0 * omega0  !!!要確認
-
-! 			GXh_w(n) = EX_w(n) / JZ_w(n)
-
-! 	enddo
-! end subroutine laplace_fft
-
 
 
 
@@ -472,7 +461,7 @@ enddo !file number loop
 !///////////////////////////////////////////////////////////////////////////////////
 
 ! program f_to_d
-! 	use condt_para
+! 	use const_para
 ! 		implicit none
 
 !     		integer                         :: n,nd,ios

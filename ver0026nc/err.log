@@ -1,0 +1,74 @@
+./compile4: line 13: ifort: command not found
+./compile4: line 42: ./ficticious_fwi_cpml: cannot execute binary file
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.001s
+         line 0: warning: Skipping unreadable file "ex1010.d"
+         line 0: warning: Skipping unreadable file "ex1020.d"
+         line 0: warning: Skipping unreadable file "ex1030.d"
+         line 0: No data in plot
+
+         line 0: warning: Skipping unreadable file "hz1010.d"
+         line 0: warning: Skipping unreadable file "hz1020.d"
+         line 0: warning: Skipping unreadable file "hz1030.d"
+         line 0: No data in plot
+
+         line 0: warning: Skipping unreadable file "EX_w1010.d"
+         line 0: warning: Skipping unreadable file "EX_w1020.d"
+         line 0: warning: Skipping unreadable file "EX_w1030.d"
+         line 0: No data in plot
+
+         line 0: warning: Skipping unreadable file "HZ_w1010.d"
+         line 0: warning: Skipping unreadable file "HZ_w1020.d"
+         line 0: warning: Skipping unreadable file "HZ_w1030.d"
+         line 0: No data in plot
+
+         line 0: warning: Skipping unreadable file "EX_t1010.d"
+         line 0: warning: Skipping unreadable file "EX_t1020.d"
+         line 0: warning: Skipping unreadable file "EX_t1030.d"
+         line 0: No data in plot
+
+         line 0: warning: Skipping unreadable file "EX_w1010.d"
+         line 0: warning: Skipping unreadable file "EX_w1020.d"
+         line 0: warning: Skipping unreadable file "EX_w1030.d"
+         line 0: No data in plot
+
+         line 0: warning: Skipping unreadable file "HZ_w1010.d"
+         line 0: warning: Skipping unreadable file "HZ_w1020.d"
+         line 0: warning: Skipping unreadable file "HZ_w1030.d"
+         line 0: No data in plot
+
+         line 0: warning: Skipping unreadable file "EX_t1010.d"
+         line 0: warning: Skipping unreadable file "EX_t1020.d"
+         line 0: warning: Skipping unreadable file "EX_t1030.d"
+         line 0: No data in plot
+
+         line 0: warning: Skipping unreadable file "model_sig_xz.dat"
+         line 0: warning: No usable data in this plot to auto-scale axis range
+         line 0: z axis range undefined or overflow
+
+         line 0: warning: Skipping unreadable file "model_sig_xy.dat"
+         line 0: warning: No usable data in this plot to auto-scale axis range
+         line 0: z axis range undefined or overflow
+
+         line 0: warning: Skipping unreadable file "model_myu_xz.dat"
+         line 0: warning: No usable data in this plot to auto-scale axis range
+         line 0: z axis range undefined or overflow
+
+         line 0: warning: Skipping unreadable file "model_myu_xy.dat"
+         line 0: warning: No usable data in this plot to auto-scale axis range
+         line 0: z axis range undefined or overflow
+
+         line 0: warning: Skipping unreadable file "41pattern2_12diff.d"
+         line 0: No data in plot
+
+         line 0: warning: Skipping unreadable file "41pattern2_23diff.d"
+         line 0: No data in plot
+
+mv: rename *pattern2_1.d to out3/*pattern2_1.d: No such file or directory
+mv: rename *pattern2_2.d to out3/*pattern2_2.d: No such file or directory
+mv: rename *pattern2_3.d to out3/*pattern2_3.d: No such file or directory
+mv: rename *pattern*diff.d to out_diff/*pattern*diff.d: No such file or directory
+mv: rename *_w*.d to out_freq/*_w*.d: No such file or directory
+mv: rename *_t*.d to out_time/*_t*.d: No such file or directory
