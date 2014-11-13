@@ -17,8 +17,9 @@ AA,BB=np.meshgrid(aa,bb)
 plt.xlabel('x')
 plt.ylabel('z')
 
-plt.imshow(sig2)
-# plt.contourf(AA,BB,sig2,2,alpha=.75,cmap=plt.cm.hot)
+
+plt.imshow(sig2,origin='lower')
+
 plt.colorbar
 plt.savefig('sigmodel_xz.png')
 # show()
@@ -59,7 +60,7 @@ AA,BB=np.meshgrid(aa,bb)
 plt.xlabel('x')
 plt.ylabel('z')
 
-plt.imshow(sig2)
+plt.imshow(sig2,origin='lower')
 
 plt.colorbar
 plt.savefig('myumodel_xy.png')
