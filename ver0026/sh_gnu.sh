@@ -288,3 +288,24 @@ EOF
 # set out 'pattern1_23differential_all.eps'
 # p "< paste pattern1_2.d pattern1_3.d" using 1:(\$2-\$5) w l, "" using 1:2 w l, "" using 1:5 w l
 # EOF
+
+
+#differential__________________:::::::_____________
+# gnuplot<<EOF
+# set terminal posts enhanced color
+# set out 'diff41-45_4.eps'
+# set xlabel 't[s]'
+# set ylabel 'Differential Probe H[A/m]'
+# set xlabel font 'Helvetica, 30'
+# p '41pattern2_23diff.d' w l lw 4, '45pattern2_23diff.d' w l lw 4 lt 2
+# EOF
+
+#png ver
+# gnuplot<<EOF
+# set terminal png font "Helvetica" 20 size 2400,1800
+# set out 'diff41-45.png'
+# unset key
+# set set xlabel 't[s]'
+# set ylabel 'Differential Probe H[A/m]'
+# p '41pattern2_23diff.d' w l lw 4, '../../ver0026/out_diff/41pattern2_23diff.d' w l lw 4 lt 2
+# EOF
