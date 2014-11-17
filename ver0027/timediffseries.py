@@ -31,8 +31,9 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
 ylim(ymax=4e10)
-ax1.set_yticklabels(['43'])
+# ax1.set_yticklabels([])
 ax1.set_xticklabels([])
+ax1.set_ylabel('43')
 
 ax1 = subplot(912)
 data1 = np.loadtxt('./out_diff/45pattern2_23diff.d')
@@ -40,8 +41,9 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
 ylim(ymax=4e10)
-ax1.set_yticklabels(['45'])
+ax1.set_yticklabels([])
 ax1.set_xticklabels([])
+ax1.set_ylabel('45')
 
 ax1 = subplot(913)
 data1 = np.loadtxt('./out_diff/47pattern2_23diff.d')
@@ -49,8 +51,9 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
 ylim(ymax=4e10)
-ax1.set_yticklabels(['47'])
+ax1.set_yticklabels([])
 ax1.set_xticklabels([])
+ax1.set_ylabel('47')
 
 ax1 = subplot(914)
 data1 = np.loadtxt('./out_diff/49pattern2_23diff.d')
@@ -58,8 +61,9 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
 ylim(ymax=4e10)
-ax1.set_yticklabels(['49'])
+ax1.set_yticklabels([])
 ax1.set_xticklabels([])
+ax1.set_ylabel('49')
 
 ax1 = subplot(915)
 data1 = np.loadtxt('./out_diff/51pattern2_23diff.d')
@@ -67,8 +71,9 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
 ylim(ymax=4e10)
-ax1.set_yticklabels(['51'])
+ax1.set_yticklabels([])
 ax1.set_xticklabels([])
+ax1.set_ylabel('51')
 
 ax1 = subplot(916)
 data1 = np.loadtxt('./out_diff/53pattern2_23diff.d')
@@ -76,8 +81,9 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
 ylim(ymax=4e10)
-ax1.set_yticklabels(['53'])
+ax1.set_yticklabels([])
 ax1.set_xticklabels([])
+ax1.set_ylabel('53')
 
 ax1 = subplot(917)
 data1 = np.loadtxt('./out_diff/55pattern2_23diff.d')
@@ -85,8 +91,9 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
 ylim(ymax=4e10)
-ax1.set_yticklabels(['55'])
+ax1.set_yticklabels([])
 ax1.set_xticklabels([])
+ax1.set_ylabel('55')
 
 ax1 = subplot(918)
 data1 = np.loadtxt('./out_diff/57pattern2_23diff.d')
@@ -94,25 +101,26 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
 ylim(ymax=4e10)
-ax1.set_yticklabels(['57'])
+ax1.set_yticklabels([])
 ax1.set_xticklabels([])
+ax1.set_ylabel('57')
 
 ax1 = subplot(919)
 data1 = np.loadtxt('./out_diff/59pattern2_23diff.d')
 x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
-ax1.set_yticklabels(['59'])
+ax1.set_yticklabels([])
 ylim(ymax=4e10)
+ax1.set_ylabel('59')
+
 # ax1 = subplot(911)
 # data1 = np.loadtxt('./out_diff/61pattern2_23diff.d')
 # x1 = data1[:,0]
 # y1 = data1[:,1]
 # plt.plot(x1,y1)
 
-
-
-
+plt.xlabel('time [s]')
 
 
 
@@ -174,6 +182,6 @@ ylim(ymax=4e10)
 # y1 = data1[:,1]
 # plt.plot(x1,y1)
 
-savefig('timediffseries.png')
-# show()
+# savefig('timediffseries.png')
+show()
 
