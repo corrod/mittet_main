@@ -14,11 +14,12 @@ theta2 = theta -10
 radian = theta * np.pi/180
 
 ax = plt.axes(polar=True)
-ax.scatter(theta,y1)
-
+# ax.scatter(theta,y1)
+ax.plot(theta,y1,'o',ls='-',ms=3,markevery=6)
+ylim(ymax=1e10)
 plt.xlabel('45diff23')
-plt.savefig('polar45_23.png')
-# plt.show()
+# plt.savefig('polar45_23.png')
+plt.show()
 
 
 # data2 = np.loadtxt('./out_diff/45pattern2_23diff.d')

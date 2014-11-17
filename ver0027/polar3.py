@@ -14,8 +14,12 @@ theta2 = theta +10
 radian = theta * np.pi/180
 
 ax = plt.axes(polar=True)
-ax.scatter(theta2,y1)
+# ax.scatter(theta2,y1)
+
+ax.plot(theta,y1,'o',ls='-',ms=3,markevery=6)
+
+ylim(ymax=1e10)
 
 plt.xlabel('45diff23_shiftplus')
-plt.savefig('polar45_23shiftplus.png')
-# plt.show()
+# plt.savefig('polar45_23shiftplus.png')
+plt.show()
