@@ -21,7 +21,6 @@ ax.plot(theta+10,y1,'o',ls='--',ms=3,markevery=6, label='shift')
 ylim(ymax=1e10)
 ax.legend()
 
-plt.xlabel('45diff23_shift')
-
-# plt.savefig('polar45_23shift.png')
+plt.xlabel('45diff23_shift2')
+plt.savefig('polar45_23shift2.png')
 plt.show()

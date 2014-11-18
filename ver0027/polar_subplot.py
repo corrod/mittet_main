@@ -1,3 +1,5 @@
+#ylimの値がうまく設定できない
+
 from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
@@ -35,11 +37,15 @@ for i, case in enumerate(cases):
     col = i % cols
     axpolar.append(fig4.add_subplot(gs[row, col], polar = True))
     axpolar[-1].set_title('markevery=%s' % str(case))
-    axpolar[-1].plot(theta, y1, 'o', ls='-', ms=3,  markevery=case)
+    # axpolar[-1].plot(theta, y1, 'o', ls='-', ms=3,  markevery=case)
+    axpolar[-1].plot(theta, y1, ylim(ymax=1e10), 'o', ls='-', ms=3,  markevery=case)
 # fig4.tight_layout()
+# ylim(ymax=1e10)
+# axis('scaled')
 
-ylim(ymax=1e10)
+# ylim(ymax=1e10)
+plt.xlabel('45diff23sub')
 
-# plt.savefig('polar45_23sub.png')
+plt.savefig('polar45_23sub.png')
 plt.show()
 

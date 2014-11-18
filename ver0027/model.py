@@ -3,6 +3,7 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 
+
 data1 = np.loadtxt('./model_sig_xz.dat')
 x1 = data1[:,0]
 y1 = data1[:,1]
@@ -14,20 +15,29 @@ sig2 = sig.reshape((101,101))
 # bb = np.arange(1,101,1)
 # AA,BB=np.meshgrid(aa,bb)
 
-plt.xlabel('x')
-plt.ylabel('z')
+fig=figure()
+ax1=fig.add_subplot(111)
 
+ax1.set_xlabel('x')
+ax1.set_ylabel('z')
+ax1.set_xticklabels([])
+ax1.set_yticklabels([])
 
 # im=plt.imshow(sig2,origin='lower',cmap=cm.RdYlBu) #blue red
 # im=plt.imshow(sig2,origin='lower',cmap=cm.seismic) #seismic
 # im=plt.imshow(sig2,origin='lower',cmap=cm.jet) #original
-im=plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
+plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 # im=plt.imshow(sig2,origin='lower',cmap=cm.rainbow) #red_blue
 # im=plt.imshow(sig2,origin='lower',cmap=cm.RdBu)
 
-# plt.colorbar(im)
-plt.savefig('sigmodel_xz.png')
+
+plt.savefig('sigmodel_xz.eps')
 # show()
+
+
+
+
+
 
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -38,12 +48,19 @@ z1 = data1[:,2]
 sig = data1[:,3]
 sig2 = sig.reshape((101,101))
 
-plt.xlabel('x')
-plt.ylabel('y')
+# plt.xlabel('x')
+# plt.ylabel('y')
+fig=figure()
+ax1=fig.add_subplot(111)
 
-im=plt.imshow(sig2)
+ax1.set_xlabel('x')
+ax1.set_ylabel('y')
+ax1.set_xticklabels([])
+ax1.set_yticklabels([])
 
-# plt.colorbar(im)
+plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
+
+
 plt.savefig('sigmodel_xy.png')
 # show()
 
@@ -57,12 +74,19 @@ z1 = data1[:,2]
 sig = data1[:,3]
 sig2 = sig.reshape((101,101))
 
-plt.xlabel('x')
-plt.ylabel('z')
-plt.colorbar
+# plt.xlabel('x')
+# plt.ylabel('z')
+# plt.colorbar
+fig=figure()
+ax1=fig.add_subplot(111)
 
-im=plt.imshow(sig2,origin='lower')
-1
+ax1.set_xlabel('x')
+ax1.set_ylabel('z')
+ax1.set_xticklabels([])
+ax1.set_yticklabels([])
+
+plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
+
 plt.savefig('myumodel_xz.png')
 # show()
 
@@ -76,11 +100,18 @@ sig = data1[:,3]
 sig2 = sig.reshape((101,101))
 
 
-plt.xlabel('x')
-plt.ylabel('y')
+# plt.xlabel('x')
+# plt.ylabel('y')
+fig=figure()
+ax1=fig.add_subplot(111)
 
-im=plt.imshow(sig2)
+ax1.set_xlabel('x')
+ax1.set_ylabel('y')
+ax1.set_xticklabels([])
+ax1.set_yticklabels([])
 
-# plt.colorbar(im)
+plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
+
+
 plt.savefig('myumodel_xy.png')
 # show()

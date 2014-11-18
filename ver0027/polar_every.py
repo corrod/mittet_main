@@ -22,5 +22,5 @@ ylim(ymax=1e10)
 
 plt.xlabel('45diff23every')
 
-# plt.savefig('polar45_23every.png')
+plt.savefig('polar45_23every.png')
 plt.show()

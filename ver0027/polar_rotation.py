@@ -33,13 +33,14 @@ axpolar = []
 for i, case in enumerate(cases):
     row = (i // cols)
     col = i % cols
-    axpolar.append(fig4.add_subplot(gs[row, col], polar = True))
+    axpolar.append(fig.add_subplot(gs[row, col], polar = True))
     axpolar[-1].set_title('markevery=%s' % str(case))
     axpolar[-1].plot(theta+case, y1, 'o', ls='-', ms=3,  markevery=case)
 # fig.tight_layout()
 
 # ylim(ymax=1e10)
 
-# plt.savefig('polar45_23sub.png')
+plt.xlabel('45diff23rotation')
+plt.savefig('polar45_23rotation.png')
 plt.show()
 

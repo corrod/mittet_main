@@ -182,6 +182,6 @@ plt.xlabel('time [s]')
 # y1 = data1[:,1]
 # plt.plot(x1,y1)
 
-# savefig('timediffseries.png')
+savefig('timediffseries.png')
 show()
 

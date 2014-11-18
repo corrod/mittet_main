@@ -18,7 +18,7 @@ ax = plt.axes(polar=True)
 ax.plot(theta,y1,'o',ls='-',ms=3,markevery=6)
 ylim(ymax=1e10)
 plt.xlabel('45diff23')
-# plt.savefig('polar45_23.png')
+plt.savefig('polar45_23.png')
 plt.show()
 
 
