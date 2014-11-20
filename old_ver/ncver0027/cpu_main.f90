@@ -32,7 +32,7 @@ program main
     complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
 ! do sp= 41,61,2  !ソース位置
- do sp= 31,71  !ソース位置
+ do sp= 41,61  !ソース位置
 
     write(file_sp,*) sp !
 
@@ -70,7 +70,7 @@ program main
     open(56,file = trim(adjustl(file_sp))//'pattern2_2.d')   !①
     open(57,file = trim(adjustl(file_sp))//'pattern2_3.d')   !② ③
 
-write(*,*) ' no crack_ver'
+write(*,*) 'no crack_ver'
 
     write(*,*) 'x_source position :', sp
 

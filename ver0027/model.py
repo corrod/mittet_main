@@ -31,7 +31,7 @@ plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 # im=plt.imshow(sig2,origin='lower',cmap=cm.RdBu)
 
 
-plt.savefig('sigmodel_xz.eps')
+plt.savefig('sigmodel_xz.png')
 # show()
 
 

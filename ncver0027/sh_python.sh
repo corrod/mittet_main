@@ -6,3 +6,6 @@ python polar_every.py
 python polar_rotation.py
 python polar_subplot.py
 python timediffseries.py
+python model.py
+python diff.py
+python diff12.py
