@@ -61,6 +61,7 @@ time ./ficticious_fwi_cpml #> jyouken.txt
   # sh sh_movie.sh
 
 # python subplot.py
+sh sh_python.sh
 
 # ファイル整理
 mv *pattern2_1.d out3
