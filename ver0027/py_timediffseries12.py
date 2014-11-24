@@ -1,3 +1,4 @@
+# coding:utf-8
 from __future__ import division, print_function
 
 import numpy as np
@@ -16,6 +17,7 @@ rps=arange(41,61,2)
 
 f = figure()
 subplots_adjust(hspace=0.001)
+
 
 # for rp in enumerate(rps):
 

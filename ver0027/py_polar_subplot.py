@@ -1,3 +1,4 @@
+# coding:utf-8
 #ylim umakusetteidekinai
 
 from __future__ import division
