@@ -11,7 +11,7 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
-sig2 = sig.reshape((101,101))
+sig2 = sig.reshape((71,101))
 
 # aa = np.arange(1,101,1)
 # bb = np.arange(1,101,1)
@@ -50,7 +50,7 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
-sig2 = sig.reshape((101,101))
+sig2 = sig.reshape((61,101))
 
 # plt.xlabel('x')
 # plt.ylabel('y')
@@ -78,7 +78,7 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
-sig2 = sig.reshape((101,101))
+sig2 = sig.reshape((71,101))
 
 # plt.xlabel('x')
 # plt.ylabel('z')
@@ -105,7 +105,7 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
-sig2 = sig.reshape((101,101))
+sig2 = sig.reshape((61,101))
 
 
 # plt.xlabel('x')
