@@ -157,67 +157,6 @@ subroutine model
 !     厚み 15mm 10mm 5mm 7.5mm 15mm
 !#############################################################
 
-    !海水
-    do k=1,nz
-        do j=1,ny
-            do i=1,nx
-                sig(i,j,k) = sigwa
-                myu(i,j,k) = myuwa
-            enddo
-        enddo
-    enddo
-
-    !鉄板 ブロックを5つに分けて
-    do k=1,zblock1
-        do j=1,ny
-            do i=1,xblock2
-                sig(i,j,k) = sigfe
-                myu(i,j,k) = myufe
-            enddo
-        enddo
-    enddo
-    do k=1,zblock2
-        do j=1,ny
-            do i=xblock2,xblock3
-                sig(i,j,k) = sigfe
-                myu(i,j,k) = myufe
-            enddo
-        enddo
-    enddo
-    do k=1,zblock3
-        do j=1,ny
-            do i=xblock3,xblock4
-                sig(i,j,k) = sigfe
-                myu(i,j,k) = myufe
-            enddo
-        enddo
-    enddo
-    do k=1,zblock4
-        do j=1,ny
-            do i=xblock4,xblock5
-                sig(i,j,k) = sigfe
-                myu(i,j,k) = myufe
-            enddo
-        enddo
-    enddo
-    do k=1,zblock5
-        do j=1,ny
-            do i=xblock5,nx
-                sig(i,j,k) = sigfe
-                myu(i,j,k) = myufe
-            enddo
-        enddo
-    enddo
-
-
-!#############################################################
-    ! 実験モデル2 穴モデル 深さ8mm
-    !     5箇所傷
-    !     厚み 15mm
-    !     欠陥深さ 8mm (15mm,4mm)
-
-!#############################################################
-
 !     !海水
 !     do k=1,nz
 !         do j=1,ny
@@ -228,57 +167,118 @@ subroutine model
 !         enddo
 !     enddo
 
-!     !鉄板
-!     do k=1,plate
+!     !鉄板 ブロックを5つに分けて
+!     do k=1,zblock1
 !         do j=1,ny
-!             do i=1,nx
+!             do i=1,xblock2
+!                 sig(i,j,k) = sigfe
+!                 myu(i,j,k) = myufe
+!             enddo
+!         enddo
+!     enddo
+!     do k=1,zblock2
+!         do j=1,ny
+!             do i=xblock2,xblock3
+!                 sig(i,j,k) = sigfe
+!                 myu(i,j,k) = myufe
+!             enddo
+!         enddo
+!     enddo
+!     do k=1,zblock3
+!         do j=1,ny
+!             do i=xblock3,xblock4
+!                 sig(i,j,k) = sigfe
+!                 myu(i,j,k) = myufe
+!             enddo
+!         enddo
+!     enddo
+!     do k=1,zblock4
+!         do j=1,ny
+!             do i=xblock4,xblock5
+!                 sig(i,j,k) = sigfe
+!                 myu(i,j,k) = myufe
+!             enddo
+!         enddo
+!     enddo
+!     do k=1,zblock5
+!         do j=1,ny
+!             do i=xblock5,nx
 !                 sig(i,j,k) = sigfe
 !                 myu(i,j,k) = myufe
 !             enddo
 !         enddo
 !     enddo
 
-!     !欠陥
-!     do k=zs,ze
-!         do j=ys1,ye1
-!             do i=xs1,xe1
-!                 sig(i,j,k) = sigwa
-!                 myu(i,j,k) = myuwa
-!             enddo
-!         enddo
-!     enddo
-!     do k=zs,ze
-!         do j=ys2,ye2
-!             do i=xs2,xe2
-!                 sig(i,j,k) = sigwa
-!                 myu(i,j,k) = myuwa
-!             enddo
-!         enddo
-!     enddo
-!     do k=zs,ze
-!         do j=ys3,ye3
-!             do i=xs3,xe3
-!                 sig(i,j,k) = sigwa
-!                 myu(i,j,k) = myuwa
-!             enddo
-!         enddo
-!     enddo
-!     do k=zs,ze
-!         do j=ys4,ye4
-!             do i=xs4,xe4
-!                 sig(i,j,k) = sigwa
-!                 myu(i,j,k) = myuwa
-!             enddo
-!         enddo
-!     enddo
-!     do k=zs,ze
-!         do j=ys5,ye5
-!             do i=xs5,xe5
-!                 sig(i,j,k) = sigwa
-!                 myu(i,j,k) = myuwa
-!             enddo
-!         enddo
-!     enddo
+
+!#############################################################
+    ! 実験モデル2 穴モデル 深さ8mm
+    !     5箇所傷
+    !     厚み 15mm
+    !     欠陥深さ 8mm (15mm,4mm)
+
+!#############################################################
+
+    !海水
+    do k=1,nz
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+
+    !鉄板
+    do k=1,plate
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigfe
+                myu(i,j,k) = myufe
+            enddo
+        enddo
+    enddo
+
+    !欠陥
+    do k=zs,ze
+        do j=ys1,ye1
+            do i=xs1,xe1
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+    do k=zs,ze
+        do j=ys2,ye2
+            do i=xs2,xe2
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+    do k=zs,ze
+        do j=ys3,ye3
+            do i=xs3,xe3
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+    do k=zs,ze
+        do j=ys4,ye4
+            do i=xs4,xe4
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+    do k=zs,ze
+        do j=ys5,ye5
+            do i=xs5,xe5
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -324,6 +324,18 @@ subroutine model
         close(103)
 
         end subroutine model
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     ! ! model1 海水一様モデル______________________
