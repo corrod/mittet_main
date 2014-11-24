@@ -26,13 +26,13 @@ subplots_adjust(hspace=0.001)
 # x1 = data1[:,0]
 # y1 = data1[:,1]
 # plt.plot(x1,y1)
-
 ax1 = subplot(911)
+ax1.set_title('absolute method')
 data1 = np.loadtxt('./out_diff/43pattern2_12diff.d')
 x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
-ylim(ymax=4e10)
+ylim(ymax=2e11)
 # ax1.set_yticklabels([])
 ax1.set_xticklabels([])
 ax1.set_ylabel('43')
@@ -42,7 +42,7 @@ data1 = np.loadtxt('./out_diff/45pattern2_12diff.d')
 x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
-ylim(ymax=4e10)
+ylim(ymax=2e11)
 ax1.set_yticklabels([])
 ax1.set_xticklabels([])
 ax1.set_ylabel('45')
@@ -52,7 +52,7 @@ data1 = np.loadtxt('./out_diff/47pattern2_12diff.d')
 x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
-ylim(ymax=4e10)
+ylim(ymax=2e11)
 ax1.set_yticklabels([])
 ax1.set_xticklabels([])
 ax1.set_ylabel('47')
@@ -62,7 +62,7 @@ data1 = np.loadtxt('./out_diff/49pattern2_12diff.d')
 x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
-ylim(ymax=4e10)
+ylim(ymax=2e11)
 ax1.set_yticklabels([])
 ax1.set_xticklabels([])
 ax1.set_ylabel('49')
@@ -72,7 +72,7 @@ data1 = np.loadtxt('./out_diff/51pattern2_12diff.d')
 x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
-ylim(ymax=4e10)
+ylim(ymax=2e11)
 ax1.set_yticklabels([])
 ax1.set_xticklabels([])
 ax1.set_ylabel('51')
@@ -82,7 +82,7 @@ data1 = np.loadtxt('./out_diff/53pattern2_12diff.d')
 x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
-ylim(ymax=4e10)
+ylim(ymax=2e11)
 ax1.set_yticklabels([])
 ax1.set_xticklabels([])
 ax1.set_ylabel('53')
@@ -92,7 +92,7 @@ data1 = np.loadtxt('./out_diff/55pattern2_12diff.d')
 x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
-ylim(ymax=4e10)
+ylim(ymax=2e11)
 ax1.set_yticklabels([])
 ax1.set_xticklabels([])
 ax1.set_ylabel('55')
@@ -102,7 +102,7 @@ data1 = np.loadtxt('./out_diff/57pattern2_12diff.d')
 x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
-ylim(ymax=4e10)
+ylim(ymax=2e11)
 ax1.set_yticklabels([])
 ax1.set_xticklabels([])
 ax1.set_ylabel('57')
@@ -113,7 +113,7 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 plt.plot(x1,y1)
 ax1.set_yticklabels([])
-ylim(ymax=4e10)
+ylim(ymax=2e11)
 ax1.set_ylabel('59')
 
 # ax1 = subplot(911)

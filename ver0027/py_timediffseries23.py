@@ -28,6 +28,7 @@ subplots_adjust(hspace=0.001)
 # plt.plot(x1,y1)
 
 ax1 = subplot(911)
+ax1.set_title('differential method')
 data1 = np.loadtxt('./out_diff/43pattern2_23diff.d')
 x1 = data1[:,0]
 y1 = data1[:,1]
@@ -123,7 +124,6 @@ ax1.set_ylabel('59')
 # plt.plot(x1,y1)
 
 plt.xlabel('time [s]')
-
 
 
 savefig('timediffseries23.png')
