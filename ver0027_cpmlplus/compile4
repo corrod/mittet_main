@@ -60,8 +60,6 @@ time ./ficticious_fwi_cpml #> jyouken.txt
 # #H'zの伝播movie
   # sh sh_movie.sh
 
-# python subplot.py
-sh sh_python.sh
 
 # ファイル整理
 mv *pattern2_1.d out3
@@ -75,6 +73,8 @@ mv *.png out_png
 mv *_w*.d out_freq
 mv *_t*.d out_time
 
+# python subplot.py
+sh sh_python.sh
 
 # -----------------------------------------------------------------------------------
 # no conjg
