@@ -171,6 +171,7 @@ subroutine model_simple
 
 
 ! H23モデル　モデル1
+
 subroutine model_stair
 
     use const_para
@@ -403,8 +404,7 @@ subroutine model_pinhole8
     xs5 = 85 - 7!150mm
     xe5 = 85 + 7
     ys5 = ycenter - 1!10mm??
-    ye5 = ycenter + 1
-
+    ye5 = ys5 + 1
 
     write(*,*) 'plate_z', plate
     write(*,*) 'offset', offset
@@ -574,27 +574,26 @@ subroutine model_pinholeall
     ys1 = ycenter - 5
     ye1 = ycenter + 5
 
-    xs2 = 25 - 1!10mm
+    xs2 = 25  !10mm
     xe2 = 25 + 1
     ys2 = ycenter - 1
-    ye2 = ycenter + 1
+    ye2 = ys2 + 1
 
-    xs3 = 40 - 2!20mm
-    xe3 = 40 + 2
-    ys3 = ycenter - 2
-    ye3 = ycenter + 2
+    xs3 = 40 - 1!20mm
+    xe3 = 40 + 1
+    ys3 = ycenter - 1
+    ye3 = ycenter + 1
 
-    xs4 = 55 - 3!50mm
+    xs4 = 55 - 2!50mm
     xe4 = 55 + 3
-    ys4 = ycenter - 3
+    ys4 = ycenter - 2
     ye4 = ycenter + 3
 
     !直方形状
     xs5 = 85 - 7!150mm
     xe5 = 85 + 7
     ys5 = ycenter - 1!10mm??
-    ye5 = ycenter + 1
-
+    ye5 = ys5 + 1
 
     write(*,*) 'plate_z', plate
     write(*,*) 'offset', offset
@@ -604,8 +603,6 @@ subroutine model_pinholeall
     write(*,*) 'xx1,yy1,zz1',xx1,yy1,zz1
     write(*,*) 'xx2,yy2,zz2',xx2,yy2,zz2
     write(*,*) 'xx3,yy3,zz3',xx3,yy3,zz3
-
-
 
 
     !海水
@@ -628,15 +625,15 @@ subroutine model_pinholeall
         enddo
     enddo
 
-    !欠陥8mm
-    do k=zs,ze
-        do j=ys1,ye1
-            do i=xs1,xe1
-                sig(i,j,k) = sigwa
-                myu(i,j,k) = myuwa
-            enddo
-        enddo
-    enddo
+    !欠陥8mm 中
+!     do k=zs,ze
+!         do j=ys1,ye1
+!             do i=xs1,xe1
+!                 sig(i,j,k) = sigwa
+!                 myu(i,j,k) = myuwa
+!             enddo
+!         enddo
+!     enddo
     do k=zs,ze
         do j=ys2,ye2
             do i=xs2,xe2
@@ -670,16 +667,16 @@ subroutine model_pinholeall
         enddo
     enddo
 
-    !欠陥15mm貫通
-    do k=zs,ze
-        do j=ys1+15,ye1+15
-            do i=xs1,xe1
+    !欠陥15mm貫通　上
+    do k=1,plate
+        do j=ys1+15+4,ye1+15-5
+            do i=xs1+4,xe1-5
                 sig(i,j,k) = sigwa
                 myu(i,j,k) = myuwa
             enddo
         enddo
     enddo
-    do k=zs,ze
+    do k=1,plate
         do j=ys2+15,ye2+15
             do i=xs2,xe2
                 sig(i,j,k) = sigwa
@@ -687,7 +684,7 @@ subroutine model_pinholeall
             enddo
         enddo
     enddo
-    do k=zs,ze
+    do k=1,plate
         do j=ys3+15,ye3+15
             do i=xs3,xe3
                 sig(i,j,k) = sigwa
@@ -695,7 +692,7 @@ subroutine model_pinholeall
             enddo
         enddo
     enddo
-    do k=zs,ze
+    do k=1,plate
         do j=ys4+15,ye4+15
             do i=xs4,xe4
                 sig(i,j,k) = sigwa
@@ -703,7 +700,7 @@ subroutine model_pinholeall
             enddo
         enddo
     enddo
-    do k=zs,ze
+    do k=1,plate
         do j=ys5+15,ye5+15
             do i=xs5,xe5
                 sig(i,j,k) = sigwa
@@ -712,8 +709,8 @@ subroutine model_pinholeall
         enddo
     enddo
 
-    !欠陥4mm貫通
-    do k=zs,ze
+    !欠陥4mm貫通　下
+    do k=plate-1,plate
         do j=ys1-15,ye1-15
             do i=xs1,xe1
                 sig(i,j,k) = sigwa
@@ -721,7 +718,7 @@ subroutine model_pinholeall
             enddo
         enddo
     enddo
-    do k=zs,ze
+    do k=plate-1,plate
         do j=ys2-15,ye2-15
             do i=xs2,xe2
                 sig(i,j,k) = sigwa
@@ -729,7 +726,7 @@ subroutine model_pinholeall
             enddo
         enddo
     enddo
-    do k=zs,ze
+    do k=plate-1,plate
         do j=ys3-15,ye3-15
             do i=xs3,xe3
                 sig(i,j,k) = sigwa
@@ -737,7 +734,7 @@ subroutine model_pinholeall
             enddo
         enddo
     enddo
-    do k=zs,ze
+    do k=plate-1,plate
         do j=ys4-15,ye4-15
             do i=xs4,xe4
                 sig(i,j,k) = sigwa
@@ -745,7 +742,7 @@ subroutine model_pinholeall
             enddo
         enddo
     enddo
-    do k=zs,ze
+    do k=plate-1,plate
         do j=ys5-15,ye5-15
             do i=xs5,xe5
                 sig(i,j,k) = sigwa

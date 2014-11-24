@@ -2,7 +2,7 @@
 # coding:utf-8
 from pylab import *
 import numpy as np
-import scipy as sp
+
 import matplotlib.pyplot as plt
 
 
@@ -60,14 +60,14 @@ ax1.set_title('model_sig_xy')
 
 ax1.set_xlabel('x')
 ax1.set_ylabel('y')
-ax1.set_xticklabels([])
-ax1.set_yticklabels([])
+# ax1.set_xticklabels([])
+# ax1.set_yticklabels([])
 
 plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 
 
 plt.savefig('sigmodel_xy.png')
-# show()
+show()
 
 
 
@@ -87,13 +87,13 @@ ax1.set_title('model_myu_xz')
 
 ax1.set_xlabel('x')
 ax1.set_ylabel('z')
-ax1.set_xticklabels([])
-ax1.set_yticklabels([])
+# ax1.set_xticklabels([])
+# ax1.set_yticklabels([])
 
 plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 
 plt.savefig('myumodel_xz.png')
-# show()
+show()
 
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -112,11 +112,11 @@ ax1.set_title('model_myu_xy')
 
 ax1.set_xlabel('x')
 ax1.set_ylabel('y')
-ax1.set_xticklabels([])
-ax1.set_yticklabels([])
+# ax1.set_xticklabels([])
+# ax1.set_yticklabels([])
 
 plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 
 
 plt.savefig('myumodel_xy.png')
-# show()
+show()

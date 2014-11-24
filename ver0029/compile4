@@ -67,8 +67,6 @@ mv *pattern2_2.d out3
 mv *pattern2_3.d out3
 mv *pattern*diff.d out_diff
 
-mv *.eps out_eps
-mv *.png out_png
 
 mv *_w*.d out_freq
 mv *_t*.d out_time
@@ -77,6 +75,8 @@ mv *_t*.d out_time
 sh sh_python.sh
 
 
+mv *.eps out_eps
+mv *.png out_png
 
 
 
