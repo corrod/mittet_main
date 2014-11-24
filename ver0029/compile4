@@ -4,9 +4,7 @@
 #nohup ./compile4>out.log 2>err.log < /dev/null &
 #標準出力、計算条件 > out.log
 #並列状況、エラー出力 > err.log
-
 date
-
 #メインスクリプト:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 export OMP_NUM_THREADS=5
 #5threads で25分
@@ -26,8 +24,6 @@ ifort -parallel -par_report1 -o ficticious_fwi_cpml cpu_parameter_wafe.f90 cpu_s
 # cpu_f_to_d_e.f90 : ficticious から diffusiveへ E (no conjugate ver)
 # cpu_f_to_d_h.f90 : ficticious から diffusiveへ E (no conjugate ver)
 # cpu_main.f90 : main program
-
-
 
 # # all in
 # ifort -o ficticious_fwd parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field_cpml4.f90 e_field4.f90 h_field_cpml4.f90 h_field4.f90 cpml.f90 mur2.f90 cerjan.f90 pml.f90 main2.f90 # -check all -CB -traceback -g -r8

@@ -11,7 +11,8 @@ x1 = data1[:,0]
 y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
-sig2 = sig.reshape((101,101))
+sig2 = sig.reshape((101,101)) #101,101,101
+# sig2 = sig.reshape((71,101)) #101,61,71
 
 # aa = np.arange(1,101,1)
 # bb = np.arange(1,101,1)
@@ -36,7 +37,7 @@ plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 
 
 plt.savefig('sigmodel_xz.png')
-show()
+# show()
 
 
 
@@ -51,6 +52,7 @@ y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
 sig2 = sig.reshape((101,101))
+# sig2 = sig.reshape((61,101))
 
 
 fig=figure()
@@ -67,7 +69,7 @@ plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 
 
 plt.savefig('sigmodel_xy.png')
-show()
+# show()
 
 
 
@@ -78,6 +80,7 @@ y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
 sig2 = sig.reshape((101,101))
+# sig2 = sig.reshape((71,101))
 
 # plt.colorbar
 fig=figure()
@@ -93,7 +96,7 @@ ax1.set_ylabel('z')
 plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 
 plt.savefig('myumodel_xz.png')
-show()
+# show()
 
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -103,6 +106,7 @@ y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
 sig2 = sig.reshape((101,101))
+# sig2 = sig.reshape((61,101))
 
 
 fig=figure()
@@ -119,4 +123,4 @@ plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 
 
 plt.savefig('myumodel_xy.png')
-show()
+# show()

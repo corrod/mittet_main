@@ -23,6 +23,7 @@ module const_para
 
     integer, parameter :: nstep = 4351 ! 総タイムステップ数 　
     integer, parameter :: nx=101, ny=101, nz=101  !グリッド数 奇数　
+!     integer, parameter :: nx=101, ny=61, nz=71  !グリッド数 奇数　
     real(8), parameter :: dx = 4.5d-3, dy=dx, dz=dx !　
     real(8), parameter :: fmax = 2.0d3!1.0d2 !25.0d0 !12.5kusuda!送信源の最大周波数 　
     integer, parameter :: ncpml = 10 !CPMLのgrid数
