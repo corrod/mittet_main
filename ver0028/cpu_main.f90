@@ -32,7 +32,7 @@ program main
     complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
 ! do sp= 41,61,2  !ソース位置
- do sp= 41,61  !ソース位置
+ do sp= 15,85,2  !ソース位置
 
     write(file_sp,*) sp !
 

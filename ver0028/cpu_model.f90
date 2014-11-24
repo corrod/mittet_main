@@ -12,6 +12,9 @@ subroutine model
     integer :: ycenter, ystart, yend
     integer :: zcenter, zstart, zend
 
+    integer :: xblock1,xblock2,xblock3,xblock4,xblock5
+    integer :: zblock1,zblock2,zblock3,zblock4,zblock5
+
     airlayer = nz - 20
 
     xcenter = x0
@@ -25,6 +28,18 @@ subroutine model
     yend   = ycenter + 5
     zstart = plate - 2
     zend   = plate
+
+    !実験モデル1
+    xblock1 = 1
+    zblock1 = plate
+    xblock2 = xblock1 + 20
+    zblock2 = plate - 1
+    xblock3 = xblock2 + 20
+    zblock3 = plate - 2
+    xblock4 = xblock3 + 20
+    zblock4 = plate - 1
+    xblock5 = xblock4 + 20
+    zblock5 = plate
 
 
     write(*,*) 'plate_z', plate
@@ -40,67 +55,6 @@ subroutine model
 
 !#############################################################
     ! model 立方体形状欠陥モデル（空気層無し）_______________
-!#############################################################
-
-    !海水
-    do k=1,nz
-        do j=1,ny
-            do i=1,nx
-                sig(i,j,k) = sigwa
-                myu(i,j,k) = myuwa
-            enddo
-        enddo
-    enddo
-    !鉄板
-    do k=1,zend
-        do j=1,ny
-            do i=1,nx
-                sig(i,j,k) = sigfe
-                myu(i,j,k) = myufe
-            enddo
-        enddo
-    enddo
-!             !海水ー鉄板境界
-!             k = zend +1
-!             do j = 1,ny
-!                 do i = 1,nx
-!                     sig(i,j,k) = (sigwa + sigfe) * 0.5d0
-!                     myu(i,j,k) = (myuwa + myufe) * 0.5d0
-!                 enddo
-!             enddo
-
-    !欠陥
-    do k=zstart,zend
-        do j=ystart,yend
-            do i=xstart,xend
-                sig(i,j,k) = sigwa
-                myu(i,j,k) = myuwa
-            enddo
-        enddo
-    enddo
-
-!     do k=1,nz
-!         do j=1,ny
-!             do i=1,nx
-!                 sig(i,j,k) = sigfe
-!                 myu(i,j,k) = myufe
-!                 if(k>plate) then
-!                     sig(i,j,k) = sigwa
-!                     myu(i,j,k) = myuwa
-!                     elseif(i>=xstart .and. i<=xend &
-!                      .and. j>=ystart .and. j<=yend &
-!                      .and. k>=zstart .and. k<= zend) then
-!                     sig(i,j,k) = sigwa
-!                     myu(i,j,k) = myuwa
-!                 endif
-!             enddo
-!         enddo
-!     enddo
-
-
-
-!#############################################################
-    ! 実験モデル1
 !#############################################################
 
 !     !海水
@@ -160,6 +114,104 @@ subroutine model
 
 
 
+!#############################################################
+    ! 実験モデル1
+!     5ブロック
+!     幅   200mm ずつ
+!     厚み 15mm 10mm 5mm 7.5mm 15mm
+!#############################################################
+
+    !海水
+    do k=1,nz
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+
+    !鉄板 ブロックを5つに分けて
+    do k=1,zblock1
+        do j=1,ny
+            do i=1,xblock2
+                sig(i,j,k) = sigfe
+                myu(i,j,k) = myufe
+            enddo
+        enddo
+    enddo
+    do k=1,zblock2
+        do j=1,ny
+            do i=xblock2,xblock3
+                sig(i,j,k) = sigfe
+                myu(i,j,k) = myufe
+            enddo
+        enddo
+    enddo
+    do k=1,zblock3
+        do j=1,ny
+            do i=xblock3,xblock4
+                sig(i,j,k) = sigfe
+                myu(i,j,k) = myufe
+            enddo
+        enddo
+    enddo
+    do k=1,zblock4
+        do j=1,ny
+            do i=xblock4,xblock5
+                sig(i,j,k) = sigfe
+                myu(i,j,k) = myufe
+            enddo
+        enddo
+    enddo
+    do k=1,zblock5
+        do j=1,ny
+            do i=xblock5,nx
+                sig(i,j,k) = sigfe
+                myu(i,j,k) = myufe
+            enddo
+        enddo
+    enddo
+
+!             !海水ー鉄板境界
+!             k = zend +1
+!             do j = 1,ny
+!                 do i = 1,nx
+!                     sig(i,j,k) = (sigwa + sigfe) * 0.5d0
+!                     myu(i,j,k) = (myuwa + myufe) * 0.5d0
+!                 enddo
+!             enddo
+
+!     !欠陥
+!     do k=zstart,zend
+!         do j=ystart,yend
+!             do i=xstart,xend
+!                 sig(i,j,k) = sigwa
+!                 myu(i,j,k) = myuwa
+!             enddo
+!         enddo
+!     enddo
+
+!     do k=1,nz
+!         do j=1,ny
+!             do i=1,nx
+!                 sig(i,j,k) = sigfe
+!                 myu(i,j,k) = myufe
+!                 if(k>plate) then
+!                     sig(i,j,k) = sigwa
+!                     myu(i,j,k) = myuwa
+!                     elseif(i>=xstart .and. i<=xend &
+!                      .and. j>=ystart .and. j<=yend &
+!                      .and. k>=zstart .and. k<= zend) then
+!                     sig(i,j,k) = sigwa
+!                     myu(i,j,k) = myuwa
+!                 endif
+!             enddo
+!         enddo
+!     enddo
+
+
+
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -187,7 +239,7 @@ subroutine model
 
         !x-y 水平断面
         open(102,file='model_sig_xy.dat')
-            k = plate-1
+            k = plate
             do j = 1, ny
                 do i = 1, nx
                     write(102,*) i,j,k,sig(i,j,k)
@@ -196,7 +248,7 @@ subroutine model
         close(102)
 
         open(103,file='model_myu_xy.dat')
-            k = plate-1
+            k = plate
             do j = 1, ny
                 do i = 1, nx
                     write(103,*) i,j,k,myu(i,j,k)
