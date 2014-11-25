@@ -21,7 +21,7 @@ sig2 = sig.reshape((61,101)) #101,61,71
 fig=figure()
 ax1=fig.add_subplot(111)
 
-ax1.text('sea water')
+
 ax1.set_xlabel('x')
 ax1.set_ylabel('z')
 # ax1.set_xticklabels([])

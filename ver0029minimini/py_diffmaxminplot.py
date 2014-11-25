@@ -21,7 +21,7 @@ ax1.set_title('extract max at each place')
 ax1.set_xticks([])
 ax1.set_ylabel('differential max')
 ax1.plot(posi1,max1,label='max')
-ax1.plot.legend()
+ax1.legend()
 
 
 data2 = np.loadtxt('./diff_min.d')
@@ -33,7 +33,7 @@ ax2.set_title('extract min at each place')
 ax2.set_xlabel('shot position x (2)')
 ax2.set_ylabel('differential min')
 ax2.plot(posi2,min2,label='min')
-ax2.plot.legend()
+ax2.legend()
 
 # fig.tight_layout()
 savefig('diffmaxminplot.png')
