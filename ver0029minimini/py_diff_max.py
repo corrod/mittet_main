@@ -1,11 +1,11 @@
-
 # coding:utf-8
+
 from pylab import *
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 
-cases = range(19,83)
+cases = range(15,86)
 
 for i, case in enumerate(cases):
 	data1 = np.loadtxt("./out_diff/%spattern2_23diff.d" % str(case))
@@ -13,8 +13,8 @@ for i, case in enumerate(cases):
 	hz1 = data1[:,1]
 	maxnumber=max(xrange(len(hz1)),key=lambda i:hz1[i])
 	minnumber=min(xrange(len(hz1)),key=lambda i:hz1[i])
-	# print case,maxnumber+1,max(hz1)
-	print case,minnumber+1,min(hz1)
+	print case,maxnumber+1,max(hz1)
+	# print case,minnumber+1,min(hz1)
 
 
 

@@ -12,7 +12,7 @@ y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
 # sig2 = sig.reshape((101,101)) #101,101,101
-sig2 = sig.reshape((71,101)) #101,61,71
+sig2 = sig.reshape((61,101)) #101,61,71
 
 # aa = np.arange(1,101,1)
 # bb = np.arange(1,101,1)
@@ -21,7 +21,7 @@ sig2 = sig.reshape((71,101)) #101,61,71
 fig=figure()
 ax1=fig.add_subplot(111)
 
-
+ax1.text('sea water')
 ax1.set_xlabel('x')
 ax1.set_ylabel('z')
 # ax1.set_xticklabels([])
@@ -79,7 +79,7 @@ y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
 # sig2 = sig.reshape((101,101))
-sig2 = sig.reshape((71,101))
+sig2 = sig.reshape((61,101))
 
 # plt.colorbar
 fig=figure()
