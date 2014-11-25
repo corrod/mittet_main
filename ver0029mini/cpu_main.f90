@@ -32,7 +32,9 @@ program main
     complex(kind(0d0)) :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
 ! do sp= 41,61,2  !ソース位置
- do sp= 1+ncpml+L_hori,nx-ncpml-L_hori  !ソース位置
+!  do sp= 15,86  !ソース位置
+
+do sp = 1+ncpml+L_hori,nx-ncpml-L_hori
 
     write(file_sp,*) sp !
 
@@ -87,8 +89,8 @@ t=0.0d0!開始時間-----------------------------------
     !モデルの読み込み
 !     call model_simple !1つのピンホール
 !     call model_stair !階段状モデル1
-!     call model_pinhole8 !深さ8mmの場合のピンホールモデル
-    call model_pinholeall !全部のピンホールモデル
+    call model_pinhole8 !深さ8mmの場合のピンホールモデル
+!     call model_pinholeall !全部のピンホールモデル
 
     !cpmlの係数,fdtd部分の係数
     call init_cpml
