@@ -35,7 +35,7 @@ subroutine model_simple
     zstart = plate - 2
     zend   = plate
 
-
+    write(*,*) '********simple center crack model*********'
     write(*,*) 'plate_z', plate
     write(*,*) 'offset', offset
     write(*,*) 'xstart,xend', xstart,xend
@@ -155,21 +155,6 @@ subroutine model_simple
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ! H23モデル　モデル1
 
 subroutine model_stair
@@ -217,15 +202,14 @@ subroutine model_stair
     xblock5 = xblock4 + 20
     zblock5 = plate
 
+    write(*,*) '**************stair model********************'
     write(*,*) 'plate_z', plate
     write(*,*) 'offset', offset
-
     write(*,*) 'x,y,z source',x_source,y_source,z_source
     write(*,*) 'x,y,z source2',x_source2,y_source2,z_source2
     write(*,*) 'xx1,yy1,zz1',xx1,yy1,zz1
     write(*,*) 'xx2,yy2,zz2',xx2,yy2,zz2
     write(*,*) 'xx3,yy3,zz3',xx3,yy3,zz3
-
 
 
 !#############################################################
@@ -286,8 +270,6 @@ subroutine model_stair
             enddo
         enddo
     enddo
-
-
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !モデル出力
@@ -406,16 +388,14 @@ subroutine model_pinhole8
     ys5 = ycenter - 1!10mm??
     ye5 = ys5 + 1
 
+    write(*,*) '************pinhole8 model*******************'
     write(*,*) 'plate_z', plate
     write(*,*) 'offset', offset
-
     write(*,*) 'x,y,z source',x_source,y_source,z_source
     write(*,*) 'x,y,z source2',x_source2,y_source2,z_source2
     write(*,*) 'xx1,yy1,zz1',xx1,yy1,zz1
     write(*,*) 'xx2,yy2,zz2',xx2,yy2,zz2
     write(*,*) 'xx3,yy3,zz3',xx3,yy3,zz3
-
-
 
 
     !海水
@@ -530,8 +510,6 @@ subroutine model_pinhole8
 
 
 
-
-
 ! モデル2　ピンホール富山　全部
 !#############################################################
     ! 実験モデル2 穴モデル 深さ4, 8, 15mmmm
@@ -595,9 +573,9 @@ subroutine model_pinholeall
     ys5 = ycenter - 1!10mm??
     ye5 = ys5 + 1
 
+    write(*,*) '**************pinholeall model*********************'
     write(*,*) 'plate_z', plate
     write(*,*) 'offset', offset
-
     write(*,*) 'x,y,z source',x_source,y_source,z_source
     write(*,*) 'x,y,z source2',x_source2,y_source2,z_source2
     write(*,*) 'xx1,yy1,zz1',xx1,yy1,zz1
@@ -793,162 +771,3 @@ subroutine model_pinholeall
         close(103)
 
         end subroutine model_pinholeall
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    ! ! model1 海水一様モデル______________________
-    ! ! !海水
-    ! sig(1:nx, 1:ny, 1:nz) = sigwa
-    ! myu(1:nx, 1:ny, 1:nz) = myuwa
-
-
-    ! model 海水-空気______________________________
-    ! 海水
-!     do k=1,airlayer-1
-!         do j=1,ny
-!             do i=1,nx
-!                 sig(i,j,k) = sigwa
-!                 myu(i,j,k) = myuwa
-!             enddo
-!         enddo
-!     enddo
-!     ! 空気
-!     do k=airlayer,nz
-!         do j=1,ny
-!             do i=1,nx
-!                 sig(i,j,k) = sigair
-!                 myu(i,j,k) = myuair
-!             enddo
-!         enddo
-!     enddo
-
-    ! model2 海水-鉄板 欠陥なしモデル_____________________
-    ! !海水
-    ! sig(1:nx, 1:ny, 1:nz) = sigwa
-    ! myu(1:nx, 1:ny, 1:nz) = myuwa
-
-    ! !鉄板
-    ! sig(1:nx, 1:ny, z0+10:nz) = sigfe
-    ! myu(1:nx, 1:ny, z0+10:nz) = myufe
-
-
-! ! model2-2 欠陥なしモデル（空気層あり）_____________
-! ! 海水
-!     do k=1,plate
-!         do j=1,ny
-!             do i=1,nx
-!                 sig(i,j,k) = sigwa
-!                 myu(i,j,k) = myuwa
-!             enddo
-!         enddo
-!     enddo
-! ! 鉄板
-!     do k=plate+1,airlayer-1
-!         do j=1,ny
-!             do i=1,nx
-!                 sig(i,j,k) = sigfe
-!                 myu(i,j,k) = myufe
-!             enddo
-!         enddo
-!     enddo
-! ! 空気層
-!     do k=airlayer,nz
-!         do j=1,ny
-!             do i=1,nx
-!                 sig(i,j,k) = sigair
-!                 myu(i,j,k) = myuair
-!             enddo
-!         enddo
-!     enddo
-
-
-
-
-
-
-
-! !model4 立方体形状欠陥モデル（空気層あり）________________
-    ! !海水
-    ! do k=1,nz
-    !     do j=1,ny
-    !         do i=1,nx
-    !             sig(i,j,k) = sigwa
-    !             myu(i,j,k) = myuwa
-    !         enddo
-    !     enddo
-    ! enddo
-    ! !鉄板
-    ! do k=1,zend
-    !     do j=1,ny
-    !         do i=1,nx
-    !             sig(i,j,k) = sigfe
-    !             myu(i,j,k) = myufe
-    !         enddo
-    !     enddo
-    ! enddo
-    !             !海水ー鉄板境界
-!             k = zend +1
-!             do j = 1,ny
-!                 do i = 1,nx
-!                     sig(i,j,k) = (sigwa + sigfe) * 0.5d0
-!                     myu(i,j,k) = (myuwa + myufe) * 0.5d0
-!                 enddo
-!             enddo
-    ! !欠陥
-    ! do k=zstart,zend
-    !     do j=ystart,yend
-    !         do i=xstart,xend
-    !             sig(i,j,k) = sigwa
-    !             myu(i,j,k) = myuwa
-    !         enddo
-    !     enddo
-    ! enddo
-    ! !空気層
-    ! do k=airlayer,nz
-    !     do j=1,ny
-    !         do i=1,nx
-    !             sig(i,j,k) = sigair
-    !             myu(i,j,k) = myuair
-    !         enddo
-    !     enddo
-    ! enddo
-
-!             !空気層ー海水境界
-!             k = airlayer
-!             do j=1,ny
-!                 do i =1,nx
-!                     sig(i,j,k) = (sigwa + sigair) * 0.5d0
-!                     myu(i,j,k) = (myuwa + myuair) * 0.5d0
-!                 enddo
-!             enddo
-
-    ! ! model5 コーティング層挟む____________________
-    ! !海水
-    ! sig(1:nx, 1:ny, 1:nz) = sigwa
-    ! myu(1:nx, 1:ny, 1:nz) = myuwa
-
-    ! !コーティング
-    ! sig(1:nx, 1:ny, x0+7:x0+9) = sig!　
-    ! myu(1:nx, 1:ny, x0+7:x0+9) = myu!　
-
-    ! !鉄板
-    ! sig(1:nx, 1:ny, x0+10:nz) = sigfe
-    ! myu(1:nx, 1:ny, x0+10:nz) = myufe
-
-    ! !欠陥
-    ! sig(x0-3:x0+3, y0-3:y0+3, x0+10:x0+15) = sigwa
-    ! myu(x0-3:x0+3, y0-3:y0+3, x0+10:x0+15) = myuwa
-
-
