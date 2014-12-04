@@ -2,7 +2,7 @@
 
 from pylab import *
 import numpy as np
-import scipy as sp
+# import scipy as sp
 import matplotlib.pyplot as plt
 
 data1 = np.loadtxt('./out_diff/45pattern2_12diff.d')

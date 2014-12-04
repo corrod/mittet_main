@@ -9,7 +9,7 @@ import matplotlib.cbook as cbook
 
 from pylab import *
 import numpy as np
-import scipy as sp
+# import scipy as sp
 import matplotlib.pyplot as plt
 
 

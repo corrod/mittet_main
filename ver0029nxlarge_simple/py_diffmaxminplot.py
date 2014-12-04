@@ -18,7 +18,7 @@ max1  = data1[:,2]
 
 ax1.set_title('extract max at each place')
 # ax1.set_xlabel('shot position (left)')
-ax1.set_xticks([])
+# ax1.set_xticks([])
 ax1.set_ylabel('differential max')
 ax1.plot(posi1,max1,label='max')
 ax1.legend()
@@ -37,4 +37,4 @@ ax2.legend()
 
 # fig.tight_layout()
 savefig('diffmaxminplot.png')
-# show() # after savefig
+show() # after savefig
