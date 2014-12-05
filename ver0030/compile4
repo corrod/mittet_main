@@ -1,5 +1,5 @@
 #!/bin/sh
-#compile仕方
+#compile仕方 g
 # -check all -warn all -std -gen_interfaces -fpe0 -ftrapuv -traceback
 #nohup ./compile4>out.log 2>err.log < /dev/null &
 #標準出力、計算条件 > out.log
