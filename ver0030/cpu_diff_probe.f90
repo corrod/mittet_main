@@ -40,13 +40,13 @@ subroutine diff_probe
     close(54)
 
 
-    !受信点1-2 標準比較
+    !受信点1-2
     open(55,file=trim(adjustl(file_sp))//'pattern2_12diff.d')
         do i=1,nd
             write(55,*) in1_1(i), in1_2(i) - in2_2(i)
         enddo
     close(55)
-    !受信点2-3 自己比較
+    !受信点2-3
     open(56,file=trim(adjustl(file_sp))//'pattern2_23diff.d')
         do i=1,nd
             write(56,*) in2_1(i), in2_2(i) - in3_2(i)

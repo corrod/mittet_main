@@ -30,8 +30,8 @@ subroutine model_simple
     !欠陥1つモデル
     xstart = xcenter - 2
     xend   = xcenter + 2
-    ystart = ycenter - 5
-    yend   = ycenter + 5
+    ystart = ycenter - 2
+    yend   = ycenter + 2
     zstart = plate - 2
     zend   = plate
 

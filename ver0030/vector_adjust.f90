@@ -1,26 +1,25 @@
-subroutine diff_probe
-    use const_para
-    implicit none
+subroutine vector_ajust
+	use const_para
+	implicit none
+	integer :: nd,ios
+	real(8), allocatable :: in1_1(:),in1_2(:),in1_3(:)
+	real(8), allocatable :: in2_1(:),in2_2(:),in2_3(:)
+	real(8), allocatable :: in3_1(:),in3_2(:),in3_3(:)
 
-    integer :: nd,ios
-    real(8), allocatable :: in1_1(:),in1_2(:),in1_3(:)
-    real(8), allocatable :: in2_1(:),in2_2(:),in2_3(:)
-    real(8), allocatable :: in3_1(:),in3_2(:),in3_3(:)
-
-    open(51,file=trim(adjustl(file_sp))//'pattern2_1.d',action='read')
+    open(51,file='aaa',action='read')
       nd=0
-        do
-            read(51,'(f12.0)',iostat=ios)
-            if (ios<0) exit !ファイルの末尾にきたらループを抜ける
-            nd=nd+1
-        enddo
+	    do
+	        read(51,'(f12.0)',iostat=ios)
+	        if (ios<0) exit
+	         nd=nd+1
+	    enddo
     close(51)
 
     allocate(in1_1(nd), in1_2(nd), in1_3(nd))
     allocate(in2_1(nd), in2_2(nd), in2_3(nd))
     allocate(in3_1(nd), in3_2(nd), in3_3(nd))
 
-    !受信点1,2,3の読み込み
+
     open(52,file=trim(adjustl(file_sp))//'pattern2_1.d')
         do i=1,nd
             read(52,*) in1_1(i),in1_2(i),in1_3(i)
@@ -40,19 +39,20 @@ subroutine diff_probe
     close(54)
 
 
-    !受信点1-2 標準比較
+
     open(55,file=trim(adjustl(file_sp))//'pattern2_12diff.d')
         do i=1,nd
             write(55,*) in1_1(i), in1_2(i) - in2_2(i)
         enddo
     close(55)
-    !受信点2-3 自己比較
+
     open(56,file=trim(adjustl(file_sp))//'pattern2_23diff.d')
         do i=1,nd
             write(56,*) in2_1(i), in2_2(i) - in3_2(i)
         enddo
     close(56)
 
-    deallocate(in1_1,in1_2,in1_3,in2_1,in2_2,in2_3,in3_1,in3_2,in3_3)
-
-        end subroutine diff_probe
+    deallocate(in1_1,in1_2,in1_3)
+    deallocate(in2_1,in2_2,in2_3)
+    deallocate(in3_1,in3_2,in3_3)
+end subroutine vector_ajust
