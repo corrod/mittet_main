@@ -13,11 +13,11 @@ subroutine source_posi
 ! 	write(*,*) "x_source位置 :"
 ! 	read(*,*) x_source
 
-    x_source  = sp
+    x_source  = sp - L_hori/2
     y_source  = y0
     z_source  = plate + offset
     !送信位置 右
-    x_source2 = x_source + L_hori
+    x_source2 = sp + L_hori/2
     y_source2 = y_source
     z_source2 = z_source
     !受信位置
