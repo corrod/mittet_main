@@ -52,7 +52,7 @@ time ./ficticious_fwi_cpml #> jyouken.txt
 # # 差分出力
 #   sh sh_differential.sh
 # #ある点でのH'zの時間分布、計算モデルの出力
-  sh sh_gnu.sh
+sh sh_gnu.sh
 # #H'zの伝播movie
   # sh sh_movie.sh
 
@@ -63,13 +63,11 @@ mv *pattern2_2.d out3
 mv *pattern2_3.d out3
 mv *pattern*diff.d out_diff
 
-
 mv *_w*.d out_freq
 mv *_t*.d out_time
 
 # python subplot.py
 sh sh_python.sh
-
 
 mv *.eps out_eps
 mv *.png out_png
