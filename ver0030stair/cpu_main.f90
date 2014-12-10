@@ -72,6 +72,7 @@ do sp = 1+ncpml+L_hori,nx-ncpml-L_hori
     open(56,file = trim(adjustl(file_sp))//'pattern2_2.d')   !①
     open(57,file = trim(adjustl(file_sp))//'pattern2_3.d')   !② ③
 
+write(*,*) 'crack_ver'
 
     write(*,*) 'x_source position :', sp
 
@@ -86,8 +87,8 @@ t=0.0d0!開始時間-----------------------------------
     call source_posi
 
     !モデルの読み込み
-    call model_simple !1つのピンホール
-!     call model_stair !階段状モデル1
+!     call model_simple !1つのピンホール
+    call model_stair !階段状モデル1
 !     call model_pinhole8 !深さ8mmの場合のピンホールモデル
 !     call model_pinholeall !全部のピンホールモデル
 
