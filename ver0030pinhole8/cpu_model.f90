@@ -2,6 +2,122 @@
 !モデル設定
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+subroutine model_nocrack
+
+    use const_para
+    implicit none
+
+    integer :: airlayer
+    integer :: xcenter, xstart, xend
+    integer :: ycenter, ystart, yend
+    integer :: zcenter, zstart, zend
+
+    integer :: xblock1,xblock2,xblock3,xblock4,xblock5
+    integer :: zblock1,zblock2,zblock3,zblock4,zblock5
+
+    integer :: xs1,xs2,xs3,xs4,xs5
+    integer :: xe1,xe2,xe3,xe4,xe5
+    integer :: ys1,ys2,ys3,ys4,ys5
+    integer :: ye1,ye2,ye3,ye4,ye5
+    integer :: zs,ze
+
+    airlayer = nz - 20
+
+    xcenter = x0
+    ycenter = y0
+    zcenter = z0
+
+    !欠陥1つモデル
+    xstart = xcenter - 2
+    xend   = xcenter + 2
+    ystart = ycenter - 2
+    yend   = ycenter + 2
+    zstart = plate - 2
+    zend   = plate
+
+    write(*,*) '************** model_nocrack ****************'
+    write(*,*) 'plate_z', plate
+    write(*,*) 'offset', offset
+    write(*,*) 'xstart,xend', xstart,xend
+    write(*,*) 'ystart,yend', ystart,yend
+    write(*,*) 'zstart,zend', zstart,zend
+    write(*,*) 'x,y,z source',x_source,y_source,z_source
+    write(*,*) 'x,y,z source2',x_source2,y_source2,z_source2
+    write(*,*) 'xx1,yy1,zz1',xx1,yy1,zz1
+    write(*,*) 'xx2,yy2,zz2',xx2,yy2,zz2
+    write(*,*) 'xx3,yy3,zz3',xx3,yy3,zz3
+
+!#############################################################
+    ! model 立方体形状欠陥モデル（空気層無し）_______________
+!#############################################################
+
+    !海水
+    do k=1,nz
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigwa
+                myu(i,j,k) = myuwa
+            enddo
+        enddo
+    enddo
+    !鉄板
+    do k=1,zend
+        do j=1,ny
+            do i=1,nx
+                sig(i,j,k) = sigfe
+                myu(i,j,k) = myufe
+            enddo
+        enddo
+    enddo
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!モデル出力
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        !x-z 鉛直断面
+        open(100,file='model_sig_xz.dat')
+            do k = 1, nz
+                 j = y0
+                    do i = 1, nx
+                        write(100,*) i,j,k,sig(i,j,k)
+                    enddo
+            enddo
+        close(100)
+
+        open(101,file='model_myu_xz.dat')
+            do k = 1, nz
+                 j = y0
+                    do i = 1, nx
+                        write(101,*) i,j,k,myu(i,j,k)
+                    enddo
+            enddo
+        close(101)
+
+        !x-y 水平断面
+        open(102,file='model_sig_xy.dat')
+            k = plate
+            do j = 1, ny
+                do i = 1, nx
+                    write(102,*) i,j,k,sig(i,j,k)
+                enddo
+            enddo
+        close(102)
+
+        open(103,file='model_myu_xy.dat')
+            k = plate
+            do j = 1, ny
+                do i = 1, nx
+                    write(103,*) i,j,k,myu(i,j,k)
+                enddo
+            enddo
+        close(103)
+
+        end subroutine model_nocrack
+
+
+
+
 subroutine model_simple
 
     use const_para
@@ -35,7 +151,7 @@ subroutine model_simple
     zstart = plate - 2
     zend   = plate
 
-
+    write(*,*) '************** model_simple ****************'
     write(*,*) 'plate_z', plate
     write(*,*) 'offset', offset
     write(*,*) 'xstart,xend', xstart,xend
@@ -209,6 +325,8 @@ subroutine model_stair
     zblock4 = plate - 1
     xblock5 = xblock4 + 20
     zblock5 = plate
+
+    write(*,*) '************** model_stair ****************'
 
     write(*,*) 'plate_z', plate
     write(*,*) 'offset', offset
@@ -399,6 +517,8 @@ subroutine model_pinhole8
     ys5 = ycenter - 1!10mm??
     ye5 = ys5 + 1
 
+    write(*,*) '************** model_pinhole8 ****************'
+
     write(*,*) 'plate_z', plate
     write(*,*) 'offset', offset
 
@@ -587,6 +707,9 @@ subroutine model_pinholeall
     xe5 = 85 + 7
     ys5 = ycenter - 1!10mm??
     ye5 = ys5 + 1
+
+
+    write(*,*) '************** model_pinholeall ****************'
 
     write(*,*) 'plate_z', plate
     write(*,*) 'offset', offset

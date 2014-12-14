@@ -72,7 +72,6 @@ do sp = 1+ncpml+L_hori,nx-ncpml-L_hori
     open(56,file = trim(adjustl(file_sp))//'pattern2_2.d')   !①
     open(57,file = trim(adjustl(file_sp))//'pattern2_3.d')   !② ③
 
-write(*,*) 'crack_ver'
 
     write(*,*) 'x_source position :', sp
 

@@ -86,6 +86,7 @@ t=0.0d0!開始時間-----------------------------------
     call source_posi
 
     !モデルの読み込み
+!     call model_nocrack !欠陥なし
     call model_simple !1つのピンホール
 !     call model_stair !階段状モデル1
 !     call model_pinhole8 !深さ8mmの場合のピンホールモデル
