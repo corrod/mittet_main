@@ -21,27 +21,112 @@ l11 = data[:,10] #ch5 min
 l12 = data[:,11] #ch6 max
 l13 = data[:,12] #ch6 min
 
-distance = l1 * l12
-plot(l1,label="l1")
-plot(l2,label="l2")
-plot(l3,label="l3")
-plot(l4,label="l4")
-plot(l5,label="l5")
-plot(l6,label="l6")
-plot(l7,label="l7")
-plot(l8,label="l8")
-plot(l9,label="l9")
-plot(l10,label="l10")
-plot(l11,label="l11")
-plot(l12,label="l12")
-plot(l13,label="l13")
 
-# plot(distance)
-# plot(distance,l2)
-
+plot(l1,label="l1 time")
 legend()
-savefig('toyama')
 show()
+
+plot(l1*l10,label='l1*l10')
+legend()
+show()
+
+plot(l1*l10,l2,label='l1*l10,l2')
+legend()
+show()
+
+plot(l1*l10,l4,label='l1*l10,l4')
+legend()
+show()
+
+
+plot(l1,l12,label='marker')
+plot(l1,l4,label='voltage')
+legend()
+savefig('marker-voltage')
+show()
+
+plot(l1,l12,label='marker')
+plot(l1,l2,label='electric current')
+legend()
+savefig('marker-electric current')
+show()
+
+plot(l1,l12,label='marker')
+plot(l1,l2,label='electric current')
+plot(l1,l4,label='voltage')
+legend()
+savefig('electriccurrent-voltage')
+show()
+
+
+
+fig=figure()
+ax1 = fig.add_subplot(211)
+ax2 = fig.add_subplot(212)
+ax1.plot(l2,label="l2")
+ax2.plot(l3,label="l3")
+ax1.legend()
+ax2.legend()
+title('electric current')
+savefig('electric current')
+show()
+
+fig=figure()
+ax1 = fig.add_subplot(211)
+ax2 = fig.add_subplot(212)
+ax1.plot(l4,label="l4")
+ax2.plot(l5,label="l5")
+ax1.legend()
+ax2.legend()
+title('voltage')
+savefig('voltage')
+show()
+
+fig=figure()
+ax1 = fig.add_subplot(211)
+ax2 = fig.add_subplot(212)
+ax1.plot(l6,label="l6")
+ax2.plot(l7,label="l7")
+ax1.legend()
+ax2.legend()
+title('GV')
+savefig('GV')
+show()
+
+
+fig=figure()
+ax1 = fig.add_subplot(211)
+ax2 = fig.add_subplot(212)
+ax1.plot(l8,label="l8")
+ax2.plot(l9,label="l9")
+ax1.legend()
+ax2.legend()
+title('seiatsuki??')
+savefig('seiatsuki??')
+show()
+
+fig=figure()
+ax1 = fig.add_subplot(211)
+ax2 = fig.add_subplot(212)
+ax1.plot(l10,label="l10")
+ax2.plot(l11,label="l11")
+ax1.legend()
+ax2.legend()
+title('rotational speed')
+savefig('rotational speed')
+show()
+
+fig=figure()
+ax1 = fig.add_subplot(211)
+ax2 = fig.add_subplot(212)
+ax1.plot(l12,label="l12") #marker max
+ax2.plot(l13,label="l13") #marker min
+ax1.legend()
+ax2.legend()
+title('marker')
+savefig('marker')
+show()
+
 
 
 # plot(l7,l3,label='differential X')
