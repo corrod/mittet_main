@@ -19,6 +19,9 @@ python py_abso_min.py>abso_min.d #extract min abso hz at each position
 
 python py_absomaxminplot.py #extract max min at each position (absolute)
 
+python py_lissajous_absolute.py #lissajous absolute
+python py_lissajous_differential.py #lissajous differential
+
 python py_model.py #sig,myu model
 
 python py_diff.py # plot timeseries diff hz with and without crack at one 23 receiver position
