@@ -2,7 +2,6 @@
 
 from pylab import *
 import numpy as np
-# import scipy as sp
 import matplotlib.pyplot as plt
 
 cases = range(19,103)

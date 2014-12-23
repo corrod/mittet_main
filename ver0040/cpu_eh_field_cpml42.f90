@@ -56,6 +56,8 @@ subroutine media_coeff
     enddo
 end subroutine media_coeff
 
+
+
 ! do k=1,nz
 !   do j=1,ny
 !     do i=1,nx
@@ -112,13 +114,9 @@ end subroutine media_coeff
 !//////////////////////////////////////////////////////////////////////////////
 
 subroutine e_field_cpml4(Ex,Ey,EZ,Hx,Hy,Hz)
-! subroutine e_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz)
-
     use const_para
     implicit none
 
-!     integer, intent(in) :: istep
-!     real(8), intent(in) :: t !経過時間
     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in)    :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
@@ -158,14 +156,16 @@ subroutine e_field_cpml4(Ex,Ey,EZ,Hx,Hy,Hz)
 end subroutine e_field_cpml4
 
 
-subroutine e_field_cpml4bp(Ex,Ey,EZ,Hx,Hy,Hz) !!
-! subroutine e_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!      E_field CPML_ver back propagate
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+subroutine e_field_cpml4bp(Ex,Ey,EZ,Hx,Hy,Hz)
     use const_para
     implicit none
 
-!     integer, intent(in) :: istep
-!     real(8), intent(in) :: t !経過時間
     complex(kind(0d0)), intent(inout) :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(in)    :: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 ! +-反転
@@ -203,18 +203,17 @@ subroutine e_field_cpml4bp(Ex,Ey,EZ,Hx,Hy,Hz) !!
     enddo
 end subroutine e_field_cpml4bp
 
+
+
+
 !//////////////////////////////////////////////////////////////////////////////
 ! H_field CPML ver
 !//////////////////////////////////////////////////////////////////////////////
 
-subroutine h_field_cpml4(Ex,Ey,EZ,Hx,Hy,Hz) !!
-! subroutine h_field_cpml4(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
-
+subroutine h_field_cpml4(Ex,Ey,Ez,Hx,Hy,Hz)
     use const_para
     implicit none
 
-!     integer, intent(in) :: istep
-!     real(8), intent(in) :: t
     complex(kind(0d0)), intent(in)   :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(inout):: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 
@@ -253,15 +252,14 @@ subroutine h_field_cpml4(Ex,Ey,EZ,Hx,Hy,Hz) !!
 end subroutine h_field_cpml4
 
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!     H_field CPMLver back propagate
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine h_field_cpml4bp(Ex,Ey,EZ,Hx,Hy,Hz) !!
-! subroutine h_field_cpml4bp(istep,t,Ex,Ey,EZ,Hx,Hy,Hz) !!
-
+subroutine h_field_cpml4bp(Ex,Ey,EZ,Hx,Hy,Hz)
     use const_para
     implicit none
 
-!     integer, intent(in) :: istep
-!     real(8), intent(in) :: t
     complex(kind(0d0)), intent(in)   :: Ex(nx,ny,nz),Ey(nx,ny,nz),Ez(nx,ny,nz)
     complex(kind(0d0)), intent(inout):: Hx(nx,ny,nz),Hy(nx,ny,nz),Hz(nx,ny,nz)
 !+-反転
