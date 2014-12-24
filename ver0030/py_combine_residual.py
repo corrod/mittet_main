@@ -13,9 +13,6 @@ for i, case in enumerate(cases):
 	hz1 = data1[:,1]
 	hz2 = np.c_[hz2,hz1]
 np.savetxt('combine_residual_abso.dat',hz2)
-# f = open('combine_residual_abso.dat')
-# print >> f,hz2
-# f.close()
 
 
 data22 = np.loadtxt("./out_residual/19residual_wave_diff.d")
@@ -26,6 +23,3 @@ for i, case in enumerate(cases):
 	hz11 = data11[:,1]
 	hz22 = np.c_[hz22,hz11]
 np.savetxt('combine_residual_diff.dat',hz22)
-# f = open('combine_residual_abso.dat')
-# print >> f,hz2
-# f.close()
