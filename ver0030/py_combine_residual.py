@@ -1,9 +1,9 @@
 import numpy as np
 
-g = range(1,86)
+g = range(19,104)
 np.savetxt('pycordinate.dat',g)
 
-cases = range(19,103)
+cases = range(19,104)
 
 data2 = np.loadtxt("./out_residual/19residual_wave_abso.d")
 hz2 = data2[:,1]
