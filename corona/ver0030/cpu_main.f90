@@ -39,7 +39,7 @@ do sp = 1+ncpml+L_hori,nx-ncpml-L_hori
     write(file_sp,*) sp !
 
 open(1000,file='./out_residual_rev/'//trim(adjustl(file_sp))//'residual_wave_diff_rev.d')
-! open(1001,file='./out_residual_rev/'trim(adjustl(file_sp))//'residual_wave_abso_rev.d')
+! open(1000,file='./out_residual_rev/'//trim(adjustl(file_sp))//'residual_wave_abso_rev.d')
 
      do i=1,nstep
           read(1000,*) t_res(i), signal_res(i)
@@ -113,8 +113,8 @@ t=0.0d0!開始時間-----------------------------------
 do istep = 1, nstep !反復計算開始----------------------
 
     !入力波源の設定
-!     call read_source_3d(istep,t,Hz,Je,Jh)
-    call read_source_3d_res(istep,t,Hz)
+    call read_source_3d(istep,t,Hz,Je,Jh)
+!     call read_source_3d_res(istep,t,Hz)
 !     call firstderiv_gauss(istep,t,Je,Jh,sig,myu)
                     !     call read_source_3d(istep,t,sig,myu,Hz,Je,Jh)
 !     call read_source_3d(istep,t,sig,myu,EX,Je,Jh)
@@ -192,7 +192,7 @@ enddo !*反復計算終了
 
     close(14) !signal_res
     close(1000) !residual_diff
-    close(1001) !residual_abso
+!     close(1001) !residual_abso
 
     !差分プローブ 自己比較、相互比較
     call diff_probe
