@@ -6,8 +6,8 @@ from pylab import *
 # np.savetxt('simulation_time.dat',time)
 tt = 10
 
-t = tt * 1.258468585615218e-006
-
+# t = tt * 1.258468585615218e-006
+t = 10
 rp = range(19,105)
 
 fig = figure()
