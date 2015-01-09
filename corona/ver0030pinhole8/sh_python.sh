@@ -39,6 +39,15 @@ python py_rev_residual.py # reverse residual time and combine
 #combine after XXpattern2_12diff.d XXpattern2_23diff.d
 python py_combine.py
 
+#plot one time combine_pattern or combine_residual_abso
+python py_pickup_one_time.py
+
+#plot contour of combine_pattern or combine_residual_
+python py_contour.py
+
+#derivation of combine_pattern or comvine_residual_
+python py_derivation.py
+
 #matlab wiggle
 # wigb_control_abso.m #wiggle absolute
 # wigb_control_diff.m #wiggle differential
