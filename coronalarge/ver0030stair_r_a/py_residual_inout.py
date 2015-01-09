@@ -4,7 +4,7 @@ from pylab import *
 import numpy as np
 import matplotlib.pyplot as plt
 
-cases =range(19,104)
+cases =range(19,114)
 
 # residual differential
 for i,case in enumerate(cases):

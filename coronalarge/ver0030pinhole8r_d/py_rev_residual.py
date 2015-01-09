@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-cases = range(19,104)
+cases = range(19,114)
 
 #reverse
 for i, case in enumerate(cases):

@@ -4,11 +4,10 @@ from pylab import *
 
 # time = range(0,1.737945116734669e-003,1.258468585615218e-006)
 # np.savetxt('simulation_time.dat',time)
-tt = 10
 
-# t = tt * 1.258468585615218e-006
 t = 10
-rp = range(19,105)
+
+rp = range(19,114)
 
 fig = figure()
 

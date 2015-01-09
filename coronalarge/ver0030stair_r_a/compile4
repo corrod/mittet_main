@@ -10,7 +10,7 @@ export OMP_NUM_THREADS=5
 #5threads で25分
 
 #構造改革
-ifort -parallel -par_report1 -o ficticious_fwi_cpml cpu_parameter_wafe.f90 cpu_source_posi.f90 cpu_set_condition.f90 cpu_waveform.f90 cpu_model.f90 cpu_output.f90 cpu_eh_field_cpml42.f90 cpu_cpml4.f90 cpu_diff_probe.f90 cpu_window_function.f90 cpu_f_to_d_e.f90 cpu_f_to_d_h.f90 cpu_main.f90 -lfftw3 #-pg -check all -warn all -std -gen_interfaces -fpe0 -ftrapuv -CB -traceback -g -r8
+ifort -parallel -par_report1 -o ficticious_fwi_cpml_stair_r_a cpu_parameter_wafe.f90 cpu_source_posi.f90 cpu_set_condition.f90 cpu_waveform.f90 cpu_model.f90 cpu_output.f90 cpu_eh_field_cpml42.f90 cpu_cpml4.f90 cpu_diff_probe.f90 cpu_window_function.f90 cpu_f_to_d_e.f90 cpu_f_to_d_h.f90 cpu_main.f90 -lfftw3 #-pg -check all -warn all -std -gen_interfaces -fpe0 -ftrapuv -CB -traceback -g -r8
 # cpu_parameter_wafe.f90 : パラメータ設定モジュール
 # cpu_source_posi.f90 : ソース位置設定
 # cpu_set_condition.f90 : 計算条件確認
@@ -40,7 +40,7 @@ ifort -parallel -par_report1 -o ficticious_fwi_cpml cpu_parameter_wafe.f90 cpu_s
 # PML
 # ifort -o ficticious parameter.f90 set_condition.f90 waveform.f90 model.f90 output.f90 e_field4.f90 e_pml.f90 h_field4.f90 h_pml.f90 main2.f90 #-check all -CB -traceback -g -r8
 
-time ./ficticious_fwi_cpml #> jyouken.txt
+time ./ficticious_fwi_cpml_stair_r_a #> jyouken.txt
 
 #差分プローブ
 # ifort diff_probe.f90

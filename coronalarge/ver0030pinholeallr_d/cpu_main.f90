@@ -100,7 +100,7 @@ t=0.0d0!開始時間-----------------------------------
 !     call model_simple !1つのピンホール
 !     call model_stair !階段状モデル1
 !     call model_pinhole8 !深さ8mmの場合のピンホールモデル
-    call model_pinholeall !全部のピンホールモデル
+!     call model_pinholeall !全部のピンホールモデル
     call model_pinholeall_large !全部のピンホールモデル
 
     !cpmlの係数,fdtd部分の係数

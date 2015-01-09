@@ -1,10 +1,10 @@
 # coding:utf-8
 import numpy as np
 
-g = range(19,104)
+g = range(19,114)
 np.savetxt('pycordinate.dat',g)
 
-cases = range(19,104)
+cases = range(19,114)
 
 data2 = np.loadtxt("./out_diff/19pattern2_12diff.d")
 hz2 = data2[:,1]

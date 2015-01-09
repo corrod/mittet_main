@@ -31,7 +31,7 @@ t_in = inputdata[:,0]
 hz_r_in = inputdata[:,1]
 # hz_i_in = inputdata[:,2]
 
-cases = range(19,103)
+cases = range(19,114)
 
 for i, case in enumerate(cases):
 	data1 = np.loadtxt("./out_diff/%spattern2_12diff.d" % str(case))
