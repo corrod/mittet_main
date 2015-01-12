@@ -21,7 +21,7 @@ module const_para
     integer :: sp !source position
     character(16) :: file_sp ! = sp
 
-    integer, parameter :: nstep = 4351 ! 総タイムステップ数 　
+    integer, parameter :: nstep = 19!4351 ! 総タイムステップ数 　
 !     integer, parameter :: nx=101, ny=101, nz=101  !グリッド数 奇数　
 !     integer, parameter :: nx=101, ny=61, nz=71  !グリッド数 奇数　
     integer, parameter :: nx=131, ny=51, nz=51  !グリッド数 奇数　

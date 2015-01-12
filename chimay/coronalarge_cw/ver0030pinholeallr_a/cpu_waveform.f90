@@ -42,13 +42,14 @@
 
     !送信源位置の設定!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    !ソース1(left)
-    Hz(x_source, y_source, z_source) = Hz(x_source, y_source, z_source) &
-                    - signal(istep)*dt / myu(x_source, y_source, z_source) /dx/dy/dz!　　　
-!    !ソース2(right)
-    Hz(x_source2, y_source2, z_source2) = Hz(x_source2, y_source2, z_source2) &
-                    - signal(istep)*dt / myu(x_source2, y_source2, z_source2) /dx/dy/dz!　　　
+!     !ソース1(left)
+!     Hz(x_source, y_source, z_source) = Hz(x_source, y_source, z_source) &
+!                     - signal(istep)*dt / myu(x_source, y_source, z_source) /dx/dy/dz!　　　
+! !    !ソース2(right)
+!     Hz(x_source2, y_source2, z_source2) = Hz(x_source2, y_source2, z_source2) &
+!                     - signal(istep)*dt / myu(x_source2, y_source2, z_source2) /dx/dy/dz!　　　
 
+    
     !ソース波形
     write(15,*) t, real(signal_sin(istep)) , aimag(signal_sin(istep)) !signal_sin.d
     write(16,*) t, real(signal(istep)) , aimag(signal(istep))   !signal.d
@@ -74,13 +75,15 @@
 
     !送信源位置の設定!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-   !ソース1(left)
-    Hz(x_source, y_source, z_source) = Hz(x_source, y_source, z_source) &
-                    - signal_res(istep) * dt / myu(x_source, y_source, z_source) /dx/dy/dz!　　　
-!    !ソース2(right)
-    Hz(x_source2, y_source2, z_source2) = Hz(x_source2, y_source2, z_source2) &
-                    - signal_res(istep) * dt / myu(x_source2, y_source2, z_source2) /dx/dy/dz!　　　
-
+!    !ソース1(left)
+!     Hz(x_source, y_source, z_source) = Hz(x_source, y_source, z_source) &
+!                     - signal_res(istep) * dt / myu(x_source, y_source, z_source) /dx/dy/dz!　　　
+! !    !ソース2(right)
+!     Hz(x_source2, y_source2, z_source2) = Hz(x_source2, y_source2, z_source2) &
+!                     - signal_res(istep) * dt / myu(x_source2, y_source2, z_source2) /dx/dy/dz!　　　
+!ソース　センター
+    Hz(sp, y_source, z_source) = Hz(sp, y_source, z_source) &
+                    - signal_res(istep) * dt / myu(sp, y_source, z_source) /dx/dy/dz!
 
         end subroutine read_source_3d_res
 
