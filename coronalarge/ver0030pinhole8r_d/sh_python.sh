@@ -42,8 +42,11 @@ python py_combine.py
 #plot one time combine_pattern or combine_residual_abso
 python py_pickup_one_time.py
 
-#plot contour of combine_pattern or combine_residual_abso
+#plot contour of combine_pattern or combine_residual_
 python py_contour.py
+
+#derivation of combine_pattern or comvine_residual_
+python py_derivation.py
 
 #matlab wiggle
 # wigb_control_abso.m #wiggle absolute

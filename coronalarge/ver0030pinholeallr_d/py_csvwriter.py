@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 #     writer = csv.writer(f)
 #     writer.writerows(someiterable)
 
-cases = range(19,104)
+cases = range(19,114)
 f = open('./pycordinate.dat','w')
 # for case in enumerate(cases):
 # 	print >> f, case

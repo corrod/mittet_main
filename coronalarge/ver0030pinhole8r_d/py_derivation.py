@@ -3,7 +3,7 @@ import numpy as np
 from pylab import *
 
 left = 19
-right = 103
+right = 113
 cases = range(left,right)
 
 data1 = np.loadtxt('./combine_pattern2_12diff.dat')
@@ -92,7 +92,7 @@ ax1 = fig.add_subplot(111)
 
 ax1.set_xlabel('probe position')
 ax1.set_ylabel('time')
-ax1.set_title('deriviation of differential residual')
+ax1.set_title('deriviation of absolute residual')
 
 x = arange(1,b+1) # x = arange(19,104+1)
 y = arange(1,a+1) # y = arange(1,4351+1)

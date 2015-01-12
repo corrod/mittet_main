@@ -6,7 +6,7 @@ data = dlmread('./combine_residual_abso_rev.dat');
 
 cordinate1 = transpose(cordinate);
 
-data(:,85) = [];
+data(:,95) = [];
 
 for i = 1:4351
     data(i, :) = data(i, :) * i^1;
