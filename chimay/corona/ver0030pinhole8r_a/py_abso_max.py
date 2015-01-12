@@ -3,7 +3,7 @@ from pylab import *
 import numpy as np
 import matplotlib.pyplot as plt
 
-cases = range(19,103)
+cases = range(19,114)
 
 for i, case in enumerate(cases):
 	data1 = np.loadtxt("./out_diff/%spattern2_12diff.d" % str(case))

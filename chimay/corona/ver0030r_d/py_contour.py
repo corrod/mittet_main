@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 #absolute
 data1 = np.loadtxt('./combine_pattern2_12diff.dat')
 
-x = arange(19,104+1)
+x = arange(19,114+1)
 y = arange(1,4351+1)
 X,Y = meshgrid(x,y)
 
@@ -27,7 +27,7 @@ show()
 # differential
 data1 = np.loadtxt('./combine_pattern2_23diff.dat')
 
-x = arange(19,104+1)
+x = arange(19,114+1)
 y = arange(1,4351+1)
 X,Y = meshgrid(x,y)
 
@@ -49,7 +49,7 @@ show()
 # residual absolute
 data1 = np.loadtxt('./combine_residual_abso.dat')
 
-x = arange(19,104+1)
+x = arange(19,114+1)
 y = arange(1,4351+1)
 X,Y = meshgrid(x,y)
 
@@ -72,7 +72,7 @@ show()
 # residual differential
 data1 = np.loadtxt('./combine_residual_diff.dat')
 
-x = arange(19,104+1)
+x = arange(19,114+1)
 y = arange(1,4351+1)
 X,Y = meshgrid(x,y)
 

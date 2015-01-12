@@ -3,7 +3,7 @@ import numpy as np
 from pylab import *
 
 left = 19
-right = 103
+right = 113
 cases = range(left,right)
 
 data1 = np.loadtxt('./combine_pattern2_12diff.dat')

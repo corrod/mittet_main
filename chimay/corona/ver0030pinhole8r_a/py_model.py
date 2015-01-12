@@ -12,7 +12,7 @@ y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
 # sig2 = sig.reshape((101,101)) #101,101,101
-sig2 = sig.reshape((51,121)) #101,61,71
+sig2 = sig.reshape((51,131)) #101,61,71
 
 # aa = np.arange(1,101,1)
 # bb = np.arange(1,101,1)
@@ -51,7 +51,7 @@ y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
 # sig2 = sig.reshape((101,101))
-sig2 = sig.reshape((51,121))
+sig2 = sig.reshape((51,131))
 
 
 fig=figure()
@@ -79,7 +79,7 @@ y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
 # sig2 = sig.reshape((101,101))
-sig2 = sig.reshape((51,121))
+sig2 = sig.reshape((51,131))
 
 # plt.colorbar
 fig=figure()
@@ -105,7 +105,7 @@ y1 = data1[:,1]
 z1 = data1[:,2]
 sig = data1[:,3]
 # sig2 = sig.reshape((101,101))
-sig2 = sig.reshape((51,121))
+sig2 = sig.reshape((51,131))
 
 
 fig=figure()
