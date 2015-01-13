@@ -48,6 +48,8 @@ python py_contour.py
 #derivation of combine_pattern or comvine_residual_
 python py_derivation.py
 
+#migration of 2nd
+python py_migration.py
 #matlab wiggle
 # wigb_control_abso.m #wiggle absolute
 # wigb_control_diff.m #wiggle differential

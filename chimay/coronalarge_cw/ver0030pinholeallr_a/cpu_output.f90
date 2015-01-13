@@ -162,7 +162,8 @@ subroutine output_EH_J_2nd(istep,t,Je,Jh,Ex,Ey,Ez,Hx,Hy,Hz)
 
     open(500,file='./out_bp/'//trim(adjustl(file_sp))//'_2nd.dat',access='append')
         do i_rp = 1 + ncpml + L_hori, nx - ncpml - L_hori
-            write(500,fmt='(e22.15)', advance='no') real(hz(i_rp,y0,plate))
+            write(500,fmt='(e23.15)', advance='no') real(hz(i_rp,y0,plate))
+!             write(500,fmt='(e22.15,a1)', advance='no') real(hz(i_rp,y0,plate)), ' '
         enddo
     close(500)
 
