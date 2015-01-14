@@ -8,8 +8,8 @@ from cmath import *
 nstep = 4351
 # nstep = 4351
 
-data_stac = np.loadtxt('./out_bp/19_2nd.dat')
-cases = range(19 + 1, 113 + 1)
+data_stac = np.loadtxt('./out_bp/21_2nd.dat')
+cases = range(21 + 1, 111 + 1)
 for i, case in enumerate(cases):
 	data = np.loadtxt('./out_bp/%s_2nd.dat' % str(case))
 	data_stac = data_stac + data
@@ -22,8 +22,9 @@ c = data_stac
 # c = np.transpose(data_stac)
 a = len(c)
 b = len(np.transpose(c))
-
-x = arange(19, 113 + 1)
+xlabel('sp')
+ylabel('time')
+x = arange(21, 115 + 1)
 y = arange(1, a + 1)
 X,Y = meshgrid(x, y)
 contourf(X, Y, c)

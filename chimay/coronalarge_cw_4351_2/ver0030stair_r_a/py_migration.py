@@ -9,7 +9,8 @@ nstep = 4351
 # nstep = 4351
 
 data_stac = np.loadtxt('./out_bp/19_2nd.dat')
-cases = range(19 + 1, 113 + 1)
+cases = range(19 + 1, 111 + 1)
+# cases = range(19 + 1, 113 + 1)
 for i, case in enumerate(cases):
 	data = np.loadtxt('./out_bp/%s_2nd.dat' % str(case))
 	data_stac = data_stac + data
@@ -22,8 +23,10 @@ c = data_stac
 # c = np.transpose(data_stac)
 a = len(c)
 b = len(np.transpose(c))
-
+xlabel('sp')
+ylabel('time')
 x = arange(19, 113 + 1)
+# x = arange(19, 113 + 1)
 y = arange(1, a + 1)
 X,Y = meshgrid(x, y)
 contourf(X, Y, c)

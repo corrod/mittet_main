@@ -22,7 +22,8 @@ c = data_stac
 # c = np.transpose(data_stac)
 a = len(c)
 b = len(np.transpose(c))
-
+xlabel('sp')
+ylabel('time')
 x = arange(19, 113 + 1)
 y = arange(1, a + 1)
 X,Y = meshgrid(x, y)
