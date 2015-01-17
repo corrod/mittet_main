@@ -32,7 +32,7 @@ ax1.set_xlabel('probe position')
 ax1.set_ylabel('time')
 ax1.set_title('deriviation of absolute')
 
-x = arange(1,b+1) # x = arange(19,104+1)
+x = arange(1+18,b+1+18) # x = arange(19,104+1)
 y = arange(1,a+1) # y = arange(1,4351+1)
 X,Y = meshgrid(x,y)
 
@@ -63,7 +63,7 @@ ax1.set_xlabel('probe position')
 ax1.set_ylabel('time')
 ax1.set_title('deriviation of differential')
 
-x = arange(1,b+1) # x = arange(19,104+1)
+x = arange(1+18,b+1+18) # x = arange(19,104+1)
 y = arange(1,a+1) # y = arange(1,4351+1)
 X,Y = meshgrid(x,y)
 
@@ -105,7 +105,7 @@ ax1.set_xlabel('probe position')
 ax1.set_ylabel('time')
 ax1.set_title('deriviation of absolute migration')
 
-x = arange(1,b+1) # x = arange(19,104+1)
+x = arange(1+18,b+1+18) # x = arange(19,104+1)
 y = arange(1,a+1) # y = arange(1,4351+1)
 X,Y = meshgrid(x,y)
 
@@ -142,7 +142,7 @@ ax1.set_xlabel('probe position')
 ax1.set_ylabel('time')
 ax1.set_title('deriviation of differential migration')
 
-x = arange(1,b+1) # x = arange(19,104+1)
+x = arange(1+18,b+1+18) # x = arange(19,104+1)
 y = arange(1,a+1) # y = arange(1,4351+1)
 X,Y = meshgrid(x,y)
 
