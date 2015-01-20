@@ -1,0 +1,170 @@
+./compile4: line 13: ifort: command not found
+./compile4: line 43: ./ficticious_fwi_cpml: cannot execute binary file
+
+real	0m0.003s
+user	0m0.000s
+sys	0m0.001s
+mv: rename *pattern2_1.d to out3: No such file or directory
+mv: rename *pattern2_2.d to out3: No such file or directory
+mv: rename *pattern2_3.d to out3: No such file or directory
+mv: rename *pattern*diff.d to out_diff/*pattern*diff.d: No such file or directory
+mv: rename *_w*.d to out_freq: No such file or directory
+mv: rename *_t*.d to out_time: No such file or directory
+Traceback (most recent call last):
+  File "py_polar.py", line 6, in <module>
+    data1 = np.loadtxt('./out_diff/45pattern2_23diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/45pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_polar2.py", line 7, in <module>
+    data1 = np.loadtxt('./out_diff/45pattern2_23diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/45pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_polar3.py", line 7, in <module>
+    data1 = np.loadtxt('./out_diff/45pattern2_23diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/45pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_polar4.py", line 7, in <module>
+    data1 = np.loadtxt('./out_diff/45pattern2_23diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/45pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_polar_every.py", line 7, in <module>
+    data1 = np.loadtxt('./out_diff/45pattern2_23diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/45pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_polar_rotation.py", line 20, in <module>
+    data1 = np.loadtxt('./out_diff/45pattern2_23diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/45pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_polar_subplot.py", line 22, in <module>
+    data1 = np.loadtxt('./out_diff/45pattern2_23diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/45pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_timediffseries23.py", line 32, in <module>
+    data1 = np.loadtxt('./out_diff/43pattern2_23diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/43pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_timediffseries12.py", line 31, in <module>
+    data1 = np.loadtxt('./out_diff/43pattern2_12diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/43pattern2_12diff.d'
+Traceback (most recent call last):
+  File "py_diff_max.py", line 11, in <module>
+    data1 = np.loadtxt("./out_diff/%spattern2_23diff.d" % str(case))
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/19pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_diff_min.py", line 11, in <module>
+    data1 = np.loadtxt("./out_diff/%spattern2_23diff.d" % str(case))
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/19pattern2_23diff.d'
+/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py:816: UserWarning: loadtxt: Empty input file: "./diff_max.d"
+  warnings.warn('loadtxt: Empty input file: "%s"' % fname)
+Traceback (most recent call last):
+  File "py_diffmaxminplot.py", line 15, in <module>
+    posi1 = data1[:,0]
+IndexError: too many indices
+Traceback (most recent call last):
+  File "py_abso_max.py", line 9, in <module>
+    data1 = np.loadtxt("./out_diff/%spattern2_12diff.d" % str(case))
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/19pattern2_12diff.d'
+Traceback (most recent call last):
+  File "py_abso_min.py", line 9, in <module>
+    data1 = np.loadtxt("./out_diff/%spattern2_12diff.d" % str(case))
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/19pattern2_12diff.d'
+/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py:816: UserWarning: loadtxt: Empty input file: "./abso_max.d"
+  warnings.warn('loadtxt: Empty input file: "%s"' % fname)
+Traceback (most recent call last):
+  File "py_absomaxminplot.py", line 15, in <module>
+    posi1 = data1[:,0]
+IndexError: too many indices
+Traceback (most recent call last):
+  File "py_lissajous_absolute.py", line 29, in <module>
+    inputdata = np.loadtxt('./signal_res.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './signal_res.d'
+Traceback (most recent call last):
+  File "py_lissajous_differential.py", line 33, in <module>
+    inputdata = np.loadtxt('./signal_res.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './signal_res.d'
+Traceback (most recent call last):
+  File "py_model.py", line 9, in <module>
+    data1 = np.loadtxt('./model_sig_xz.dat')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './model_sig_xz.dat'
+Traceback (most recent call last):
+  File "py_diff.py", line 8, in <module>
+    data1 = np.loadtxt('./out_diff/45pattern2_23diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/45pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_diff12.py", line 8, in <module>
+    data1 = np.loadtxt('./out_diff/45pattern2_12diff.d')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/45pattern2_12diff.d'
+Traceback (most recent call last):
+  File "py_residual_inout.py", line 12, in <module>
+    data1 = np.loadtxt("../ver0030nocrack/out_diff/%spattern2_23diff.d" % str(case))
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: '../ver0030nocrack/out_diff/19pattern2_23diff.d'
+Traceback (most recent call last):
+  File "py_combine_residual.py", line 9, in <module>
+    data2 = np.loadtxt("./out_residual/19residual_wave_abso.d")
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_residual/19residual_wave_abso.d'
+Traceback (most recent call last):
+  File "py_rev_residual.py", line 10, in <module>
+    data = np.loadtxt("./out_residual/%sresidual_wave_abso.d" % str(case))
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_residual/19residual_wave_abso.d'
+Traceback (most recent call last):
+  File "py_combine.py", line 9, in <module>
+    data2 = np.loadtxt("./out_diff/19pattern2_12diff.d")
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './out_diff/19pattern2_12diff.d'
+Traceback (most recent call last):
+  File "py_pickup_one_time.py", line 18, in <module>
+    data1 = np.loadtxt('./combine_pattern2_12diff.dat')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './combine_pattern2_12diff.dat'
+Traceback (most recent call last):
+  File "py_contour.py", line 7, in <module>
+    data1 = np.loadtxt('./combine_pattern2_12diff.dat')
+  File "/usr/local/lib/python2.7/site-packages/numpy/lib/npyio.py", line 734, in loadtxt
+    fh = iter(open(fname, 'U'))
+IOError: [Errno 2] No such file or directory: './combine_pattern2_12diff.dat'
+mv: rename *.eps to out_eps: No such file or directory
+mv: rename *.png to out_png: No such file or directory
