@@ -25,6 +25,7 @@ for i, case in enumerate(cases):
 	y_hilbert_stac1 = np.c_[y_hilbert_stac1,y_hilbert1]
 	envelope1 = (real(y_hilbert1)**2 + imag(y_hilbert1)**2)**0.5
 	envelope_stac1 = np.c_[envelope_stac1,envelope1]
+
 y_hilbert_stac1_r = real(y_hilbert_stac1)
 y_hilbert_stac1_i = imag(y_hilbert_stac1)
 
@@ -98,6 +99,7 @@ for i, case in enumerate(cases):
 	y_hilbert_stac2 = np.c_[y_hilbert_stac2,y_hilbert2]
 	envelope2 = (real(y_hilbert2)**2 + imag(y_hilbert2)**2)**0.5
 	envelope_stac2 = np.c_[envelope_stac2,envelope2]
+
 y_hilbert_stac2_r = real(y_hilbert_stac2)
 y_hilbert_stac2_i = imag(y_hilbert_stac2)
 np.savetxt('combine_pattern2_23hilbert_r.dat',y_hilbert_stac2_r)
@@ -177,7 +179,7 @@ y_hilbert_stac3_r = real(y_hilbert_stac3)
 y_hilbert_stac3_i = imag(y_hilbert_stac3)
 np.savetxt('combine_residual_abso_hilbert_r.dat',y_hilbert_stac3_r)
 np.savetxt('combine_residual_abso_hilbert_i.dat',y_hilbert_stac3_i)
-np.savetxt('combine_residual_abso_hilbert_envelope',envelope_stac3)
+np.savetxt('ombine_residual_abso_hilbert_envelope',envelope_stac3)
 
 
 fig = figure(figsize=(15,5))
@@ -252,7 +254,7 @@ y_hilbert_stac4_r = real(y_hilbert_stac4)
 y_hilbert_stac4_i = imag(y_hilbert_stac4)
 np.savetxt('combine_residual_diff_hilbert_r.dat',y_hilbert_stac4_r)
 np.savetxt('combine_residual_diff_hilbert_i.dat',y_hilbert_stac4_i)
-np.savetxt('combine_residual_diff_hilbert_envelope',envelope_stac4)
+np.savetxt('ombine_residual_diff_hilbert_envelope',envelope_stac4)
 
 
 fig = figure(figsize=(15,5))
