@@ -36,56 +36,85 @@ np.savetxt('combine_pattern2_12hilbert_r.dat',y_hilbert_stac1_r)
 np.savetxt('combine_pattern2_12hilbert_i.dat',y_hilbert_stac1_i)
 np.savetxt('combine_pattern2_12hilbert_envelope',envelope_stac1)
 
-fig = figure(figsize=(15,5))
+# fig = figure(figsize=(15,5))
 
 
-c = np.transpose(y_hilbert_stac1_r)
-a = len(c)
-b = len(np.transpose(c))
+# c = np.transpose(y_hilbert_stac1_r)
+# a = len(c)
+# b = len(np.transpose(c))
 
-subplot(131)
-xlabel('probe position')
-ylabel('time')
-title('hilbert real of absolute')
-x = arange(1,b+1)
-y = arange(1,a+1)
-X,Y = meshgrid(x,y)
-contourf(X,Y,c)
-colorbar()
+# subplot(131)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert real of absolute')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
 
 
-c = np.transpose(y_hilbert_stac1_i)
-a = len(c)
-b = len(np.transpose(c))
+# c = np.transpose(y_hilbert_stac1_i)
+# a = len(c)
+# b = len(np.transpose(c))
 
-subplot(132)
-xlabel('probe position')
-ylabel('time')
-title('hilbert imag of absolute')
-x = arange(1,b+1)
-y = arange(1,a+1)
-X,Y = meshgrid(x,y)
-contourf(X,Y,c)
-colorbar()
-# savefig('combine_pattern_2_12_hilbert.png')
+# subplot(132)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert imag of absolute')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
+# # savefig('combine_pattern_2_12_hilbert.png')
+# # show()
+
+# c = np.transpose(envelope_stac1)
+# a = len(c)
+# b = len(np.transpose(c))
+
+# subplot(133)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert envelope of absolute')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
+# savefig('combine_pattern_2_12_hilbert_envelope.png')
 # show()
+
+######### phase of absolute  ####################
+phai1 = y_hilbert_stac1_i/y_hilbert_stac1_r
+
+# for i, case in enumerate(cases):
+# 	plt.plot(phai1[:,case])
+# 	plt.grid(True)
+# 	plt.title('phase of absolute %s' % str(case))
+# 	savefig('./phase/%scombine_pattern_2_12_phase_onetime.png' % str(case))
+# 	plt.show()
+plt.show()
+plt.plot(phai1[:,1400])
+plt.grid(True)
+plt.title('phase of absolute')
+savefig('combine_pattern_2_12_phase_onetime.png')
+plt.show()
 
 c = np.transpose(envelope_stac1)
 a = len(c)
 b = len(np.transpose(c))
-
-subplot(133)
 xlabel('probe position')
 ylabel('time')
-title('hilbert envelope of absolute')
+title('phase of after migration absolute')
 x = arange(1,b+1)
 y = arange(1,a+1)
 X,Y = meshgrid(x,y)
 contourf(X,Y,c)
 colorbar()
-savefig('combine_pattern_2_12_hilbert_envelope.png')
-show()
-
+savefig('combine_pattern_2_12_phase.png')
+plt.show()
 
 
 
@@ -111,59 +140,81 @@ np.savetxt('combine_pattern2_23hilbert_i.dat',y_hilbert_stac2_i)
 np.savetxt('combine_pattern2_23hilbert_envelope',envelope_stac2)
 
 
-fig = figure(figsize=(15,5))
+# fig = figure(figsize=(15,5))
 
 
-c = np.transpose(y_hilbert_stac2_r)
-a = len(c)
-b = len(np.transpose(c))
+# c = np.transpose(y_hilbert_stac2_r)
+# a = len(c)
+# b = len(np.transpose(c))
 
-subplot(131)
-xlabel('probe position')
-ylabel('time')
-title('hilbert real of differential')
-x = arange(1,b+1)
-y = arange(1,a+1)
-X,Y = meshgrid(x,y)
-contourf(X,Y,c)
-colorbar()
+# subplot(131)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert real of differential')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
 
 
-c = np.transpose(y_hilbert_stac2_i)
-a = len(c)
-b = len(np.transpose(c))
+# c = np.transpose(y_hilbert_stac2_i)
+# a = len(c)
+# b = len(np.transpose(c))
 
-subplot(132)
-xlabel('probe position')
-ylabel('time')
-title('hilbert imag of differential')
-x = arange(1,b+1)
-y = arange(1,a+1)
-X,Y = meshgrid(x,y)
-contourf(X,Y,c)
-colorbar()
-# savefig('combine_pattern_2_23_hilbert.png')
+# subplot(132)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert imag of differential')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
+# # savefig('combine_pattern_2_23_hilbert.png')
+# # show()
+
+
+
+# c = np.transpose(envelope_stac2)
+# a = len(c)
+# b = len(np.transpose(c))
+
+# subplot(133)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert envelope of differential')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
+# savefig('combine_pattern_2_23_hilbert_envelope.png')
 # show()
 
+######### phase of differential  ####################
+phai2 = y_hilbert_stac2_i/y_hilbert_stac2_r
+
+plt.plot(phai2[:,1428])
+plt.title('phase of differential')
+plt.grid(True)
+savefig('combine_pattern_2_23_phase_onetime.png')
+plt.show()
 
 
 c = np.transpose(envelope_stac2)
 a = len(c)
 b = len(np.transpose(c))
-
-subplot(133)
 xlabel('probe position')
 ylabel('time')
-title('hilbert envelope of differential')
+title('phase of after migration absolute')
 x = arange(1,b+1)
 y = arange(1,a+1)
 X,Y = meshgrid(x,y)
 contourf(X,Y,c)
 colorbar()
-savefig('combine_pattern_2_23_hilbert_envelope.png')
-show()
-
-
+savefig('combine_pattern_2_23_phase.png')
+plt.show()
 
 
 
@@ -190,63 +241,70 @@ np.savetxt('migration_abso_hilbert_i.dat',y_hilbert_stac3_i)
 np.savetxt('migration_abso_hilbert_envelope',envelope_stac3)
 
 
-fig = figure(figsize=(15,5))
+# fig = figure(figsize=(15,5))
 
 
-c = np.transpose(y_hilbert_stac3_r)
-a = len(c)
-b = len(np.transpose(c))
+# c = np.transpose(y_hilbert_stac3_r)
+# a = len(c)
+# b = len(np.transpose(c))
 
-subplot(131)
-xlabel('probe position')
-ylabel('time')
-title('hilbert real of absolute migration')
-x = arange(1,b+1)
-y = arange(1,a+1)
-X,Y = meshgrid(x,y)
-contourf(X,Y,c)
-colorbar()
+# subplot(131)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert real of absolute migration')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
 
 
-c = np.transpose(y_hilbert_stac3_i)
-a = len(c)
-b = len(np.transpose(c))
+# c = np.transpose(y_hilbert_stac3_i)
+# a = len(c)
+# b = len(np.transpose(c))
 
-subplot(132)
-xlabel('probe position')
-ylabel('time')
-title('hilbert imag of absolute migration')
-x = arange(1,b+1)
-y = arange(1,a+1)
-X,Y = meshgrid(x,y)
-contourf(X,Y,c)
-colorbar()
-# savefig('migration_abso_hilbert.png')
+# subplot(132)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert imag of absolute migration')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
+# # savefig('migration_abso_hilbert.png')
+# # show()
+
+
+
+# c = np.transpose(envelope_stac3)
+# a = len(c)
+# b = len(np.transpose(c))
+
+# subplot(133)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert envelope of absolute migration')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
+# savefig('migration_abso_hilbert_envelope.png')
 # show()
 
 
 
-c = np.transpose(envelope_stac3)
-a = len(c)
-b = len(np.transpose(c))
 
-subplot(133)
-xlabel('probe position')
-ylabel('time')
-title('hilbert envelope of absolute migration')
-x = arange(1,b+1)
-y = arange(1,a+1)
-X,Y = meshgrid(x,y)
-contourf(X,Y,c)
-colorbar()
-savefig('migration_abso_hilbert_envelope.png')
-show()
-
-
-
-
-######### phase of differential migration ####################
+######### phase of absolute migration ####################
 phai3 = y_hilbert_stac3_i/y_hilbert_stac3_r
+
+plt.plot(phai3[:,2855])
+plt.title('phase of absolute migration')
+plt.grid(True)
+savefig('migration_abso_phase_onetime.png')
+plt.show()
+
 c = np.transpose(envelope_stac3)
 a = len(c)
 b = len(np.transpose(c))
@@ -284,61 +342,69 @@ np.savetxt('migration_diff_hilbert_i.dat',y_hilbert_stac4_i)
 np.savetxt('migration_diff_hilbert_envelope',envelope_stac4)
 
 
-fig = figure(figsize=(15,5))
+# fig = figure(figsize=(15,5))
 
 
-c = np.transpose(y_hilbert_stac4_r)
-a = len(c)
-b = len(np.transpose(c))
+# c = np.transpose(y_hilbert_stac4_r)
+# a = len(c)
+# b = len(np.transpose(c))
 
-subplot(131)
-xlabel('probe position')
-ylabel('time')
-title('hilbert real of differential migration')
-x = arange(1,b+1)
-y = arange(1,a+1)
-X,Y = meshgrid(x,y)
-contourf(X,Y,c)
-colorbar()
+# subplot(131)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert real of differential migration')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
 
 
-c = np.transpose(y_hilbert_stac4_i)
-a = len(c)
-b = len(np.transpose(c))
+# c = np.transpose(y_hilbert_stac4_i)
+# a = len(c)
+# b = len(np.transpose(c))
 
-subplot(132)
-xlabel('probe position')
-ylabel('time')
-title('hilbert imag of differential migration')
-x = arange(1,b+1)
-y = arange(1,a+1)
-X,Y = meshgrid(x,y)
-contourf(X,Y,c)
-colorbar()
-# savefig('migration_diff_hilbert.png')
+# subplot(132)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert imag of differential migration')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
+# # savefig('migration_diff_hilbert.png')
+# # show()
+
+
+
+# c = np.transpose(envelope_stac4)
+# a = len(c)
+# b = len(np.transpose(c))
+
+# subplot(133)
+# xlabel('probe position')
+# ylabel('time')
+# title('hilbert envelope of differential migration')
+# x = arange(1,b+1)
+# y = arange(1,a+1)
+# X,Y = meshgrid(x,y)
+# contourf(X,Y,c)
+# colorbar()
+# savefig('migration_diff_hilbert_envelope.png')
 # show()
-
-
-
-c = np.transpose(envelope_stac4)
-a = len(c)
-b = len(np.transpose(c))
-
-subplot(133)
-xlabel('probe position')
-ylabel('time')
-title('hilbert envelope of differential migration')
-x = arange(1,b+1)
-y = arange(1,a+1)
-X,Y = meshgrid(x,y)
-contourf(X,Y,c)
-colorbar()
-savefig('migration_diff_hilbert_envelope.png')
-show()
 
 
 ######### phase of differential migration ####################
 phai4 = y_hilbert_stac4_i/y_hilbert_stac4_r
+
+plt.plot(phai4[:,2855])
+plt.title('phase of differential migration')
+plt.grid(True)
+savefig('migration_diff_phase_onetime.png')
+plt.show()
+
+
 c = np.transpose(envelope_stac4)
 a = len(c)
 b = len(np.transpose(c))
