@@ -1,11 +1,17 @@
-subroutine diff_probe
-    use const_para
+program diff_probe
+!     use const_para
     implicit none
 
     integer :: nd,ios
-    real(8), allocatable :: in1_1(:),in1_2(:),in1_3(:)
-    real(8), allocatable :: in2_1(:),in2_2(:),in2_3(:)
-    real(8), allocatable :: in3_1(:),in3_2(:),in3_3(:)
+    integer :: sp
+    integer :: i
+    character(16) :: file_sp
+    real(8) :: in1_1(4351),in1_2(4351),in1_3(4351)
+    real(8) :: in2_1(4351),in2_2(4351),in2_3(4351)
+    real(8) :: in3_1(4351),in3_2(4351),in3_3(4351)
+
+do sp =19,113
+write(file_sp,*) sp
 
     open(51,file=trim(adjustl(file_sp))//'pattern2_1.d',action='read')
       nd=0
@@ -16,9 +22,9 @@ subroutine diff_probe
         enddo
     close(51)
 
-    allocate(in1_1(nd), in1_2(nd), in1_3(nd))
-    allocate(in2_1(nd), in2_2(nd), in2_3(nd))
-    allocate(in3_1(nd), in3_2(nd), in3_3(nd))
+!     allocate(in1_1(nd), in1_2(nd), in1_3(nd))
+!     allocate(in2_1(nd), in2_2(nd), in2_3(nd))
+!     allocate(in3_1(nd), in3_2(nd), in3_3(nd))
 
     !受信点1,2,3の読み込み
     open(52,file=trim(adjustl(file_sp))//'pattern2_1.d')
@@ -53,6 +59,9 @@ subroutine diff_probe
         enddo
     close(56)
 
-    deallocate(in1_1,in1_2,in1_3,in2_1,in2_2,in2_3,in3_1,in3_2,in3_3)
 
-        end subroutine diff_probe
+!     deallocate(in1_1,in1_2,in1_3,in2_1,in2_2,in2_3,in3_1,in3_2,in3_3)
+
+enddo
+
+        end program diff_probe

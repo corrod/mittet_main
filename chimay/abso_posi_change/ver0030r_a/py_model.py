@@ -118,8 +118,8 @@ ax1.set_ylabel('y')
 # ax1.set_xticklabels([])
 # ax1.set_yticklabels([])
 
-plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
+ax1.plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 
 
-plt.savefig('myumodel_xy.png')
+ax1.plt.savefig('myumodel_xy.png')
 # show()

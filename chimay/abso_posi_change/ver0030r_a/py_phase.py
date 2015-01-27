@@ -87,29 +87,29 @@ np.savetxt('combine_pattern2_12hilbert_envelope',envelope_stac1)
 # savefig('combine_pattern_2_12_hilbert_envelope.png')
 # show()
 
-######### phase of absolute  ####################
-phai1 = y_hilbert_stac1_i/y_hilbert_stac1_r
+# ######### phase of absolute  ####################
+# phai1 = y_hilbert_stac1_i/y_hilbert_stac1_r
 
-atan2phai=y_hilbert_stac1_r
-for x in range(1,95):
-	for y in range(1,4351):
-		atan2phai[x,y] = math.atan2(y_hilbert_stac1_i[x,y],y_hilbert_stac1_r[x,y])
-
-
-atan2phai[:,:] = math.atan2(y_hilbert_stac1_i[:,:],y_hilbert_stac1_r[:,:])
-
-# atanphai1[:,1400] = math.atan(phai1[:,1400])
+# atan2phai=y_hilbert_stac1_r
+# for x in range(1,95):
+# 	for y in range(1,4351):
+# 		atan2phai[x,y] = math.atan2(y_hilbert_stac1_i[x,y],y_hilbert_stac1_r[x,y])
 
 
-plt.plot(phai1[:,1400])
-plt.grid(True)
-plt.title('phase of absolute')
-savefig('combine_pattern_2_12_phase_onetime.png')
-plt.show()
+# atan2phai[:,:] = math.atan2(y_hilbert_stac1_i[:,:],y_hilbert_stac1_r[:,:])
 
-# plt.plot(atanphai1[:,1400])
+# # atanphai1[:,1400] = math.atan(phai1[:,1400])
+
+
+# plt.plot(phai1[:,1400])
 # plt.grid(True)
-# plt.title('arc phase of absolute')
+# plt.title('phase of absolute')
+# savefig('combine_pattern_2_12_phase_onetime.png')
+# plt.show()
+
+# # plt.plot(atanphai1[:,1400])
+# # plt.grid(True)
+# # plt.title('arc phase of absolute')
 # # savefig('combine_pattern_2_12_phase_onetime.png')
 # plt.show()
 
@@ -203,22 +203,22 @@ np.savetxt('combine_pattern2_23hilbert_envelope',envelope_stac2)
 # X,Y = meshgrid(x,y)
 # contourf(X,Y,c)
 # colorbar()
-# savefig('combine_pattern_2_23_hilbert_envelope.png')
-# show()
+# # savefig('combine_pattern_2_23_hilbert_envelope.png')
+# # show()
 
-######### phase of differential  ####################
-phai2 = y_hilbert_stac2_i/y_hilbert_stac2_r
+# ######### phase of differential  ####################
+# phai2 = y_hilbert_stac2_i/y_hilbert_stac2_r
 
-# atanphai2 = atan(phai2)
+# # atanphai2 = atan(phai2)
 
-plt.plot(phai2[:,1428])
-plt.title('phase of differential')
-plt.grid(True)
-savefig('combine_pattern_2_23_phase_onetime.png')
-plt.show()
+# plt.plot(phai2[:,1428])
+# plt.title('phase of differential')
+# plt.grid(True)
+# savefig('combine_pattern_2_23_phase_onetime.png')
+# plt.show()
 
 
-# plt.plot(atanphai2[:,1400])
+# # plt.plot(atanphai2[:,1400])
 # plt.grid(True)
 # plt.title('arc phase of differential')
 # # savefig('combine_pattern_2_23_phase_onetime.png')
@@ -319,15 +319,15 @@ np.savetxt('migration_abso_hilbert_envelope',envelope_stac3)
 
 
 ######### phase of absolute migration ####################
-phai3 = y_hilbert_stac3_i/y_hilbert_stac3_r
+# phai3 = y_hilbert_stac3_i/y_hilbert_stac3_r
 
-# atanphai3 = atan(phai3)
+# # atanphai3 = atan(phai3)
 
-plt.plot(phai3[:,2855])
-plt.title('phase of absolute migration')
-plt.grid(True)
-savefig('migration_abso_phase_onetime.png')
-plt.show()
+# plt.plot(phai3[:,2855])
+# plt.title('phase of absolute migration')
+# plt.grid(True)
+# savefig('migration_abso_phase_onetime.png')
+# plt.show()
 
 # plt.plot(atanphai3[:,1400])
 # plt.grid(True)
@@ -428,18 +428,18 @@ np.savetxt('migration_diff_hilbert_envelope',envelope_stac4)
 
 
 ######### phase of differential migration ####################
-phai4 = y_hilbert_stac4_i/y_hilbert_stac4_r
+# phai4 = y_hilbert_stac4_i/y_hilbert_stac4_r
 
-# atanphai4 = atan(phai4)
+# # atanphai4 = atan(phai4)
 
 
-plt.plot(phai4[:,2855])
-plt.title('phase of differential migration')
-plt.grid(True)
-savefig('migration_diff_phase_onetime.png')
-plt.show()
+# plt.plot(phai4[:,2855])
+# plt.title('phase of differential migration')
+# plt.grid(True)
+# savefig('migration_diff_phase_onetime.png')
+# plt.show()
 
-# plt.plot(atanphai4[:,1400])
+# # plt.plot(atanphai4[:,1400])
 # plt.grid(True)
 # plt.title('arc phase of differential migration')
 # # savefig('combine_pattern_2_12_phase_onetime.png')
