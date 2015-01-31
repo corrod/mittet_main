@@ -151,6 +151,29 @@ savefig('instantaneous_freq_absomigration')
 plt.show()
 
 
+
+
+# pick up ############################################
+# c = omega_stac_t[3400:3600,38:58]
+c = omega_stac_t[3400:3600,38:58]
+a = len(c)
+b = len(np.transpose(c))
+xlabel('probe position')
+ylabel('time')
+title('Attribute Analysis absolute migration pickup')
+x = arange(1,b+1)
+y = arange(1,a+1)
+X,Y = meshgrid(x,y)
+xticks([1,5,10,15,20], ('55', '60', '65', '70', '75'))
+# yticks([1,100,200,300,400], ('3300', '3400', '3500', '3600', '3700'))
+yticks([1,100,200], ('3400', '3500', '3600'))
+
+contourf(X,Y,c)
+colorbar()
+savefig('instantaneous_freq_absomigration_pickup')
+plt.show()
+
+
 plt.plot(omega_stac_t[:,50])
 plt.title('instantaneous frequency one place')
 savefig('instantaneous_freq_absomigration_oneplace')
