@@ -13,8 +13,8 @@ X,Y = meshgrid(x,y)
 fig =figure()
 ax1=fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position')
+ax1.set_ylabel('Time')
 ax1.set_title('absolute contour')
 
 # contour(X,Y,data1) #no paste
@@ -34,8 +34,8 @@ X,Y = meshgrid(x,y)
 fig =figure()
 ax1=fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position')
+ax1.set_ylabel('Time')
 ax1.set_title('differential contour')
 
 # contour(X,Y,data1) #no paste
@@ -56,8 +56,8 @@ X,Y = meshgrid(x,y)
 fig =figure()
 ax1=fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position')
+ax1.set_ylabel('Time')
 ax1.set_title('absolute residual contour')
 
 # contour(X,Y,data1) #no paste
@@ -79,8 +79,8 @@ X,Y = meshgrid(x,y)
 fig =figure()
 ax1=fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position')
+ax1.set_ylabel('Time')
 ax1.set_title('differential residual contour')
 
 # contour(X,Y,data1) #no paste

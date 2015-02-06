@@ -28,8 +28,8 @@ b = len(np.transpose(dy_stac))
 fig = figure()
 ax1 = fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position')
+ax1.set_ylabel('Time')
 ax1.set_title('deriviation of absolute')
 
 x = arange(1,b+1) # x = arange(19,104+1)
@@ -59,8 +59,8 @@ b = len(np.transpose(dy_stac))
 fig = figure()
 ax1 = fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position')
+ax1.set_ylabel('Time')
 ax1.set_title('deriviation of differential')
 
 x = arange(1,b+1) # x = arange(19,104+1)
@@ -101,9 +101,11 @@ b = len(np.transpose(dy_stac))
 fig = figure()
 ax1 = fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position',fontsize=20)
+ax1.set_ylabel('Time',fontsize=20)
 ax1.set_title('deriviation of absolute migration')
+
+xticks([22,42,62,82], ('40', '60', '80', '100'))
 
 x = arange(1,b+1) # x = arange(19,104+1)
 y = arange(1,a+1) # y = arange(1,4351+1)
@@ -138,9 +140,11 @@ b = len(np.transpose(dy_stac))
 fig = figure()
 ax1 = fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position',fontsize=20)
+ax1.set_ylabel('Time',fontsize=20)
 ax1.set_title('deriviation of differential migration')
+
+xticks([22,42,62,82], ('40', '60', '80', '100'))
 
 x = arange(1,b+1) # x = arange(19,104+1)
 y = arange(1,a+1) # y = arange(1,4351+1)

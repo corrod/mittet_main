@@ -28,8 +28,8 @@ b = len(np.transpose(dy_stac))
 fig = figure()
 ax1 = fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position')
+ax1.set_ylabel('Time')
 ax1.set_title('deriviation of absolute')
 
 x = arange(1,b+1) # x = arange(19,104+1)
@@ -59,8 +59,8 @@ b = len(np.transpose(dy_stac))
 fig = figure()
 ax1 = fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position')
+ax1.set_ylabel('Time')
 ax1.set_title('deriviation of differential')
 
 x = arange(1,b+1) # x = arange(19,104+1)
@@ -90,8 +90,8 @@ b = len(np.transpose(dy_stac))
 fig = figure()
 ax1 = fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position')
+ax1.set_ylabel('Time')
 ax1.set_title('deriviation of absolute residual')
 
 x = arange(1,b+1) # x = arange(19,104+1)
@@ -120,8 +120,8 @@ b = len(np.transpose(dy_stac))
 fig = figure()
 ax1 = fig.add_subplot(111)
 
-ax1.set_xlabel('probe position')
-ax1.set_ylabel('time')
+ax1.set_xlabel('Probe Position')
+ax1.set_ylabel('Time')
 ax1.set_title('deriviation of differential residual')
 
 x = arange(1,b+1) # x = arange(19,104+1)

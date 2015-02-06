@@ -22,10 +22,11 @@ fig=figure()
 ax1=fig.add_subplot(111)
 
 
-ax1.set_xlabel('x')
-ax1.set_ylabel('z')
+ax1.set_xlabel('x',fontsize=20)
+ax1.set_ylabel('z',fontsize=20)
 # ax1.set_xticklabels([])
 # ax1.set_yticklabels([])
+
 
 # im=plt.imshow(sig2,origin='lower',cmap=cm.RdYlBu) #blue red
 # im=plt.imshow(sig2,origin='lower',cmap=cm.seismic) #seismic
@@ -57,10 +58,10 @@ sig2 = sig.reshape((51,131))
 fig=figure()
 ax1=fig.add_subplot(111)
 
-ax1.set_title('model_sig_xy')
+# ax1.set_title('model_sig_xy')
 
-ax1.set_xlabel('x')
-ax1.set_ylabel('y')
+ax1.set_xlabel('x',fontsize=20)
+ax1.set_ylabel('y',fontsize=20)
 # ax1.set_xticklabels([])
 # ax1.set_yticklabels([])
 
@@ -118,8 +119,8 @@ ax1.set_ylabel('y')
 # ax1.set_xticklabels([])
 # ax1.set_yticklabels([])
 
-ax1.plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
+plt.imshow(sig2,origin='lower',cmap=cm.bwr) #blue red
 
 
-ax1.plt.savefig('myumodel_xy.png')
+plt.savefig('myumodel_xy.png')
 # show()
