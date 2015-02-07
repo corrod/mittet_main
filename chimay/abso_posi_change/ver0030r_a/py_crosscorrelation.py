@@ -148,22 +148,39 @@ time_max_t = np.transpose(time_max)
 time_min_t = np.transpose(time_min)
 
 
-plot(time_max_t[1:])
-# title( "max time")
-xlabel('Probe Position',fontsize=20)
+l=time_min_t
+ll=time_min_t[::-1]
+l[0:47]=ll[0:47]
+fig=figure(figsize=(10,3))
+# xlabel('Probe Position',fontsize=20)
 ylabel('Time',fontsize=20)
-xticks([23,43,63,83], ('40', '60', '80', '100'))
-savefig('migration_corr_envelope_maxtimefalse.png')
+ylim(85,95)
+# ylim(ymax=92)
+xticks([18,38,58,78], ('40', '60', '80', '100'))
+# yticks([89,89.5,90,90.5,91],("2168","2172","2176","2180","2184"))
+yticks([89,89.5,90,90.5,91],("2184","2180","2176","2172","2168"))
+grid(True)
+plot(l[4:90],lw=2)
+savefig('corr_env_maxmin.png')
 show()
 
-# plot(time_min_t[1:])
-plot(time_min_t[1:91])
-# title( "min time")
-xlabel('Probe Position',fontsize=20)
-ylabel('Time',fontsize=20)
-xticks([23,43,63,83], ('40', '60', '80', '100'))
-savefig('migration_corr_envelope_mintimefalse.png')
-show()
+
+# plot(time_max_t[1:])
+# # title( "max time")
+# xlabel('Probe Position',fontsize=20)
+# ylabel('Time',fontsize=20)
+# xticks([23,43,63,83], ('40', '60', '80', '100'))
+# savefig('migration_corr_envelope_maxtimefalse.png')
+# show()
+
+# # plot(time_min_t[1:])
+# plot(time_min_t[1:91])
+# # title( "min time")
+# xlabel('Probe Position',fontsize=20)
+# ylabel('Time',fontsize=20)
+# xticks([23,43,63,83], ('40', '60', '80', '100'))
+# savefig('migration_corr_envelope_mintimefalse.png')
+# show()
 
 
 ###########################################################
