@@ -43,10 +43,10 @@ show()
 
 
 # fig=figure()
-fig = figure(figsize=(10,5))
+# fig = figure(figsize=(10,5))
 
 
-ax3 = subplot(111)
+ax3 = subplot(211)
 
 # ax1 = fig.add_subplot(111)
 
@@ -64,20 +64,20 @@ two_data = data2[t,:]
 ax3.set_title('extract absolute residual at one time')
 ax3.set_xlabel('Probe Position',fontsize=20)
 ax3.set_ylabel('Residual [A/m]',fontsize=20)
-ax3.plot(rp,one_data,label='%s absolute' % str(t))
+ax3.plot(rp,one_data,label='abso' )
 ax3.grid(True)
 ax3.legend()
-savefig('%scombine_absoresidual.png' % str(t))
-show()
+# savefig('%scombine_absoresidual.png' % str(t))
+# show()
 
-fig = figure(figsize=(9,4))
-ax4 = subplot(111)
-ax4.set_title('extract differential residual at one time')
-ax4.set_xlabel('Probe Position')
-ax4.set_ylabel('Residual [A/m]')
-ax4.plot(rp,two_data,label='%s differential' % str(t))
-ax4.grid(True)
-ax4.legend()
+# fig = figure(figsize=(9,4))
+# ax4 = subplot(111)
+# ax4.set_title('extract differential residual at one time')
+# ax4.set_xlabel('Probe Position')
+# ax4.set_ylabel('Residual [A/m]')
+# ax4.plot(rp,two_data,label='%s differential' % str(t))
+# ax4.grid(True)
+# ax4.legend()
 
 savefig('%scombine_residual.png' % str(t))
 show()

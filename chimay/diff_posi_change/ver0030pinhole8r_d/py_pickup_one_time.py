@@ -58,17 +58,17 @@ data2 = np.loadtxt('./combine_residual_diff.dat')
 one_data = data1[t,:]
 two_data = data2[t,:]
 
-ax3.set_title('extract absolute residual at %s' % str(t))
-# ax1.set_xlabel('probe position')
-ax3.set_ylabel('absolute residual')
-ax3.plot(rp,one_data,label='%s absolute' % str(t))
-ax3.grid(True)
-ax3.legend()
+# ax3.set_title('extract absolute residual at %s' % str(t))
+# # ax1.set_xlabel('probe position')
+# ax3.set_ylabel('absolute residual')
+# ax3.plot(rp,one_data,label='%s absolute' % str(t))
+# ax3.grid(True)
+# ax3.legend()
 
-ax4.set_title('extract differential residual at %s' % str(t))
-ax4.set_xlabel('probe position')
-ax4.set_ylabel('differential residual')
-ax4.plot(rp,two_data,label='%s differential' % str(t))
+ax4.set_title('extract differential residual at one time')
+ax4.set_xlabel('Probe Position',fontsize=20)
+ax4.set_ylabel('Residual [A/m]',fontsize=20)
+ax4.plot(rp,two_data,label='diff')
 ax4.grid(True)
 ax4.legend()
 

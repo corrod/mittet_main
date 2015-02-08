@@ -63,7 +63,7 @@ y = arange(1,a+1)
 X,Y = meshgrid(x,y)
 contourf(X,Y,c)
 colorbar()
-savefig('instantaneous_freq_2_23')
+savefig('instantaneous_freq_2_23.png')
 plt.show()
 
 
@@ -147,9 +147,11 @@ title('Attribute Analysis instantaneous frequency differential migration')
 x = arange(1,b+1)
 y = arange(1,a+1)
 X,Y = meshgrid(x,y)
+xticks([22,42,62,82], ('40', '60', '80', '100'))
+ylim(4351,0)
 contourf(X,Y,c)
-colorbar()
-savefig('instantaneous_freq_diffmigration')
+# colorbar()
+savefig('instantaneous_freq_diffmigration.png')
 plt.show()
 
 
@@ -169,10 +171,10 @@ X,Y = meshgrid(x,y)
 xticks([1,5,10,15,20], ('55', '60', '65', '70', '75'))
 # yticks([1,100,200,300,400], ('3300', '3400', '3500', '3600', '3700'))
 yticks([1,100,200], ('3400', '3500', '3600'))
-
+ylim(200,1)
 contourf(X,Y,c)
 colorbar()
-savefig('instantaneous_freq_diffmigration_pickup')
+savefig('instantaneous_freq_diffmigration_pickup.png')
 plt.show()
 
 
