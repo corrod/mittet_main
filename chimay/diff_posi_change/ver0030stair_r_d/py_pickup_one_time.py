@@ -5,7 +5,7 @@ from pylab import *
 # time = range(0,1.737945116734669e-003,1.258468585615218e-006)
 # np.savetxt('simulation_time.dat',time)
 
-t = 10
+t = 20
 
 rp = range(19,115)
 
@@ -43,10 +43,10 @@ show()
 
 
 # fig=figure()
-fig = figure(figsize=(10,5))
+# fig = figure(figsize=(10,5))
 
 
-ax3 = subplot(111)
+ax3 = subplot(211)
 
 # ax1 = fig.add_subplot(111)
 
@@ -61,21 +61,25 @@ data2 = np.loadtxt('./combine_residual_diff.dat')
 one_data = data1[t,:]
 two_data = data2[t,:]
 
-ax3.set_title('extract absolute residual at one time')
-ax3.set_xlabel('Probe Position',fontsize=20)
-ax3.set_ylabel('Residual [A/m]',fontsize=20)
-ax3.plot(rp,one_data,label='%s absolute' % str(t))
-ax3.grid(True)
-ax3.legend()
-savefig('%scombine_absoresidual.png' % str(t))
-show()
+# ax3.set_title('extract absolute residual at one time')
+# ax3.set_xlabel('Probe Position',fontsize=20)
+# ax3.set_ylabel('Residual [A/m]',fontsize=20)
+# ax3.plot(rp,one_data,label='%s absolute' % str(t))
+# ax3.grid(True)
+# ax3.legend()
+# savefig('%scombine_absoresidual.png' % str(t))
+# show()
 
-fig = figure(figsize=(9,4))
-ax4 = subplot(111)
+# fig = figure(figsize=(9,4))
+ax4 = subplot(212)
 ax4.set_title('extract differential residual at one time')
-ax4.set_xlabel('Probe Position')
-ax4.set_ylabel('Residual [A/m]')
-ax4.plot(rp,two_data,label='%s differential' % str(t))
+ax4.set_xlabel('Probe Position',fontsize=20)
+ax4.set_ylabel('Residual [A/m]',fontsize=20)
+ax4.plot([37,37],[-0.03,0.030], color='red', linewidth=1, linestyle="--")
+ax4.plot([57,57],[-0.03,0.030], color='red', linewidth=1, linestyle="--")
+ax4.plot([77,77],[-0.03,0.030], color='red', linewidth=1, linestyle="--")
+ax4.plot([96,96],[-0.03,0.030], color='red', linewidth=1, linestyle="--")
+ax4.plot(rp,two_data,color='blue',label='%s differential' % str(t))
 ax4.grid(True)
 ax4.legend()
 
